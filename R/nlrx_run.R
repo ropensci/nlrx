@@ -1,6 +1,6 @@
 
 # Write an xml file for one simulation run
-nlrx_create_XML <- function(nl, run, xmlfile) {
+nlrx_create_XML <- function(nl, seed, run, xmlfile) {
 
   library(XML)
 
@@ -28,6 +28,8 @@ nlrx_create_XML <- function(nl, run, xmlfile) {
   for (i in 1:length(simdata_run)) {
     addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
   }
+  ## Add seed:
+  addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), newXMLNode("value", attrs=c(value=seed))))
 
   ## Use NetLogo specific prefix:
   prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
@@ -72,11 +74,11 @@ nlrx_run_one <- function(nl, seed, run, cleanup=NULL) {
 
   ## Write XML File:
   xmlfile <- paste0(nl@experiment@out.path, "nlrx", seed, "_", run, ".xml")
-  nlrx_create_XML(nl, run, xmlfile)
+  nlrx_create_XML(nl, seed, run, xmlfile)
 
   ## Execute:
   outfile <- paste0(nl@experiment@out.path, "nlrx", seed, "_", run, ".csv")
-  nlrx_call_nl(nl, xmlfile, outfile, seed)
+  nlrx_call_nl(nl, xmlfile, outfile)
 
   ## Read results
   nl_results <- nlrx_gather_results(nl, outfile)
