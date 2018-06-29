@@ -73,17 +73,15 @@ nlrx_gather_results <- function(nl, outfile) {
 nlrx_run_one <- function(nl, seed, run, cleanup=NULL) {
 
   ## Write XML File:
-  xmlfile <- paste0(nl@experiment@out.path, "nlrx", seed, "_", run, ".xml")
+  xmlfile <- paste0(tempdir(), "nlrx", seed, "_", run, ".xml")
   nlrx_create_XML(nl, seed, run, xmlfile)
 
   ## Execute:
-  outfile <- paste0(nl@experiment@out.path, "nlrx", seed, "_", run, ".csv")
+  outfile <- paste0(tempdir(), "nlrx", seed, "_", run, ".csv")
   nlrx_call_nl(nl, xmlfile, outfile)
 
   ## Read results
   nl_results <- nlrx_gather_results(nl, outfile)
-
-
 
   ## Delete temporary files:
   if(cleanup == "xml" | cleanup == "all") {
@@ -92,6 +90,8 @@ nlrx_run_one <- function(nl, seed, run, cleanup=NULL) {
   if(cleanup == "csv" | cleanup == "all") {
     nlrx_cleanup(nl, pattern=".csv")
   }
+
+
 
 
   return(nl_results)

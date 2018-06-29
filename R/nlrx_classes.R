@@ -11,14 +11,16 @@ nlrx_init_classes <- function() {
              method="character",
              simdata="tbl",
              simobject="list",
-             simseeds="numeric"
+             simseeds="numeric",
+             simresults="tbl"
            ),
 
            prototype=list(
              method=NA_character_,
              simdata=tibble(),
              simobject=list(),
-             simseeds=NA_integer_
+             simseeds=NA_integer_,
+             simresults=tibble()
            ))
 
 

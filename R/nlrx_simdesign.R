@@ -88,7 +88,7 @@ nlrx_add_simdesign_morris <- function(nl, sim.seedrep, sim.type, sim.levels, sim
   library(sensitivity)
   library(tibble)
 
-  morris.design <- list(type = sim.type, levels = sim.levels, grid.jump = sim.grid.jump)  ## gridjump should be levels / 2
+  morris.design <- list(type = sim.type, levels = sim.levels, grid.jump = sim.grid.jump)
 
   input.values <- nl@experiment@param.change
   fixed.values <- nl@experiment@param.const
