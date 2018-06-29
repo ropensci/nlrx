@@ -54,9 +54,15 @@ nlrx_cleanup <- function(nl, pattern) {
 }
 
 
-nlrx_gather_results <- function(outfile) {
+nlrx_gather_results <- function(nl, outfile) {
+
+  library(dplyr)
 
   NLtable <- read.csv(outfile, skip=6)
+
+  ## Throw away all ticks that are not within the eval interval
+  NLtable <- NLtable %>% filter(X.step. %in% nl@experiment@eval.ticks)
+
   return(NLtable)
 }
 
@@ -73,7 +79,9 @@ nlrx_run_one <- function(nl, seed, run, cleanup=NULL) {
   nlrx_call_nl(nl, xmlfile, outfile, seed)
 
   ## Read results
-  nl_results <- nlrx_gather_results(outfile)
+  nl_results <- nlrx_gather_results(nl, outfile)
+
+
 
   ## Delete temporary files:
   if(cleanup == "xml" | cleanup == "all") {

@@ -33,6 +33,7 @@ nlrx_init_classes <- function() {
              setup.name="character",
              go.name="character",
              max.ticks="numeric",
+             eval.ticks="numeric",
              metrics="character",
              param.change="list",
              param.const="list",
@@ -45,7 +46,8 @@ nlrx_init_classes <- function() {
              metrics.tick="true",
              setup.name="setup",
              go.name="go",
-             max.ticks=NA_real_,
+             max.ticks=NA_integer_,
+             eval.ticks=NA_integer_,
              metrics=NA_character_,
              param.change=list(),
              param.const=list(),
@@ -80,7 +82,7 @@ nlrx_get_nl <- function(nl.path, model.path) {
 
 
 # create and attach an experiment to a nl object
-nlrx_add_experiment <- function(nl, sim.name, out.path, n.rep, metrics.tick, setup.name, go.name, max.ticks, metrics, param.change, param.const) {
+nlrx_add_experiment <- function(nl, sim.name, out.path, n.rep, metrics.tick, setup.name, go.name, max.ticks, eval.ticks, metrics, param.change, param.const) {
 
   experiment <- new("experiment",
                     sim.name=sim.name,
@@ -90,6 +92,7 @@ nlrx_add_experiment <- function(nl, sim.name, out.path, n.rep, metrics.tick, set
                     setup.name=setup.name,
                     go.name=go.name,
                     max.ticks=max.ticks,
+                    eval.ticks=eval.ticks,
                     metrics=metrics,
                     param.change=param.change,
                     param.const=param.const)

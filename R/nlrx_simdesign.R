@@ -33,11 +33,13 @@ nlrx_generate_seeds <- function(sim.seedrep) {
 nlrx_add_simdesign_lhs <- function(nl, sim.seedrep, sim.sample, sim.digits) {
 
   input.values <- nl@experiment@param.change
+  fixed.values <- nl@experiment@param.const
 
   lhs <- nlrx_create_lhs(input.values = input.values,
                          sample.count = sim.sample,
                          precision = sim.digits)
 
+  lhs <- as.tibble(cbind(lhs, fixed.values, stringsAsFactors=FALSE))
   seeds <- nlrx_generate_seeds(sim.seedrep)
 
   # Cretae new simdesign and add to nl
@@ -57,6 +59,7 @@ nlrx_add_simdesign_sobol <- function(nl, sim.seedrep, sim.sample, sim.order, sim
   library(tibble)
 
   input.values <- nl@experiment@param.change
+  fixed.values <- nl@experiment@param.const
 
   input.sets.1 <- nlrx_create_lhs(input.values=input.values,
                                  sample.count=sim.sample,
@@ -67,18 +70,52 @@ nlrx_add_simdesign_sobol <- function(nl, sim.seedrep, sim.sample, sim.order, sim
 
   # create instance of sobol class
   so <- sobol(model = NULL, X1 = input.sets.1, X2 = input.sets.2, order=sim.order, nboot = sim.nboot)
-
+  soX <- as.tibble(cbind(so$X, fixed.values, stringsAsFactors=FALSE))
   seeds <- nlrx_generate_seeds(sim.seedrep)
 
   # Cretae new simdesign and add to nl
   nl@experiment@simdesign <- new("simdesign",
                                  method="sobol",
-                                 simdata=so$X,
+                                 simdata=soX,
                                  simseeds=seeds,
                                  simobject=list(so))
 
   return(nl)
 }
+
+nlrx_add_simdesign_morris <- function(nl, sim.seedrep, sim.type, sim.levels, sim.rep, sim.grid.jump) {
+
+  library(sensitivity)
+  library(tibble)
+
+  morris.design <- list(type = sim.type, levels = sim.levels, grid.jump = sim.grid.jump)  ## gridjump should be levels / 2
+
+  input.values <- nl@experiment@param.change
+  fixed.values <- nl@experiment@param.const
+
+  # get the min and max values of the input factor ranges
+  mins <- sapply(seq(1,length(input.values)), function(i) {
+    input.values[[i]]$min})
+  maxs <- sapply(seq(1,length(input.values)), function(i) {
+    input.values[[i]]$max})
+
+  # create input sets
+  mo <- morris(model = NULL, factors = names(input.values), r = sim.rep, design = morris.design,
+               binf = mins, bsup = maxs, scale=TRUE)
+
+  moX <- as.tibble(cbind(as.tibble(mo$X), fixed.values, stringsAsFactors=FALSE))
+  seeds <- nlrx_generate_seeds(sim.seedrep)
+
+  # Cretae new simdesign and add to nl
+  nl@experiment@simdesign <- new("simdesign",
+                                 method="morris",
+                                 simdata=moX,
+                                 simseeds=seeds,
+                                 simobject=list(mo))
+
+  return(nl)
+}
+
 
 nlrx_show_simdata <- function(nl) {
 
