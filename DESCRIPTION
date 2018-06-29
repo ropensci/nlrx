@@ -9,5 +9,10 @@ Description: More about what it does (maybe more than one line)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+<<<<<<< HEAD
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+=======
+Imports: 
+    XML
+>>>>>>> 2567df132bb3c4fe92fe6bb964e8948fdf78eb6b
