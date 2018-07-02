@@ -2,14 +2,13 @@
 
 eval_simdesign <- function(nl) {
 
-  library(purrr)
   # A valid experiment needs at least
   notvalid <- c()
 
   if(is.na(simmethod(nl))) {
     notvalid <- c(notvalid, "simmethod")
   }
-  if(is_empty(siminput(nl))) {
+  if(purrr::is_empty(siminput(nl))) {
     notvalid <- c(notvalid, "siminput")
   }
   if(is.na(simseeds(nl))) {
@@ -28,7 +27,7 @@ simdesign_simple <- function(nl, nseeds) {
   eval_constants(nl)
   message("Creating simple simulation design")
   # This doesnt use variables but only constants to create a simdesign:
-  simple <- as.tibble(constants(nl))
+  simple <- tibble::as.tibble(constants(nl))
   seeds <- util_generate_seeds(nseeds = nseeds)
   simsimple <- new("simdesign",
                    simmethod="simple",
@@ -45,14 +44,14 @@ simdesign_ff <- function(nl, nseeds) {
   eval_experiment(nl)
   eval_variables(nl)
   message("Creating full facotrial simulation design")
-  library(plyr)
+
   # Add a full factorial simulatin design:
   # Generate vectors from variables data:
-  ff <- llply(variables(nl), function(i) {
+  ff <- plyr::llply(variables(nl), function(i) {
     seq(i$min, i$max, i$step)
   })
 
-  ff <- as.tibble(expand.grid(ff))
+  ff <- tibble::as.tibble(expand.grid(ff))
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   simff <- new("simdesign",
@@ -76,7 +75,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
                          samples = samples,
                          precision = precision)
 
-  lhs <- as.tibble(cbind(lhs, constants(nl), stringsAsFactors=FALSE))
+  lhs <- tibble::as.tibble(cbind(lhs, constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   # Add simdesign to nl
@@ -94,9 +93,6 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
   eval_variables(nl)
   message("Creating sobol simulation design")
 
-  library(sensitivity)
-  library(tibble)
-
   lhs_1 <- util_create_lhs(input = variables(nl),
                            samples = samples,
                            precision = precision)
@@ -105,8 +101,8 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
                            precision = precision)
 
   # create instance of sobol class
-  so <- sobol(model = NULL, X1 = lhs_1, X2 = lhs_2, order=sobolorder, nboot = sobolnboot, conf=sobolconf)
-  soX <- as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  so <- sensitivity::sobol(model = NULL, X1 = lhs_1, X2 = lhs_2, order=sobolorder, nboot = sobolnboot, conf=sobolconf)
+  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -125,9 +121,6 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
   eval_variables(nl)
   message("Creating sobol2007 simulation design")
 
-  library(sensitivity)
-  library(tibble)
-
   lhs_1 <- util_create_lhs(input = variables(nl),
                            samples = samples,
                            precision = precision)
@@ -136,8 +129,8 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
                            precision = precision)
 
   # create instance of sobol class
-  so <- sobol2007(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  so <- sensitivity::sobol2007(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
+  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -156,9 +149,6 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
   eval_variables(nl)
   message("Creating soboljansen simulation design")
 
-  library(sensitivity)
-  library(tibble)
-
   lhs_1 <- util_create_lhs(input = variables(nl),
                            samples = samples,
                            precision = precision)
@@ -167,8 +157,8 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
                            precision = precision)
 
   # create instance of sobol class
-  so <- soboljansen(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  so <- sensitivity::soboljansen(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
+  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -188,9 +178,6 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
   eval_variables(nl)
   message("Creating morris simulation design")
 
-  library(sensitivity)
-  library(tibble)
-
   morrisdesign <- list(type = morristype, levels = morrislevels, grid.jump = morrisgridjump)
 
   # get the min and max values of the input factor ranges
@@ -200,10 +187,10 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
     variables(nl)[[i]]$max})
 
   # create input sets
-  mo <- morris(model = NULL, factors = names(variables(nl)), r = morrisr, design = morrisdesign,
+  mo <- sensitivity::morris(model = NULL, factors = names(variables(nl)), r = morrisr, design = morrisdesign,
                binf = mins, bsup = maxs, scale=TRUE)
 
-  moX <- as.tibble(cbind(as.tibble(mo$X), constants(nl), stringsAsFactors=FALSE))
+  moX <- tibble::as.tibble(cbind(as.tibble(mo$X), constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
@@ -225,9 +212,6 @@ simdesign_eFast <- function(nl, samples, nseeds) {
   eval_variables(nl)
   message("Creating eFast simulation design")
 
-  library(sensitivity)
-  library(tibble)
-
   # get names of quantile functions fpr the input factors
   q.functions <- sapply(seq(1,length(variables(nl))), function(i) {
     variables(nl)[[i]]$qfun})
@@ -238,9 +222,9 @@ simdesign_eFast <- function(nl, samples, nseeds) {
     i$step <- NULL; return(i)})
 
   # create instance of fast99 class
-  f99 <- fast99(model = NULL, factors = names(variables(nl)), n = samples, q = q.functions, q.arg = q.args)
+  f99 <- sensitivity::fast99(model = NULL, factors = names(variables(nl)), n = samples, q = q.functions, q.arg = q.args)
 
-  f99X <- as.tibble(cbind(as.tibble(f99$X), constants(nl), stringsAsFactors=FALSE))
+  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X), constants(nl), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl

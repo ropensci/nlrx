@@ -47,7 +47,6 @@ eval_constants <- function(nl) {
 
 eval_experiment <- function(nl) {
 
-  library(purrr)
   # A valid experiment needs at least
   notvalid <- c()
 
@@ -63,7 +62,7 @@ eval_experiment <- function(nl) {
   if(is.na(metrics(nl))) {
     notvalid <- c(notvalid, "metrics")
   }
-  if(is_empty(variables(nl)) & is_empty(constants(nl))) {
+  if(purrr::is_empty(variables(nl)) & purrr::is_empty(constants(nl))) {
     notvalid <- c(notvalid, "variables or constants")
   }
 

@@ -19,6 +19,7 @@ Imports:
     dplyr,
     readr,
     plyr,
-    purrr
+    purrr,
+    magrittr
 Depends:
     tibble

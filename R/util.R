@@ -1,19 +1,30 @@
 
+
+util_get_os <- function() {
+  if (.Platform$OS.type == "windows") {
+    "win"
+  } else if (Sys.info()["sysname"] == "Darwin") {
+    "mac"
+  } else if (.Platform$OS.type == "unix") {
+    "unix"
+  } else {
+    stop("Unknown OS")
+  }
+}
+
+
 # Create a latin hypercube from input data
 util_create_lhs <- function(input, samples, precision) {
 
-  library(lhs)
-  library(tibble)
-
   # create a random sample of input factor sets (Latin Hypercube Sampling)
-  lhs.design <- randomLHS(samples, length(input))
+  lhs.design <- lhs::randomLHS(samples, length(input))
   # transform the standardized random values to the real input value range
   # and apply the desired random distribution
   lhs.design <- lapply(seq(1,length(input)), function(i) {
     match.fun(input[[i]]$qfun)(lhs.design[,i], input[[i]]$min, input[[i]]$max)
   })
   names(lhs.design) <- names(input)
-  lhs.final <- as.tibble(lhs.design)
+  lhs.final <- tibble::as.tibble(lhs.design)
   ## Precision:
   lhs.final <- round(lhs.final, digits = precision)
 
@@ -30,14 +41,12 @@ util_generate_seeds <- function(nseeds) {
 # Write an xml file for one simulation run
 util_create_sim_XML <- function(nl, seed, run, xmlfile) {
 
-  library(XML)
-
   simdata_run <- siminput(nl)[run,]
 
   ### Create XML object:
-  nlXML = newXMLDoc()
-  experiments = newXMLNode("experiments", doc=nlXML)
-  experiment = newXMLNode("experiment", attrs=c(name=expname(nl),
+  nlXML = XML::newXMLDoc()
+  experiments = XML::newXMLNode("experiments", doc=nlXML)
+  experiment = XML::newXMLNode("experiment", attrs=c(name=expname(nl),
                                                 repetitions=repetition(nl),
                                                 runMetricsEveryStep=tickmetrics(nl)),
                           parent=experiments)
@@ -45,37 +54,37 @@ util_create_sim_XML <- function(nl, seed, run, xmlfile) {
   ## Add Setup, go
   idsetup <- paste(idsetup(nl), sep="\n", collapse="\n")
   idgo <- paste(idgo(nl), sep="\n", collapse="\n")
-  addChildren(experiment, newXMLNode("setup", idsetup, parent=experiment))
-  addChildren(experiment, newXMLNode("go", idgo, parent=experiment))
+  XML::addChildren(experiment, newXMLNode("setup", idsetup, parent=experiment))
+  XML::addChildren(experiment, newXMLNode("go", idgo, parent=experiment))
 
   ## Add final commands if provided:
   if (!is.na(idfinal(nl))) {
     idfinal <- paste(idfinal(nl), sep="\n", collapse="\n")
-    addChildren(experiment, newXMLNode("final", idfinal, parent=experiment))
+    XML::addChildren(experiment, newXMLNode("final", idfinal, parent=experiment))
   }
 
   ## Add timeLimit:
   runtime <- runtime(nl)
-  addChildren(experiment, newXMLNode("timeLimit", attrs=c(steps=runtime), parent=experiment))
+  XML::addChildren(experiment, newXMLNode("timeLimit", attrs=c(steps=runtime), parent=experiment))
 
   ## Add metrics:
   metrics <- metrics(nl)
   for (i in metrics) {
-    addChildren(experiment, newXMLNode("metric", i, parent=experiment))
+    XML::addChildren(experiment, newXMLNode("metric", i, parent=experiment))
   }
 
   ## Add parameters and values:
   for (i in 1:length(simdata_run)) {
-    addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
+    XML::addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
   }
   ## Add seed:
-  addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), newXMLNode("value", attrs=c(value=seed))))
+  XML::addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), newXMLNode("value", attrs=c(value=seed))))
 
   ## Use NetLogo specific prefix:
   prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
 
   # SAVE XML TO FILE
-  cat(saveXML(nlXML, prefix=prefix), file=xmlfile)
+  cat(XML::saveXML(nlXML, prefix=prefix), file=xmlfile)
 
 }
 
@@ -98,13 +107,10 @@ util_cleanup <- function(nl, pattern) {
 
 util_gather_results <- function(nl, outfile) {
 
-  library(dplyr)
-  library(readr)
-
-  NLtable <- read_csv(outfile, skip=6)
+  NLtable <- readr::read_csv(outfile, skip=6)
 
   ## Throw away all ticks that are not within the eval interval
-  NLtable <- NLtable %>% filter(`[step]` %in% evalticks(nl))
+  NLtable <- NLtable %>% dplyr::filter(`[step]` %in% evalticks(nl))
 
   return(NLtable)
 }
@@ -112,12 +118,10 @@ util_gather_results <- function(nl, outfile) {
 
 util_read_write_batch <- function(nl) {
 
-  library(readr)
-
-  os <- Sys.info()[1]
+  os <- util_get_os()
   batchpath_temp <- NULL
 
-  if (os == "Windows") {
+  if (os == "win") {
     # Prepare pathes:
     batchpath <- paste0(nlpath(nl), "netlogo-headless.bat")
 
@@ -130,7 +134,7 @@ util_read_write_batch <- function(nl) {
     jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
-    batch <- read_lines(batchpath)
+    batch <- readr::read_lines(batchpath)
 
     # Get position index of jvmopts and jarpath line
     pos_jvmopts <- which(grepl("SET \"JVM_OPTS=-Xmx", batch))
@@ -142,7 +146,7 @@ util_read_write_batch <- function(nl) {
 
     # Create new batchfile:
     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
-    write_lines(batch, path=batchpath_temp)
+    readr::write_lines(batch, path=batchpath_temp)
 
   }
   if (os == "unix") {
@@ -155,7 +159,7 @@ util_read_write_batch <- function(nl) {
     jvmoptsline <- paste0("JVM_OPTS=(-Xmx", jvmmem(nl), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
 
     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
-    batch <- read_lines(batchpath)
+    batch <- readr::read_lines(batchpath)
 
     # Get position index of jvmopts and jarpath line
     pos_basedir <- which(grepl("BASE_DIR=\"", batch))
@@ -167,7 +171,7 @@ util_read_write_batch <- function(nl) {
 
     # Create new batchfile:
     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
-    write_lines(batch, path=batchpath_temp)
+    readr::write_lines(batch, path=batchpath_temp)
 
   }
 
