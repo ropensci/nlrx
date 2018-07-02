@@ -1,44 +1,21 @@
+#' Create a temporary behavior space xml file to setup NetLogo via commandline
+#'
+#' @description Create a temporary behavior space xml file to setup NetLogo via commandline
+#'
+#' @param nl nl object
+#' @param seed random-seed for NetLogo simulation
+#' @param run row id of the simulation input tibble of the simdesign within the provided nl object
+#' @param xmlfile filepath where the xml file is stored
+#'
+#' @details
+#'
+#' @examples
+#' \dontrun{
+#' }
+#'
+#' @aliases util_create_sim_XML
+#' @rdname util_create_sim_XML
 
-
-util_get_os <- function() {
-  if (.Platform$OS.type == "windows") {
-    "win"
-  } else if (Sys.info()["sysname"] == "Darwin") {
-    "mac"
-  } else if (.Platform$OS.type == "unix") {
-    "unix"
-  } else {
-    stop("Unknown OS")
-  }
-}
-
-
-# Create a latin hypercube from input data
-util_create_lhs <- function(input, samples, precision) {
-
-  # create a random sample of input factor sets (Latin Hypercube Sampling)
-  lhs.design <- lhs::randomLHS(samples, length(input))
-  # transform the standardized random values to the real input value range
-  # and apply the desired random distribution
-  lhs.design <- lapply(seq(1,length(input)), function(i) {
-    match.fun(input[[i]]$qfun)(lhs.design[,i], input[[i]]$min, input[[i]]$max)
-  })
-  names(lhs.design) <- names(input)
-  lhs.final <- tibble::as.tibble(lhs.design)
-  ## Precision:
-  lhs.final <- round(lhs.final, digits = precision)
-
-  return(lhs.final)
-}
-
-util_generate_seeds <- function(nseeds) {
-
-  seeds <- ceiling(stats::runif(nseeds, 0, 10000))
-  return(seeds)
-}
-
-
-# Write an xml file for one simulation run
 util_create_sim_XML <- function(nl, seed, run, xmlfile) {
 
   simdata_run <- siminput(nl)[run,]
@@ -47,9 +24,9 @@ util_create_sim_XML <- function(nl, seed, run, xmlfile) {
   nlXML = XML::newXMLDoc()
   experiments = XML::newXMLNode("experiments", doc=nlXML)
   experiment = XML::newXMLNode("experiment", attrs=c(name=expname(nl),
-                                                repetitions=repetition(nl),
-                                                runMetricsEveryStep=tickmetrics(nl)),
-                          parent=experiments)
+                                                     repetitions=repetition(nl),
+                                                     runMetricsEveryStep=tickmetrics(nl)),
+                               parent=experiments)
 
   ## Add Setup, go
   idsetup <- paste(idsetup(nl), sep="\n", collapse="\n")
@@ -88,8 +65,24 @@ util_create_sim_XML <- function(nl, seed, run, xmlfile) {
 
 }
 
+#' Setup and execute NetLogo via commandline
+#'
+#' @description Setup and execute NetLogo via commandline
+#'
+#' @param nl nl object
+#' @param xmlfile file location of the experiment xml file
+#' @param outfile file location for output results
+#' @param batchfile file location of system specific batch file to call NetLogo via commandline
+#'
+#' @details
+#'
+#' @examples
+#' \dontrun{
+#' }
+#'
+#' @aliases util_call_nl
+#' @rdname util_call_nl
 
-# Call one simulation via commandline
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 
   NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", modelpath(nl), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", expname(nl), " --table ", "\"", outfile, "\"", " --threads ", 1)
@@ -97,6 +90,21 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 
 }
 
+#' Delete temporary files
+#'
+#' @description Delete temporary files
+#'
+#' @param nl nl object
+#' @param pattern defines file types to be deleted (".xml", ".csv" or "all")
+#'
+#' @details
+#'
+#' @examples
+#' \dontrun{
+#' }
+#'
+#' @aliases util_cleanup
+#' @rdname util_cleanup
 
 util_cleanup <- function(nl, pattern) {
 
@@ -104,6 +112,21 @@ util_cleanup <- function(nl, pattern) {
 
 }
 
+#' Load output file from simulations
+#'
+#' @description Load output file from simulations
+#'
+#' @param nl nl object
+#' @param outfile  file location of output results
+#'
+#' @details
+#'
+#' @examples
+#' \dontrun{
+#' }
+#'
+#' @aliases util_gather_results
+#' @rdname util_gather_results
 
 util_gather_results <- function(nl, outfile) {
 
@@ -115,6 +138,20 @@ util_gather_results <- function(nl, outfile) {
   return(NLtable)
 }
 
+#' Write a modified batchfile that executes NetLogo
+#'
+#' @description Write a modified batchfile that executes NetLogo
+#'
+#' @param nl nl object
+#'
+#' @details
+#'
+#' @examples
+#' \dontrun{
+#' }
+#'
+#' @aliases util_read_write_batch
+#' @rdname util_read_write_batch
 
 util_read_write_batch <- function(nl) {
 

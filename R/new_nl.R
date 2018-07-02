@@ -2,10 +2,11 @@
 #'
 #' @description Initialize a new nl object
 #'
-#' @param nlversion Character string naming which NetLogo Version is used.
-#' @param nlpath Character string pointing to the Netlogo main directory, matching the defined version.
-#' @param modelpath Character string pointing to the Netlogo model that should be used for analyses.
-#' @param jvmmem Number defining the amount of memory in megabytes that is allocated to each jvm process.
+#' @param nlversion A character string defining the NetLogo version that is used
+#' @param nlpath Path to the NetLogo main directory matching the defined version
+#' @param modelpath Path to the NetLogo model file (*.nlogo) that is used for simulations
+#' @param jvmmem Java virtual machine memory capacity in megabytes
+#' @param experiment Holds a experiment S4 class object
 #'
 #' @details
 #'
@@ -19,10 +20,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' new_nl(new_nl(nlversion = "6.0.3",
+#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#' new_nl(nlversion = "6.0.3",
 #' nlpath = "C:/Program Files/NetLogo 6.0.3/",
 #' modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
-#' jvmmem = 1024))
+#' jvmmem = 1024)
 #' }
 #'
 #' @aliases new_nl
@@ -32,11 +34,11 @@
 
 new_nl <- function(nlversion, nlpath, modelpath, jvmmem) {
 
-  nl <- new("nl",
-            nlversion = nlversion,
-            nlpath = nlpath,
-            modelpath = modelpath,
-            jvmmem = jvmmem)
+  nl <- methods::new("nl",
+                     nlversion = nlversion,
+                     nlpath = nlpath,
+                     modelpath = modelpath,
+                     jvmmem = jvmmem)
 
   return(nl)
 

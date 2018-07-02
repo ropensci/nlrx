@@ -1,4 +1,50 @@
 
+#' Execute NetLogo simulation
+#'
+#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#'
+#' @param nl nl object
+#' @param seed a random seed for the NetLogo simulation
+#' @param run rownumber of the input tibble within the attached simdesign object that should be executed
+#' @param cleanup indicate which filetypes should be deleted
+#' @details
+#'
+#' run_nl executes one simulation of the specified NetLogo model within the provided nl object.
+#' The random seed is set within the NetLogo model to control stochasticity.
+#' The run id defines whcih row of the input data tibble within the simdesign object of the provided nl object is executed.
+#' Cleanup can either be .xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+#'
+#' This function can be used to run single simulations of a NetLogo model.
+#' It can also be used within a loop environment that loops over the input tibble and the simseeds of the attached simdesign to run a full simulation of all input combinations and seeds.
+#' We suggest to use the furrr package function future_map_dfr to loop over simulations.
+#' This approach enables singlecore and multicore simulations on local machines and remote HPC clusters.
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Run one simulation:
+#' results <- run_nl(nl=nl,
+#' seed=simseeds(nl)[1],
+#' run=1,
+#' cleanup="all")
+#'
+#' # Run all simulations on local machine in parallel:
+#'
+#' library(furrr)
+#' plan(multisession)
+#' results %<-% furrr::future_map_dfr(simseeds(nl), function(seed){
+#'   furrr::future_map_dfr(seq_len(nrow(siminput(nl))), function(run) {
+#'       run_nl(nl = nl,
+#'              seed = seed,
+#'              run = run,
+#'              cleanup = "all")
+#'    })
+#'  })
+#' }
+#' @aliases run_nl
+#' @rdname run_nl
+#'
+#' @export
 
 run_nl <- function(nl, seed, run, cleanup=NULL) {
 
