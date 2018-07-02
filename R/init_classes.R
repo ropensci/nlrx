@@ -1,6 +1,6 @@
 # Initialize class "simdesign"
 #' @export
-setClass("simdesign",
+methods::setClass("simdesign",
 
          slots=list(
            simmethod="character",
@@ -23,7 +23,7 @@ setClass("simdesign",
 
 # Initialize class "experiment"
 #' @export
-setClass("experiment",
+methods::setClass("experiment",
 
          slots=list(
            expname="character",
@@ -62,7 +62,7 @@ setClass("experiment",
 
 # Initialize class "nl"
 #' @export
-setClass("nl",
+methods::setClass("nl",
          slots=list(
            nlversion="character",
            nlpath="character",

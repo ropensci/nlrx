@@ -15,18 +15,19 @@ download_netlogo(to, version)
 Auxiliary function to download NetLogo
 }
 \details{
+Supported Versions for Download and Usage (parameter \code{version}):
 \itemize{
-\item "604" = NetLogo Version 6.0.4
-\item "603" = NetLogo Version 6.0.3
-\item "602" = NetLogo Version 6.0.2
-\item "601" = NetLogo Version 6.0.1
-\item "600" = NetLogo Version 6.0.0
-\item "531" = NetLogo Version 5.3.1
+\item "6.0.4" = NetLogo Version 6.0.4
+\item "6.0.3" = NetLogo Version 6.0.3
+\item "6.0.2" = NetLogo Version 6.0.2
+\item "6.0.1" = NetLogo Version 6.0.1
+\item "6.0" = NetLogo Version 6.0
+\item "5.3.1" = NetLogo Version 5.3.1
 }
 }
 \examples{
 \dontrun{
-download_netlogo("/home/user/experiment/" , "603")
+download_netlogo("/home/user/experiment/" , "6.0.3")
 }
 
 }

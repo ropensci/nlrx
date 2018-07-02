@@ -49,7 +49,7 @@ analyze_simple <- function(nl) {
 analyze_ff <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
-  ffagg <- simoutput(nl) %>% dplyr::group_by_at(vars("[step]", names(siminput(nl)))) %>% dplyr::summarise_at(metrics(nl), funs(mean, sd, min, max))
+  ffagg <- simoutput(nl) %>% dplyr::group_by_at(vars("[step]", names(siminput(nl)))) %>% dplyr::summarise_at(metrics(nl), funs(mean, stats::sd, min, max))
   return(ffagg)
 
 }
@@ -58,7 +58,7 @@ analyze_ff <- function(nl) {
 analyze_lhs <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
-  lhsagg <- simoutput(nl) %>% dplyr::group_by_at(vars("[step]", names(siminput(nl)))) %>% dplyr::summarise_at(metrics(nl), funs(mean, sd, min, max))
+  lhsagg <- simoutput(nl) %>% dplyr::group_by_at(vars("[step]", names(siminput(nl)))) %>% dplyr::summarise_at(metrics(nl), funs(mean, stats::sd, min, max))
   return(lhsagg)
 }
 
@@ -216,7 +216,7 @@ analyze_morris <- function(nl) {
       sigma <- tibble::tibble(metric=metrics(nl)[j],
                               parameter=colnames(mo$ee),
                               index="sigma",
-                              value=apply(mo$ee, 2, sd),
+                              value=apply(mo$ee, 2, stats::sd),
                               seed=i)
 
       sensindex <- rbind(sensindex, mustar, mu, sigma)

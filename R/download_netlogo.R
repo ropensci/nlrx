@@ -45,7 +45,7 @@ download_netlogo <- function(to, version) {
          "unix" = {nl_dl <- paste0(nl_vers, "NetLogo-", version, "-64.tgz")},
          "Unknown OS" = {stop("Unknown OS. OS not supported by NetLogo")})
 
-  download.file(nl_dl, to)
+  utils::download.file(nl_dl, to)
 
 }
 

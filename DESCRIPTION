@@ -13,14 +13,16 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Imports:
     XML,
-    tibble,
     lhs,
     sensitivity,
     dplyr,
     readr,
     plyr,
     purrr,
-    magrittr
+    magrittr,
+    stats,
+    utils
 Depends:
-    tibble
+    tibble,
+    methods
 Suggests: testthat

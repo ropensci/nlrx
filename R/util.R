@@ -33,7 +33,7 @@ util_create_lhs <- function(input, samples, precision) {
 
 util_generate_seeds <- function(nseeds) {
 
-  seeds <- ceiling(runif(nseeds, 0, 10000))
+  seeds <- ceiling(stats::runif(nseeds, 0, 10000))
   return(seeds)
 }
 
