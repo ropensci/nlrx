@@ -1,5 +1,3 @@
-# initialize classes
-
 # Initialize class "simdesign"
 #' @export
 setClass("simdesign",
