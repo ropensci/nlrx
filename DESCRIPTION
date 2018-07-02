@@ -12,4 +12,13 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
 Imports: 
-    XML
+    XML,
+    tibble,
+    lhs,
+    sensitivity,
+    dplyr,
+    readr,
+    plyr,
+    purrr
+Depends:
+    tibble
