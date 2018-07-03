@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 #' Add a simple simdesign to a nl object
 #'
 #' @description Add a simple simdesign to a nl object
@@ -17,7 +24,7 @@
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_simple(nl = nl, nseeds = 3)
+#' nl@@simdesign <- simdesign_simple(nl = nl, nseeds = 3)
 #' }
 #'
 #' @aliases simdesign_simple
@@ -27,18 +34,18 @@
 
 simdesign_simple <- function(nl, nseeds) {
 
-  eval_experiment(nl)
-  eval_constants(nl)
+  util_eval_experiment(nl)
+  util_eval_constants(nl)
   message("Creating simple simulation design")
   # This doesnt use variables but only constants to create a simdesign:
-  simple <- tibble::as.tibble(constants(nl))
+  simple <- tibble::as.tibble(getexp(nl, "constants"))
   seeds <- util_generate_seeds(nseeds = nseeds)
-  simsimple <- methods::new("simdesign",
-                            simmethod="simple",
-                            siminput=simple,
-                            simseeds=seeds)
 
-  return(simsimple)
+  new_simdesign <- simdesign(simmethod="simple",
+                             siminput=simple,
+                             simseeds=seeds)
+
+  return(new_simdesign)
 
 }
 
@@ -61,7 +68,7 @@ simdesign_simple <- function(nl, nseeds) {
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_ff(nl = nl, nseeds = 3)
+#' nl@@simdesign <- simdesign_ff(nl = nl, nseeds = 3)
 #' }
 #'
 #' @aliases simdesign_ff
@@ -71,25 +78,24 @@ simdesign_simple <- function(nl, nseeds) {
 
 simdesign_ff <- function(nl, nseeds) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating full facotrial simulation design")
 
   # Add a full factorial simulatin design:
   # Generate vectors from variables data:
-  ff <- plyr::llply(variables(nl), function(i) {
+  ff <- plyr::llply(getexp(nl, "variables"), function(i) {
     seq(i$min, i$max, i$step)
   })
 
   ff <- tibble::as.tibble(expand.grid(ff))
   seeds <- util_generate_seeds(nseeds = nseeds)
 
-  simff <- methods::new("simdesign",
-                        simmethod="ff",
-                        siminput=ff,
-                        simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="ff",
+                             siminput=ff,
+                             simseeds=seeds)
 
-  return(simff)
+  return(new_simdesign)
 }
 
 #' Add a latin-hypercube simdesign to a nl object
@@ -111,7 +117,7 @@ simdesign_ff <- function(nl, nseeds) {
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_lhs(nl=nl,
+#' nl@@simdesign <- simdesign_lhs(nl=nl,
 #' samples=10,
 #' nseeds=3,
 #' precision=3)
@@ -124,24 +130,23 @@ simdesign_ff <- function(nl, nseeds) {
 
 simdesign_lhs <- function(nl, samples, nseeds, precision) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating latin hypercube simulation design")
 
-  lhs <- util_create_lhs(input = variables(nl),
+  lhs <- util_create_lhs(input = getexp(nl, "variables"),
                          samples = samples,
                          precision = precision)
 
-  lhs <- tibble::as.tibble(cbind(lhs, constants(nl), stringsAsFactors=FALSE))
+  lhs <- tibble::as.tibble(cbind(lhs, getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   # Add simdesign to nl
-  simlhs <- methods::new("simdesign",
-                         simmethod="lhs",
-                         siminput=lhs,
-                         simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="lhs",
+                             siminput=lhs,
+                             simseeds=seeds)
 
-  return(simlhs)
+  return(new_simdesign)
 }
 
 #' Add a sobol simdesign to a nl object
@@ -168,7 +173,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_sobol(nl=nl,
+#' nl@@simdesign <- simdesign_sobol(nl=nl,
 #' samples=100,
 #' sobolorder=2,
 #' sobolnboot=10,
@@ -184,30 +189,29 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 
 simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nseeds, precision) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating sobol simulation design")
 
-  lhs_1 <- util_create_lhs(input = variables(nl),
+  lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
-  lhs_2 <- util_create_lhs(input = variables(nl),
+  lhs_2 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
 
   # create instance of sobol class
   so <- sensitivity::sobol(model = NULL, X1 = lhs_1, X2 = lhs_2, order=sobolorder, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
-  simsobol <- methods::new("simdesign",
-                           simmethod="sobol",
-                           siminput=soX,
-                           simobject=list(so),
-                           simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="sobol",
+                             siminput=soX,
+                             simobject=list(so),
+                             simseeds=seeds)
 
-  return(simsobol)
+  return(new_simdesign)
 }
 
 #' Add a sobol2007 simdesign to a nl object
@@ -233,7 +237,7 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_sobol2007(nl=nl,
+#' nl@@simdesign <- simdesign_sobol2007(nl=nl,
 #' samples=100,
 #' sobolnboot=10,
 #' sobolconf=0.95,
@@ -248,30 +252,29 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
 
 simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, precision) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating sobol2007 simulation design")
 
-  lhs_1 <- util_create_lhs(input = variables(nl),
+  lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
-  lhs_2 <- util_create_lhs(input = variables(nl),
+  lhs_2 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
 
   # create instance of sobol class
   so <- sensitivity::sobol2007(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
-  simsobol2007 <- methods::new("simdesign",
-                               simmethod="sobol2007",
-                               siminput=soX,
-                               simobject=list(so),
-                               simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="sobol2007",
+                             siminput=soX,
+                             simobject=list(so),
+                             simseeds=seeds)
 
-  return(simsobol2007)
+  return(new_simdesign)
 }
 
 
@@ -298,7 +301,7 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_soboljansen(nl=nl,
+#' nl@@simdesign <- simdesign_soboljansen(nl=nl,
 #' samples=100,
 #' sobolnboot=10,
 #' sobolconf=0.95,
@@ -306,37 +309,36 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
 #' precision=3)
 #' }
 #'
-#' @aliases simdesign_sobol2007
-#' @rdname simdesign_sobol2007
+#' @aliases simdesign_soboljansen
+#' @rdname simdesign_soboljansen
 #'
 #' @export
 
 simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, precision) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating soboljansen simulation design")
 
-  lhs_1 <- util_create_lhs(input = variables(nl),
+  lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
-  lhs_2 <- util_create_lhs(input = variables(nl),
+  lhs_2 <- util_create_lhs(input = getexp(nl, "variables"),
                            samples = samples,
                            precision = precision)
 
   # create instance of sobol class
   so <- sensitivity::soboljansen(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, constants(nl), stringsAsFactors=FALSE))
+  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
-  simsoboljansen <- methods::new("simdesign",
-                                 simmethod="soboljansen",
-                                 siminput=soX,
-                                 simobject=list(so),
-                                 simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="soboljansen",
+                             siminput=soX,
+                             simobject=list(so),
+                             simseeds=seeds)
 
-  return(simsoboljansen)
+  return(new_simdesign)
 }
 
 
@@ -365,7 +367,7 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_morris(nl=nl,
+#' nl@@simdesign <- simdesign_morris(nl=nl,
 #'                                   morristype="oat",
 #'                                   morrislevels=4,
 #'                                   morrisr=3,
@@ -380,33 +382,32 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
 
 simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating morris simulation design")
 
   morrisdesign <- list(type = morristype, levels = morrislevels, grid.jump = morrisgridjump)
 
   # get the min and max values of the input factor ranges
-  mins <- sapply(seq(1,length(variables(nl))), function(i) {
-    variables(nl)[[i]]$min})
-  maxs <- sapply(seq(1,length(variables(nl))), function(i) {
-    variables(nl)[[i]]$max})
+  mins <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
+    getexp(nl, "variables")[[i]]$min})
+  maxs <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
+    getexp(nl, "variables")[[i]]$max})
 
   # create input sets
-  mo <- sensitivity::morris(model = NULL, factors = names(variables(nl)), r = morrisr, design = morrisdesign,
+  mo <- sensitivity::morris(model = NULL, factors = names(getexp(nl, "variables")), r = morrisr, design = morrisdesign,
                binf = mins, bsup = maxs, scale=TRUE)
 
-  moX <- tibble::as.tibble(cbind(as.tibble(mo$X), constants(nl), stringsAsFactors=FALSE))
+  moX <- tibble::as.tibble(cbind(as.tibble(mo$X), getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
-  simmorris <- methods::new("simdesign",
-                            simmethod="morris",
-                            siminput=moX,
-                            simobject=list(mo),
-                            simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="morris",
+                             siminput=moX,
+                             simobject=list(mo),
+                             simseeds=seeds)
 
-  return(simmorris)
+  return(new_simdesign)
 
 }
 
@@ -433,7 +434,7 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
 #' @examples
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' simdesign(nl) <- simdesign_eFast(nl=nl,
+#' nl@@simdesign <- simdesign_eFast(nl=nl,
 #'                                  samples=70,
 #'                                  nseeds=1)
 #' }
@@ -445,33 +446,32 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
 
 simdesign_eFast <- function(nl, samples, nseeds) {
 
-  eval_experiment(nl)
-  eval_variables(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
   message("Creating eFast simulation design")
 
   # get names of quantile functions fpr the input factors
-  q.functions <- sapply(seq(1,length(variables(nl))), function(i) {
-    variables(nl)[[i]]$qfun})
+  q.functions <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
+    getexp(nl, "variables")[[i]]$qfun})
 
   # generate a list of arguments for the quantile functions
-  q.args <- lapply(variables(nl), function(i) {
+  q.args <- lapply(getexp(nl, "variables"), function(i) {
     i$qfun <- NULL
     i$step <- NULL; return(i)})
 
   # create instance of fast99 class
-  f99 <- sensitivity::fast99(model = NULL, factors = names(variables(nl)), n = samples, q = q.functions, q.arg = q.args)
+  f99 <- sensitivity::fast99(model = NULL, factors = names(getexp(nl, "variables")), n = samples, q = q.functions, q.arg = q.args)
 
-  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X), constants(nl), stringsAsFactors=FALSE))
+  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X), getexp(nl, "constants"), stringsAsFactors=FALSE))
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
-  simefast <- methods::new("simdesign",
-                           simmethod="eFast",
-                           siminput=f99X,
-                           simobject=list(f99),
-                           simseeds=seeds)
+  new_simdesign <- simdesign(simmethod="eFast",
+                             siminput=f99X,
+                             simobject=list(f99),
+                             simseeds=seeds)
 
-  return(simefast)
+  return(new_simdesign)
 
 }
 

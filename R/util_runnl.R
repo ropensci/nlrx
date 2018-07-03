@@ -6,56 +6,51 @@
 #' @param seed random-seed for NetLogo simulation
 #' @param run row id of the simulation input tibble of the simdesign within the provided nl object
 #' @param xmlfile filepath where the xml file is stored
-#'
-#' @details
-#'
-#' @examples
-#' \dontrun{
-#' }
-#'
 #' @aliases util_create_sim_XML
 #' @rdname util_create_sim_XML
 
-util_create_sim_XML <- function(nl, seed, run, xmlfile) {
+util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
-  simdata_run <- siminput(nl)[run,]
+  simdata_run <- getsim(nl, "siminput")[siminputrow,]
 
   ### Create XML object:
   nlXML = XML::newXMLDoc()
   experiments = XML::newXMLNode("experiments", doc=nlXML)
-  experiment = XML::newXMLNode("experiment", attrs=c(name=expname(nl),
-                                                     repetitions=repetition(nl),
-                                                     runMetricsEveryStep=tickmetrics(nl)),
+  experiment = XML::newXMLNode("experiment", attrs=c(name=getexp(nl, "expname"),
+                                                     repetitions=getexp(nl, "repetition"),
+                                                     runMetricsEveryStep=getexp(nl, "tickmetrics")),
                                parent=experiments)
 
   ## Add Setup, go
-  idsetup <- paste(idsetup(nl), sep="\n", collapse="\n")
-  idgo <- paste(idgo(nl), sep="\n", collapse="\n")
-  XML::addChildren(experiment, newXMLNode("setup", idsetup, parent=experiment))
-  XML::addChildren(experiment, newXMLNode("go", idgo, parent=experiment))
+  idsetup <- paste(getexp(nl, "idsetup"), sep="\n", collapse="\n")
+  idgo <- paste(getexp(nl, "idgo"), sep="\n", collapse="\n")
+  XML::addChildren(experiment, XML::newXMLNode("setup", idsetup, parent=experiment))
+  XML::addChildren(experiment, XML::newXMLNode("go", idgo, parent=experiment))
 
   ## Add final commands if provided:
-  if (!is.na(idfinal(nl))) {
-    idfinal <- paste(idfinal(nl), sep="\n", collapse="\n")
-    XML::addChildren(experiment, newXMLNode("final", idfinal, parent=experiment))
+  if (!is.na(getexp(nl, "idfinal"))) {
+    idfinal <- paste(getexp(nl, "idfinal"), sep="\n", collapse="\n")
+    XML::addChildren(experiment, XML::newXMLNode("final", idfinal, parent=experiment))
   }
 
   ## Add timeLimit:
-  runtime <- runtime(nl)
-  XML::addChildren(experiment, newXMLNode("timeLimit", attrs=c(steps=runtime), parent=experiment))
+  runtime <- getexp(nl, "runtime")
+  XML::addChildren(experiment, XML::newXMLNode("timeLimit", attrs=c(steps=runtime), parent=experiment))
 
   ## Add metrics:
-  metrics <- metrics(nl)
+  metrics <- getexp(nl, "metrics")
   for (i in metrics) {
-    XML::addChildren(experiment, newXMLNode("metric", i, parent=experiment))
+    XML::addChildren(experiment, XML::newXMLNode("metric", i, parent=experiment))
   }
 
   ## Add parameters and values:
   for (i in 1:length(simdata_run)) {
-    XML::addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
+    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), XML::newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
   }
-  ## Add seed:
-  XML::addChildren(experiment, newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), newXMLNode("value", attrs=c(value=seed))))
+  ## If repetition > 1 we use a ranodm seed, otherwise the provided seed:
+  if (getexp(nl, "repetition") == 1) {
+    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), XML::newXMLNode("value", attrs=c(value=seed))))
+  }
 
   ## Use NetLogo specific prefix:
   prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
@@ -73,19 +68,12 @@ util_create_sim_XML <- function(nl, seed, run, xmlfile) {
 #' @param xmlfile file location of the experiment xml file
 #' @param outfile file location for output results
 #' @param batchfile file location of system specific batch file to call NetLogo via commandline
-#'
-#' @details
-#'
-#' @examples
-#' \dontrun{
-#' }
-#'
 #' @aliases util_call_nl
 #' @rdname util_call_nl
 
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 
-  NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", modelpath(nl), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", expname(nl), " --table ", "\"", outfile, "\"", " --threads ", 1)
+  NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", getnl(nl, "modelpath"), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", getexp(nl, "expname"), " --table ", "\"", outfile, "\"", " --threads ", 1)
   system(NLcall, wait=TRUE)
 
 }
@@ -96,19 +84,12 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #'
 #' @param nl nl object
 #' @param pattern defines file types to be deleted (".xml", ".csv" or "all")
-#'
-#' @details
-#'
-#' @examples
-#' \dontrun{
-#' }
-#'
 #' @aliases util_cleanup
 #' @rdname util_cleanup
 
 util_cleanup <- function(nl, pattern) {
 
-  file.remove(dir(path=outpath(nl), pattern=pattern, full.names=TRUE))
+  file.remove(dir(path=getexp(nl, "outpath"), pattern=pattern, full.names=TRUE))
 
 }
 
@@ -118,13 +99,6 @@ util_cleanup <- function(nl, pattern) {
 #'
 #' @param nl nl object
 #' @param outfile  file location of output results
-#'
-#' @details
-#'
-#' @examples
-#' \dontrun{
-#' }
-#'
 #' @aliases util_gather_results
 #' @rdname util_gather_results
 
@@ -133,7 +107,7 @@ util_gather_results <- function(nl, outfile) {
   NLtable <- readr::read_csv(outfile, skip=6)
 
   ## Throw away all ticks that are not within the eval interval
-  NLtable <- NLtable %>% dplyr::filter(`[step]` %in% evalticks(nl))
+  NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
 
   return(NLtable)
 }
@@ -143,13 +117,6 @@ util_gather_results <- function(nl, outfile) {
 #' @description Write a modified batchfile that executes NetLogo
 #'
 #' @param nl nl object
-#'
-#' @details
-#'
-#' @examples
-#' \dontrun{
-#' }
-#'
 #' @aliases util_read_write_batch
 #' @rdname util_read_write_batch
 
@@ -160,14 +127,14 @@ util_read_write_batch <- function(nl) {
 
   if (os == "win") {
     # Prepare pathes:
-    batchpath <- paste0(nlpath(nl), "netlogo-headless.bat")
+    batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
     # Extensions Folder:
-    extensionspath <- paste0(nlpath(nl), "app/extensions/")
-    jarpath <- paste0(nlpath(nl), "app/netlogo-", nlversion(nl), ".jar")
+    extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
+    jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-", getnl(nl, "nlversion"), ".jar")
 
     # jvmoptions string:
-    jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", jvmmem(nl), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 -Dnetlogo.extensions.dir=^\"", extensionspath, "^\"\"")
+    jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 -Dnetlogo.extensions.dir=^\"", extensionspath, "^\"\"")
     jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
@@ -189,11 +156,11 @@ util_read_write_batch <- function(nl) {
   if (os == "unix") {
 
     # Prepare pathes:
-    batchpath <- paste0(nlpath(nl), "netlogo-headless.sh")
+    batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
 
     # jvmoptions string:
-    basedirline <- paste0("BASE_DIR=\"$( cd \"$( ", nlpath(nl), " \"${BASH_SOURCE[0]}\" )\" && pwd )\"")
-    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", jvmmem(nl), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
+    basedirline <- paste0("BASE_DIR=\"$( cd \"$( ", getnl(nl, "nlpath"), " \"${BASH_SOURCE[0]}\" )\" && pwd )\"")
+    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
 
     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
     batch <- readr::read_lines(batchpath)

@@ -46,23 +46,23 @@
 #'
 #' @export
 
-run_nl <- function(nl, seed, run, cleanup=NULL) {
+run_nl <- function(nl, seed, siminputrow, cleanup=NULL) {
 
-  eval_simdesign(nl)
+  util_eval_simdesign(nl)
 
   ## Write XML File:
-  xmlfile <- tempfile(pattern=paste0("nlrx", seed, "_", run), fileext=".xml")
-  util_create_sim_XML(nl, seed, run, xmlfile)
+  xmlfile <- tempfile(pattern=paste0("nlrx", seed, "_", siminputrow), fileext=".xml")
+  util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 
   ## Execute:
-  outfile <- tempfile(pattern=paste0("nlrx", seed, "_", run), fileext=".csv")
+  outfile <- tempfile(pattern=paste0("nlrx", seed, "_", siminputrow), fileext=".csv")
   batchpath <- util_read_write_batch(nl)
   util_call_nl(nl, xmlfile, outfile, batchpath)
 
   ## Read results
   nl_results <- util_gather_results(nl, outfile)
   ## Update runnumber:
-  nl_results$`[run number]` <- run
+  nl_results$siminputrow <- siminputrow
 
   ## Delete temporary files:
   if(cleanup == "xml" | cleanup == "all") {
