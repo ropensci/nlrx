@@ -46,7 +46,7 @@
 #'
 #' @export
 
-run_nl <- function(nl, seed, siminputrow, cleanup=NULL) {
+run_nl <- function(nl, seed, siminputrow, cleanup="all") {
 
   util_eval_simdesign(nl)
 

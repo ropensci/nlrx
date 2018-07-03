@@ -174,7 +174,7 @@ util_read_write_batch <- function(nl) {
     batch[pos_jvmopts] <- jvmoptsline
 
     # Create new batchfile:
-    batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
+    batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
     readr::write_lines(batch, path=batchpath_temp)
 
   }
