@@ -17,6 +17,8 @@ simdesign(simmethod = character(), siminput = tibble(),
 \item{simseeds}{a vector or model random seeds}
 
 \item{simoutput}{tibble contatining model results}
+
+\item{...}{...}
 }
 \description{
 Construct a new experiment object

@@ -32,6 +32,14 @@ util_eval_constants <- function(nl) {
   if(length(getexp(nl, "constants")) == 0){
     stop("Error: Experiment constants list is empty. You need to define a constants list with at least one element!")
   }
+
+  # Check if variables are valid:
+  variable_validity <- sapply(names(getexp(nl, "constants")), FUN=function(x) {x %in% names(load_model_parameters(nl))})
+
+  if (length(which(variable_validity==FALSE)) > 0) {
+    stop(paste0("Error: Defined constants were not found in NetLogo model: ", names(which(variable_validity==FALSE)), ". Check load_model_parameters function to show valid parameters."))
+  }
+
 }
 
 #' Evaluate experiment object

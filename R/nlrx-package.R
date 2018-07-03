@@ -7,4 +7,15 @@
 #' @name nlrx-package
 #' @author Jan Salecker \email{jsaleck@gwdg.de}
 #' @keywords package
-NULL
+"_PACKAGE"
+
+globalVariables(c(".",
+                  "[run number]",
+                  "[step]",
+                  "funs",
+                  "group_by",
+                  "metrics",
+                  "random-seed",
+                  "vars"))
+
+

@@ -1,16 +1,18 @@
 
 .initClasses <- function() {
 
+  #' @title S4 class \code{"simdesign"}
+  #' @description empty
   #' @slot simmethod A character string for method identification
   #' @slot siminput Input parameter tibble for model simulations
   #' @slot simobject List of model objects that are created for specific simulation designs and are needed for output analysis (e.g. sobol, morris, eFast)
   #' @slot simseeds A vector of model seeds that are used to repeatedly run simulations using the siminput data
   #' @slot simoutput Output simulation results can be attached to this slot as tibble
-  #' @usage new_experiment
+  #' @import methods tibble
   #' @name simdesign-class
   #' @rdname simdesign-class
-  #' @exportClass simdesign
-  methods::setClass("simdesign",
+  #' @export
+  simdesign <- methods::setClass("simdesign",
 
                     slots=list(
                       simmethod="character",
@@ -22,14 +24,15 @@
 
                     prototype=list(
                       simmethod=NA_character_,
-                      siminput=tibble(),
+                      siminput=tibble::tibble(),
                       simobject=list(),
                       simseeds=NA_integer_,
-                      simoutput=tibble()
+                      simoutput=tibble::tibble()
                     )
    )
 
-
+  #' @title S4 class \code{"experiment"}
+  #' @description empty
   #' @slot expname A character string defining the name of the experiment
   #' @slot outpath Path to a directory where experiment output will be stored
   #' @slot repetition A number which gives the number of repetitions for each row of the simulation design input tibble
@@ -43,11 +46,11 @@
   #' @slot variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Each list item consist of a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(min=0, max=1, step=0.1, qfun="qunif")))
   #' @slot constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
   #' @slot simdesign Holds a simdesign S4 class object
-  #' @usage new_nl
+  #' @import methods
   #' @name experiment-class
   #' @rdname experiment-class
-  #' @exportClass experiment
-  methods::setClass("experiment",
+  #' @export
+  experiment <- methods::setClass("experiment",
 
                     slots=list(
                       expname="character",
@@ -80,15 +83,18 @@
                     )
    )
 
+  #' @title S4 class \code{"nl"}
+  #' @description empty
   #' @slot nlversion A character string defining the NetLogo version that is used
   #' @slot nlpath Path to the NetLogo main directory matching the defined version
   #' @slot modelpath Path to the NetLogo model file (*.nlogo) that is used for simulations
   #' @slot jvmmem Java virtual machine memory capacity in megabytes
   #' @slot experiment Holds a experiment S4 class object
+  #' @import methods
   #' @name nl-class
   #' @rdname nl-class
-  #' @exportClass nl
-  methods::setClass("nl",
+  #' @export
+  nl <- methods::setClass("nl",
 
                     slots=list(
                       nlversion="character",

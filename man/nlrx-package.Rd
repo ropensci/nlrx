@@ -2,6 +2,7 @@
 % Please edit documentation in R/nlrx-package.R
 \docType{package}
 \name{nlrx-package}
+\alias{nlrx}
 \alias{nlrx-package}
 \title{nlrx: A package for running NetLogo simulations from R.}
 \description{

@@ -23,6 +23,6 @@ Imports:
     stats,
     utils
 Depends:
-    tibble,
-    methods
+   methods,
+    tibble
 Suggests: testthat

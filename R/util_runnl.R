@@ -4,7 +4,7 @@
 #'
 #' @param nl nl object
 #' @param seed random-seed for NetLogo simulation
-#' @param run row id of the simulation input tibble of the simdesign within the provided nl object
+#' @param siminputrow row id of the simulation input tibble of the simdesign within the provided nl object
 #' @param xmlfile filepath where the xml file is stored
 #' @aliases util_create_sim_XML
 #' @rdname util_create_sim_XML

@@ -7,6 +7,8 @@
 #' @param modelpath Path to the NetLogo model file (*.nlogo) that is used for simulations
 #' @param jvmmem Java virtual machine memory capacity in megabytes
 #' @param experiment Holds a experiment S4 class object
+#' @param simdesign Holds a simdesign S4 class object
+#' @param ... ...
 #'
 #' @details
 #'
@@ -23,18 +25,21 @@
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl <- nl(nlversion = "6.0.3",
 #' nlpath = "C:/Program Files/NetLogo 6.0.3/",
-#' modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/
+#' Sample Models/Biology/Wolf Sheep Predation.nlogo",
 #' jvmmem = 1024)
 #' }
 #'
-#' @aliases nl
+#' @import methods
+#' @name nl
 #' @rdname nl
-#'
 #' @export
 nl <- function(nlversion = "6.0.2",
                nlpath = character(),
                modelpath = character(),
                jvmmem = 1024,
+               experiment=new("experiment"),
+               simdesign=new("simdesign"),
                ...) {
 
   methods::new("nl",
@@ -42,6 +47,8 @@ nl <- function(nlversion = "6.0.2",
                nlpath = nlpath,
                modelpath = modelpath,
                jvmmem = jvmmem,
+               experiment=new("experiment"),
+               simdesign=new("simdesign"),
                ...)
 }
 
@@ -63,7 +70,7 @@ nl <- function(nlversion = "6.0.2",
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
 #' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Each list item consist of a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(min=0, max=1, step=0.1, qfun="qunif")))
 #' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
-#' @param simdesign Holds a simdesign S4 class object
+#' @param ... ...
 #'
 #' @details
 #'
@@ -100,12 +107,12 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' }
 #'
-#' @aliases experiment
+#' @import methods
+#' @name experiment
 #' @rdname experiment
-#'
 #' @export
 experiment <- function(expname = "defaultexp",
-                       outpath,
+                       outpath = NA_character_,
                        repetition = 1,
                        tickmetrics = "true",
                        idsetup = "setup",
@@ -148,6 +155,7 @@ experiment <- function(expname = "defaultexp",
 #' @param simobject used for some methods to store additional information (sobol, morris, eFast)
 #' @param simseeds a vector or model random seeds
 #' @param simoutput tibble contatining model results
+#' @param ... ...
 #'
 #' @details
 #'
@@ -164,11 +172,10 @@ experiment <- function(expname = "defaultexp",
 #'
 #' }
 #'
-#' @aliases simdesign
+#' @import methods tibble
+#' @name simdesign
 #' @rdname simdesign
-#'
 #' @export
-
 simdesign <- function(simmethod = character(),
                       siminput = tibble(),
                       simobject = list(),

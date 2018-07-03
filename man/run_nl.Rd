@@ -4,14 +4,14 @@
 \alias{run_nl}
 \title{Execute NetLogo simulation}
 \usage{
-run_nl(nl, seed, run, cleanup = NULL)
+run_nl(nl, seed, siminputrow, cleanup = NULL)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{a random seed for the NetLogo simulation}
 
-\item{run}{rownumber of the input tibble within the attached simdesign object that should be executed}
+\item{siminputrow}{rownumber of the input tibble within the attached simdesign object that should be executed}
 
 \item{cleanup}{indicate which filetypes should be deleted}
 }

@@ -4,14 +4,14 @@
 \alias{util_create_sim_XML}
 \title{Create a temporary behavior space xml file to setup NetLogo via commandline}
 \usage{
-util_create_sim_XML(nl, seed, run, xmlfile)
+util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{random-seed for NetLogo simulation}
 
-\item{run}{row id of the simulation input tibble of the simdesign within the provided nl object}
+\item{siminputrow}{row id of the simulation input tibble of the simdesign within the provided nl object}
 
 \item{xmlfile}{filepath where the xml file is stored}
 }

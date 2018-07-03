@@ -4,8 +4,8 @@
 \alias{experiment}
 \title{Construct a new experiment object}
 \usage{
-experiment(expname = "defaultexp", outpath, repetition = 1,
-  tickmetrics = "true", idsetup = "setup", idgo = "go",
+experiment(expname = "defaultexp", outpath = NA_character_,
+  repetition = 1, tickmetrics = "true", idsetup = "setup", idgo = "go",
   idfinal = NA_character_, runtime = 1, evalticks = seq(1, runtime, 1),
   metrics = c("count turtles"), variables = list(), constants = list(),
   ...)
@@ -35,7 +35,7 @@ experiment(expname = "defaultexp", outpath, repetition = 1,
 
 \item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"=""default""))}
 
-\item{simdesign}{Holds a simdesign S4 class object}
+\item{...}{...}
 }
 \description{
 Construct a new experiment object

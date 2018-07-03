@@ -5,7 +5,7 @@
 #'
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
-#' @param run rownumber of the input tibble within the attached simdesign object that should be executed
+#' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
 #' @param cleanup indicate which filetypes should be deleted
 #' @details
 #'

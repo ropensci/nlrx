@@ -5,7 +5,8 @@
 \title{Construct a new nl object}
 \usage{
 nl(nlversion = "6.0.2", nlpath = character(), modelpath = character(),
-  jvmmem = 1024, ...)
+  jvmmem = 1024, experiment = new("experiment"),
+  simdesign = new("simdesign"), ...)
 }
 \arguments{
 \item{nlversion}{A character string defining the NetLogo version that is used}
@@ -17,6 +18,10 @@ nl(nlversion = "6.0.2", nlpath = character(), modelpath = character(),
 \item{jvmmem}{Java virtual machine memory capacity in megabytes}
 
 \item{experiment}{Holds a experiment S4 class object}
+
+\item{simdesign}{Holds a simdesign S4 class object}
+
+\item{...}{...}
 }
 \description{
 Construct a new nl object
@@ -33,7 +38,8 @@ Each experiment also needs to have a specified simulation design in order to run
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl <- nl(nlversion = "6.0.3",
 nlpath = "C:/Program Files/NetLogo 6.0.3/",
-modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/
+Sample Models/Biology/Wolf Sheep Predation.nlogo",
 jvmmem = 1024)
 }
 

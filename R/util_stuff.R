@@ -112,7 +112,7 @@ load_model_parameters <- function(nl) {
     l <- model.code[i]
 
     ## Check if l is a definition element and of what kind:
-    if(l %in% c("SLIDER", "SWITCH", "INPUTBOX"))
+    if(l %in% c("SLIDER", "SWITCH", "INPUTBOX", "CHOOSER"))
     {
       if (l == "SLIDER")
       {
@@ -128,6 +128,11 @@ load_model_parameters <- function(nl) {
       {
         name <- as.character(model.code[i + 5])
         value <- model.code[i + 6]
+      }
+      if (l == "CHOOSER")
+      {
+        name <- as.character(model.code[i + 5])
+        value <- scan(text=(model.code[i + 7]), what="", quiet=TRUE)
       }
 
       ## Store in data.frame:
