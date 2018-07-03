@@ -159,7 +159,7 @@ util_read_write_batch <- function(nl) {
     batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
 
     # jvmoptions string:
-    basedirline <- paste0("BASE_DIR=\"$( cd \"$( ", getnl(nl, "nlpath"), " \"${BASH_SOURCE[0]}\" )\" && pwd )\"")
+    basedirline <- paste0("BASE_DIR=\"$( cd \"$( \"", getnl(nl, "nlpath"), "\" \"${BASH_SOURCE[0]}\" )\" && pwd )\"")
     jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
 
     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
