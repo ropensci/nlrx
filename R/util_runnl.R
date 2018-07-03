@@ -155,27 +155,39 @@ util_read_write_batch <- function(nl) {
   }
   if (os == "unix") {
 
-    # Prepare pathes:
+    ## Create path variables:
     batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
-
-    # jvmoptions string:
-    basedirline <- paste0("BASE_DIR=\"$( cd \"$( \"", getnl(nl, "nlpath"), "\" \"${BASH_SOURCE[0]}\" )\" && pwd )\"")
-    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
-
-    # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
-    batch <- readr::read_lines(batchpath)
-
-    # Get position index of jvmopts and jarpath line
-    pos_basedir <- which(grepl("BASE_DIR=\"", batch))
-    pos_jvmopts <- which(grepl("JVM_OPTS=", batch))
-
-    # Replace lines in batch with updated versions
-    batch[pos_basedir] <- basedirline
-    batch[pos_jvmopts] <- jvmoptsline
-
-    # Create new batchfile:
     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
-    readr::write_lines(batch, path=batchpath_temp)
+
+    # Copy original file to temppath file
+    system(paste0("cp \"", batchpath, "\" \"", batchpath_temp, "\""), wait=TRUE)
+
+    # Define edited lines for shell script:
+    basedirline <- paste0("BASE_DIR=\"", getnl(nl, "nlpath"), "\"")
+    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -Dfile.encoding=UTF-8)")
+
+    ## Edit lines in place:
+    system(paste0("sed -i -r 's!^BASE_DIR=.*!", basedirline, "!'", " \"", batchpath_temp, "\""))
+    system(paste0("sed -i -r 's!^JVM_OPTS=.*!", jvmoptsline, "!'", " \"", batchpath_temp, "\""))
+
+    # # Prepare pathes:
+    # batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
+    #
+    #
+    # # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
+    # batch <- readr::read_lines(batchpath)
+    #
+    # # Get position index of jvmopts and jarpath line
+    # pos_basedir <- which(grepl("BASE_DIR=\"", batch))
+    # pos_jvmopts <- which(grepl("JVM_OPTS=", batch))
+    #
+    # # Replace lines in batch with updated versions
+    # batch[pos_basedir] <- basedirline
+    # batch[pos_jvmopts] <- jvmoptsline
+    #
+    # # Create new batchfile:
+    # batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
+    # readr::write_lines(batch, path=batchpath_temp)
 
   }
 
