@@ -12,17 +12,6 @@ util_eval_variables <- function(nl) {
     stop("Error: Experiment Variable list is empty.
          You need to define a variable list with at least one element!")
   }
-
-  # Check if variables are valid:
-  variable_validity <-  unlist(lapply(names(getexp(nl, "variables")),
-                                      function(x) {x %in% names(load_model_parameters(nl))}))
-
-
-  if (length(which(variable_validity==FALSE)) > 0) {
-    stop(paste0("Error: Defined variables were not found in NetLogo model: ",
-                names(which(variable_validity==FALSE)),
-                ". Check load_model_parameters function to show valid parameters."))
-  }
 }
 
 #' Evaluate constants list of an experiment object
@@ -37,16 +26,6 @@ util_eval_constants <- function(nl) {
   if(length(getexp(nl, "constants")) == 0){
     stop("Error: Experiment constants list is empty.
          You need to define a constants list with at least one element!")
-  }
-
-  # Check if variables are valid:
-  variable_validity <-  unlist(lapply(names(getexp(nl, "constants")),
-                                      function(x) {x %in% names(load_model_parameters(nl))}))
-
-  if (length(which(variable_validity==FALSE)) > 0) {
-    stop(paste0("Error: Defined constants were not found in NetLogo model: ",
-                names(which(variable_validity==FALSE)),
-                ". Check load_model_parameters function to show valid parameters."))
   }
 }
 
@@ -112,4 +91,42 @@ util_eval_simdesign <- function(nl) {
                 The following elements are missing without default: ",
                 paste(notvalid, collapse=" ; ")))
   }
+}
+
+#' Evaluate variable validity (cmopare to model)
+#'
+#' @description Evaluate variables and constants defined in experiment
+#' @param nl nl object
+#' @details
+#' This function checks if the variables and constants that are defined in the experiment are valid.
+#' It loads the model code of the NetLogo model and checks if these variables and constants really exist.
+#' In case of nonvalid entries, the function throws an error message, indicating which variables and constants are not valid.
+#' Please note, that this function might fail if the supported modelpath does not point to an existing nlogo file.
+#' This might for example happen, if the modelpath is set up for a remote cluster execution.
+#'
+#' @aliases eval_variables_constants
+#' @rdname eval_variables_constants
+#' @export
+
+eval_variables_constants <- function(nl) {
+
+  variables_validity <-  unlist(lapply(names(getexp(nl, "variables")),
+                                      function(x) {x %in% names(load_model_parameters(nl))}))
+
+  constants_validity <-  unlist(lapply(names(getexp(nl, "constants")),
+                                      function(x) {x %in% names(load_model_parameters(nl))}))
+
+  nonvalid_variables <- names(which(variables_validity==FALSE))
+  nonvalid_constants <- names(which(constants_validity==FALSE))
+
+  if (length(nonvalid_variables) > 0 | length(nonvalid_constants) > 0) {
+
+    stop(paste0("Error: Defined variables were not found in NetLogo model: ",
+                nonvalid_variables,
+                " and defined constants were not found in NetLogo model: ",
+                nonvalid_constants,
+                ". Check load_model_parameters() function to show valid parameters."))
+  }
+
+  print("All defined variables and constants are valid!")
 }
