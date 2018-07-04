@@ -12,3 +12,4 @@ analyze_eFast(nl)
 \description{
 Analyze NetLogo simulation output of simdesign eFast
 }
+\keyword{internal}

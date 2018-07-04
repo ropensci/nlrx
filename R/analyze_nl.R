@@ -109,6 +109,8 @@ analyze_nl <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_simple
 #' @rdname analyze_simple
+#' @keywords internal
+#' @export
 
 analyze_simple <- function(nl) {
 
@@ -121,13 +123,14 @@ analyze_simple <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_ff
 #' @rdname analyze_ff
-
+#' @keywords internal
+#' @export
 analyze_ff <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
 
   return(ffagg)
 
@@ -141,13 +144,14 @@ analyze_ff <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_lhs
 #' @rdname analyze_lhs
-
+#' @keywords internal
+#' @export
 analyze_lhs <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
 
   return(lhsagg)
 }
@@ -160,7 +164,8 @@ analyze_lhs <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_sobol
 #' @rdname analyze_sobol
-
+#' @keywords internal
+#' @export
 analyze_sobol <- function(nl) {
 
   sensindex <- NULL
@@ -171,8 +176,8 @@ analyze_sobol <- function(nl) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
       dplyr::select(getexp(nl, "metrics"))
 
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -205,7 +210,8 @@ analyze_sobol <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_sobol2007
 #' @rdname analyze_sobol2007
-
+#' @keywords internal
+#' @export
 analyze_sobol2007 <- function(nl) {
 
   sensindex <- NULL
@@ -216,8 +222,8 @@ analyze_sobol2007 <- function(nl) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
       dplyr::select(getexp(nl, "metrics"))
 
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -259,7 +265,8 @@ analyze_sobol2007 <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_soboljansen
 #' @rdname analyze_soboljansen
-
+#' @keywords internal
+#' @export
 analyze_soboljansen <- function(nl) {
 
   sensindex <- NULL
@@ -270,8 +277,8 @@ analyze_soboljansen <- function(nl) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
       dplyr::select(getexp(nl, "metrics"))
 
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -314,7 +321,8 @@ analyze_soboljansen <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_morris
 #' @rdname analyze_morris
-
+#' @keywords internal
+#' @export
 
 analyze_morris <- function(nl) {
 
@@ -327,8 +335,8 @@ analyze_morris <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
-      dplyr::group_by(`[run number]`) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::group_by(siminputrow) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
       dplyr::select(getexp(nl, "metrics"))
 
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -373,7 +381,8 @@ analyze_morris <- function(nl) {
 #' @param nl nl object
 #' @aliases analyze_eFast
 #' @rdname analyze_eFast
-
+#' @keywords internal
+#' @export
 analyze_eFast <- function(nl) {
 
   sensindex <- NULL
@@ -385,8 +394,8 @@ analyze_eFast <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
-      dplyr::group_by(`[run number]`) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::group_by(siminputrow) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
       dplyr::select(getexp(nl, "metrics"))
 
     simoutput.i <- t(as.matrix(simoutput.i))

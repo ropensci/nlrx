@@ -12,3 +12,4 @@ analyze_morris(nl)
 \description{
 Analyze NetLogo simulation output of simdesign morris
 }
+\keyword{internal}

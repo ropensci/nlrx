@@ -11,6 +11,7 @@
   #' @import methods tibble
   #' @name simdesign-class
   #' @rdname simdesign-class
+  #' @export
   simdesign <- methods::setClass("simdesign",
 
                     slots=list(
@@ -48,6 +49,7 @@
   #' @import methods
   #' @name experiment-class
   #' @rdname experiment-class
+  #' @export
   experiment <- methods::setClass("experiment",
 
                     slots=list(
@@ -91,6 +93,7 @@
   #' @import methods
   #' @name nl-class
   #' @rdname nl-class
+  #' @export
   nl <- methods::setClass("nl",
 
                     slots=list(

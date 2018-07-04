@@ -12,3 +12,4 @@ util_eval_experiment(nl)
 \description{
 Evaluate experiment object
 }
+\keyword{internal}

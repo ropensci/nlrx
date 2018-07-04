@@ -4,7 +4,8 @@
 #' @param nl nl object
 #' @aliases util_eval_variables
 #' @rdname util_eval_variables
-
+#' @keywords internal
+#' @export
 util_eval_variables <- function(nl) {
 
   # Check if there are any variables defined
@@ -20,7 +21,8 @@ util_eval_variables <- function(nl) {
 #' @param nl nl object
 #' @aliases util_eval_constants
 #' @rdname util_eval_constants
-
+#' @keywords internal
+#' @export
 util_eval_constants <- function(nl) {
 
   if(length(getexp(nl, "constants")) == 0){
@@ -35,7 +37,8 @@ util_eval_constants <- function(nl) {
 #' @param nl nl object
 #' @aliases util_eval_experiment
 #' @rdname util_eval_experiment
-
+#' @keywords internal
+#' @export
 util_eval_experiment <- function(nl) {
 
   notvalid <- c()
@@ -69,7 +72,8 @@ util_eval_experiment <- function(nl) {
 #' @param nl nl object
 #' @aliases util_eval_simdesign
 #' @rdname util_eval_simdesign
-
+#' @keywords internal
+#' @export
 util_eval_simdesign <- function(nl) {
 
   notvalid <- c()

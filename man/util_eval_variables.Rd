@@ -12,3 +12,4 @@ util_eval_variables(nl)
 \description{
 Evaluate variables list of an experiment object
 }
+\keyword{internal}

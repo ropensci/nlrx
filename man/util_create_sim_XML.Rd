@@ -18,3 +18,4 @@ util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 \description{
 Create a temporary behavior space xml file to setup NetLogo via commandline
 }
+\keyword{internal}

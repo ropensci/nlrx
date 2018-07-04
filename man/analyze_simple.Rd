@@ -12,3 +12,4 @@ analyze_simple(nl)
 \description{
 Analyze NetLogo simulation output of simdesign simple
 }
+\keyword{internal}

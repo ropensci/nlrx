@@ -8,7 +8,8 @@
 #' @param xmlfile filepath where the xml file is stored
 #' @aliases util_create_sim_XML
 #' @rdname util_create_sim_XML
-
+#' @keywords internal
+#' @export
 util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   simdata_run <- getsim(nl, "siminput")[siminputrow,]
@@ -70,7 +71,8 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 #' @param batchfile file location of system specific batch file to call NetLogo via commandline
 #' @aliases util_call_nl
 #' @rdname util_call_nl
-
+#' @keywords internal
+#' @export
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 
   NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", getnl(nl, "modelpath"), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", getexp(nl, "expname"), " --table ", "\"", outfile, "\"", " --threads ", 1)
@@ -86,7 +88,8 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #' @param pattern defines file types to be deleted (".xml", ".csv" or "all")
 #' @aliases util_cleanup
 #' @rdname util_cleanup
-
+#' @keywords internal
+#' @export
 util_cleanup <- function(nl, pattern) {
 
   file.remove(dir(path=getexp(nl, "outpath"), pattern=pattern, full.names=TRUE))
@@ -101,7 +104,8 @@ util_cleanup <- function(nl, pattern) {
 #' @param outfile  file location of output results
 #' @aliases util_gather_results
 #' @rdname util_gather_results
-
+#' @keywords internal
+#' @export
 util_gather_results <- function(nl, outfile) {
 
   NLtable <- readr::read_csv(outfile, skip=6)
@@ -119,7 +123,8 @@ util_gather_results <- function(nl, outfile) {
 #' @param nl nl object
 #' @aliases util_read_write_batch
 #' @rdname util_read_write_batch
-
+#' @keywords internal
+#' @export
 util_read_write_batch <- function(nl) {
 
   os <- util_get_os()

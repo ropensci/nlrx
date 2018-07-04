@@ -12,3 +12,4 @@ analyze_lhs(nl)
 \description{
 Analyze NetLogo simulation output of simdesign latin-hypercube
 }
+\keyword{internal}

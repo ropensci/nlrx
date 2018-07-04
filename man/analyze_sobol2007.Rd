@@ -12,3 +12,4 @@ analyze_sobol2007(nl)
 \description{
 Analyze NetLogo simulation output of simdesign sobol2007
 }
+\keyword{internal}

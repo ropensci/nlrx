@@ -12,3 +12,4 @@ util_read_write_batch(nl)
 \description{
 Write a modified batchfile that executes NetLogo
 }
+\keyword{internal}

@@ -18,3 +18,4 @@ util_call_nl(nl, xmlfile, outfile, batchfile)
 \description{
 Setup and execute NetLogo via commandline
 }
+\keyword{internal}

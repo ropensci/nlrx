@@ -16,3 +16,4 @@ util_create_lhs(input, samples, precision)
 \description{
 Identify and report the current OS
 }
+\keyword{internal}

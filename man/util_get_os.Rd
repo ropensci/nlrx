@@ -9,3 +9,4 @@ util_get_os()
 \description{
 Identify and report the current OS
 }
+\keyword{internal}

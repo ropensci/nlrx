@@ -14,3 +14,4 @@ util_cleanup(nl, pattern)
 \description{
 Delete temporary files
 }
+\keyword{internal}

@@ -12,3 +12,4 @@ analyze_ff(nl)
 \description{
 Analyze NetLogo simulation output of simdesign full-factorial
 }
+\keyword{internal}

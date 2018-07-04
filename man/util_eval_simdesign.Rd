@@ -12,3 +12,4 @@ util_eval_simdesign(nl)
 \description{
 Evaluate simdesign object
 }
+\keyword{internal}

@@ -12,3 +12,4 @@ analyze_soboljansen(nl)
 \description{
 Analyze NetLogo simulation output of simdesign soboljansen
 }
+\keyword{internal}

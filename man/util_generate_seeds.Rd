@@ -12,3 +12,4 @@ util_generate_seeds(nseeds)
 \description{
 Generate a vector of random seeds
 }
+\keyword{internal}
