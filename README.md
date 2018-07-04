@@ -9,7 +9,8 @@ status](https://ci.appveyor.com/api/projects/status/github/nldoc/nlrx?branch=mas
 status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/nldoc/nlrx)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-The goal of nlrx is to …
+The nlrx package provides tools to setup NetLogo simulations in R.
+It uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running sensitivity analyses.
 
 ## Installation
 
@@ -28,9 +29,6 @@ devtools::install_github("nldoc/nlrx")
 ```
 
 ## Example
-
-The nlrx package provides tools to setup NetLogo simulations in R.
-It uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running sensitivity analyses.
 
 The nlrx package uses S4 classes to store basic information on NetLogo, the model experiment and the simulation design.
 Experiment and simulation design class objects are stored within the nl class object.
