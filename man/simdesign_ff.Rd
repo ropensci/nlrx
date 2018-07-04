@@ -11,6 +11,9 @@ simdesign_ff(nl, nseeds)
 
 \item{nseeds}{number of seeds for this simulation design}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add a full-factorial simdesign to a nl object
 }

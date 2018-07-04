@@ -14,9 +14,9 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   simdata_run <- getsim(nl, "siminput")[siminputrow,]
 
   ### Create XML object:
-  nlXML = XML::newXMLDoc()
-  experiments = XML::newXMLNode("experiments", doc=nlXML)
-  experiment = XML::newXMLNode("experiment", attrs=c(name=getexp(nl, "expname"),
+  nlXML <- XML::newXMLDoc()
+  experiments <- XML::newXMLNode("experiments", doc=nlXML)
+  experiment <- XML::newXMLNode("experiment", attrs=c(name=getexp(nl, "expname"),
                                                      repetitions=getexp(nl, "repetition"),
                                                      runMetricsEveryStep=getexp(nl, "tickmetrics")),
                                parent=experiments)
@@ -44,7 +44,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   }
 
   ## Add parameters and values:
-  for (i in 1:length(simdata_run)) {
+  for (i in seq_along(simdata_run)) {
     XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), XML::newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
   }
   ## If repetition > 1 we use a ranodm seed, otherwise the provided seed:
@@ -53,7 +53,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   }
 
   ## Use NetLogo specific prefix:
-  prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
+  prefix <- "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
 
   # SAVE XML TO FILE
   cat(XML::saveXML(nlXML, prefix=prefix), file=xmlfile)

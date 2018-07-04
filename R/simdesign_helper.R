@@ -1,17 +1,11 @@
 
-
-
-
-
-
-
 #' Add a simple simdesign to a nl object
 #'
 #' @description Add a simple simdesign to a nl object
 #'
 #' @param nl nl object with a defined experiment
 #' @param nseeds number of seeds for this simulation design
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -55,7 +49,7 @@ simdesign_simple <- function(nl, nseeds) {
 #'
 #' @param nl nl object with a defined experiment
 #' @param nseeds number of seeds for this simulation design
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -106,7 +100,7 @@ simdesign_ff <- function(nl, nseeds) {
 #' @param samples number of samples for the latin hypercube
 #' @param nseeds number of seeds for this simulation design
 #' @param precision number of digits for the decimal fraction of parameter values
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -118,7 +112,7 @@ simdesign_ff <- function(nl, nseeds) {
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_lhs(nl=nl,
-#' samples=10,
+#' samples=100,
 #' nseeds=3,
 #' precision=3)
 #' }
@@ -138,7 +132,10 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
                          samples = samples,
                          precision = precision)
 
-  lhs <- tibble::as.tibble(cbind(lhs, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  lhs <- tibble::as.tibble(cbind(lhs,
+                                 getexp(nl, "constants"),
+                                 stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   # Add simdesign to nl
@@ -152,7 +149,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #' Add a sobol simdesign to a nl object
 #'
 #' @description Add a sobol simdesign to a nl object
-#'
+#' @return simdesign S4 class object
 #' @param nl nl object with a defined experiment
 #' @param samples number of samples for the sobol sensitivity analysis
 #' @param sobolorder order of interactions of the sobol sensitivity analysis
@@ -174,11 +171,11 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_sobol(nl=nl,
-#' samples=100,
+#' samples=200,
 #' sobolorder=2,
-#' sobolnboot=10,
+#' sobolnboot=20,
 #' sobolconf=0.95,
-#' nseeds=2,
+#' nseeds=3,
 #' precision=3)
 #' }
 #'
@@ -187,7 +184,13 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #'
 #' @export
 
-simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nseeds, precision) {
+simdesign_sobol <- function(nl,
+                            samples,
+                            sobolorder,
+                            sobolnboot,
+                            sobolconf,
+                            nseeds,
+                            precision) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
@@ -201,8 +204,17 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
                            precision = precision)
 
   # create instance of sobol class
-  so <- sensitivity::sobol(model = NULL, X1 = lhs_1, X2 = lhs_2, order=sobolorder, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  so <- sensitivity::sobol(model = NULL,
+                           X1 = lhs_1,
+                           X2 = lhs_2,
+                           order=sobolorder,
+                           nboot = sobolnboot,
+                           conf=sobolconf)
+
+  soX <- tibble::as.tibble(cbind(so$X,
+                                 getexp(nl, "constants"),
+                                 stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -224,7 +236,7 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
 #' @param sobolconf the confidence level for bootstrap confidence intervals
 #' @param nseeds number of seeds for this simulation design
 #' @param precision number of digits for the decimal fraction of parameter values
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -238,10 +250,10 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_sobol2007(nl=nl,
-#' samples=100,
-#' sobolnboot=10,
+#' samples=200,
+#' sobolnboot=20,
 #' sobolconf=0.95,
-#' nseeds=2,
+#' nseeds=3,
 #' precision=3)
 #' }
 #'
@@ -250,7 +262,12 @@ simdesign_sobol <- function(nl, samples, sobolorder, sobolnboot, sobolconf, nsee
 #'
 #' @export
 
-simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, precision) {
+simdesign_sobol2007 <- function(nl,
+                                samples,
+                                sobolnboot,
+                                sobolconf,
+                                nseeds,
+                                precision) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
@@ -264,8 +281,16 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
                            precision = precision)
 
   # create instance of sobol class
-  so <- sensitivity::sobol2007(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  so <- sensitivity::sobol2007(model = NULL,
+                               X1 = lhs_1,
+                               X2 = lhs_2,
+                               nboot = sobolnboot,
+                               conf=sobolconf)
+
+  soX <- tibble::as.tibble(cbind(so$X,
+                                 getexp(nl, "constants"),
+                                 stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -288,7 +313,7 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
 #' @param sobolconf the confidence level for bootstrap confidence intervals
 #' @param nseeds number of seeds for this simulation design
 #' @param precision number of digits for the decimal fraction of parameter values
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -302,10 +327,10 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_soboljansen(nl=nl,
-#' samples=100,
-#' sobolnboot=10,
+#' samples=200,
+#' sobolnboot=20,
 #' sobolconf=0.95,
-#' nseeds=2,
+#' nseeds=3,
 #' precision=3)
 #' }
 #'
@@ -314,7 +339,12 @@ simdesign_sobol2007 <- function(nl, samples, sobolnboot, sobolconf, nseeds, prec
 #'
 #' @export
 
-simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, precision) {
+simdesign_soboljansen <- function(nl,
+                                  samples,
+                                  sobolnboot,
+                                  sobolconf,
+                                  nseeds,
+                                  precision) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
@@ -328,8 +358,16 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
                            precision = precision)
 
   # create instance of sobol class
-  so <- sensitivity::soboljansen(model = NULL, X1 = lhs_1, X2 = lhs_2, nboot = sobolnboot, conf=sobolconf)
-  soX <- tibble::as.tibble(cbind(so$X, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  so <- sensitivity::soboljansen(model = NULL,
+                                 X1 = lhs_1,
+                                 X2 = lhs_2,
+                                 nboot = sobolnboot,
+                                 conf=sobolconf)
+
+  soX <- tibble::as.tibble(cbind(so$X,
+                                 getexp(nl, "constants"),
+                                 stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -352,7 +390,7 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
 #' @param morrisr morris r value
 #' @param morrisgridjump morris grid jump value
 #' @param nseeds number of seeds for this simulation design
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -370,9 +408,9 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
 #' nl@@simdesign <- simdesign_morris(nl=nl,
 #'                                   morristype="oat",
 #'                                   morrislevels=4,
-#'                                   morrisr=3,
+#'                                   morrisr=100,
 #'                                   morrisgridjump=2,
-#'                                   nseeds=2)
+#'                                   nseeds=3)
 #' }
 #'
 #' @aliases simdesign_morris
@@ -380,25 +418,38 @@ simdesign_soboljansen <- function(nl, samples, sobolnboot, sobolconf, nseeds, pr
 #'
 #' @export
 
-simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds) {
+simdesign_morris <- function(nl,
+                             morristype,
+                             morrislevels,
+                             morrisr,
+                             morrisgridjump,
+                             nseeds) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
   message("Creating morris simulation design")
 
-  morrisdesign <- list(type = morristype, levels = morrislevels, grid.jump = morrisgridjump)
+  morrisdesign <- list(type = morristype,
+                       levels = morrislevels,
+                       grid.jump = morrisgridjump)
 
   # get the min and max values of the input factor ranges
-  mins <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
-    getexp(nl, "variables")[[i]]$min})
-  maxs <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
-    getexp(nl, "variables")[[i]]$max})
+  mins <- unlist(lapply(getexp(nl, "variables"), "[", "min"))
+  maxs <- unlist(lapply(getexp(nl, "variables"), "[", "max"))
 
   # create input sets
-  mo <- sensitivity::morris(model = NULL, factors = names(getexp(nl, "variables")), r = morrisr, design = morrisdesign,
-               binf = mins, bsup = maxs, scale=TRUE)
+  mo <- sensitivity::morris(model = NULL,
+                            factors = names(getexp(nl, "variables")),
+                            r = morrisr,
+                            design = morrisdesign,
+                            binf = mins,
+                            bsup = maxs,
+                            scale=TRUE)
 
-  moX <- tibble::as.tibble(cbind(as.tibble(mo$X), getexp(nl, "constants"), stringsAsFactors=FALSE))
+  moX <- tibble::as.tibble(cbind(as.tibble(mo$X),
+                                 getexp(nl, "constants"),
+                                 stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
@@ -419,7 +470,7 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
 #' @param nl nl object with a defined experiment
 #' @param samples number of samples for the eFast sensitivity analysis
 #' @param nseeds number of seeds for this simulation design
-#'
+#' @return simdesign S4 class object
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
@@ -435,7 +486,7 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_eFast(nl=nl,
-#'                                  samples=70,
+#'                                  samples=100,
 #'                                  nseeds=1)
 #' }
 #'
@@ -444,15 +495,16 @@ simdesign_morris <- function(nl, morristype, morrislevels, morrisr, morrisgridju
 #'
 #' @export
 
-simdesign_eFast <- function(nl, samples, nseeds) {
+simdesign_eFast <- function(nl,
+                            samples,
+                            nseeds) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
   message("Creating eFast simulation design")
 
   # get names of quantile functions fpr the input factors
-  q.functions <- sapply(seq(1,length(getexp(nl, "variables"))), function(i) {
-    getexp(nl, "variables")[[i]]$qfun})
+  q.functions <- unlist(lapply(getexp(nl, "variables"), "[", "qfun"))
 
   # generate a list of arguments for the quantile functions
   q.args <- lapply(getexp(nl, "variables"), function(i) {
@@ -460,9 +512,16 @@ simdesign_eFast <- function(nl, samples, nseeds) {
     i$step <- NULL; return(i)})
 
   # create instance of fast99 class
-  f99 <- sensitivity::fast99(model = NULL, factors = names(getexp(nl, "variables")), n = samples, q = q.functions, q.arg = q.args)
+  f99 <- sensitivity::fast99(model = NULL,
+                             factors = names(getexp(nl, "variables")),
+                             n = samples,
+                             q = q.functions,
+                             q.arg = q.args)
 
-  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X), getexp(nl, "constants"), stringsAsFactors=FALSE))
+  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X),
+                                  getexp(nl, "constants"),
+                                  stringsAsFactors=FALSE))
+
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl

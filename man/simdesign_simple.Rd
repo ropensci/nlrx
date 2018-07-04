@@ -11,6 +11,9 @@ simdesign_simple(nl, nseeds)
 
 \item{nseeds}{number of seeds for this simulation design}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add a simple simdesign to a nl object
 }

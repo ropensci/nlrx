@@ -23,6 +23,9 @@ nl(nlversion = "6.0.2", nlpath = character(), modelpath = character(),
 
 \item{...}{...}
 }
+\value{
+nl S4 class object
+}
 \description{
 Construct a new nl object
 }

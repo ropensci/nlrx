@@ -20,7 +20,7 @@ Write NetLogo simulation output to file
 
 # Run one simulation:
 results <- run_nl(nl=nl,
-seed=simseeds(nl)[1],
+seed=getsim(nl, "simseeds")[1],
 run=1,
 cleanup="all")
 

@@ -13,7 +13,7 @@
 #'
 #' # Run one simulation:
 #' results <- run_nl(nl=nl,
-#' seed=simseeds(nl)[1],
+#' seed=getsim(nl, "simseeds")[1],
 #' run=1,
 #' cleanup="all")
 #'
@@ -31,7 +31,12 @@
 
 write_simoutput <- function(nl) {
 
-  outfilename <- paste0(getexp(nl, "outpath"), getexp(nl, "expname"), "_", getsim(nl, "simmethod"), ".csv")
+  outfilename <- paste0(getexp(nl, "outpath"),
+                        getexp(nl, "expname"),
+                        "_",
+                        getsim(nl, "simmethod"),
+                        ".csv")
+
   readr::write_csv(x = getsim(nl, "simoutput"), path = outfilename)
 
 }
@@ -42,9 +47,10 @@ write_simoutput <- function(nl) {
 #' @description Analyze NetLogo simulation output
 #'
 #' @param nl nl object
+#' @return analysis summary tibble
 #'
 #' Runs basic analyses on NetLogo simulation output
-#' Output has to be attached to the simdesign first with simoutput(nl) <- results
+#' Output has to be attached to the simdesign first with \code{setsim(nl, "output") <- results}
 #'
 #' The functions calls post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
 #'
@@ -53,12 +59,12 @@ write_simoutput <- function(nl) {
 #'
 #' # Run one simulation:
 #' results <- run_nl(nl=nl,
-#' seed=simseeds(nl)[1],
+#' seed=getsim(nl, "simseeds")[1],
 #' run=1,
 #' cleanup="all")
 #'
 #' # Attach output to simdesign:
-#' simoutput(nl) <- results
+#' setsim(nl, "simoutput") <- results
 #'
 #' # Perform analysis:
 #' analyze_nl(nl)
@@ -75,29 +81,23 @@ analyze_nl <- function(nl) {
 
   if (method == "simple") {
     out <- analyze_simple(nl)
-  }
-  if (method == "ff") {
+  } else if (method == "ff") {
     out <- analyze_ff(nl)
-  }
-  if (method == "lhs") {
+  } else if (method == "lhs") {
     out <- analyze_lhs(nl)
-  }
-  if (method == "morris") {
+  } else if (method == "morris") {
     out <- analyze_morris(nl)
-  }
-  if (method == "sobol") {
+  } else if (method == "sobol") {
     out <- analyze_sobol(nl)
-  }
-  if (method == "sobol2007") {
+  } else if (method == "sobol2007") {
     out <- analyze_sobol2007(nl)
-  }
-  if (method == "soboljansen") {
+  } else if (method == "soboljansen") {
     out <- analyze_soboljansen(nl)
-  }
-  if (method == "eFast") {
+  } else if (method == "eFast") {
     out <- analyze_eFast(nl)
+  } else {
+    stop(paste0("No applicable analysis method for simmethod: ", method))
   }
-
 
   return(out)
 }
@@ -125,7 +125,10 @@ analyze_simple <- function(nl) {
 analyze_ff <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
-  ffagg <- getsim(nl, "simoutput") %>% dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+  ffagg <- getsim(nl, "simoutput") %>%
+    dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+
   return(ffagg)
 
 }
@@ -142,7 +145,10 @@ analyze_ff <- function(nl) {
 analyze_lhs <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
-  lhsagg <- getsim(nl, "simoutput") %>% dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+  lhsagg <- getsim(nl, "simoutput") %>%
+    dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::summarise_at(getexp(nl, "metrics"), funs(mean, stats::sd, min, max))
+
   return(lhsagg)
 }
 
@@ -163,12 +169,16 @@ analyze_sobol <- function(nl) {
   # Calculate sensitivity indices separately for each random seed:
   for(i in getsim(nl, "simseeds")) {
 
-    # Select current seed runs, aggregate across steps and select only output columns:
-    simoutput.i <- getsim(nl, "simoutput") %>% dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean))  %>% dplyr::select(getexp(nl, "metrics"))
+    # Select seed runs, aggregate across steps and select only output columns:
+    simoutput.i <- getsim(nl, "simoutput") %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::select(getexp(nl, "metrics"))
+
     simoutput.i <- t(as.matrix(simoutput.i))
 
     # Loop over metric columns and calculate sensitivity indices:
-    for (j in (1:length(simoutput.i[,1]))) {
+    for (j in seq_len(nrow(simoutput.i))) {
            sensitivity::tell(so, simoutput.i[j,])
            soS <- so$S
            soS[soS < 0] <- 0
@@ -204,13 +214,17 @@ analyze_sobol2007 <- function(nl) {
   # Calculate sensitivity indices separately for each random seed:
   for(i in getsim(nl, "simseeds")) {
 
-    # Select current seed runs, aggregate across steps and select only output columns:
-    simoutput.i <- getsim(nl, "simoutput") %>% dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean))  %>% dplyr::select(getexp(nl, "metrics"))
+    # Select seed runs, aggregate across steps and select only output columns:
+    simoutput.i <- getsim(nl, "simoutput") %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::select(getexp(nl, "metrics"))
+
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
     # Loop over metric columns and calculate sensitivity indices:
-    for (j in (1:length(simoutput.i[,1]))) {
+    for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(so, simoutput.i[j,])
       soS <- so$S
       soS[soS < 0] <- 0
@@ -254,13 +268,17 @@ analyze_soboljansen <- function(nl) {
   # Calculate sensitivity indices separately for each random seed:
   for(i in getsim(nl, "simseeds")) {
 
-    # Select current seed runs, aggregate across steps and select only output columns:
-    simoutput.i <- getsim(nl, "simoutput") %>% dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean))  %>% dplyr::select(getexp(nl, "metrics"))
+    # Select seed runs, aggregate across steps and select only output columns:
+    simoutput.i <- getsim(nl, "simoutput") %>%
+      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::select(getexp(nl, "metrics"))
+
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
     # Loop over metric columns and calculate sensitivity indices:
-    for (j in (1:length(simoutput.i[,1]))) {
+    for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(so, simoutput.i[j,])
       soS <- so$S
       soS[soS < 0] <- 0
@@ -306,13 +324,18 @@ analyze_morris <- function(nl) {
   # Calculate sensitivity indices separately for each random seed:
   for(i in getsim(nl, "simseeds")) {
 
-    # Select current seed runs, aggregate across steps and select only output columns:
-    simoutput.i <- getsim(nl, "simoutput") %>% dplyr::filter(`random-seed` == i) %>% group_by(`[run number]`) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean))  %>% dplyr::select(getexp(nl, "metrics"))
+    # Select seed runs, aggregate across steps and select only output columns:
+    simoutput.i <- getsim(nl, "simoutput") %>%
+      dplyr::filter(`random-seed` == i) %>%
+      dplyr::group_by(`[run number]`) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::select(getexp(nl, "metrics"))
+
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
     # Loop over metric columns and calculate sensitivity indices:
-    for (j in (1:length(simoutput.i[,1]))) {
+    for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(mo, simoutput.i[j,])
 
       mustar <- tibble::tibble(metric=metrics(nl)[j],
@@ -359,13 +382,18 @@ analyze_eFast <- function(nl) {
   # Calculate sensitivity indices separately for each random seed:
   for(i in getsim(nl, "simseeds")) {
 
-    # Select current seed runs, aggregate across steps and select only output columns:
-    simoutput.i <- getsim(nl, "simoutput") %>% dplyr::filter(`random-seed` == i) %>% dplyr::group_by(`[run number]`) %>% dplyr::summarise_at(getexp(nl, "metrics"), funs(mean))  %>% dplyr::select(getexp(nl, "metrics"))
+    # Select seed runs, aggregate across steps and select only output columns:
+    simoutput.i <- getsim(nl, "simoutput") %>%
+      dplyr::filter(`random-seed` == i) %>%
+      dplyr::group_by(`[run number]`) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs(mean)) %>%
+      dplyr::select(getexp(nl, "metrics"))
+
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
     # Loop over metric columns and calculate sensitivity indices:
-    for (j in (1:length(simoutput.i[,1]))) {
+    for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(f99, simoutput.i[j,])
 
       D1 <- tibble::tibble(value = f99$D1,

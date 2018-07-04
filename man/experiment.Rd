@@ -37,6 +37,9 @@ experiment(expname = "defaultexp", outpath = NA_character_,
 
 \item{...}{...}
 }
+\value{
+experiment S4 class object
+}
 \description{
 Construct a new experiment object
 }

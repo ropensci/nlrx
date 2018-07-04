@@ -15,6 +15,9 @@ simdesign_lhs(nl, samples, nseeds, precision)
 
 \item{precision}{number of digits for the decimal fraction of parameter values}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add a latin-hypercube simdesign to a nl object
 }
@@ -27,7 +30,7 @@ Finally, the function reports a simdesign object.
 \dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl@simdesign <- simdesign_lhs(nl=nl,
-samples=10,
+samples=100,
 nseeds=3,
 precision=3)
 }

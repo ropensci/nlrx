@@ -67,7 +67,9 @@ testthat::test_that("class objects are created with correct variables", {
   testthat::expect_equal(getexp(nl, "constants")[[6]], 5)
   testthat::expect_match(getexp(nl, "constants")[[7]], "false")
 
-
+  # Skill all following tests on CRAN and travis
+  testthat::skip_on_cran()
+  testthat::skip_on_travis()
   # Testing validity of simdesign simple:
   nl@simdesign <- simdesign_simple(nl = nl,
                                    nseeds = 3)

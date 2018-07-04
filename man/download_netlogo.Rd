@@ -4,12 +4,14 @@
 \alias{download_netlogo}
 \title{Download NetLogo}
 \usage{
-download_netlogo(to, version)
+download_netlogo(to, version, extract = FALSE)
 }
 \arguments{
 \item{to}{Character string with the name where the downloaded file is saved.}
 
 \item{version}{Character string naming which NetLogo Version to download (see Details)}
+
+\item{extraxt}{TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of \code{to} (only unix)}
 }
 \description{
 Auxiliary function to download NetLogo

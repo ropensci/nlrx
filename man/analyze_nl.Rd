@@ -7,12 +7,15 @@
 analyze_nl(nl)
 }
 \arguments{
-\item{nl}{nl object
+\item{nl}{nl object}
+}
+\value{
+analysis summary tibble
 
 Runs basic analyses on NetLogo simulation output
-Output has to be attached to the simdesign first with simoutput(nl) <- results
+Output has to be attached to the simdesign first with \code{setsim(nl, "output") <- results}
 
-The functions calls post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.}
+The functions calls post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
 }
 \description{
 Analyze NetLogo simulation output
@@ -22,12 +25,12 @@ Analyze NetLogo simulation output
 
 # Run one simulation:
 results <- run_nl(nl=nl,
-seed=simseeds(nl)[1],
+seed=getsim(nl, "simseeds")[1],
 run=1,
 cleanup="all")
 
 # Attach output to simdesign:
-simoutput(nl) <- results
+setsim(nl, "simoutput") <- results
 
 # Perform analysis:
 analyze_nl(nl)

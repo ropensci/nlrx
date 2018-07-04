@@ -4,7 +4,7 @@
 \alias{run_nl}
 \title{Execute NetLogo simulation}
 \usage{
-run_nl(nl, seed, siminputrow, cleanup = NULL)
+run_nl(nl, seed, siminputrow, cleanup = "all")
 }
 \arguments{
 \item{nl}{nl object}
@@ -15,14 +15,17 @@ run_nl(nl, seed, siminputrow, cleanup = NULL)
 
 \item{cleanup}{indicate which filetypes should be deleted}
 }
+\value{
+tibble with simulation output results
+}
 \description{
 Execute NetLogo simulation from a nl object with a defined experiment and simdesign
 }
 \details{
 run_nl executes one simulation of the specified NetLogo model within the provided nl object.
 The random seed is set within the NetLogo model to control stochasticity.
-The run id defines whcih row of the input data tibble within the simdesign object of the provided nl object is executed.
-Cleanup can either be .xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+The run id defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
+Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 
 This function can be used to run single simulations of a NetLogo model.
 It can also be used within a loop environment that loops over the input tibble and the simseeds of the attached simdesign to run a full simulation of all input combinations and seeds.
@@ -42,11 +45,11 @@ cleanup="all")
 
 library(furrr)
 plan(multisession)
-results \%<-\% furrr::future_map_dfr(simseeds(nl), function(seed){
-  furrr::future_map_dfr(seq_len(nrow(siminput(nl))), function(run) {
+results \%<-\% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
+  furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
       run_nl(nl = nl,
              seed = seed,
-             run = run,
+             siminputrow = siminputrow,
              cleanup = "all")
    })
  })

@@ -19,6 +19,9 @@ simdesign_morris(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds)
 
 \item{nseeds}{number of seeds for this simulation design}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add a morris elementary effects simdesign to a nl object
 }
@@ -35,9 +38,9 @@ Finally, the function reports a simdesign object.
 nl@simdesign <- simdesign_morris(nl=nl,
                                   morristype="oat",
                                   morrislevels=4,
-                                  morrisr=3,
+                                  morrisr=100,
                                   morrisgridjump=2,
-                                  nseeds=2)
+                                  nseeds=3)
 }
 
 }

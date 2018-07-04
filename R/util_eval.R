@@ -9,14 +9,19 @@ util_eval_variables <- function(nl) {
 
   # Check if there are any variables defined
   if(length(getexp(nl, "variables")) == 0){
-    stop("Error: Experiment Variable list is empty. You need to define a variable list with at least one element!")
+    stop("Error: Experiment Variable list is empty.
+         You need to define a variable list with at least one element!")
   }
 
   # Check if variables are valid:
-  variable_validity <- sapply(names(getexp(nl, "variables")), FUN=function(x) {x %in% names(load_model_parameters(nl))})
+  variable_validity <-  unlist(lapply(names(getexp(nl, "variables")),
+                                      function(x) {x %in% names(load_model_parameters(nl))}))
+
 
   if (length(which(variable_validity==FALSE)) > 0) {
-    stop(paste0("Error: Defined variables were not found in NetLogo model: ", names(which(variable_validity==FALSE)), ". Check load_model_parameters function to show valid parameters."))
+    stop(paste0("Error: Defined variables were not found in NetLogo model: ",
+                names(which(variable_validity==FALSE)),
+                ". Check load_model_parameters function to show valid parameters."))
   }
 }
 
@@ -30,16 +35,19 @@ util_eval_variables <- function(nl) {
 util_eval_constants <- function(nl) {
 
   if(length(getexp(nl, "constants")) == 0){
-    stop("Error: Experiment constants list is empty. You need to define a constants list with at least one element!")
+    stop("Error: Experiment constants list is empty.
+         You need to define a constants list with at least one element!")
   }
 
   # Check if variables are valid:
-  variable_validity <- sapply(names(getexp(nl, "constants")), FUN=function(x) {x %in% names(load_model_parameters(nl))})
+  variable_validity <-  unlist(lapply(names(getexp(nl, "constants")),
+                                      function(x) {x %in% names(load_model_parameters(nl))}))
 
   if (length(which(variable_validity==FALSE)) > 0) {
-    stop(paste0("Error: Defined constants were not found in NetLogo model: ", names(which(variable_validity==FALSE)), ". Check load_model_parameters function to show valid parameters."))
+    stop(paste0("Error: Defined constants were not found in NetLogo model: ",
+                names(which(variable_validity==FALSE)),
+                ". Check load_model_parameters function to show valid parameters."))
   }
-
 }
 
 #' Evaluate experiment object
@@ -70,7 +78,9 @@ util_eval_experiment <- function(nl) {
   }
 
   if (length(notvalid) > 0) {
-    stop(paste0("Error: To add a sim design to a nl object you need to define a proper experiment first. The following elements are missing without default: ", paste(notvalid, collapse=" ; ")))
+    stop(paste0("Error: To add a sim design to a nl object you need to define a proper experiment first.
+                The following elements are missing without default: ",
+                paste(notvalid, collapse=" ; ")))
   }
 }
 
@@ -96,6 +106,10 @@ util_eval_simdesign <- function(nl) {
   }
 
   if (length(notvalid) > 0) {
-    stop(paste0("Error: To run a simulation you have to add a sim design to a nl object with a properly defined experiment. Please first initialize a nl object, then add a proper experiment and finally add a simdesign by using one of the provided simdesign functions. The following elements are missing without default: ", paste(notvalid, collapse=" ; ")))
+    stop(paste0("Error: To run a simulation you have to add a simdesign to a nl object with a properly defined experiment.
+                Please first initialize a nl object, then add a proper experiment,
+                and finally add a simdesign by using one of the provided simdesign functions.
+                The following elements are missing without default: ",
+                paste(notvalid, collapse=" ; ")))
   }
 }

@@ -21,19 +21,19 @@ empty
 
 \item{\code{siminput}}{Input parameter tibble for model simulations}
 
-\item{\code{simobject}}{List of model objects that are created for specific simulation designs and are needed for output analysis (e.g. sobol, morris, eFast)}
+\item{\code{simobject}}{Store method object (e.g. sobol, morris, eFast)}
 
-\item{\code{simseeds}}{A vector of model seeds that are used to repeatedly run simulations using the siminput data}
+\item{\code{simseeds}}{A vector of model seeds}
 
-\item{\code{simoutput}}{Output simulation results can be attached to this slot as tibble}
+\item{\code{simoutput}}{variable to attach simulation result tibbles}
 
 \item{\code{expname}}{A character string defining the name of the experiment}
 
 \item{\code{outpath}}{Path to a directory where experiment output will be stored}
 
-\item{\code{repetition}}{A number which gives the number of repetitions for each row of the simulation design input tibble}
+\item{\code{repetition}}{The number of repetitions for each row of the simulation design input tibble}
 
-\item{\code{tickmetrics}}{Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
+\item{\code{tickmetrics}}{"true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
 
 \item{\code{idsetup}}{character string or vector of character strings, defining the name of the NetLogo setup procedure}
 
@@ -43,7 +43,7 @@ empty
 
 \item{\code{runtime}}{number of model ticks that should be run for each simulation}
 
-\item{\code{evalticks}}{vector of tick numbers defining when measurements are taken}
+\item{\code{evalticks}}{number or vector of tick numbers defining when measurements are taken}
 
 \item{\code{metrics}}{vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))}
 

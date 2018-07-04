@@ -106,7 +106,7 @@ load_model_parameters <- function(nl) {
   ## Extract the parameters and their values line by line:
   modelparam <- list()
 
-  for (i in 1:length(model.code))
+  for (i in seq_len(length(model.code)))
   {
     ## Read current line from model code
     l <- model.code[i]
@@ -117,26 +117,48 @@ load_model_parameters <- function(nl) {
       if (l == "SLIDER")
       {
         name <- as.character(model.code[i + 5])
-        value <- as.numeric(as.character(model.code[i + 9]))
+
+        entry <- list(type = l,
+                      value = as.numeric(as.character(model.code[i + 9])),
+                      min = as.numeric(as.character(model.code[i + 7])),
+                      max = as.numeric(as.character(model.code[i + 8])),
+                      incr = as.numeric(as.character(model.code[i + 10]))
+        )
+
       }
       if (l == "SWITCH")
       {
         name <- as.character(model.code[i + 5])
-        value <- ifelse(as.numeric(as.character(model.code[i + 7])) == 1, TRUE, FALSE)
+
+        entry <- list(type = l,
+                      value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1, TRUE, FALSE)
+        )
       }
       if (l == "INPUTBOX")
       {
         name <- as.character(model.code[i + 5])
-        value <- model.code[i + 6]
+
+        entry <- list(type = l,
+                      value = model.code[i + 6],
+                      entrytype = model.code[i + 9]
+        )
       }
       if (l == "CHOOSER")
       {
         name <- as.character(model.code[i + 5])
-        value <- scan(text=(model.code[i + 7]), what="", quiet=TRUE)
+
+        validvalues <- scan(text=(model.code[i + 7]), what="", quiet=TRUE)
+        select_id <- (as.numeric(as.character(model.code[i + 8])) + 1)
+        selectedvalue <- validvalues[select_id]
+
+        entry <- list(type = l,
+                      value = selectedvalue,
+                      validvalues = validvalues
+        )
       }
 
       ## Store in data.frame:
-      modelparam[[name]] <- value
+      modelparam[[name]] <- entry
     }
   }
 

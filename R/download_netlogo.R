@@ -4,7 +4,7 @@
 #'
 #' @param to      Character string with the name where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
- #'
+#' @param extraxt TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of `to` (only unix)
 #' @details
 #'
 #' Supported Versions for Download and Usage (parameter `version`):
@@ -29,23 +29,29 @@
 #' @export
 
 
-download_netlogo <- function(to, version) {
+download_netlogo <- function(to, version, extract=FALSE) {
 
   switch(version,
-         "6.0.4" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/6.0.4/"},
-         "6.0.3" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/6.0.3/"},
-         "6.0.2" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/6.0.2/"},
-         "6.0.1" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/6.0.1/"},
-         "6.0" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/6.0.0/"},
-         "5.3.1" = {nl_vers <- "https://ccl.northwestern.edu/netlogo/5.3.1/"})
+         "6.0.4" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.4/"},
+         "6.0.3" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.3/"},
+         "6.0.2" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.2/"},
+         "6.0.1" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.1/"},
+         "6.0" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.0/"},
+         "5.3.1" = {nl_url <- "https://ccl.northwestern.edu/netlogo/5.3.1/"})
 
   switch(util_get_os(),
-         "win" = {nl_dl <- paste0(nl_vers, "NetLogo-", version, "-64.msi")},
-         "mac" = {nl_dl <- paste0(nl_vers, "NetLogo-", version, ".dmg")},
-         "unix" = {nl_dl <- paste0(nl_vers, "NetLogo-", version, "-64.tgz")},
+         "win" = {nl_file <- paste0("NetLogo-", version, "-64.msi")},
+         "mac" = {nl_file <- paste0("NetLogo-", version, ".dmg")},
+         "unix" = {nl_file <- paste0("NetLogo-", version, "-64.tgz")},
          "Unknown OS" = {stop("Unknown OS. OS not supported by NetLogo")})
+
+  nl_dl <- paste0(nl_url, nl_file)
 
   utils::download.file(nl_dl, to)
 
+  ## Extract the archive if os=unix:
+  if (util_get_os() == "unix") {
+    system(paste0("tar xvzf ", nl_file))
+  }
 }
 

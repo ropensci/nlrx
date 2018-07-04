@@ -13,6 +13,9 @@ simdesign_eFast(nl, samples, nseeds)
 
 \item{nseeds}{number of seeds for this simulation design}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add an eFast simdesign to a nl object
 }
@@ -27,7 +30,7 @@ Finally, the function reports a simdesign object.
 \dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl@simdesign <- simdesign_eFast(nl=nl,
-                                 samples=70,
+                                 samples=100,
                                  nseeds=1)
 }
 

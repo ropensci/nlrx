@@ -22,6 +22,9 @@ simdesign_sobol(nl, samples, sobolorder, sobolnboot, sobolconf, nseeds,
 
 \item{precision}{number of digits for the decimal fraction of parameter values}
 }
+\value{
+simdesign S4 class object
+}
 \description{
 Add a sobol simdesign to a nl object
 }
@@ -36,11 +39,11 @@ Finally, the function reports a simdesign object.
 \dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl@simdesign <- simdesign_sobol(nl=nl,
-samples=100,
+samples=200,
 sobolorder=2,
-sobolnboot=10,
+sobolnboot=20,
 sobolconf=0.95,
-nseeds=2,
+nseeds=3,
 precision=3)
 }
 
