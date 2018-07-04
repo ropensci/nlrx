@@ -93,7 +93,7 @@ util_eval_simdesign <- function(nl) {
   }
 }
 
-#' Evaluate variable validity (cmopare to model)
+#' Evaluate variable validity
 #'
 #' @description Evaluate variables and constants defined in experiment
 #' @param nl nl object
@@ -104,10 +104,14 @@ util_eval_simdesign <- function(nl) {
 #' Please note, that this function might fail if the supported modelpath does not point to an existing nlogo file.
 #' This might for example happen, if the modelpath is set up for a remote cluster execution.
 #'
+#'#' @examples
+#' \dontrun{
+#' eval_variables_constants(nl)
+#' }
+#'
 #' @aliases eval_variables_constants
 #' @rdname eval_variables_constants
 #' @export
-
 eval_variables_constants <- function(nl) {
 
   variables_validity <-  unlist(lapply(names(getexp(nl, "variables")),
@@ -128,5 +132,5 @@ eval_variables_constants <- function(nl) {
                 ". Check load_model_parameters() function to show valid parameters."))
   }
 
-  print("All defined variables and constants are valid!")
+  message("All defined variables and constants are valid!")
 }
