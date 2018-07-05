@@ -82,7 +82,12 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nldoc/nlrx/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -96,7 +101,7 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>nlrx: A package for running NetLogo simulations from R.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/nlrx-package.R'><code>R/nlrx-package.R</code></a></small>
     <div class="hidden name"><code>nlrx-package.Rd</code></div>
     </div>
 
@@ -165,7 +170,7 @@ precision=3)
 The <code>run_nl</code> function allows to run one specific simulation from the siminput parameter table.
 However, the most efficient way to run all simulations at once is nesting the call of <code>run_nl</code> into a future_map function.
 This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.</p>
-<p><code>
+<p><code><a href='http://www.rdocumentation.org/packages/future/topics/plan'>
 future::plan(multisession)
     results %&lt;-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
  furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
@@ -175,11 +180,11 @@ future::plan(multisession)
           cleanup = "all")
     })
   })
-</code></p>
+</a></code></p>
 <p>Step 5: Attach results to nl and run analysis</p>
 <p>nlrx provides method specific analysis functions for each simulation design.
 Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.
-In order to run the <code>analyze_nl()</code> function, the simulation output has to be attached to the nl object first.
+In order to run the <code><a href='analyze_nl.html'>analyze_nl()</a></code> function, the simulation output has to be attached to the nl object first.
 After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
 <p><code>
 # Attach results to nl object:
@@ -190,6 +195,13 @@ write_simoutput(nl)
 analyze_nl(nl)
 </code></p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p><a href='https://github.com/nldoc/nlrx/'>https://github.com/nldoc/nlrx/</a></p></li>
+<li><p>Report bugs at <a href='https://github.com/nldoc/nlrx/issues/'>https://github.com/nldoc/nlrx/issues/</a></p></li>
+</ul></div>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -197,6 +209,8 @@ analyze_nl(nl)
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
     <h2>Author</h2>

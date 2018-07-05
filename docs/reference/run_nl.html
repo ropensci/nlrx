@@ -81,7 +81,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nldoc/nlrx/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -95,7 +100,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute NetLogo simulation</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
     <div class="hidden name"><code>run_nl.Rd</code></div>
     </div>
 
@@ -156,8 +161,8 @@ This approach enables singlecore and multicore simulations on local machines and
 
 <span class='fu'>library</span>(<span class='no'>furrr</span>)
 <span class='fu'>plan</span>(<span class='no'>multisession</span>)
-<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='kw pkg'>furrr</span><span class='kw ns'>::</span><span class='fu'>future_map_dfr</span>(<span class='fu'>getsim</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>), <span class='kw'>function</span>(<span class='no'>seed</span>){
-  <span class='kw pkg'>furrr</span><span class='kw ns'>::</span><span class='fu'>future_map_dfr</span>(<span class='fu'>seq_len</span>(<span class='fu'>nrow</span>(<span class='fu'>getsim</span>(<span class='no'>nl</span>, <span class='st'>"siminput"</span>))), <span class='kw'>function</span>(<span class='no'>siminputrow</span>) {
+<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='kw pkg'>furrr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/furrr/topics/future_map'>future_map_dfr</a></span>(<span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>), <span class='kw'>function</span>(<span class='no'>seed</span>){
+  <span class='kw pkg'>furrr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/furrr/topics/future_map'>future_map_dfr</a></span>(<span class='fu'>seq_len</span>(<span class='fu'>nrow</span>(<span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"siminput"</span>))), <span class='kw'>function</span>(<span class='no'>siminputrow</span>) {
       <span class='fu'>run_nl</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
              <span class='kw'>seed</span> <span class='kw'>=</span> <span class='no'>seed</span>,
              <span class='kw'>siminputrow</span> <span class='kw'>=</span> <span class='no'>siminputrow</span>,

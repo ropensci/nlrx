@@ -73,13 +73,10 @@ nl@experiment <- experiment(expname="wolf-sheep",
 While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method. nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast. A simulation design is attached to a nl object by using on of these simdesign functions:
 
 ``` r
-nl@simdesign <- simdesign_sobol(nl=nl,
-                                samples=500,
-                                sobolorder=2,
-                                sobolnboot=50,
-                                sobolconf=0.95,
-                                nseeds=2,
-                                precision=3)
+nl@simdesign <- simdesign_lhs(nl=nl,
+                               samples=100,
+                               nseeds=3,
+                               precision=3)
 ```
 
 #### Step 4: Run simulations

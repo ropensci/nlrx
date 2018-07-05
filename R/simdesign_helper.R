@@ -408,7 +408,7 @@ simdesign_soboljansen <- function(nl,
 #' nl@@simdesign <- simdesign_morris(nl=nl,
 #'                                   morristype="oat",
 #'                                   morrislevels=4,
-#'                                   morrisr=100,
+#'                                   morrisr=20,
 #'                                   morrisgridjump=2,
 #'                                   nseeds=3)
 #' }

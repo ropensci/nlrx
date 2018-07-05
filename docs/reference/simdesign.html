@@ -81,7 +81,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nldoc/nlrx/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -95,7 +100,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Construct a new simdesign object</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/class_constr.R'><code>R/class_constr.R</code></a></small>
     <div class="hidden name"><code>simdesign.Rd</code></div>
     </div>
 
@@ -155,19 +160,19 @@ A simulation design is attached to a nl object by using on of these simdesign fu
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_simple</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_simple.html'>simdesign_simple</a></span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                                  <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ff</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_ff.html'>simdesign_ff</a></span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                              <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_lhs</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_lhs.html'>simdesign_lhs</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                               <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>100</span>,
                               <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
                               <span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_sobol</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_sobol.html'>simdesign_sobol</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                 <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>200</span>,
                                 <span class='kw'>sobolorder</span><span class='kw'>=</span><span class='fl'>2</span>,
                                 <span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>20</span>,
@@ -175,28 +180,28 @@ A simulation design is attached to a nl object by using on of these simdesign fu
                                 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
                                 <span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_sobol2007</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_sobol2007.html'>simdesign_sobol2007</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                     <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>200</span>,
                                     <span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>20</span>,
                                     <span class='kw'>sobolconf</span><span class='kw'>=</span><span class='fl'>0.95</span>,
                                     <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
                                     <span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_soboljansen</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_soboljansen.html'>simdesign_soboljansen</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                       <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>200</span>,
                                       <span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>20</span>,
                                       <span class='kw'>sobolconf</span><span class='kw'>=</span><span class='fl'>0.95</span>,
                                       <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
                                       <span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_morris</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_morris.html'>simdesign_morris</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                  <span class='kw'>morristype</span><span class='kw'>=</span><span class='st'>"oat"</span>,
                                  <span class='kw'>morrislevels</span><span class='kw'>=</span><span class='fl'>4</span>,
                                  <span class='kw'>morrisr</span><span class='kw'>=</span><span class='fl'>100</span>,
                                  <span class='kw'>morrisgridjump</span><span class='kw'>=</span><span class='fl'>2</span>,
                                  <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>)
 
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_eFast</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_eFast.html'>simdesign_eFast</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                 <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>100</span>,
                                 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>)
 

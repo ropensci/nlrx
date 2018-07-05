@@ -81,7 +81,12 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/nldoc/nlrx/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -95,7 +100,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add a sobol2007 simdesign to a nl object</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
     <div class="hidden name"><code>simdesign_sobol2007.Rd</code></div>
     </div>
 
@@ -153,8 +158,8 @@ Finally, the function reports a simdesign object.</p>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
 <span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_sobol2007</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-<span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>200</span>,
-<span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>20</span>,
+<span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>1000</span>,
+<span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>100</span>,
 <span class='kw'>sobolconf</span><span class='kw'>=</span><span class='fl'>0.95</span>,
 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
 <span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
