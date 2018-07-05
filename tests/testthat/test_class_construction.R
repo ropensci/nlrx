@@ -6,7 +6,7 @@ testthat::test_that("class objects are created with correct variables", {
            modelpath = "C:/Program Files/NetLogo 6.0.2/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
            jvmmem = 1024)
 
-
+  testthat::context("Class construction: nl")
   testthat::expect_match(getnl(nl, "nlversion"), "6.0.2")
   testthat::expect_match(getnl(nl, "nlpath"), "C:/Program Files/NetLogo 6.0.2/")
   testthat::expect_match(getnl(nl, "modelpath"), "C:/Program Files/NetLogo 6.0.2/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
@@ -35,6 +35,7 @@ testthat::test_that("class objects are created with correct variables", {
                                                "show-energy?" = "false")
   )
 
+  testthat::context("Class construction: experiment")
   testthat::expect_match(getexp(nl, "expname"), "nlrxtest")
   testthat::expect_match(getexp(nl, "outpath"), "C:/out/")
   testthat::expect_equal(getexp(nl, "repetition"), 1)
@@ -70,6 +71,7 @@ testthat::test_that("class objects are created with correct variables", {
   # Skill all following tests on CRAN and travis
   testthat::skip_on_cran()
   testthat::skip_on_travis()
+  testthat::context("Class construction: simdesign")
   # Testing validity of simdesign simple:
   nl@simdesign <- simdesign_simple(nl = nl,
                                    nseeds = 3)

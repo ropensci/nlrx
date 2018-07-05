@@ -65,9 +65,7 @@ run_nl <- function(nl, seed, siminputrow, cleanup="all") {
   util_call_nl(nl, xmlfile, outfile, batchpath)
 
   ## Read results
-  nl_results <- util_gather_results(nl, outfile)
-  ## Update runnumber:
-  nl_results$siminputrow <- siminputrow
+  nl_results <- util_gather_results(nl, outfile, siminputrow)
 
   ## Delete temporary files:
   if(cleanup == "xml" | cleanup == "all") {

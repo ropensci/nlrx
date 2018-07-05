@@ -102,17 +102,24 @@ util_cleanup <- function(nl, pattern) {
 #'
 #' @param nl nl object
 #' @param outfile  file location of output results
+#' @param siminputrow current row of siminput tibble
 #' @aliases util_gather_results
 #' @rdname util_gather_results
 #' @keywords internal
 #' @export
-util_gather_results <- function(nl, outfile) {
+util_gather_results <- function(nl, outfile, siminputrow) {
 
   NLtable <- readr::read_csv(outfile, skip=6)
+  NLtable$siminputrow <- siminputrow
 
   ## Throw away all ticks that are not within the eval interval
-  NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
-
+  if (max(NLtable$`[step]`) < min(getexp(nl, "evalticks")))
+  {
+    message("No model results reported for specified evalticks. Using last reported tick instead.")
+    NLtable <- NLtable %>% dplyr::filter(`[step]` == max(`[step]`))
+  } else {
+    NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
+  }
   return(NLtable)
 }
 

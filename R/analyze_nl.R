@@ -129,7 +129,7 @@ analyze_ff <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
     dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
 
   return(ffagg)
@@ -150,7 +150,7 @@ analyze_lhs <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
     dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
 
   return(lhsagg)
@@ -346,17 +346,17 @@ analyze_morris <- function(nl) {
     for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(mo, simoutput.i[j,])
 
-      mustar <- tibble::tibble(metric=metrics(nl)[j],
+      mustar <- tibble::tibble(metric=getexp(nl, "metrics")[j],
                                parameter=colnames(mo$ee),
                                index="mustar",
                                value=apply(mo$ee, 2, function(x) mean(abs(x))),
                                seed=i)
-      mu <- tibble::tibble(metric=metrics(nl)[j],
+      mu <- tibble::tibble(metric=getexp(nl, "metrics")[j],
                            parameter=colnames(mo$ee),
                            index="mu",
                            value=apply(mo$ee, 2, mean),
                            seed=i)
-      sigma <- tibble::tibble(metric=metrics(nl)[j],
+      sigma <- tibble::tibble(metric=getexp(nl, "metrics")[j],
                               parameter=colnames(mo$ee),
                               index="sigma",
                               value=apply(mo$ee, 2, stats::sd),
