@@ -1,18 +1,26 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-nlrx <img src="man/figures/logo.png" align="right" width="150" />
-=================================================================
 
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/nldoc/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/nldoc/nlrx) [![Travis build status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/nldoc/nlrx) [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-The nlrx package provides tools to setup NetLogo simulations in R. It uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running sensitivity analyses.
+# nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
-Installation
-------------
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/nldoc/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/nldoc/nlrx)
+[![Travis build status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/nldoc/nlrx)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-You can install the released version of nlrx from [CRAN](https://CRAN.R-project.org) with:
+The nlrx package provides tools to setup NetLogo simulations in R.
+It uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running sensitivity analyses.
 
-``` r
+## Installation
+
+You can install the released version of nlrx from
+[CRAN](https://CRAN.R-project.org) with:
+
+
+```r
 install.packages("nlrx")
 #> Error in install.packages : Updating loaded packages
 ```
@@ -24,10 +32,11 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("nldoc/nlrx")
 ```
 
-Example
--------
+## Example
 
-The nlrx package uses S4 classes to store basic information on NetLogo, the model experiment and the simulation design. Experiment and simulation design class objects are stored within the nl class object. This allows to have a complete simulation setup within one single R object.
+The nlrx package uses S4 classes to store basic information on NetLogo, the model experiment and the simulation design.
+Experiment and simulation design class objects are stored within the nl class object.
+This allows to have a complete simulation setup within one single R object.
 
 The following steps guide you trough the process on how to setup, run and analyze NetLogo model simulations with nlrx
 
@@ -35,7 +44,8 @@ The following steps guide you trough the process on how to setup, run and analyz
 
 The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
 
-``` r
+
+```r
 nl <- nl(nlversion = "6.0.3",
          nlpath = "C:/Program Files/NetLogo 6.0.3/",
          modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
@@ -44,9 +54,11 @@ nl <- nl(nlversion = "6.0.3",
 
 #### Step 2: Attach an experiment
 
-The experiment object is organized in a similar fashion as NetLogo BehaviorSpace experiments. It holds information on model variables, constants, metrics, runtime, ...
+The experiment object is organized in a similar fashion as NetLogo BehaviorSpace experiments.
+It holds information on model variables, constants, metrics, runtime, ...
 
-``` r
+
+```r
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
                             repetition=1,
@@ -70,9 +82,12 @@ nl@experiment <- experiment(expname="wolf-sheep",
 
 #### Step 3: Attach a simulation design
 
-While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method. nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast. A simulation design is attached to a nl object by using on of these simdesign functions:
+While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
+nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
+A simulation design is attached to a nl object by using on of these simdesign functions:
 
-``` r
+
+```r
 nl@simdesign <- simdesign_sobol(nl=nl,
                                 samples=500,
                                 sobolorder=2,
@@ -84,9 +99,13 @@ nl@simdesign <- simdesign_sobol(nl=nl,
 
 #### Step 4: Run simulations
 
-All information that is needed to run the simulations is now stored within the nl object. The run\_nl function allows to run one specific simulation from the siminput parameter table. However, the most efficient way to run all simulations at once is nesting the call of run\_nl into a future\_map function. This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.
+All information that is needed to run the simulations is now stored within the nl object.
+The run_nl function allows to run one specific simulation from the siminput parameter table.
+However, the most efficient way to run all simulations at once is nesting the call of run_nl into a future_map function.
+This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.
 
-``` r
+
+```r
 library(furrr)
 future::plan(multisession)
 
@@ -102,9 +121,13 @@ results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
 
 #### Step 5: Attach results to nl and run analysis
 
-nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze\_nl function, the simulation output has to be attached to the nl object first. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
+nlrx provides method specific analysis functions for each simulation design.
+Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.
+In order to run the analyze_nl function, the simulation output has to be attached to the nl object first.
+After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
 
-``` r
+
+```r
 # Attach results to nl object:
 setsim(nl, "simoutput") <- results
 

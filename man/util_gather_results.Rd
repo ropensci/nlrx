@@ -4,12 +4,16 @@
 \alias{util_gather_results}
 \title{Load output file from simulations}
 \usage{
-util_gather_results(nl, outfile)
+util_gather_results(nl, outfile, seed, siminputrow)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{outfile}{file location of output results}
+
+\item{seed}{model random-seed}
+
+\item{siminputrow}{current row of siminput tibble}
 }
 \description{
 Load output file from simulations

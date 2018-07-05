@@ -1,17 +1,24 @@
 Package: nlrx
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Setup, run and analyze NetLogo model simulations from R via XML
 Version: 0.1.0
 Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
                      role = c("aut", "cre"), comment = c(ORCID = '0000-0002-9000-4229')))
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: Jan Salecker <jsaleck@gwdg.de>
+Description: The nlrx package provides tools to setup, run and analyze NetLogo model simulations in R.
+    nlrx experiments use a similar structure as NetLogos Behavior Space experiments. 
+    However, nlrx offers more flexibility and additional tools for running and anlyzing complex simulation designs and sensitivity analyses.
+    The user defines all information that is needed in an intuitive framework, using S4 class objects.
+    Experiments are submitted from R to NetLogo via XML files that are dynamically written, based on specifications defined by the user.
+    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.
+    This also enables simulating NetLogo experiments on remote HPC machines.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.0.1
+URL: https://github.com/nldoc/nlrx/
+BugReports: https://github.com/nldoc/nlrx/issues/
 Imports:
     XML,
     lhs,

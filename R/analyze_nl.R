@@ -110,8 +110,6 @@ analyze_nl <- function(nl) {
 #' @aliases analyze_simple
 #' @rdname analyze_simple
 #' @keywords internal
-#' @export
-
 analyze_simple <- function(nl) {
 
 }
@@ -124,13 +122,15 @@ analyze_simple <- function(nl) {
 #' @aliases analyze_ff
 #' @rdname analyze_ff
 #' @keywords internal
-#' @export
 analyze_ff <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
+    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max)) %>%
+    dplyr::ungroup()
+
+  ffagg <- tibble::as.tibble(ffagg)
 
   return(ffagg)
 
@@ -145,13 +145,15 @@ analyze_ff <- function(nl) {
 #' @aliases analyze_lhs
 #' @rdname analyze_lhs
 #' @keywords internal
-#' @export
 analyze_lhs <- function(nl) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max))
+    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max)) %>%
+    dplyr::ungroup()
+
+  lhsagg <- tibble::as.tibble(lhsagg)
 
   return(lhsagg)
 }
@@ -165,7 +167,6 @@ analyze_lhs <- function(nl) {
 #' @aliases analyze_sobol
 #' @rdname analyze_sobol
 #' @keywords internal
-#' @export
 analyze_sobol <- function(nl) {
 
   sensindex <- NULL
@@ -197,6 +198,7 @@ analyze_sobol <- function(nl) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
+  sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
 
@@ -211,7 +213,6 @@ analyze_sobol <- function(nl) {
 #' @aliases analyze_sobol2007
 #' @rdname analyze_sobol2007
 #' @keywords internal
-#' @export
 analyze_sobol2007 <- function(nl) {
 
   sensindex <- NULL
@@ -252,6 +253,7 @@ analyze_sobol2007 <- function(nl) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
+  sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
 
@@ -266,7 +268,6 @@ analyze_sobol2007 <- function(nl) {
 #' @aliases analyze_soboljansen
 #' @rdname analyze_soboljansen
 #' @keywords internal
-#' @export
 analyze_soboljansen <- function(nl) {
 
   sensindex <- NULL
@@ -307,6 +308,7 @@ analyze_soboljansen <- function(nl) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
+  sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
 
@@ -322,8 +324,6 @@ analyze_soboljansen <- function(nl) {
 #' @aliases analyze_morris
 #' @rdname analyze_morris
 #' @keywords internal
-#' @export
-
 analyze_morris <- function(nl) {
 
   sensindex <- NULL
@@ -368,6 +368,7 @@ analyze_morris <- function(nl) {
 
   # Remove rownames
   rownames(sensindex) <- NULL
+  sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
 
@@ -382,7 +383,6 @@ analyze_morris <- function(nl) {
 #' @aliases analyze_eFast
 #' @rdname analyze_eFast
 #' @keywords internal
-#' @export
 analyze_eFast <- function(nl) {
 
   sensindex <- NULL
@@ -421,6 +421,7 @@ analyze_eFast <- function(nl) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
+  sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
 

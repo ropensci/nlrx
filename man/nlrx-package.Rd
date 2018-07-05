@@ -108,6 +108,14 @@ write_simoutput(nl)
 analyze_nl(nl)
 }
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/nldoc/nlrx/}
+  \item Report bugs at \url{https://github.com/nldoc/nlrx/issues/}
+}
+
+}
 \author{
 Jan Salecker \email{jsaleck@gwdg.de}
 }

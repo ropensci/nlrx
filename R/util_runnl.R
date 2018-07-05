@@ -9,7 +9,6 @@
 #' @aliases util_create_sim_XML
 #' @rdname util_create_sim_XML
 #' @keywords internal
-#' @export
 util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   simdata_run <- getsim(nl, "siminput")[siminputrow,]
@@ -72,7 +71,6 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 #' @aliases util_call_nl
 #' @rdname util_call_nl
 #' @keywords internal
-#' @export
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 
   NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", getnl(nl, "modelpath"), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", getexp(nl, "expname"), " --table ", "\"", outfile, "\"", " --threads ", 1)
@@ -89,7 +87,6 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #' @aliases util_cleanup
 #' @rdname util_cleanup
 #' @keywords internal
-#' @export
 util_cleanup <- function(nl, pattern) {
 
   file.remove(dir(path=getexp(nl, "outpath"), pattern=pattern, full.names=TRUE))
@@ -102,24 +99,59 @@ util_cleanup <- function(nl, pattern) {
 #'
 #' @param nl nl object
 #' @param outfile  file location of output results
+#' @param seed model random-seed
 #' @param siminputrow current row of siminput tibble
 #' @aliases util_gather_results
 #' @rdname util_gather_results
 #' @keywords internal
-#' @export
-util_gather_results <- function(nl, outfile, siminputrow) {
+util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   NLtable <- readr::read_csv(outfile, skip=6)
   NLtable$siminputrow <- siminputrow
 
-  ## Throw away all ticks that are not within the eval interval
-  if (max(NLtable$`[step]`) < min(getexp(nl, "evalticks")))
-  {
-    message("No model results reported for specified evalticks. Using last reported tick instead.")
+  # Check if tickmetrics is true, if not, we only keep the last reported line:
+  if (getexp(nl, "tickmetrics") == "false") {
+
+    # Report line with max step:
     NLtable <- NLtable %>% dplyr::filter(`[step]` == max(`[step]`))
+
+
   } else {
+
+    # We filter all evalticks lines from the table
     NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
+
+    # We then chek if there are ticks, that have reported no results:
+    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% simdata$`[step]`)]
+
+    if (length(noeval) > 0)
+    {
+      message(paste0("No model results reported for siminputrow ", siminputrow, " on ticks ", noeval))
+    }
+
+
   }
+
+  # Finally check if the tibble is still empty:
+  if (nrow(NLtable == 0)) {
+
+    # Create an na line:
+    NArow <- tibble::tibble(`[run number]` = NA)
+    NArow <- cbind(NArow, getsim(nl, "siminput")[siminputrow,])
+    NArow <- cbind(NArow, tibble::tibble(`random-seed` = seed))
+    NArow <- cbind(NArow, tibble::tibble(`[step]` = NA))
+
+    NAmetrics <- t(tibble::tibble(rep(NA, length(getexp(nl, "metrics")))))
+    colnames(NAmetrics) <- getexp(nl, "metrics")
+    rownames(NAmetrics) <- NULL
+
+    NArow <- cbind(NArow, NAmetrics)
+    NArow$siminputrow <- siminputrow
+
+    NLtable <- NArow
+  }
+
+
   return(NLtable)
 }
 
@@ -131,7 +163,6 @@ util_gather_results <- function(nl, outfile, siminputrow) {
 #' @aliases util_read_write_batch
 #' @rdname util_read_write_batch
 #' @keywords internal
-#' @export
 util_read_write_batch <- function(nl) {
 
   os <- util_get_os()

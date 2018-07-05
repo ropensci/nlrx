@@ -171,9 +171,9 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_sobol(nl=nl,
-#' samples=200,
+#' samples=1000,
 #' sobolorder=2,
-#' sobolnboot=20,
+#' sobolnboot=100,
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)
@@ -250,8 +250,8 @@ simdesign_sobol <- function(nl,
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_sobol2007(nl=nl,
-#' samples=200,
-#' sobolnboot=20,
+#' samples=1000,
+#' sobolnboot=100,
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)
@@ -327,8 +327,8 @@ simdesign_sobol2007 <- function(nl,
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@simdesign <- simdesign_soboljansen(nl=nl,
-#' samples=200,
-#' sobolnboot=20,
+#' samples=1000,
+#' sobolnboot=100,
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)

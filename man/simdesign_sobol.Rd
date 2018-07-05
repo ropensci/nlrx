@@ -39,9 +39,9 @@ Finally, the function reports a simdesign object.
 \dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl@simdesign <- simdesign_sobol(nl=nl,
-samples=200,
+samples=1000,
 sobolorder=2,
-sobolnboot=20,
+sobolnboot=100,
 sobolconf=0.95,
 nseeds=3,
 precision=3)

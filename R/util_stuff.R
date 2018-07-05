@@ -5,7 +5,6 @@
 #' @aliases util_get_os
 #' @rdname util_get_os
 #' @keywords internal
-#' @export
 util_get_os <- function() {
   if (.Platform$OS.type == "windows") {
     "win"
@@ -28,7 +27,6 @@ util_get_os <- function() {
 #' @aliases util_create_lhs
 #' @rdname util_create_lhs
 #' @keywords internal
-#' @export
 util_create_lhs <- function(input, samples, precision) {
 
   # create a random sample of input factor sets (Latin Hypercube Sampling)
@@ -55,7 +53,6 @@ util_create_lhs <- function(input, samples, precision) {
 #' @aliases util_generate_seeds
 #' @rdname util_generate_seeds
 #' @keywords internal
-#' @export
 util_generate_seeds <- function(nseeds) {
 
   seeds <- ceiling(stats::runif(nseeds, 0, 10000))
