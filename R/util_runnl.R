@@ -122,7 +122,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
 
     # We then chek if there are ticks, that have reported no results:
-    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% simdata$`[step]`)]
+    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% getsim(nl, "simoutput")$`[step]`)]
 
     if (length(noeval) > 0)
     {

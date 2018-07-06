@@ -43,6 +43,9 @@ util_eval_experiment <- function(nl) {
   if(is.na(getexp(nl, "expname"))) {
     notvalid <- c(notvalid, "expname")
   }
+  if(!getexp(nl, "tickmetrics") %in% c("true", "false")) {
+    notvalid <- c(notvalid, "tickmetrics must be either \"true\" or \"false\"")
+  }
   if(is.na(getexp(nl, "outpath"))) {
     notvalid <- c(notvalid, "outpath")
   }
@@ -104,7 +107,7 @@ util_eval_simdesign <- function(nl) {
 #' Please note, that this function might fail if the supported modelpath does not point to an existing nlogo file.
 #' This might for example happen, if the modelpath is set up for a remote cluster execution.
 #'
-#'#' @examples
+#' @examples
 #' \dontrun{
 #' eval_variables_constants(nl)
 #' }

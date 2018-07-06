@@ -11,7 +11,7 @@ download_netlogo(to, version, extract = FALSE)
 
 \item{version}{Character string naming which NetLogo Version to download (see Details)}
 
-\item{extraxt}{TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of \code{to} (only unix)}
+\item{extract}{TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of \code{to} (only unix)}
 }
 \description{
 Auxiliary function to download NetLogo

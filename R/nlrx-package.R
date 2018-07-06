@@ -115,6 +115,7 @@ globalVariables(c(".",
                   "group_by",
                   "metrics",
                   "random-seed",
-                  "vars"))
+                  "vars",
+                  "siminputrow"))
 
 
