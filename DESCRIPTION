@@ -32,5 +32,6 @@ Imports:
     utils
 Depends:
    methods,
-    tibble
+    tibble,
+    R (>= 2.10)
 Suggests: testthat
