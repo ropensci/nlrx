@@ -46,12 +46,12 @@ download_netlogo <- function(to, version, extract=FALSE) {
          "Unknown OS" = {stop("Unknown OS. OS not supported by NetLogo")})
 
   nl_dl <- paste0(nl_url, nl_file)
-
-  utils::download.file(nl_dl, paste0(to, "/", nl_file))
+  to_file <- paste0(to, "/", nl_file)
+  utils::download.file(nl_dl, to_file)
 
   ## Extract the archive if os=unix:
   if (util_get_os() == "unix") {
-    system(paste0("tar xvzf ", nl_file))
+    system(paste0("tar xvzf ", to_file))
   }
 }
 
