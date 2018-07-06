@@ -47,7 +47,7 @@ download_netlogo <- function(to, version, extract=FALSE) {
 
   nl_dl <- paste0(nl_url, nl_file)
 
-  utils::download.file(nl_dl, to)
+  utils::download.file(nl_dl, paste0(to, "/", nl_file))
 
   ## Extract the archive if os=unix:
   if (util_get_os() == "unix") {
