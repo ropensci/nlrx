@@ -78,3 +78,53 @@ run_nl <- function(nl, seed, siminputrow, cleanup="all") {
   return(nl_results)
 }
 
+
+
+
+#' Execute NetLogo simulation without pregenerated parametersets
+#'
+#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets
+#'
+#' @param nl nl object
+#' @param cleanup indicate which filetypes should be deleted
+#' @return tibble with simulation output results
+#' @details
+#'
+#' run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
+#' This is the case for dynamic designs, such as SImulated Annealing, where parametersets are dynamically generated, based on the output of previous simulations.
+#' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+#'
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Run one simulation:
+#' results <- run_nl_dyn(nl=nl,
+#' cleanup="all")
+#'
+#' }
+#' @aliases run_nl_dyn
+#' @rdname run_nl_dyn
+#'
+#' @export
+
+run_nl_dyn <- function(nl, seed, cleanup="all") {
+
+  nl_results <- NULL
+
+
+  if(getsim(nl, "simmethod") == "GenSA")
+  {
+    nl_results <- util_run_nl_dyn_GenSA(nl = nl,
+                                        seed = seed,
+                                        cleanup = cleanup)
+  }
+
+
+  return(nl_results)
+}
+
+
+
+
+

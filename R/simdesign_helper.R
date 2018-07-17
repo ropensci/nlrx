@@ -534,3 +534,88 @@ simdesign_eFast <- function(nl,
 
 }
 
+
+
+
+#' Add a Simulated Annealing simdesign to a nl object
+#'
+#' @description Add a Simulated Annealing simdesign to a nl object
+#'
+#' @param nl nl object with a defined experiment
+#' @param par optional vector of start values for each parameter defined in variables of experiment
+#' @param evalcrit position of evaluation criterion within defined NetLogo metrics of nl experiment
+#' @param control list with further arguments passed to the GenSA function (see ?GenSA for details)
+#' @param nseeds number of seeds for this simulation design
+#' @return simdesign S4 class object
+#' @details
+#'
+#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+#' The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
+#' that are defined in the variables field of the experiment object within the nl object.
+#' The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
+#' The reporter is defined within the experiment metrics vector.
+#' For the simulated annealing function we only refer to the position of the reporter that we want to use for evaluation.
+#' The function uses the GenSA package to set up a Simulated Annealing function.
+#' For details on the GenSA function parameters see ?GenSA
+#' Finally, the function reports a simdesign object.
+#'
+#'
+#'
+#'
+#' @examples
+#' \dontrun{
+#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#' nl@@simdesign <- simdesign_GenSA(nl=nl,
+#'                                  par=NULL,
+#'                                  evalcrit=1,
+#'                                  control=list(max.time = 600),
+#'                                  nseeds=1)
+#' }
+#'
+#' @aliases simdesign_GenSA
+#' @rdname simdesign_GenSA
+#'
+#' @export
+
+simdesign_GenSA <- function(nl,
+                            par = NULL,
+                            evalcrit = 1,
+                            control = list(),
+                            nseeds = 1) {
+
+  # Evaluate experiment and variables:
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
+  message("Creating GenSA simulation design")
+
+  # Parameters we need for simulated annealing:
+  lower <- unlist(lapply(getexp(nl, "variables"), "[", "min"))
+  upper <- unlist(lapply(getexp(nl, "variables"), "[", "max"))
+
+  # Get evaulation criterion reporter from metrics vector:
+  evalcrit_reporter <- getexp(nl, "metrics")[evalcrit]
+  # Check if the reporter exists:
+  if (is.na(evalcrit_reporter)) {
+    stop(paste0("Error: No valid reporter at defined evalcrit position: ", evalcrit))
+  }
+
+  # Create a gsa object:
+  gsa <- list(par = par,
+              upper = upper,
+              lower = lower,
+              evalcrit = evalcrit_reporter,
+              control = control)
+
+  # generate random seeds
+  seeds <- util_generate_seeds(nseeds)
+
+  # Add simdesign to nl
+  new_simdesign <- simdesign(simmethod="GenSA",
+                             siminput=tibble::tibble(),
+                             simobject=gsa,
+                             simseeds=seeds)
+
+  return(new_simdesign)
+
+}
+

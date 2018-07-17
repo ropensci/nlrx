@@ -29,7 +29,8 @@ Imports:
     purrr,
     magrittr,
     stats,
-    utils
+    utils,
+    GenSA
 Depends:
    methods,
     tibble,

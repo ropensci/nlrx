@@ -106,7 +106,7 @@ util_cleanup <- function(nl, pattern) {
 #' @keywords internal
 util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
-  NLtable <- readr::read_csv(outfile, skip=6)
+  NLtable <- readr::read_csv(outfile, skip=6, col_types = cols())
   NLtable$siminputrow <- siminputrow
 
   # Check if tickmetrics is true, if not, we only keep the last reported line:
@@ -122,7 +122,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
 
     # We then chek if there are ticks, that have reported no results:
-    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% getsim(nl, "simoutput")$`[step]`)]
+    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% NLtable$`[step]`)]
 
     if (length(noeval) > 0)
     {
@@ -133,7 +133,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   }
 
   # Finally check if the tibble is still empty:
-  if (nrow(NLtable == 0)) {
+  if (nrow(NLtable) == 0) {
 
     # Create an na line:
     NArow <- tibble::tibble(`[run number]` = NA)
@@ -239,3 +239,4 @@ util_read_write_batch <- function(nl) {
 
 
 }
+
