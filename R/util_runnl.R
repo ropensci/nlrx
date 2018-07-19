@@ -106,7 +106,7 @@ util_cleanup <- function(nl, pattern) {
 #' @keywords internal
 util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
-  NLtable <- readr::read_csv(outfile, skip=6, col_types = cols())
+  NLtable <- readr::read_csv(outfile, skip=6, col_types = readr::cols())
   NLtable$siminputrow <- siminputrow
 
   # Check if tickmetrics is true, if not, we only keep the last reported line:

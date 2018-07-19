@@ -87,7 +87,7 @@ run_nl <- function(nl, seed, siminputrow, cleanup="all") {
 #'
 #' @param nl nl object
 #' @param cleanup indicate which filetypes should be deleted
-#' @return tibble with simulation output results
+#' @return simulation output results can be tibble, list, ...
 #' @details
 #'
 #' run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
@@ -116,6 +116,13 @@ run_nl_dyn <- function(nl, seed, cleanup="all") {
   if(getsim(nl, "simmethod") == "GenSA")
   {
     nl_results <- util_run_nl_dyn_GenSA(nl = nl,
+                                        seed = seed,
+                                        cleanup = cleanup)
+  }
+
+  if(getsim(nl, "simmethod") == "GenAlg")
+  {
+    nl_results <- util_run_nl_dyn_GenAlg(nl = nl,
                                         seed = seed,
                                         cleanup = cleanup)
   }

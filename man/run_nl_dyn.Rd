@@ -12,7 +12,7 @@ run_nl_dyn(nl, seed, cleanup = "all")
 \item{cleanup}{indicate which filetypes should be deleted}
 }
 \value{
-tibble with simulation output results
+simulation output results can be tibble, list, ...
 }
 \description{
 Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets

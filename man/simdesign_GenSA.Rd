@@ -41,7 +41,7 @@ Finally, the function reports a simdesign object.
 nl@simdesign <- simdesign_GenSA(nl=nl,
                                  par=NULL,
                                  evalcrit=1,
-                                 maxit=100,
+                                 control=list(max.time = 600),
                                  nseeds=1)
 }
 

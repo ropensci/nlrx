@@ -619,3 +619,92 @@ simdesign_GenSA <- function(nl,
 
 }
 
+
+
+
+
+#' Add a Genetic Algorithm simdesign to a nl object
+#'
+#' @description Add a Genetic Algorithm simdesign to a nl object
+#'
+#' @param nl nl object with a defined experiment
+#' @param popSize population Size parameter for genetic algorithm
+#' @param iters number of iterations for genetic algorithm function
+#' @param evalcrit position of evaluation criterion within defined NetLogo metrics of nl experiment
+#' @param elitism elitism rate of genetic algorithm function
+#' @param mutationChance mutation rate of genetic algorithm function
+#' @param nseeds number of seeds for this simulation design
+#' @return simdesign S4 class object
+#' @details
+#'
+#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+#' The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
+#' that are defined in the variables field of the experiment object within the nl object.
+#' The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
+#' The reporter is defined within the experiment metrics vector.
+#' For the Genetic Algorithm function we only refer to the position of the reporter that we want to use for evaluation.
+#' The function uses the genalg package to set up a Genetic Algorithm function.
+#' For details on the genalg function parameters see ?genalg::rbga
+#' Finally, the function reports a simdesign object.
+#'
+#'
+#'
+#'
+#' @examples
+#' \dontrun{
+#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#'
+#' }
+#'
+#' @aliases simdesign_GenAlg
+#' @rdname simdesign_GenAlg
+#'
+#' @export
+
+simdesign_GenAlg <- function(nl,
+                             popSize = 200,
+                             iters = 100,
+                             evalcrit = 1,
+                             elitism = NA,
+                             mutationChance = NA,
+                             nseeds = 1) {
+
+  # Evaluate experiment and variables:
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
+  message("Creating GenAlg simulation design")
+
+  # Parameters we need for simulated annealing:
+  lower <- unlist(lapply(getexp(nl, "variables"), "[", "min"))
+  upper <- unlist(lapply(getexp(nl, "variables"), "[", "max"))
+
+  # Get evaulation criterion reporter from metrics vector:
+  evalcrit_reporter <- getexp(nl, "metrics")[evalcrit]
+  # Check if the reporter exists:
+  if (is.na(evalcrit_reporter)) {
+    stop(paste0("Error: No valid reporter at defined evalcrit position: ", evalcrit))
+  }
+
+  # Create a gsa object:
+  galg <- list(popSize = popSize,
+              iters = iters,
+              upper = upper,
+              lower = lower,
+              elitism = elitism,
+              mutationChance = mutationChance,
+              evalcrit = evalcrit_reporter)
+
+  # generate random seeds
+  seeds <- util_generate_seeds(nseeds)
+
+  # Add simdesign to nl
+  new_simdesign <- simdesign(simmethod="GenAlg",
+                             siminput=tibble::tibble(),
+                             simobject=galg,
+                             simseeds=seeds)
+
+  return(new_simdesign)
+
+}
+
