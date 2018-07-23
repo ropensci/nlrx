@@ -336,9 +336,10 @@ analyze_morris <- function(nl) {
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
       dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
-      dplyr::select(getexp(nl, "metrics"))
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::select(-siminputrow)
 
+    metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
@@ -346,17 +347,17 @@ analyze_morris <- function(nl) {
     for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(mo, simoutput.i[j,])
 
-      mustar <- tibble::tibble(metric=getexp(nl, "metrics")[j],
+      mustar <- tibble::tibble(metric=metrics[j],
                                parameter=colnames(mo$ee),
                                index="mustar",
                                value=apply(mo$ee, 2, function(x) mean(abs(x))),
                                seed=i)
-      mu <- tibble::tibble(metric=getexp(nl, "metrics")[j],
+      mu <- tibble::tibble(metric=metrics[j],
                            parameter=colnames(mo$ee),
                            index="mu",
                            value=apply(mo$ee, 2, mean),
                            seed=i)
-      sigma <- tibble::tibble(metric=getexp(nl, "metrics")[j],
+      sigma <- tibble::tibble(metric=metrics[j],
                               parameter=colnames(mo$ee),
                               index="sigma",
                               value=apply(mo$ee, 2, stats::sd),
