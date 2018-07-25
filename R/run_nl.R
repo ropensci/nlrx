@@ -4,50 +4,82 @@
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
+#' @param cleanup indicate which filetypes should be deleted
+#' @return tibble with simulation output results
+#' @details
+#'
+#' run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
+#' The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
+#' The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
+#' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+#'
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Run parallel on local machine:
+#' future::plan(multisession)
+#' results <- run_nl_all(nl, cleanup="all")
+#'
+#' }
+#' @aliases run_nl_all
+#' @rdname run_nl_all
+#'
+#' @export
+
+run_nl_all <- function(nl, cleanup="all") {
+
+  ## Execute on remote location
+  nl_results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
+      furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
+
+        run_nl_one(nl = nl,
+                   seed = seed,
+                   siminputrow = siminputrow,
+                   cleanup = "all")
+      })
+    })
+
+  return(nl_results)
+}
+
+
+
+#' Execute NetLogo simulation
+#'
+#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#'
+#' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
 #' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
 #' @param cleanup indicate which filetypes should be deleted
 #' @return tibble with simulation output results
 #' @details
 #'
-#' run_nl executes one simulation of the specified NetLogo model within the provided nl object.
+#' run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
 #' The random seed is set within the NetLogo model to control stochasticity.
-#' The run id defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
+#' The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
 #' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 #'
 #' This function can be used to run single simulations of a NetLogo model.
-#' It can also be used within a loop environment that loops over the input tibble and the simseeds of the attached simdesign to run a full simulation of all input combinations and seeds.
-#' We suggest to use the furrr package function future_map_dfr to loop over simulations.
-#' This approach enables singlecore and multicore simulations on local machines and remote HPC clusters.
+#'
 #'
 #' @examples
 #' \dontrun{
 #'
 #' # Run one simulation:
-#' results <- run_nl(nl=nl,
-#' seed=simseeds(nl)[1],
-#' run=1,
-#' cleanup="all")
+#' results <- run_nl_one(nl=nl,
+#'                       seed=getsims(nl, "simseeds")[1],
+#'                       siminputrow=1,
+#'                       cleanup="all")
 #'
-#' # Run all simulations on local machine in parallel:
-#'
-#' library(furrr)
-#' plan(multisession)
-#' results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-#'   furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
-#'       run_nl(nl = nl,
-#'              seed = seed,
-#'              siminputrow = siminputrow,
-#'              cleanup = "all")
-#'    })
-#'  })
 #' }
-#' @aliases run_nl
-#' @rdname run_nl
+#' @aliases run_nl_one
+#' @rdname run_nl_one
 #'
 #' @export
 
-run_nl <- function(nl, seed, siminputrow, cleanup="all") {
+run_nl_one <- function(nl, seed, siminputrow, cleanup="all") {
 
   util_eval_simdesign(nl)
 

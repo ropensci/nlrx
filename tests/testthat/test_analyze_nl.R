@@ -43,7 +43,7 @@ testthat::test_that("Analysis of sample data", {
   sobol <- analyze_nl(nl_sobol)
 
   testthat::expect_match(class(sobol)[1], "tbl_df")
-  testthat::expect_equal(nrow(sobol), 6, .01)
+  testthat::expect_equal(nrow(sobol), 18, .01)
   testthat::expect_equal(ncol(sobol), 8, .01)
   testthat::expect_equal(mean(sobol$original), 0.3385253, .01)
   testthat::expect_equal(mean(sobol$bias), 0.006594322, .01)
@@ -58,10 +58,10 @@ testthat::test_that("Analysis of sample data", {
   sobol2007 <- analyze_nl(nl_sobol2007)
 
   testthat::expect_match(class(sobol2007)[1], "tbl_df")
-  testthat::expect_equal(nrow(sobol2007), 8, .01)
+  testthat::expect_equal(nrow(sobol2007), 24, .01)
   testthat::expect_equal(ncol(sobol2007), 9, .01)
   testthat::expect_equal(mean(sobol2007$original), 0.5373813, .01)
-  testthat::expect_equal(mean(sobol2007$bias), 0.00490168, .01)
+  testthat::expect_equal(mean(sobol2007$bias), 0.003789834, .01)
 
 
   testthat::context("Load sample data soboljansen")
@@ -73,10 +73,10 @@ testthat::test_that("Analysis of sample data", {
   soboljansen <- analyze_nl(nl_soboljansen)
 
   testthat::expect_match(class(soboljansen)[1], "tbl_df")
-  testthat::expect_equal(nrow(soboljansen), 8, .01)
+  testthat::expect_equal(nrow(soboljansen), 24, .01)
   testthat::expect_equal(ncol(soboljansen), 9, .01)
   testthat::expect_equal(mean(soboljansen$original), 0.4977627, .01)
-  testthat::expect_equal(mean(soboljansen$bias), 0.00232037, .01)
+  testthat::expect_equal(mean(soboljansen$bias), 0.001826447, .01)
 
 
   testthat::context("Load sample data morris")
@@ -88,7 +88,7 @@ testthat::test_that("Analysis of sample data", {
   morris <- analyze_nl(nl_morris)
 
   testthat::expect_match(class(morris)[1], "tbl_df")
-  testthat::expect_equal(nrow(morris), 12, .01)
+  testthat::expect_equal(nrow(morris), 36, .01)
   testthat::expect_equal(ncol(morris), 5, .01)
   testthat::expect_equal(mean(morris$value), 23.61037, .01)
 
@@ -103,7 +103,7 @@ testthat::test_that("Analysis of sample data", {
   eFast <- analyze_nl(nl_eFast)
 
   testthat::expect_match(class(eFast)[1], "tbl_df")
-  testthat::expect_equal(nrow(eFast), 8, .01)
+  testthat::expect_equal(nrow(eFast), 24, .01)
   testthat::expect_equal(ncol(eFast), 5, .01)
   testthat::expect_equal(mean(eFast$value), 258.6271, .01)
 

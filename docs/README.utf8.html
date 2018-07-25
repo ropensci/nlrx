@@ -80,7 +80,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/nldoc/nlrx/">
+  <a href="https://github.com/nldoc/nlrx">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -171,18 +171,10 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <div id="step-4-run-simulations" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-4-run-simulations" class="anchor"></a>Step 4: Run simulations</h4>
-<p>All information that is needed to run the simulations is now stored within the nl object. The run_nl function allows to run one specific simulation from the siminput parameter table. However, the most efficient way to run all simulations at once is nesting the call of run_nl into a future_map function. This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(furrr)
-future<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/future/topics/plan">plan</a></span>(multisession)
+<p>All information that is needed to run the simulations is now stored within the nl object. The run_nl_one() function allows to run one specific simulation from the siminput parameter table. The run_nl_all() function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">future<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/future/topics/plan">plan</a></span>(multisession)
 
-results <span class="op">%&lt;-%</span><span class="st"> </span>furrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/furrr/topics/future_map">future_map_dfr</a></span>(<span class="kw"><a href="reference/getsim.html">getsim</a></span>(nl, <span class="st">"simseeds"</span>), <span class="cf">function</span>(seed){
-  furrr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/furrr/topics/future_map">future_map_dfr</a></span>(<span class="kw">seq_len</span>(<span class="kw">nrow</span>(<span class="kw"><a href="reference/getsim.html">getsim</a></span>(nl, <span class="st">"siminput"</span>))), <span class="cf">function</span>(siminputrow) {
-    <span class="kw"><a href="reference/run_nl.html">run_nl</a></span>(<span class="dt">nl =</span> nl,
-           <span class="dt">seed =</span> seed,
-           <span class="dt">siminputrow =</span> siminputrow,
-           <span class="dt">cleanup =</span> <span class="st">"all"</span>)
-     })
-   })</code></pre></div>
+results &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">cleanup =</span> <span class="st">"all"</span>)</code></pre></div>
 </div>
 <div id="step-5-attach-results-to-nl-and-run-analysis" class="section level4">
 <h4 class="hasAnchor">

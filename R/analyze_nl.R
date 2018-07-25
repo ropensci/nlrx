@@ -178,9 +178,11 @@ analyze_sobol <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
-      dplyr::select(getexp(nl, "metrics"))
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::select(-siminputrow) %>%
+      dplyr::select_if(~!all(is.na(.)))
 
+    metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
     # Loop over metric columns and calculate sensitivity indices:
@@ -190,7 +192,7 @@ analyze_sobol <- function(nl) {
            soS[soS < 0] <- 0
            soS[soS > 1] <- 1
            soS$parameter <- rownames(soS)
-           soS$metric <- getexp(nl, "metrics")[j]
+           soS$metric <- metrics[j]
            soS$seed <- i
 
            sensindex <- rbind(sensindex, soS)
@@ -224,9 +226,11 @@ analyze_sobol2007 <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
-      dplyr::select(getexp(nl, "metrics"))
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::select(-siminputrow) %>%
+      dplyr::select_if(~!all(is.na(.)))
 
+    metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
@@ -238,14 +242,14 @@ analyze_sobol2007 <- function(nl) {
       soS[soS > 1] <- 1
       soS$index <- "first-order"
       soS$parameter <- rownames(soS)
-      soS$metric <- getexp(nl, "metrics")[j]
+      soS$metric <- metrics[j]
       soS$seed <- i
       soT <- so$T
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"
       soT$parameter <- rownames(soT)
-      soT$metric <- getexp(nl, "metrics")[j]
+      soT$metric <- metrics[j]
       soT$seed <- i
 
       sensindex <- rbind(sensindex, soS, soT)
@@ -279,9 +283,11 @@ analyze_soboljansen <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
-      dplyr::select(getexp(nl, "metrics"))
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::select(-siminputrow) %>%
+      dplyr::select_if(~!all(is.na(.)))
 
+    metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
@@ -293,14 +299,14 @@ analyze_soboljansen <- function(nl) {
       soS[soS > 1] <- 1
       soS$index <- "first-order"
       soS$parameter <- rownames(soS)
-      soS$metric <- getexp(nl, "metrics")[j]
+      soS$metric <- metrics[j]
       soS$seed <- i
       soT <- so$T
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"
       soT$parameter <- rownames(soT)
-      soT$metric <- getexp(nl, "metrics")[j]
+      soT$metric <- metrics[j]
       soT$seed <- i
 
       sensindex <- rbind(sensindex, soS, soT)
@@ -337,7 +343,8 @@ analyze_morris <- function(nl) {
       dplyr::filter(`random-seed` == i) %>%
       dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
-      dplyr::select(-siminputrow)
+      dplyr::select(-siminputrow) %>%
+      dplyr::select_if(~!all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -396,9 +403,11 @@ analyze_eFast <- function(nl) {
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
       dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean)) %>%
-      dplyr::select(getexp(nl, "metrics"))
+      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::select(-siminputrow) %>%
+      dplyr::select_if(~!all(is.na(.)))
 
+    metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
 
@@ -409,12 +418,12 @@ analyze_eFast <- function(nl) {
       D1 <- tibble::tibble(value = f99$D1,
                            index="first-order",
                            parameter=names(getexp(nl, "variables")),
-                           metric=getexp(nl, "metrics")[j],
+                           metric=metrics[j],
                            seed=i)
       Dt <- tibble::tibble(value = f99$Dt,
                            index="total",
                            parameter=names(getexp(nl, "variables")),
-                           metric=getexp(nl, "metrics")[j],
+                           metric=metrics[j],
                            seed=i)
 
       sensindex <- rbind(sensindex, D1, Dt)

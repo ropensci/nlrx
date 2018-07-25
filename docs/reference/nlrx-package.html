@@ -83,7 +83,7 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/nldoc/nlrx/">
+  <a href="https://github.com/nldoc/nlrx">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -101,7 +101,7 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>nlrx: A package for running NetLogo simulations from R.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/nlrx-package.R'><code>R/nlrx-package.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/nlrx-package.R'><code>R/nlrx-package.R</code></a></small>
     <div class="hidden name"><code>nlrx-package.Rd</code></div>
     </div>
 
@@ -157,30 +157,21 @@ constants = list("model-version" = "\"sheep-wolves-grass\"",
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
 A simulation design is attached to a nl object by using on of these simdesign functions:</p>
 <p><code>
-nl@simdesign &lt;- simdesign_sobol(nl=nl,
-samples=500,
-sobolorder=2,
-sobolnboot=50,
-sobolconf=0.95,
-nseeds=2,
+nl@simdesign &lt;- simdesign_lhs(nl=nl,
+samples=100,
+nseeds=3,
 precision=3)
 </code></p>
 <p>Step 4: Run simulations</p>
 <p>All information that is needed to run the simulations is now stored within the nl object.
-The <code>run_nl</code> function allows to run one specific simulation from the siminput parameter table.
-However, the most efficient way to run all simulations at once is nesting the call of <code>run_nl</code> into a future_map function.
-This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.</p>
+The <code>run_nl_one</code> function allows to run one specific simulation from the siminput parameter table.
+The <code>run_nl_all</code> function runs a loop over all simseeds and rows of the parameter input table siminput
+The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.</p>
 <p><code><a href='http://www.rdocumentation.org/packages/future/topics/plan'>
 future::plan(multisession)
-    results %&lt;-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
- furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
-   run_nl(nl = nl,
-          seed = seed,
-          siminputrow = siminputrow,
-          cleanup = "all")
-    })
-  })
-</a></code></p>
+    results &lt;- run_nl_all(nl = nl,
+                      cleanup = "all")
+    </a></code></p>
 <p>Step 5: Attach results to nl and run analysis</p>
 <p>nlrx provides method specific analysis functions for each simulation design.
 Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.

@@ -82,7 +82,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/nldoc/nlrx/">
+  <a href="https://github.com/nldoc/nlrx">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -100,7 +100,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Evaluate variable validity</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx//blob/master/R/util_eval.R'><code>R/util_eval.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/util_eval.R'><code>R/util_eval.R</code></a></small>
     <div class="hidden name"><code>eval_variables_constants.Rd</code></div>
     </div>
 
@@ -128,10 +128,13 @@ It loads the model code of the NetLogo model and checks if these variables and c
 In case of nonvalid entries, the function throws an error message, indicating which variables and constants are not valid.
 Please note, that this function might fail if the supported modelpath does not point to an existing nlogo file.
 This might for example happen, if the modelpath is set up for a remote cluster execution.</p>
-<p>#' @examples
-eval_variables_constants(nl)</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'>eval_variables_constants</span>(<span class='no'>nl</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -139,7 +142,9 @@ eval_variables_constants(nl)</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

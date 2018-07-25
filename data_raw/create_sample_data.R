@@ -154,15 +154,7 @@ run_sample_data <- function (nl) {
             bsub,
             multisession))
 
-  results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-    furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
-
-      run_nl(nl = nl,
-             seed = seed,
-             siminputrow = siminputrow,
-             cleanup = "all")
-    })
-  })
+  results <- run_nl_all(nl = nl, cleanup = "all")
 
   ## Attach output to nl
   setsim(nl, "simoutput") <- results

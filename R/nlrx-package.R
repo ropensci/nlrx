@@ -68,21 +68,16 @@
 #' Step 4: Run simulations
 #'
 #' All information that is needed to run the simulations is now stored within the nl object.
-#' The \code{run_nl} function allows to run one specific simulation from the siminput parameter table.
-#' However, the most efficient way to run all simulations at once is nesting the call of \code{run_nl} into a future_map function.
-#' This loops over all defined random-seeds and all rows of the siminput parameter table and reports the results in a tibble.
+#' The \code{run_nl_one} function allows to run one specific simulation from the siminput parameter table.
+#' The \code{run_nl_all} function runs a loop over all simseeds and rows of the parameter input table siminput
+#' The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
 #'
 #' \code{
 #' future::plan(multisession)
 #'
-#' results \%<-\% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-#'  furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
-#'    run_nl(nl = nl,
-#'           seed = seed,
-#'           siminputrow = siminputrow,
-#'           cleanup = "all")
-#'     })
-#'   })
+#' results <- run_nl_all(nl = nl,
+#'                       cleanup = "all")
+#'
 #' }
 #'
 #' Step 5: Attach results to nl and run analysis
