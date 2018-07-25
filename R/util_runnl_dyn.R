@@ -64,7 +64,7 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   results <- results[evalcrit]
   # Calc mean and convert to numeric:
   if (nrow(results) > 1) {
-    results <- mean(results)
+    results <- mean(results[,1])
   }
   results <- as.numeric(results)
 
