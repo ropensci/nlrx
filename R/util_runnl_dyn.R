@@ -58,7 +58,8 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Call netlogo:
   results <- run_nl(nl = nl,
                     siminputrow = 1,
-                    seed = seed)
+                    seed = seed,
+                    cleanup = cleanup)
 
   # Select metric for gensa:
   results <- results[[evalcrit]]
@@ -135,12 +136,13 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Call netlogo:
   results <- run_nl(nl = nl,
                     siminputrow = 1,
-                    seed = seed)
+                    seed = seed,
+                    cleanup = cleanup)
 
   # Select metric for gensa:
-  results <- results[evalcrit]
+  results <- results[[evalcrit]]
   # Calc mean and convert to numeric:
-  if (nrow(results) > 1) {
+  if (length(results) > 1) {
     results <- mean(results)
   }
   results <- as.numeric(results)
