@@ -314,6 +314,7 @@ util_read_write_batch <- function(nl) {
                 "java \"${JVM_OPTS[@]}\" -Dnetlogo.extensions.dir=\"${BASE_DIR}/app/extensions\" -classpath \"$CLASSPATH\" org.nlogo.headless.Main \"${ARGS[@]}\""
                 )
 
+    #
     # Put all blocks together:
     allblocks <- c(block1, basedirline, block2, jvmoptsline, block3)
 
