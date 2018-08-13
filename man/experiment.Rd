@@ -6,9 +6,9 @@
 \usage{
 experiment(expname = "defaultexp", outpath = NA_character_,
   repetition = 1, tickmetrics = "true", idsetup = "setup", idgo = "go",
-  idfinal = NA_character_, runtime = 1, evalticks = seq(1, runtime, 1),
-  metrics = c("count turtles"), variables = list(), constants = list(),
-  ...)
+  idfinal = NA_character_, idrunnum = NA_character_, runtime = 1,
+  evalticks = seq(1, runtime, 1), metrics = c("count turtles"),
+  variables = list(), constants = list(), ...)
 }
 \arguments{
 \item{expname}{A character string defining the name of the experiment}
@@ -24,6 +24,8 @@ experiment(expname = "defaultexp", outpath = NA_character_,
 \item{idgo}{character string or vector of character strings, defining the name of the NetLogo go procedure}
 
 \item{idfinal}{character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick}
+
+\item{idrunnum}{character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.}
 
 \item{runtime}{number of model ticks that should be run for each simulation}
 
@@ -60,6 +62,7 @@ tickmetrics="true",
 idsetup="setup",
 idgo="go",
 idfinal=NA_character_,
+idrunnum=NA_character_,
 runtime=50,
 evalticks=seq(40,50),
 metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),

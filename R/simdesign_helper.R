@@ -83,6 +83,12 @@ simdesign_ff <- function(nl, nseeds) {
   })
 
   ff <- tibble::as.tibble(expand.grid(ff))
+
+  ff <- tibble::as.tibble(cbind(ff,
+                                getexp(nl, "constants"),
+                                stringsAsFactors=FALSE))
+
+
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   new_simdesign <- simdesign(simmethod="ff",

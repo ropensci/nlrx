@@ -112,9 +112,9 @@
 
     <pre class="usage"><span class='fu'>experiment</span>(<span class='kw'>expname</span> <span class='kw'>=</span> <span class='st'>"defaultexp"</span>, <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
   <span class='kw'>repetition</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>tickmetrics</span> <span class='kw'>=</span> <span class='st'>"true"</span>, <span class='kw'>idsetup</span> <span class='kw'>=</span> <span class='st'>"setup"</span>, <span class='kw'>idgo</span> <span class='kw'>=</span> <span class='st'>"go"</span>,
-  <span class='kw'>idfinal</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>evalticks</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='no'>runtime</span>, <span class='fl'>1</span>),
-  <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"count turtles"</span>), <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>constants</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='no'>...</span>)</pre>
+  <span class='kw'>idfinal</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>idrunnum</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>evalticks</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='no'>runtime</span>, <span class='fl'>1</span>), <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"count turtles"</span>),
+  <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>constants</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,6 +146,10 @@
     <tr>
       <th>idfinal</th>
       <td><p>character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick</p></td>
+    </tr>
+    <tr>
+      <th>idrunnum</th>
+      <td><p>character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.</p></td>
     </tr>
     <tr>
       <th>runtime</th>
@@ -196,6 +200,7 @@ Each experiment also needs to have a specified simulation design in order to run
 <span class='kw'>idsetup</span><span class='kw'>=</span><span class='st'>"setup"</span>,
 <span class='kw'>idgo</span><span class='kw'>=</span><span class='st'>"go"</span>,
 <span class='kw'>idfinal</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
+<span class='kw'>idrunnum</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
 <span class='kw'>runtime</span><span class='kw'>=</span><span class='fl'>50</span>,
 <span class='kw'>evalticks</span><span class='kw'>=</span><span class='fu'>seq</span>(<span class='fl'>40</span>,<span class='fl'>50</span>),
 <span class='kw'>metrics</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"count sheep"</span>, <span class='st'>"count wolves"</span>, <span class='st'>"count patches with [pcolor = green]"</span>),

@@ -11,7 +11,15 @@
 #' @keywords internal
 util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
+  ### Get the current values from the siminput matrix:
   simdata_run <- getsim(nl, "siminput")[siminputrow,]
+
+  ### Attach a runnum variable if needed:
+  if (!is.na(getexp(nl, "idrunnum"))) {
+    runnum <- tibble(siminputrow)
+    names(runnum) <- getexp(nl, "idrunnum")
+    simdata_run <- cbind(simdata_run, runnum)
+  }
 
   ### Create XML object:
   nlXML <- XML::newXMLDoc()
@@ -167,70 +175,164 @@ util_read_write_batch <- function(nl) {
 
   os <- util_get_os()
   batchpath_temp <- NULL
+  nl_majorversion <- substring(getnl(nl, "nlversion"), 0, 1)
 
   if (os == "win") {
-    # Prepare pathes:
-    batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
-    # Extensions Folder:
+    # Block 1 of the batch file:
+    block1 <- c("@echo off",
+                "setlocal ENABLEDELAYEDEXPANSION",
+                "set BASE_DIR=%~dp0",
+                "if defined JAVA_HOME (",
+                "  set \"JAVA=%JAVA_HOME%\\bin\\java.exe\"",
+                ") ELSE (",
+                "  ECHO JAVA_HOME not defined, using java on PATH.",
+                "  ECHO If you encounter errors, set JAVA_HOME or update your PATH to include java.exe.",
+                "  set \"JAVA=java.exe\"",
+                ")"
+                )
+
+    # JVM_OPTS line:
     extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
-    jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-", getnl(nl, "nlversion"), ".jar")
-
-    # jvmoptions string:
     jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 -Dnetlogo.extensions.dir=^\"", extensionspath, "^\"\"")
+
+    # Block 2 of the batch file:
+    block2 <- c("set ARGS=",
+                "FOR %%a IN (%*) DO (",
+                "  SET \"ARG=%%a\"",
+                "  IF \"!ARG!\" == \"--3D\" (",
+                "    SET \"JVM_OPTS=!JVM_OPTS! -Dorg.nlogo.is3d=true\"",
+                "  ) ELSE (",
+                "    IF \"!ARG:~0,2!\" == \"-D\" (",
+                "      SET \"JVM_OPTS=!JVM_OPTS! !ARG!\"",
+                "	  ) ELSE (",
+                "      SET \"ARGS=!ARGS! !ARG!\"",
+                "	  )",
+                "  )",
+                ")")
+
+    # Classpath line:
+    if (nl_majorversion == 6) {
+      jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-", getnl(nl, "nlversion"), ".jar")
+    }
+    if (nl_majorversion == 5) {
+      jarpath <- paste0(getnl(nl, "nlpath"), "app/NetLogo.jar")
+    }
+
     jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
-    # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
-    batch <- readr::read_lines(batchpath)
 
-    # Get position index of jvmopts and jarpath line
-    pos_jvmopts <- which(grepl("SET \"JVM_OPTS=-Xmx", batch))
-    pos_jarpath <- which(grepl("SET \"ABSOLUTE_CLASSPATH=", batch))
+    # Block 3 of the batch file:
+    block3 <- c("\"%JAVA%\" %JVM_OPTS% -classpath \"%ABSOLUTE_CLASSPATH%\" org.nlogo.headless.Main %ARGS%")
 
-    # Replace lines in batch with updated versions
-    batch[pos_jvmopts] <- jvmoptsline
-    batch[pos_jarpath] <- jarpathline
+    # Put all blocks together:
+    allblocks <- c(block1, jvmoptsline, block2, jarpathline, block3)
 
-    # Create new batchfile:
+
+    ## Write batch file:
     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
-    readr::write_lines(batch, path=batchpath_temp)
+    writeLines(allblocks, batchpath_temp)
+
+
+    ##### OLD STUFF:
+#
+#     # Prepare pathes:
+#     batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.bat")
+#
+#     # Extensions Folder:
+#     extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
+#     jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-", getnl(nl, "nlversion"), ".jar")
+#
+#     # jvmoptions string:
+#     jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 -Dnetlogo.extensions.dir=^\"", extensionspath, "^\"\"")
+#     jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
+#
+#     # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
+#     batch <- readr::read_lines(batchpath)
+#
+#     # Get position index of jvmopts and jarpath line
+#     pos_jvmopts <- which(grepl("SET \"JVM_OPTS=-Xmx", batch))
+#     pos_jarpath <- which(grepl("SET \"ABSOLUTE_CLASSPATH=", batch))
+#
+#     # Replace lines in batch with updated versions
+#     batch[pos_jvmopts] <- jvmoptsline
+#     batch[pos_jarpath] <- jarpathline
+#
+#     # Create new batchfile:
+#     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
+#     readr::write_lines(batch, path=batchpath_temp)
 
   }
   if (os == "unix") {
 
-    ## Create path variables:
-    batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
-    batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
 
-    # Copy original file to temppath file
-    system(paste0("cp \"", batchpath, "\" \"", batchpath_temp, "\""), wait=TRUE)
+    # Block1 of netlogo-headless.sh:
+    block1 <- c("#!/bin/bash")
 
-    # Define edited lines for shell script:
+    # Basedirline:
     basedirline <- paste0("BASE_DIR=\"", getnl(nl, "nlpath"), "\"")
-    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -Dfile.encoding=UTF-8)")
 
-    ## Edit lines in place:
-    system(paste0("sed -i -r 's!^BASE_DIR=.*!", basedirline, "!'", " \"", batchpath_temp, "\""))
-    system(paste0("sed -i -r 's!^JVM_OPTS=.*!", jvmoptsline, "!'", " \"", batchpath_temp, "\""))
+    # Block2 of netlogo-headless.sh:
+    block2 <- c("if [[ ${JAVA_HOME+1} ]]; then)",
+                "  JAVA=\"${JAVA_HOME}/bin/java\"",
+                "else",
+                "  echo \"JAVA_HOME undefined, using java from path. For control over exact java version, set JAVA_HOME\"",
+                "  JAVA=\"java\"",
+                "fi;")
 
-    # # Prepare pathes:
-    # batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
-    #
-    #
-    # # Read batchfile (on windows use nlpath\netlogo-headless.bat, on linux and mac nlpath\netlogo-headless.sh)
-    # batch <- readr::read_lines(batchpath)
-    #
-    # # Get position index of jvmopts and jarpath line
-    # pos_basedir <- which(grepl("BASE_DIR=\"", batch))
-    # pos_jvmopts <- which(grepl("JVM_OPTS=", batch))
-    #
-    # # Replace lines in batch with updated versions
-    # batch[pos_basedir] <- basedirline
-    # batch[pos_jvmopts] <- jvmoptsline
-    #
-    # # Create new batchfile:
-    # batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
-    # readr::write_lines(batch, path=batchpath_temp)
+    # jvmoptsline:
+    jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8)")
+
+    # Block3 of netlogo-headless.sh:
+    block3 <- c("OPTS_INDEX=2",
+                "ARGS=()",
+                "INDEX=0",
+                "for arg in \"$@\"; do",
+                "  if [[ \"$arg\" == \"--3D\" ]]; then",
+                "    JVM_OPTS[OPTS_INDEX++]=\"-Dorg.nlogo.is3d=true\"",
+                "  elif [[ \"$arg\" == -D* ]]; then",
+                "    JVM_OPTS[OPTS_INDEX++]=\"$arg\"",
+                "  else",
+                "    ARGS[INDEX++]=\"$arg\"",
+                "  fi",
+                "done",
+                "RAW_CLASSPATH=\"app/args4j-2.0.12.jar:app/asm-all-5.0.4.jar:app/asm-all-5.0.4.jar:app/autolink-0.6.0.jar:app/behaviorsearch.jar:app/commons-codec-1.10.jar:app/commons-logging-1.1.1.jar:app/config-1.3.1.jar:app/flexmark-0.20.0.jar:app/flexmark-ext-autolink-0.20.0.jar:app/flexmark-ext-escaped-character-0.20.0.jar:app/flexmark-ext-typographic-0.20.0.jar:app/flexmark-formatter-0.20.0.jar:app/flexmark-util-0.20.0.jar:app/gluegen-rt-2.3.2.jar:app/httpclient-4.2.jar:app/httpcore-4.2.jar:app/httpmime-4.2.jar:app/jcommon-1.0.16.jar:app/jfreechart-1.0.13.jar:app/jhotdraw-6.0b1.jar:app/jmf-2.1.1e.jar:app/jogl-all-2.3.2.jar:app/json-simple-1.1.1.jar:app/log4j-1.2.16.jar:app/macro-compat_2.12-1.1.1.jar:app/macro-compat_2.12-1.1.1.jar:app/netlogo-6.0.3.jar:app/parboiled_2.12-2.1.3.jar:app/parboiled_2.12-2.1.3.jar:app/picocontainer-2.13.6.jar:app/picocontainer-2.13.6.jar:app/rsyntaxtextarea-2.6.0.jar:app/scala-library-2.12.0.jar:app/scala-library.jar:app/scala-parser-combinators_2.12-1.0.4.jar:app/scala-parser-combinators_2.12-1.0.5.jar:app/shapeless_2.12-2.3.2.jar:app/shapeless_2.12-2.3.2.jar\"",
+                "CLASSPATH=\'\'",
+                "for jar in `echo $RAW_CLASSPATH | sed 's/:/ /g'`; do",
+                "  CLASSPATH=\"$CLASSPATH:$BASE_DIR/$jar\"",
+                "done",
+                "CLASSPATH=`echo $CLASSPATH | sed 's/://'`",
+                "$JAVA \"${JVM_OPTS[@]}\" -Dnetlogo.extensions.dir=\"${BASE_DIR}/app/extensions\" -classpath \"$CLASSPATH\" org.nlogo.headless.Main \"${ARGS[@]}\""
+                )
+
+    # Put all blocks together:
+    allblocks <- c(block1, basedirline, block2, jvmoptsline, block3)
+
+
+    ## Write batch file:
+    batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
+    writeLines(allblocks, batchpath_temp)
+
+
+#
+#     ## OLD STUFF:
+#
+#
+#     ## Create path variables:
+#     batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
+#     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
+#
+#     # Copy original file to temppath file
+#     system(paste0("cp \"", batchpath, "\" \"", batchpath_temp, "\""), wait=TRUE)
+#
+#     # Define edited lines for shell script:
+#     basedirline <- paste0("BASE_DIR=\"", getnl(nl, "nlpath"), "\"")
+#     jvmoptsline <- paste0("JVM_OPTS=(-Xmx", getnl(nl, "jvmmem"), "m -Dfile.encoding=UTF-8)")
+#
+#     ## Edit lines in place:
+#     system(paste0("sed -i -r 's!^BASE_DIR=.*!", basedirline, "!'", " \"", batchpath_temp, "\""))
+#     system(paste0("sed -i -r 's!^JVM_OPTS=.*!", jvmoptsline, "!'", " \"", batchpath_temp, "\""))
+
 
   }
 

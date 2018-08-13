@@ -123,14 +123,17 @@ eval_variables_constants <- function(nl) {
   constants_validity <-  unlist(lapply(names(getexp(nl, "constants")),
                                       function(x) {x %in% names(load_model_parameters(nl))}))
 
-  nonvalid_variables <- names(which(variables_validity==FALSE))
-  nonvalid_constants <- names(which(constants_validity==FALSE))
+  nonvalid_variables <- names(getexp(nl, "variables")[which(variables_validity==FALSE)])
+  nonvalid_constants <- names(getexp(nl, "constants")[which(constants_validity==FALSE)])
 
-  if (length(nonvalid_variables) > 0 | length(nonvalid_constants) > 0) {
-
-    stop(paste0("Error: Defined variables were not found in NetLogo model: ",
+  if (length(nonvalid_variables) > 0) {
+    stop(paste0("Warning: Defined variables were not found in NetLogo model: ",
                 nonvalid_variables,
-                " and defined constants were not found in NetLogo model: ",
+                ". Check load_model_parameters() function to show valid parameters."))
+  }
+
+  if (length(nonvalid_constants) > 0) {
+    stop(paste0("Warning: Defined constants were not found in NetLogo model: ",
                 nonvalid_constants,
                 ". Check load_model_parameters() function to show valid parameters."))
   }

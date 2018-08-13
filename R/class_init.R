@@ -40,6 +40,7 @@
   #' @slot idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
   #' @slot idgo character string or vector of character strings, defining the name of the NetLogo go procedure
   #' @slot idfinal character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick
+  #' @slot idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
   #' @slot runtime number of model ticks that should be run for each simulation
   #' @slot evalticks number or vector of tick numbers defining when measurements are taken
   #' @slot metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
@@ -60,6 +61,7 @@
                       idsetup="character",
                       idgo="character",
                       idfinal="character",
+                      idrunnum="character",
                       runtime="numeric",
                       evalticks="numeric",
                       metrics="character",
@@ -75,6 +77,7 @@
                       idsetup="setup",
                       idgo="go",
                       idfinal=NA_character_,
+                      idrunnum=NA_character_,
                       runtime=NA_integer_,
                       evalticks=NA_integer_,
                       metrics=NA_character_,

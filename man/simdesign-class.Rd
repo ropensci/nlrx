@@ -41,6 +41,8 @@ empty
 
 \item{\code{idfinal}}{character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick}
 
+\item{\code{idrunnum}}{character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.}
+
 \item{\code{runtime}}{number of model ticks that should be run for each simulation}
 
 \item{\code{evalticks}}{number or vector of tick numbers defining when measurements are taken}
