@@ -273,7 +273,7 @@ util_read_write_batch <- function(nl) {
     basedirline <- paste0("BASE_DIR=\"", getnl(nl, "nlpath"), "\"")
 
     # Block2 of netlogo-headless.sh:
-    block2 <- c("if [[ ${JAVA_HOME+1} ]]; then)",
+    block2 <- c("if [[ ${JAVA_HOME+1} ]]; then",
                 "  JAVA=\"${JAVA_HOME}/bin/java\"",
                 "else",
                 "  echo \"JAVA_HOME undefined, using java from path. For control over exact java version, set JAVA_HOME\"",
