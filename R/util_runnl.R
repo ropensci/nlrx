@@ -313,6 +313,9 @@ util_read_write_batch <- function(nl) {
     batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
     writeLines(allblocks, batchpath_temp)
 
+    ## Make sh executable on linux:
+    system(paste0("chmod +x ", batchpath_temp), wait = TRUE)
+
 
 #
 #     ## OLD STUFF:
