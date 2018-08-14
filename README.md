@@ -104,6 +104,9 @@ write_simoutput(nl)
 analyze_nl(nl)
 ```
 
+Further notes
+-------------
+
 #### Comments on simdesigns and variable definitions
 
 Correctly defining variables within the experiment class object is crucial for creating simdesigns. The implemented simdesigns have different requirements for variable definitions:
@@ -142,7 +145,8 @@ Three slots of the experiment class define how measurements are taken: \* tickme
 
 Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
 
-#### Wolf Sheep examples for all simdesigns
+Further Wolf Sheep examples for all implemented simdesigns
+----------------------------------------------------------
 
 The following section provides valid experiment setups for all supported simdesigns using the Wolf Sheep Model from the NetLogo models library.
 
