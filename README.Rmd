@@ -127,3 +127,58 @@ write_simoutput(nl)
 # Do further analysis:
 analyze_nl(nl)
 ``` 
+
+
+#### Comments on simdesigns and variable definitions
+
+Correctly defining variables within the experiment class object is crucial for creating simdesigns.
+The implemented simdesigns have different requirements for variable definitions:
+
+   Simdesign       | Variable requirements              |  data type 
+------------------ | ---------------------------------- | -----------
+simdesign_simple   | only constants are used            | any
+simdesign_distinct | values (need to have equal length) | any
+simdesign_ff       | values, or min, max, step (values is prioritized) | any
+simdesign_lhs      | min, max, qfun                     | numeric
+simdesign_sobol    | min, max, qfun                     | numeric
+simdesign_sobol2007 | min, max, qfun                     | numeric
+simdesign_soboljansen | min, max, qfun                     | numeric
+simdesign_morris   | min, max, qfun                     | numeric
+simdesign_eFast    | min, max, qfun                     | numeric
+simdesign_genSA    | min, max                     | numeric
+simdesign_genAlg    | min, max                     | numeric
+
+Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
+Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\"string\"").
+Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
+
+#### Comments on self-written output
+
+The experiment provides a slot called "idrunnum".
+This slot can be used to transfer the current nlrx runnumber (siminputrow) to NetLogo.
+To use this functionality, a slider or numeric input field widget needs to be created on the GUI of your NetLogo model.
+The name of this widget can be entered into the "idrunnum" field of the experiment.
+During simulations, the value of this widget is automatically set to the current siminputrow number.
+For self-written output In NetLogo, we suggest to include this global vairable and the current random-seed, which allows referecing this output to the collected output of the nlrx simulations.
+
+#### Comments on seed management
+
+The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization.
+This only makes sense if you generate a random random-seed during the setup of your model.
+By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object.
+If your model does not reset the random seed manually, the seed will always be the same for each repetition.
+
+However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices.
+
+In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds.
+Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
+
+#### Comments on measurements
+
+Three slots of the experiment class define how measurements are taken:
+* tickmetrics, defines if measurements are taken at the end of the simulation or on each tick
+* evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks
+* metrics, definition of valid NetLogo reporters that are used to collect data
+
+Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected.
+In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.

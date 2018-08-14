@@ -8,7 +8,7 @@
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+#' This function creates a simdesign S4 class which can be added to a nl object.
 #' The simple simdesign only uses model parameters that are defined in the constants field of the experiment object within the nl object.
 #' Thus, the resulting input tibble of the simdesign has only one run with constant parameterisations.
 #' This can be useful to run one simulation with a specific parameterset.
@@ -43,6 +43,76 @@ simdesign_simple <- function(nl, nseeds) {
 
 }
 
+
+
+#' Add a distinct simdesign to a nl object
+#'
+#' @description Add a distinct simdesign to a nl object
+#'
+#' @param nl nl object with a defined experiment
+#' @param nseeds number of seeds for this simulation design
+#' @return simdesign S4 class object
+#' @details
+#'
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#' The distinct simdesign allows to create a parameter matrix with distinct parameterisations.
+#'
+#' Variables in the experiment variable list need to provide a vector of distinct values (e.g. list(values=c(1,2,3,4)).
+#' All vectors of values must have the same length across variables.
+#'
+#' The distinct simdesign then creates one simulation run for all first elements of these values vectors,
+#' one run for all second items, and so on.
+#' With this function, multiple distinct simulations can be run at once.
+#' Finally, the function reports a simdesign object.
+#'
+#'
+#' @examples
+#' \dontrun{
+#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#' nl@@simdesign <- simdesign_distinct(nl = nl, nseeds = 3)
+#' }
+#'
+#' @aliases simdesign_distinct
+#' @rdname simdesign_distinct
+#'
+#' @export
+
+simdesign_distinct <- function(nl, nseeds) {
+
+  util_eval_experiment(nl)
+  util_eval_constants(nl)
+  util_eval_variables_distinct(nl)
+  message("Creating simple simulation design")
+
+  # Create a tibble from the defined variable value vectors:
+
+  ff <- plyr::llply(getexp(nl, "variables"), function(i) {
+
+    ## If values are not directly supplied generate values from distribution:
+      i$values
+
+  })
+
+  ff <- tibble::as.tibble(ff)
+
+  ff <- tibble::as.tibble(cbind(ff,
+                                getexp(nl, "constants"),
+                                stringsAsFactors=FALSE))
+
+
+  seeds <- util_generate_seeds(nseeds = nseeds)
+
+  new_simdesign <- simdesign(simmethod="ff",
+                             siminput=ff,
+                             simseeds=seeds)
+
+  return(new_simdesign)
+
+}
+
+
+
+
 #' Add a full-factorial simdesign to a nl object
 #'
 #' @description Add a full-factorial simdesign to a nl object
@@ -52,10 +122,14 @@ simdesign_simple <- function(nl, nseeds) {
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The full-factorial simdesign uses parameter ranges that are defined in the variables field of the experiment object within the nl object.
-#' First, a vector is created for each parameter, based on the min, max and step value.
-#' Then, a full-factorial matrix of all parameter combinations is created as input tibble for the simdesign.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a vector of distinct values (e.g. list(values=c(1,2,3,4)).
+#' Or a sequence definition with min, max and step (e.g. list=(min=1, max=4, step=1)).
+#' If both (values and sequence) are defined, the full-factorial design gives priority to the values.
+#'
+#' The full-factorial simdesign uses these defined parameter ranges within the nl object.
+#' A full-factorial matrix of all parameter combinations is created as input tibble for the simdesign.
 #' Finally, the function reports a simdesign object.
 #'
 #'
@@ -74,15 +148,24 @@ simdesign_ff <- function(nl, nseeds) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_ff(nl)
   message("Creating full facotrial simulation design")
+
 
   # Add a full factorial simulatin design:
   # Generate vectors from variables data:
   ff <- plyr::llply(getexp(nl, "variables"), function(i) {
-    seq(i$min, i$max, i$step)
+
+    ## If values are not directly supplied generate values from distribution:
+    if (is.null(i$values)) {
+      # generate a sequence:
+      seq(i$min, i$max, i$step)
+    } else {
+      i$values
+    }
   })
 
-  ff <- tibble::as.tibble(expand.grid(ff))
+  ff <- tibble::as.tibble(expand.grid(ff, stringsAsFactors = FALSE))
 
   ff <- tibble::as.tibble(cbind(ff,
                                 getexp(nl, "constants"),
@@ -109,8 +192,11 @@ simdesign_ff <- function(nl, nseeds) {
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The latin hypercube simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The latin hypercube simdesign creates a parameter matrix based on these defined distributions.
 #' Finally, the function reports a simdesign object.
 #'
 #'
@@ -132,6 +218,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating latin hypercube simulation design")
 
   lhs <- util_create_lhs(input = getexp(nl, "variables"),
@@ -166,9 +253,11 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #'
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The sobol simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-#' It uses the sensitivity package to set up a sobol sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The sobol simdesign uses the sensitivity package to set up a sobol sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
 #' For details on method specific sensitivity analysis function parameters see ?sobol
 #' Finally, the function reports a simdesign object.
 #'
@@ -200,6 +289,7 @@ simdesign_sobol <- function(nl,
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating sobol simulation design")
 
   lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
@@ -245,9 +335,11 @@ simdesign_sobol <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The sobol2007 simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-#' It uses the sensitivity package to set up a sobol2007 sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The sobol2007 simdesign uses the sensitivity package to set up a sobol2007 sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
 #' For details on method specific sensitivity analysis function parameters see ?sobol2007
 #' Finally, the function reports a simdesign object.
 #'
@@ -277,6 +369,7 @@ simdesign_sobol2007 <- function(nl,
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating sobol2007 simulation design")
 
   lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
@@ -322,9 +415,11 @@ simdesign_sobol2007 <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The soboljansen simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-#' It uses the sensitivity package to set up a soboljansen sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The soboljansen simdesign uses the sensitivity package to set up a soboljansen sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
 #' For details on method specific sensitivity analysis function parameters see ?soboljansen
 #' Finally, the function reports a simdesign object.
 #'
@@ -354,6 +449,7 @@ simdesign_soboljansen <- function(nl,
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating soboljansen simulation design")
 
   lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
@@ -399,9 +495,11 @@ simdesign_soboljansen <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The morris simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-#' It uses the sensitivity package to set up a morris elementary effects sensitivity analysis, including a simobject of class morris and a input tibble for simulations.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The morris simdesign uses the sensitivity package to set up a morris elementary effects sensitivity analysis, including a simobject of class morris and a input tibble for simulations.
 #' For details on method specific sensitivity analysis function parameters see ?morris
 #' Finally, the function reports a simdesign object.
 #'
@@ -433,6 +531,7 @@ simdesign_morris <- function(nl,
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating morris simulation design")
 
   morrisdesign <- list(type = morristype,
@@ -479,9 +578,11 @@ simdesign_morris <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-#' The eFast simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-#' It uses the sensitivity package to set up a fast99 elementary effects sensitivity analysis, including a simobject of class fast99 and a input tibble for simulations.
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The eFast simdesign uses the sensitivity package to set up a fast99 elementary effects sensitivity analysis, including a simobject of class fast99 and a input tibble for simulations.
 #' For details on method specific sensitivity analysis function parameters see ?fast99
 #' Finally, the function reports a simdesign object.
 #'
@@ -507,6 +608,7 @@ simdesign_eFast <- function(nl,
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_sa(nl)
   message("Creating eFast simulation design")
 
   # get names of quantile functions fpr the input factors
@@ -555,7 +657,10 @@ simdesign_eFast <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+#'
 #' The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
 #' that are defined in the variables field of the experiment object within the nl object.
 #' The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
@@ -592,6 +697,7 @@ simdesign_GenSA <- function(nl,
   # Evaluate experiment and variables:
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_op(nl)
   message("Creating GenSA simulation design")
 
   # Parameters we need for simulated annealing:
@@ -643,7 +749,10 @@ simdesign_GenSA <- function(nl,
 #' @return simdesign S4 class object
 #' @details
 #'
-#' This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+#'
 #' The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
 #' that are defined in the variables field of the experiment object within the nl object.
 #' The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
@@ -679,6 +788,7 @@ simdesign_GenAlg <- function(nl,
   # Evaluate experiment and variables:
   util_eval_experiment(nl)
   util_eval_variables(nl)
+  util_eval_variables_op(nl)
   message("Creating GenAlg simulation design")
 
   # Parameters we need for simulated annealing:

@@ -22,8 +22,11 @@ simdesign S4 class object
 Add a latin-hypercube simdesign to a nl object
 }
 \details{
-This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-The latin hypercube simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
+This function creates a simdesign S4 class which can be added to a nl object.
+
+Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+
+The latin hypercube simdesign creates a parameter matrix based on these defined distributions.
 Finally, the function reports a simdesign object.
 }
 \examples{

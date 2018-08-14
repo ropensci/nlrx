@@ -14,6 +14,137 @@ util_eval_variables <- function(nl) {
   }
 }
 
+
+
+#' Evaluate variables list of an experiment object
+#'
+#' @description Evaluate variables list of an experiment object
+#' @param nl nl object
+#' @aliases util_eval_variables_distinct
+#' @rdname util_eval_variables_distinct
+#' @keywords internal
+util_eval_variables_distinct <- function(nl) {
+
+  # The function checks if there is enough variable information to create a ff simdesign
+  # The ff design needs either a set of min, max and step or distinct values
+
+  vars <- getexp(nl, "variables")
+  vars.values.missing <- lapply(vars, function(x) is.null(x$values))
+  vars.length.mismatch <- var(unlist(lapply(vars, function(x) length(x$values)))) != 0
+
+  vars.missing <- data.frame(cbind(values.missing = unlist(vars.values.missing), length = unlist(vars.length.mismatch)))
+
+
+  vars.missing$variable <- rownames(vars.missing)
+  values.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE)
+
+  # Check if there are missing values
+  if(nrow(values.missing) > 0){
+    stop(paste0("Error: Variable definition incomplete for variables: ", values.missing$variable, ".
+          To setup a distinct simulation design you need to provide for each variable
+          a vector of distinct values (e.g. list(values=c(1,2,3,4)))."))
+  }
+
+  length.mismatch <- vars.missing %>% dplyr::filter(length == TRUE)
+
+  # Check if there are any variables defined
+  if(nrow(length.mismatch) > 0){
+    stop(paste0("Error: Mismatch in vector length of variable values.
+          The length of provided values vectors of experiment variables is not equal across all variables."))
+  }
+}
+
+
+
+
+
+
+#' Evaluate variables list of an experiment object
+#'
+#' @description Evaluate variables list of an experiment object
+#' @param nl nl object
+#' @aliases util_eval_variables_ff
+#' @rdname util_eval_variables_ff
+#' @keywords internal
+util_eval_variables_ff <- function(nl) {
+
+  # The function checks if there is enough variable information to create a ff simdesign
+  # The ff design needs either a set of min, max and step or distinct values
+
+  vars <- getexp(nl, "variables")
+  vars.values.missing <- lapply(vars, function(x) is.null(x$values))
+  vars.dist.missing <- lapply(vars, function(x) is.null(x$min) | is.null(x$max) | is.null(x$step))
+  vars.missing <- data.frame(cbind(values.missing = unlist(vars.values.missing), dist.missing = unlist(vars.dist.missing)))
+  vars.missing$variable <- rownames(vars.missing)
+  vars.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE && dist.missing == TRUE)
+
+  # Check if there are any variables defined
+  if(nrow(vars.missing) > 0){
+    stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
+          To setup a full factorial simulation design you need to provide for each variable
+          either a vector of distinct values (e.g. list(values=c(1,2,3,4)))
+          or a sequence with min, max and step (e.g. list(min=1, max=4, step=1))."))
+  }
+}
+
+
+#' Evaluate variables list of an experiment object
+#'
+#' @description Evaluate variables list of an experiment object
+#' @param nl nl object
+#' @aliases util_eval_variables_sa
+#' @rdname util_eval_variables_sa
+#' @keywords internal
+util_eval_variables_sa <- function(nl) {
+
+  # The function checks if there is enough variable information to create a sensitivity analysis simdesign
+  # The sa designs need a set of min, max and qfun
+
+  vars <- getexp(nl, "variables")
+  vars.dist.missing <- lapply(vars, function(x) is.null(x$min) | is.null(x$max) | is.null(x$qfun))
+  vars.missing <- data.frame(dist.missing = unlist(vars.dist.missing))
+  vars.missing$variable <- rownames(vars.missing)
+  vars.missing <- vars.missing %>% dplyr::filter(dist.missing == TRUE)
+
+  # Check if there are any variables defined
+  if(nrow(vars.missing) > 0){
+    stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
+                To setup a sensitivity analysis simulation design you need to provide for each variable
+                a distribution with min, max and qfun (e.g. list(min=1, max=4, qfun=\"qunif\"))."))
+  }
+}
+
+
+
+#' Evaluate variables list of an experiment object
+#'
+#' @description Evaluate variables list of an experiment object
+#' @param nl nl object
+#' @aliases util_eval_variables_op
+#' @rdname util_eval_variables_op
+#' @keywords internal
+util_eval_variables_op <- function(nl) {
+
+  # The function checks if there is enough variable information to create an optimization simdesign
+  # The optimization designs need a set of min and max
+
+  vars <- getexp(nl, "variables")
+  vars.dist.missing <- lapply(vars, function(x) is.null(x$min) | is.null(x$max))
+  vars.missing <- data.frame(dist.missing = unlist(vars.dist.missing))
+  vars.missing$variable <- rownames(vars.missing)
+  vars.missing <- vars.missing %>% dplyr::filter(dist.missing == TRUE)
+
+  # Check if there are any variables defined
+  if(nrow(vars.missing) > 0){
+    stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
+                To setup an optimization simulation design you need to provide for each variable
+                a distribution with min and max (e.g. list(min=1, max=4))."))
+  }
+}
+
+
+
+
 #' Evaluate constants list of an experiment object
 #'
 #' @description Evaluate constants list of an experiment object

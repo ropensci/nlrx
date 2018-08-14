@@ -29,9 +29,11 @@ simdesign S4 class object
 Add a sobol simdesign to a nl object
 }
 \details{
-This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-The sobol simdesign uses parameter ranges and q-functions that are defined in the variables field of the experiment object within the nl object.
-It uses the sensitivity package to set up a sobol sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
+This function creates a simdesign S4 class which can be added to a nl object.
+
+Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).
+
+The sobol simdesign uses the sensitivity package to set up a sobol sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
 For details on method specific sensitivity analysis function parameters see ?sobol
 Finally, the function reports a simdesign object.
 }

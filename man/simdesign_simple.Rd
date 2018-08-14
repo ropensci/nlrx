@@ -18,7 +18,7 @@ simdesign S4 class object
 Add a simple simdesign to a nl object
 }
 \details{
-This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+This function creates a simdesign S4 class which can be added to a nl object.
 The simple simdesign only uses model parameters that are defined in the constants field of the experiment object within the nl object.
 Thus, the resulting input tibble of the simdesign has only one run with constant parameterisations.
 This can be useful to run one simulation with a specific parameterset.

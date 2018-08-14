@@ -29,7 +29,10 @@ simdesign S4 class object
 Add a Genetic Algorithm simdesign to a nl object
 }
 \details{
-This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+This function creates a simdesign S4 class which can be added to a nl object.
+
+Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+
 The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
 that are defined in the variables field of the experiment object within the nl object.
 The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.

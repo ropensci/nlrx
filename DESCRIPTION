@@ -37,4 +37,8 @@ Depends:
    methods,
     tibble,
     R (>= 2.10)
-Suggests: testthat
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
