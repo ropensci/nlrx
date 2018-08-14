@@ -4,14 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
+
 # nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/nldoc/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/nldoc/nlrx)
@@ -26,8 +19,10 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
 You can install the released version of nlrx from
 [CRAN](https://CRAN.R-project.org) with:
 
-```{r}
+
+```r
 install.packages("nlrx")
+#> Error in install.packages : Updating loaded packages
 ```
 
 And the development version from [GitHub](https://github.com/) with:
@@ -49,7 +44,8 @@ The following steps guide you trough the process on how to setup, run and analyz
 
 The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
 
-```{r eval=FALSE}
+
+```r
 nl <- nl(nlversion = "6.0.3",
          nlpath = "C:/Program Files/NetLogo 6.0.3/",
          modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
@@ -61,7 +57,8 @@ nl <- nl(nlversion = "6.0.3",
 The experiment object is organized in a similar fashion as NetLogo BehaviorSpace experiments.
 It holds information on model variables, constants, metrics, runtime, ...
 
-```{r eval=FALSE}
+
+```r
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
                             repetition=1,
@@ -90,7 +87,8 @@ While the experiment defines the variables and specifications of the model, the 
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
 A simulation design is attached to a nl object by using on of these simdesign functions:
 
-```{r eval=FALSE}
+
+```r
 nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
                                nseeds=3,
@@ -104,7 +102,8 @@ The run_nl_one() function allows to run one specific simulation from the siminpu
 The run_nl_all() function runs a loop over all simseeds and rows of the parameter input table siminput.
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
 
-```{r eval=FALSE}
+
+```r
 future::plan(multisession)
 
 results <- run_nl_all(nl = nl, cleanup = "all")
@@ -117,7 +116,8 @@ Depending on the chosen design, the function reports a tibble with aggregated re
 In order to run the analyze_nl function, the simulation output has to be attached to the nl object first.
 After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
 
-```{r eval=FALSE}
+
+```r
 # Attach results to nl object:
 setsim(nl, "simoutput") <- results
 
@@ -126,7 +126,7 @@ write_simoutput(nl)
 
 # Do further analysis:
 analyze_nl(nl)
-``` 
+```
 
 
 #### Comments on simdesigns and variable definitions

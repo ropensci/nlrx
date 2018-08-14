@@ -123,7 +123,7 @@ Correctly defining variables within the experiment class object is crucial for c
 | simdesign\_genSA       | min, max                                          | numeric   |
 | simdesign\_genAlg      | min, max                                          | numeric   |
 
-Categorical variable values are currently only allowed for simdesign\_simple, simdesign\_distinct and simdesign\_ff. Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. ""string""). Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
+Categorical variable values are currently only allowed for simdesign\_simple, simdesign\_distinct and simdesign\_ff. Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\\"string\\""). Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
 
 #### Comments on self-written output
 
@@ -131,9 +131,9 @@ The experiment provides a slot called "idrunnum". This slot can be used to trans
 
 #### Comments on seed management
 
-The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization. This only makes sense if you generate a random random-seed during the setup of your model. By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object. If your model does not reset the random seed manually, the seed will always be the same for each repetition.
+The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization. This is only useful if you manually generate a new random-seed during the setup of your model. By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object. If your model does not reset the random seed manually, the seed will always be the same for each repetition.
 
-However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices.
+However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices. Thus we suggest to set the experiment repetition to 1 and instead use the nseeds variable of the desired simdesign to run multiple simulations with different random seeds.
 
 In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds. Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
 
