@@ -10,7 +10,7 @@ util_eval_variables <- function(nl) {
   # Check if there are any variables defined
   if(length(getexp(nl, "variables")) == 0){
     stop("Error: Experiment Variable list is empty.
-         You need to define a variable list with at least one element!")
+         You need to define a variable list with at least one element!", call.=FALSE)
   }
 }
 
@@ -42,7 +42,7 @@ util_eval_variables_distinct <- function(nl) {
   if(nrow(values.missing) > 0){
     stop(paste0("Error: Variable definition incomplete for variables: ", values.missing$variable, ".
           To setup a distinct simulation design you need to provide for each variable
-          a vector of distinct values (e.g. list(values=c(1,2,3,4)))."))
+          a vector of distinct values (e.g. list(values=c(1,2,3,4)))."), call.=FALSE)
   }
 
   length.mismatch <- vars.missing %>% dplyr::filter(length == TRUE)
@@ -50,7 +50,7 @@ util_eval_variables_distinct <- function(nl) {
   # Check if there are any variables defined
   if(nrow(length.mismatch) > 0){
     stop(paste0("Error: Mismatch in vector length of variable values.
-          The length of provided values vectors of experiment variables is not equal across all variables."))
+          The length of provided values vectors of experiment variables is not equal across all variables."), call.=FALSE)
   }
 }
 
@@ -83,7 +83,7 @@ util_eval_variables_ff <- function(nl) {
     stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
           To setup a full factorial simulation design you need to provide for each variable
           either a vector of distinct values (e.g. list(values=c(1,2,3,4)))
-          or a sequence with min, max and step (e.g. list(min=1, max=4, step=1))."))
+          or a sequence with min, max and step (e.g. list(min=1, max=4, step=1))."), call.=FALSE)
   }
 }
 
@@ -110,7 +110,7 @@ util_eval_variables_sa <- function(nl) {
   if(nrow(vars.missing) > 0){
     stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
                 To setup a sensitivity analysis simulation design you need to provide for each variable
-                a distribution with min, max and qfun (e.g. list(min=1, max=4, qfun=\"qunif\"))."))
+                a distribution with min, max and qfun (e.g. list(min=1, max=4, qfun=\"qunif\"))."), call.=FALSE)
   }
 }
 
@@ -138,7 +138,7 @@ util_eval_variables_op <- function(nl) {
   if(nrow(vars.missing) > 0){
     stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
                 To setup an optimization simulation design you need to provide for each variable
-                a distribution with min and max (e.g. list(min=1, max=4))."))
+                a distribution with min and max (e.g. list(min=1, max=4))."), call.=FALSE)
   }
 }
 
@@ -156,7 +156,7 @@ util_eval_constants <- function(nl) {
 
   if(length(getexp(nl, "constants")) == 0){
     stop("Error: Experiment constants list is empty.
-         You need to define a constants list with at least one element!")
+         You need to define a constants list with at least one element!", call.=FALSE)
   }
 }
 
@@ -193,7 +193,7 @@ util_eval_experiment <- function(nl) {
   if (length(notvalid) > 0) {
     stop(paste0("Error: To add a sim design to a nl object you need to define a proper experiment first.
                 The following elements are missing without default: ",
-                paste(notvalid, collapse=" ; ")))
+                paste(notvalid, collapse=" ; ")), call.=FALSE)
   }
 }
 
@@ -223,7 +223,7 @@ util_eval_simdesign <- function(nl) {
                 Please first initialize a nl object, then add a proper experiment,
                 and finally add a simdesign by using one of the provided simdesign functions.
                 The following elements are missing without default: ",
-                paste(notvalid, collapse=" ; ")))
+                paste(notvalid, collapse=" ; ")), call.=FALSE)
   }
 }
 
@@ -260,13 +260,13 @@ eval_variables_constants <- function(nl) {
   if (length(nonvalid_variables) > 0) {
     stop(paste0("Warning: Defined variables were not found in NetLogo model: ",
                 nonvalid_variables,
-                ". Check load_model_parameters() function to show valid parameters."))
+                ". Check load_model_parameters() function to show valid parameters."), call.=FALSE)
   }
 
   if (length(nonvalid_constants) > 0) {
     stop(paste0("Warning: Defined constants were not found in NetLogo model: ",
                 nonvalid_constants,
-                ". Check load_model_parameters() function to show valid parameters."))
+                ". Check load_model_parameters() function to show valid parameters."), call.=FALSE)
   }
 
   message("All defined variables and constants are valid!")
