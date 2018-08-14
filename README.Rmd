@@ -1,5 +1,9 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: false
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -26,7 +30,7 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
 You can install the released version of nlrx from
 [CRAN](https://CRAN.R-project.org) with:
 
-```{r}
+```{r eval=FALSE}
 install.packages("nlrx")
 ```
 
@@ -182,3 +186,7 @@ Three slots of the experiment class define how measurements are taken:
 
 Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected.
 In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
+
+#### Wolf Sheep examples for all simdesigns
+
+
