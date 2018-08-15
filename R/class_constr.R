@@ -69,7 +69,7 @@ nl <- function(nlversion = "6.0.2",
 #' @param runtime number of model ticks that should be run for each simulation
 #' @param evalticks vector of tick numbers defining when measurements are taken
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
-#' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Each list item consist of a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(min=0, max=1, step=0.1, qfun="qunif")))
+#' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))
 #' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
 #' @param ... ...
 #' @return experiment S4 class object
