@@ -78,6 +78,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/getstarted.html">Vignette Title</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -131,10 +143,12 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
-The full-factorial simdesign uses parameter ranges that are defined in the variables field of the experiment object within the nl object.
-First, a vector is created for each parameter, based on the min, max and step value.
-Then, a full-factorial matrix of all parameter combinations is created as input tibble for the simdesign.
+    <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
+<p>Variables in the experiment variable list need to provide a vector of distinct values (e.g. list(values=c(1,2,3,4)).
+Or a sequence definition with min, max and step (e.g. list=(min=1, max=4, step=1)).
+If both (values and sequence) are defined, the full-factorial design gives priority to the values.</p>
+<p>The full-factorial simdesign uses these defined parameter ranges within the nl object.
+A full-factorial matrix of all parameter combinations is created as input tibble for the simdesign.
 Finally, the function reports a simdesign object.</p>
     
 

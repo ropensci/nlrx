@@ -78,6 +78,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/getstarted.html">Vignette Title</a>
+    </li>
+  </ul>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -131,7 +143,7 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function creates a simdesign S4 class which can be added to a nl object by using the setter function simdesign(nl).
+    <p>This function creates a simdesign S4 class which can be added to a nl object.
 The simple simdesign only uses model parameters that are defined in the constants field of the experiment object within the nl object.
 Thus, the resulting input tibble of the simdesign has only one run with constant parameterisations.
 This can be useful to run one simulation with a specific parameterset.

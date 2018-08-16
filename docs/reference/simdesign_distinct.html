@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Execute NetLogo simulation — run_nl_one • nlrx</title>
+<title>Add a distinct simdesign to a nl object — simdesign_distinct • nlrx</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Execute NetLogo simulation — run_nl_one" />
+<meta property="og:title" content="Add a distinct simdesign to a nl object — simdesign_distinct" />
 
-<meta property="og:description" content="Execute NetLogo simulation from a nl object with a defined experiment and simdesign" />
+<meta property="og:description" content="Add a distinct simdesign to a nl object" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -111,62 +111,54 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Execute NetLogo simulation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
-    <div class="hidden name"><code>run_nl_one.Rd</code></div>
+    <h1>Add a distinct simdesign to a nl object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
+    <div class="hidden name"><code>simdesign_distinct.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Execute NetLogo simulation from a nl object with a defined experiment and simdesign</p>
+    <p>Add a distinct simdesign to a nl object</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_one</span>(<span class='no'>nl</span>, <span class='no'>seed</span>, <span class='no'>siminputrow</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>simdesign_distinct</span>(<span class='no'>nl</span>, <span class='no'>nseeds</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>nl</th>
-      <td><p>nl object</p></td>
+      <td><p>nl object with a defined experiment</p></td>
     </tr>
     <tr>
-      <th>seed</th>
-      <td><p>a random seed for the NetLogo simulation</p></td>
-    </tr>
-    <tr>
-      <th>siminputrow</th>
-      <td><p>rownumber of the input tibble within the attached simdesign object that should be executed</p></td>
-    </tr>
-    <tr>
-      <th>cleanup</th>
-      <td><p>indicate which filetypes should be deleted</p></td>
+      <th>nseeds</th>
+      <td><p>number of seeds for this simulation design</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>tibble with simulation output results</p>
+    <p>simdesign S4 class object</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
-The random seed is set within the NetLogo model to control stochasticity.
-The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.</p>
-<p>This function can be used to run single simulations of a NetLogo model.</p>
+    <p>This function creates a simdesign S4 class which can be added to a nl object.
+The distinct simdesign allows to create a parameter matrix with distinct parameterisations.</p>
+<p>Variables in the experiment variable list need to provide a vector of distinct values (e.g. list(values=c(1,2,3,4)).
+All vectors of values must have the same length across variables.</p>
+<p>The distinct simdesign then creates one simulation run for all first elements of these values vectors,
+one run for all second items, and so on.
+With this function, multiple distinct simulations can be run at once.
+Finally, the function reports a simdesign object.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_one</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-                      <span class='kw'>seed</span><span class='kw'>=</span><span class='fu'>getsims</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
-                      <span class='kw'>siminputrow</span><span class='kw'>=</span><span class='fl'>1</span>,
-                      <span class='kw'>cleanup</span><span class='kw'>=</span><span class='st'>"all"</span>)
-
-<span class='co'># }</span></pre>
+<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_distinct</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>, <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
