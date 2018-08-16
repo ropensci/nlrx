@@ -141,7 +141,13 @@ In summary, if you set the random-seed of your NetLogo model manually, you can i
 
 #### Comments on measurements
 
-Three slots of the experiment class define how measurements are taken: \* tickmetrics, defines if measurements are taken at the end of the simulation or on each tick \* evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks \* metrics, definition of valid NetLogo reporters that are used to collect data
+Three slots of the experiment class define how measurements are taken:
+
+-   tickmetrics, defines if measurements are taken at the end of the simulation or on each tick
+
+-   evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks
+
+-   metrics, definition of valid NetLogo reporters that are used to collect data
 
 Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
 

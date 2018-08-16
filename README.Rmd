@@ -181,8 +181,11 @@ Otherwise, set the experiment repetition to 1 and increase the nseeds variable o
 #### Comments on measurements
 
 Three slots of the experiment class define how measurements are taken:
+
 * tickmetrics, defines if measurements are taken at the end of the simulation or on each tick
+
 * evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks
+
 * metrics, definition of valid NetLogo reporters that are used to collect data
 
 Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected.
