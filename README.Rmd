@@ -160,11 +160,11 @@ Variable values that should be recognized by NetLogo as logical need to be enter
 #### Comments on self-written output
 
 The experiment provides a slot called "idrunnum".
-This slot can be used to transfer the current nlrx runnumber (siminputrow) to NetLogo.
-To use this functionality, a slider or numeric input field widget needs to be created on the GUI of your NetLogo model.
+This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
+To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
 The name of this widget can be entered into the "idrunnum" field of the experiment.
-During simulations, the value of this widget is automatically set to the current siminputrow number.
-For self-written output In NetLogo, we suggest to include this global vairable and the current random-seed, which allows referecing this output to the collected output of the nlrx simulations.
+During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
+For self-written output In NetLogo, we suggest to include this global vairable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
 #### Comments on seed management
 
