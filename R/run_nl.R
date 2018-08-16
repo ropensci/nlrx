@@ -32,7 +32,7 @@
 run_nl_all <- function(nl, seedprogress=FALSE, simprogress=FALSE, cleanup="all") {
 
   ## Execute on remote location
-  nl_results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), .progress = seedprogress, function(seed){
+  nl_results <- furrr::future_map_dfr(getsim(nl, "simseeds"), .progress = seedprogress, function(seed){
       furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), .progress = simprogress, function(siminputrow) {
 
         run_nl_one(nl = nl,
