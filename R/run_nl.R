@@ -4,6 +4,8 @@
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
+#' @param seedprogress defaults to FALSE, if TRUE reports progress on seed loops
+#' @param simprogress defaults to FALSE, if TRUE reports progress on simulation loops
 #' @param cleanup indicate which filetypes should be deleted
 #' @return tibble with simulation output results
 #' @details
@@ -19,7 +21,7 @@
 #'
 #' # Run parallel on local machine:
 #' future::plan(multisession)
-#' results <- run_nl_all(nl, cleanup="all")
+#' results <- run_nl_all(nl, FALSE, FALSE, cleanup="all")
 #'
 #' }
 #' @aliases run_nl_all
@@ -27,11 +29,11 @@
 #'
 #' @export
 
-run_nl_all <- function(nl, cleanup="all") {
+run_nl_all <- function(nl, seedprogress=FALSE, simprogress=FALSE, cleanup="all") {
 
   ## Execute on remote location
-  nl_results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-      furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
+  nl_results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), .progress = seedprogress, function(seed){
+      furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), .progress = simprogress, function(siminputrow) {
 
         run_nl_one(nl = nl,
                    seed = seed,

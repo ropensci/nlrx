@@ -4,10 +4,14 @@
 \alias{run_nl_all}
 \title{Execute NetLogo simulation}
 \usage{
-run_nl_all(nl, cleanup = "all")
+run_nl_all(nl, seedprogress = FALSE, simprogress = FALSE, cleanup = "all")
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{seedprogress}{defaults to FALSE, if TRUE reports progress on seed loops}
+
+\item{simprogress}{defaults to FALSE, if TRUE reports progress on simulation loops}
 
 \item{cleanup}{indicate which filetypes should be deleted}
 }
@@ -28,7 +32,7 @@ Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv"
 
 # Run parallel on local machine:
 future::plan(multisession)
-results <- run_nl_all(nl, cleanup="all")
+results <- run_nl_all(nl, FALSE, FALSE, cleanup="all")
 
 }
 }
