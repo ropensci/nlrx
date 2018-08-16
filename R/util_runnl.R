@@ -16,7 +16,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   ### Attach a runnum variable if needed:
   if (!is.na(getexp(nl, "idrunnum"))) {
-    runnum <- tibble(siminputrow)
+    runnum <- tibble(paste0(getexp(nl, "expname"), "_", seed, "_", siminputrow))
     names(runnum) <- getexp(nl, "idrunnum")
     simdata_run <- cbind(simdata_run, runnum)
   }
