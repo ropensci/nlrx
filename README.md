@@ -86,7 +86,7 @@ All information that is needed to run the simulations is now stored within the n
 ``` r
 future::plan(multisession)
 
-results <- run_nl_all(nl = nl, cleanup = "all")
+results %<-% run_nl_all(nl = nl, cleanup = "all")
 ```
 
 #### Step 5: Attach results to nl and run analysis
@@ -150,6 +150,28 @@ Three slots of the experiment class define how measurements are taken:
 -   metrics, definition of valid NetLogo reporters that are used to collect data
 
 Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
+
+Although the metrics slot accepts any valid NetLogo reporter, such as "count patches", reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clear results data frame. For example, the NetLogo reporter "count patches with \[pcolor = green\]" could be written as a NetLogo reporter function:
+
+``` r
+to-report green.patches
+  report count patches with [pcolor = green]
+end
+```
+
+In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with \[pcolor = green\]".
+
+#### Further notes on the future concept
+
+The run\_nl\_all function uses the map\_dfr functions from the furrr package. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign.
+
+We suggest to always use a future operator (%&lt;-%) when you call this function:
+
+``` r
+future::plan(multisession)
+
+results %<-% run_nl_all(nl = nl, cleanup = "all")
+```
 
 Further Wolf Sheep examples for all implemented simdesigns
 ----------------------------------------------------------

@@ -122,7 +122,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>seedprogress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>simprogress</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,14 +130,6 @@
     <tr>
       <th>nl</th>
       <td><p>nl object</p></td>
-    </tr>
-    <tr>
-      <th>seedprogress</th>
-      <td><p>defaults to FALSE, if TRUE reports progress on seed loops</p></td>
-    </tr>
-    <tr>
-      <th>simprogress</th>
-      <td><p>defaults to FALSE, if TRUE reports progress on simulation loops</p></td>
     </tr>
     <tr>
       <th>cleanup</th>
@@ -161,7 +153,7 @@ Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv"
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Run parallel on local machine:</span>
 <span class='kw pkg'>future</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multisession</span>)
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='fl'>FALSE</span>, <span class='fl'>FALSE</span>, <span class='kw'>cleanup</span><span class='kw'>=</span><span class='st'>"all"</span>)
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span><span class='kw'>=</span><span class='st'>"all"</span>)
 
 <span class='co'># }</span></pre>
   </div>

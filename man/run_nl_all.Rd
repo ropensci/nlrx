@@ -28,7 +28,7 @@ Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv"
 
 # Run parallel on local machine:
 future::plan(multisession)
-results <- run_nl_all(nl, cleanup="all")
+results \%<-\% run_nl_all(nl, cleanup="all")
 
 }
 }

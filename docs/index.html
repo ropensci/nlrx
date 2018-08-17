@@ -156,7 +156,7 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <p>All information that is needed to run the simulations is now stored within the nl object. The run_nl_one() function allows to run one specific simulation from the siminput parameter table. The run_nl_all() function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">future<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/future/topics/plan">plan</a></span>(multisession)
 
-results &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">cleanup =</span> <span class="st">"all"</span>)</code></pre></div>
+results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">cleanup =</span> <span class="st">"all"</span>)</code></pre></div>
 </div>
 <div id="step-5-attach-results-to-nl-and-run-analysis" class="section level4">
 <h4 class="hasAnchor">
@@ -267,6 +267,20 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_nl
 <li><p>metrics, definition of valid NetLogo reporters that are used to collect data</p></li>
 </ul>
 <p>Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.</p>
+<p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clear results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to<span class="op">-</span>report green.patches
+  report count patches with [pcolor =<span class="st"> </span>green]
+end</code></pre></div>
+<p>In your nlrx experiment metrics field you can then enter “green.patches” which is way more intuitive then “count patches with [pcolor = green]”.</p>
+</div>
+<div id="further-notes-on-the-future-concept" class="section level4">
+<h4 class="hasAnchor">
+<a href="#further-notes-on-the-future-concept" class="anchor"></a>Further notes on the future concept</h4>
+<p>The run_nl_all function uses the map_dfr functions from the furrr package. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign.</p>
+<p>We suggest to always use a future operator (%&lt;-%) when you call this function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">future<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/future/topics/plan">plan</a></span>(multisession)
+
+results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">cleanup =</span> <span class="st">"all"</span>)</code></pre></div>
 </div>
 </div>
 <div id="further-wolf-sheep-examples-for-all-implemented-simdesigns" class="section level2">

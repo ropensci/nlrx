@@ -76,8 +76,8 @@
 #' \code{
 #' future::plan(multisession)
 #'
-#' results <- run_nl_all(nl = nl,
-#'                       cleanup = "all")
+#' results %<-% run_nl_all(nl = nl,
+#'                         cleanup = "all")
 #'
 #' }
 #'
