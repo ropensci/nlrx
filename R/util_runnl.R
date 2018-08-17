@@ -181,7 +181,6 @@ util_read_write_batch <- function(nl) {
       ## NetLogo 5.3.1 does not contain a premade batchfile in the installation directory
       ## Thus, we have to write the batchfile manually
 
-
       # Block 1 of the batch file:
       block1 <- c("@echo off",
                   "setlocal ENABLEDELAYEDEXPANSION",
@@ -215,22 +214,14 @@ util_read_write_batch <- function(nl) {
                   ")")
 
       # Classpath line:
-      if (nl_majorversion == 6) {
-        jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-", getnl(nl, "nlversion"), ".jar")
-      }
-      if (nl_majorversion == 5) {
-        jarpath <- paste0(getnl(nl, "nlpath"), "app/NetLogo.jar")
-      }
-
+      jarpath <- paste0(getnl(nl, "nlpath"), "app/NetLogo.jar")
       jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
-
 
       # Block 3 of the batch file:
       block3 <- c("\"%JAVA%\" %JVM_OPTS% -classpath \"%ABSOLUTE_CLASSPATH%\" org.nlogo.headless.Main %ARGS%")
 
       # Put all blocks together:
       allblocks <- c(block1, jvmoptsline, block2, jarpathline, block3)
-
 
       ## Write batch file:
       batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
