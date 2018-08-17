@@ -153,7 +153,7 @@ Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv"
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Run parallel on local machine:</span>
 <span class='kw pkg'>future</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multisession</span>)
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span><span class='kw'>=</span><span class='st'>"all"</span>)
+<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span><span class='kw'>=</span><span class='st'>"all"</span>)
 
 <span class='co'># }</span></pre>
   </div>

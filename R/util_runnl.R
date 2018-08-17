@@ -47,6 +47,19 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   ## Add metrics:
   metrics <- getexp(nl, "metrics")
+
+  # Add turtle metrics if defined
+  if (any(!is.na(getexp(nl, "metrics.turtles")))) {
+    turtles.reporter <- paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.turtles"), collapse=" "), ")] of turtles\")")
+    metrics <- c(metrics, turtles.reporter)
+  }
+
+  # add patch metrics if defined
+  if (any(!is.na(getexp(nl, "metrics.patches")))) {
+    patches.reporter <- paste0("runresult (word \"[(list ",  paste(getexp(nl, "metrics.patches"), collapse=" "), ")] of patches\")")
+    metrics <- c(metrics, patches.reporter)
+  }
+
   for (i in metrics) {
     XML::addChildren(experiment, XML::newXMLNode("metric", i, parent=experiment))
   }

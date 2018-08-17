@@ -180,11 +180,11 @@ precision=3)
 The <code>run_nl_one</code> function allows to run one specific simulation from the siminput parameter table.
 The <code>run_nl_all</code> function runs a loop over all simseeds and rows of the parameter input table siminput
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.</p>
-<p><code><a href='http://www.rdocumentation.org/packages/future/topics/plan'>
+<p><code>
 future::plan(multisession)
-    results &lt;- run_nl_all(nl = nl,
-                      cleanup = "all")
-    </a></code></p>
+    results <!-- %&lt;-% run_nl_all(nl = nl, -->
+                        cleanup = "all")
+    </code></p>
 <p>Step 5: Attach results to nl and run analysis</p>
 <p>nlrx provides method specific analysis functions for each simulation design.
 Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.

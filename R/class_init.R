@@ -44,6 +44,8 @@
   #' @slot runtime number of model ticks that should be run for each simulation
   #' @slot evalticks number or vector of tick numbers defining when measurements are taken
   #' @slot metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
+  #' @slot metrics.turtles vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))
+  #' @slot metrics.patches vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))
   #' @slot variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Each list item consist of a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(min=0, max=1, step=0.1, qfun="qunif")))
   #' @slot constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
   #' @slot simdesign Holds a simdesign S4 class object
@@ -65,6 +67,8 @@
                       runtime="numeric",
                       evalticks="numeric",
                       metrics="character",
+                      metrics.turtles="character",
+                      metrics.patches="character",
                       variables="list",
                       constants="list"
                     ),
@@ -81,6 +85,8 @@
                       runtime=NA_integer_,
                       evalticks=NA_integer_,
                       metrics=NA_character_,
+                      metrics.turtles=NA_character_,
+                      metrics.patches=NA_character_,
                       variables=list(),
                       constants=list()
                     )

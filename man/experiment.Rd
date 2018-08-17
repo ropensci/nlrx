@@ -8,6 +8,7 @@ experiment(expname = "defaultexp", outpath = NA_character_,
   repetition = 1, tickmetrics = "true", idsetup = "setup", idgo = "go",
   idfinal = NA_character_, idrunnum = NA_character_, runtime = 1,
   evalticks = seq(1, runtime, 1), metrics = c("count turtles"),
+  metrics.turtles = NA_character_, metrics.patches = NA_character_,
   variables = list(), constants = list(), ...)
 }
 \arguments{
@@ -32,6 +33,10 @@ experiment(expname = "defaultexp", outpath = NA_character_,
 \item{evalticks}{vector of tick numbers defining when measurements are taken}
 
 \item{metrics}{vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))}
+
+\item{metrics.turtles}{vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))}
+
+\item{metrics.patches}{vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))}
 
 \item{variables}{a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))}
 
@@ -66,6 +71,8 @@ idrunnum=NA_character_,
 runtime=50,
 evalticks=seq(40,50),
 metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+metrics.turtles=c("who", "pxcor", "pycor", "color"),
+metrics.patches=c("pxcor", "pycor", "pcolor")
 variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
                  'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
 constants = list("model-version" = "\\"sheep-wolves-grass\\"",

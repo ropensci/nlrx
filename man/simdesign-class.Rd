@@ -49,6 +49,10 @@ empty
 
 \item{\code{metrics}}{vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))}
 
+\item{\code{metrics.turtles}}{vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))}
+
+\item{\code{metrics.patches}}{vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))}
+
 \item{\code{variables}}{a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Each list item consist of a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(min=0, max=1, step=0.1, qfun="qunif")))}
 
 \item{\code{constants}}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"=""default""))}
