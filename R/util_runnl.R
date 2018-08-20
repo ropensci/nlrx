@@ -365,15 +365,20 @@ util_read_write_batch <- function(nl) {
 
     turtle_owns <- purrr::map(seq_len(nrow(turtles_string)), function(x){
 
-    turtles_breed <- regmatches(turtles_string[x,][[1]],gregexpr("(?<=\\{).*?(?=\\})", turtles_string[x,][[1]], perl=TRUE))
-    regmatches(turtles_string[x,][[1]],gregexpr("(?<=\\{).*?(?=\\})", turtles_string[x,][[1]], perl=TRUE)) <- c(sapply(turtles_breed, FUN = function(x) gsub("\\s", "_", x)))
+    #regmatches(turtles_string[x,][[1]],gregexpr("(?<=\\{)*?(?=\\})", turtles_string[x,][[1]], perl=TRUE))
+    #gsub("(?<=\\{)\\s(?=\\})", "_", turtles_string[x,][[1]], perl = TRUE)
+    #regmatches(turtles_string[x,][[1]],gregexpr("(?<=\\{).*?(?=\\})", turtles_string[x,][[1]], perl=TRUE)) <- c(sapply(turtles_breed, FUN = function(x) gsub("\\s", "_", x)))
 
-    turtles_doublequote <- regmatches(turtles_string[x,][[1]],gregexpr('(?<=\\").*?(?=\\")', turtles_string[x,][[1]], perl=TRUE))
-    regmatches(turtles_string[x,][[1]],gregexpr('(?<=\\").*?(?=\\")', turtles_string[x,][[1]], perl=TRUE)) <- c(sapply(turtles_doublequote, FUN = function(x) gsub("\\s", "_", x)))
+
+    #turtles_doublequote <- regmatches(turtles_string[x,][[1]],gregexpr('(?<=\\").*?(?=\\")', turtles_string[x,][[1]], perl=TRUE))
+    #regmatches(turtles_string[x,][[1]],gregexpr('(?<=\\").*?(?=\\")', turtles_string[x,][[1]], perl=TRUE)) <- c(sapply(turtles_doublequote, FUN = function(x) gsub("\\s", "_", x)))
+
+
 
     turtles_string[x,][[1]] <- substring(turtles_string[x,][[1]], 2)
     turtles_string[x,][[1]] <- substring(turtles_string[x,][[1]], 1, max(nchar(turtles_string[x,][[1]])) - 1)
 
+    turtles_string[x,][[1]]  <- gsub("breed", "", turtles_string[x,][[1]], perl=TRUE)
     turtles_string[x,][[1]]  <- gsub("\\{", "\\1", turtles_string[x,][[1]], perl=TRUE)
     turtles_string[x,][[1]]  <- gsub("\\}", "\\1", turtles_string[x,][[1]], perl=TRUE)
     turtles_string[x,][[1]]  <- gsub("^ *|(?<= ) | *$", "", turtles_string[x,][[1]], perl = TRUE)
