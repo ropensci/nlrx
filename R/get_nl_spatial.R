@@ -1,4 +1,39 @@
 
+#' Calculate spatial data from metrics.turtles and metrics.patches output
+#'
+#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#'
+#' @param nl nl object
+#' @param turtles if TRUE, the function generates spatial point objects (sf) from metrics.turtles data
+#' @param patches if TRUE, the function generates raster objects from metrics.patches data
+#' @param turtle_coords either "px" if turtle coordinates were measured as "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
+#' @return tibble with spatial data objects
+#' @details
+#'
+#' get_nl_spatial generates spatial point objects and raster objects from tdata that has been collected by metrics.turtles and metrics.patches.
+#' metrics.turtles and metrics.patches need to collect coordinates of turtles and patches.
+#' For patches this can be easily done by adding "pxcor" and "pycor" to metrics.patches.
+#' For turtles you can either add "pxcor" and "pycor" to metrics.turtles or "xcor" and "ycor".
+#' It is also possible to measure both coordinates, and select the type that is used for spatial object creation through the function parameter turtle_coords.
+#' "px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Run parallel on local machine:
+#' future::plan(multisession)
+#' # Run simulations:
+#' results %<-% run_nl_all(nl = nl, cleanup = "all")
+#' # Attach results to nl:
+#' setsim(nl, "simoutput") <- results
+#' # Get spatial data:
+#' results_spatial <- get_nl_spatial(nl)
+#'
+#' }
+#' @aliases get_nl_spatial
+#' @rdname get_nl_spatial
+#'
+#' @export
 
 get_nl_spatial <- function(nl,
                            turtles = TRUE,
