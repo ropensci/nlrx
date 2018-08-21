@@ -76,7 +76,7 @@ get_nl_spatial <- function(nl,
       }
 
       turtles <- getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]] %>%
-        mutate_at(which(coord_ind == TRUE), function(x) as.numeric(as.character(x))) %>%
+        dplyr::mutate_at(which(coord_ind == TRUE), function(x) as.numeric(as.character(x))) %>%
         as.tibble %>%
         sf::st_as_sf(., coords = which(coord_ind == TRUE))
 
