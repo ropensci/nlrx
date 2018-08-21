@@ -53,6 +53,7 @@ get_nl_spatial <- function(nl,
     patches <-  purrr::map(seq_along(getsim(nl, "simoutput")$metrics.patches), function(raster_ind){
 
       patches_raster <- raster::rasterFromXYZ(getsim(nl, "simoutput")$metrics.patches[[raster_ind]])
+      patches_raster <- raster::flip(patches_raster, 2)
       names(patches_raster) <- paste("S", getsim(nl, "simoutput")[raster_ind, "random-seed"],"_R", getsim(nl, "simoutput")[raster_ind, "siminputrow"], sep = "")
       return(patches_raster)
     })
