@@ -3,4 +3,6 @@ pkgdown: 1.1.0.9000
 pkgdown_sha: 982bd327f97b623554b4cca90b86b4fb084aa634
 articles:
   getstarted: getstarted.html
+  simdesign-examples: simdesign-examples.html
+  spatial-output: spatial-output.html
 
