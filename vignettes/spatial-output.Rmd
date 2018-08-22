@@ -1,0 +1,135 @@
+---
+title: "Spatial Output"
+author: "Jan Salecker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Gathering spatial output from NetLogo model simulations
+
+nlrx is able to gather spatial output from your NetLogo simulations.
+The experiment class object provides two slots for measuring turtles and patches.
+The metrics.turtles slot accepts any vector of strings containing valid turtles-own variables of your NetLogo model.
+The metrics.patches slot accepts any vector of strings containing valid patches-own variables of your NetLogo model.
+The experiment class will soon be updated to also support capturing link variables.
+
+Basically, you can enter any variable of your model that is listed in turtles-own or patches-own, however if you add variables that contain strings, these strings must not contain any whitespaces or the output data will not be parsed correctly.
+
+For instance, we might want to measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We can then define our experiment and run the simulations:
+
+```{r eval=FALSE}
+
+# Define nl object
+nl <- nl(nlversion = "6.0.3",
+         nlpath = "C:/Program Files/NetLogo 6.0.3/",
+         modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+         jvmmem = 1024)
+
+# Define experiment
+nl@experiment <- experiment(expname = "nlrx_spatial",
+                            outpath="C:/out/",
+                            repetition = 1,      
+                            tickmetrics = "true",
+                            idsetup = "setup",   
+                            idgo = "go",         
+                            idfinal = NA_character_,  
+                            idrunnum = NA_character_,
+                            runtime = 100,
+                            evalticks = seq(1,100),
+                            metrics = c("count sheep","count wolves"),
+                            metrics.turtles = c("who", "pxcor", "pycor", "breed"),
+                            metrics.patches = c("pxcor", "pycor", "pcolor"),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             'initial-number-sheep' = 100,
+                                             'initial-number-wolves' = 50,
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false")
+                            )
+
+# Attach simdesign simple using only constants
+nl@simdesign <- simdesign_simple(nl=nl,
+                                 nseeds=1)
+
+# Run simulations and store output in results
+future::plan(multisession)
+results %<-% run_nl_all(nl = nl, cleanup = "all")
+
+```
+
+This experiment will run for 100 ticks and collects all metrics, metrics.turtles and metrics.patches on each tick.
+Thus, running run_nl_all() will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble.
+This lists already contain all measured agent metrics and can for example be used to analyse distributions of these variables for specific agent groups.
+
+In case of spatial data containing coordinates (pxcor/pycor for patches or pxcor/pycor and/or xcor/ycor for turtles), nlrx provides a function to transform the measured output into spatial objects.
+In order to use the function get_nl_spatial() you first have to attach your simulation output results to the nl object:
+
+```{r eval=FALSE}
+# Attach results to nl object:
+setsim(nl, "simoutput") <- results
+
+# Report spatial data:
+results_spatial <- get_nl_spatial(nl,
+                                  turtles = TRUE,
+                                  patches = TRUE,
+                                  turtle_coords = "px",
+                                  format="spatial")
+``` 
+
+The get_nl_spatial() function uses 4 function parameters:
+
+* turtles - TRUE/FALSE, if true the function will transform the measured metrics.turtles to spatial sf objects.
+* patches - TRUE/FALSE, if true the function will transform the measured metrics.patches to spatial raster objects. In case there are several patches variables besides the coordinates, the result will be a rasterstack containing one raster for each patch variable
+* turtle_coords - "px"/"x", because turtle coordinates can be measured as pxcor/pycor or xcor/ycor this string defines which coordinates are used for creating the turtle sf objects. For instance, you can measure both coordinate pairs by entering them into metrics.turtles, and then decide for one type of coordinates to create spatial objects.
+* format - "spatial"/"tibble", the "spatial" option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format "tibble" report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2. 
+
+Using the gganimate package(https://github.com/thomasp85/gganimate), it is even possible to generate animated plots from this spatial data tibble.
+Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with get_nl_spatial.
+
+
+```{r eval=FALSE}
+
+# Report spatial data as tibble:
+results_spatial_tibble <- get_nl_spatial(nl,
+                                  turtles = TRUE,
+                                  patches = TRUE,
+                                  turtle_coords = "px",
+                                  format="tibble")
+
+# Load libraries (gganimate available from https://github.com/thomasp85/gganimate)
+library(ggplot2)
+library(gganimate)
+
+# Create an animated plot, using the step column as animation variable
+p1 <- ggplot(results_spatial_tibble) +
+  geom_tile(aes(x=x, y=y, fill=factor(z))) +
+  geom_point(aes(x = X, y = Y, group=who, color = breed), size=2) +
+  scale_fill_manual(values = c("35" = "darksalmon", "55" = "chartreuse4")) +
+  scale_color_manual(values = c("sheep" = "white", "wolves" = "black")) +
+  transition_time(step) +
+  coord_equal() +
+  labs(title = 'Step: {frame_time}') +
+  theme_void()
+
+# Animate the plot and use 1 frame for each step of the model simulations
+gganimate::animate(p1, nframes = max(results_spatial_tibble$step), width=400, height=400, fps=4)
+
+
+``` 
+
+
+

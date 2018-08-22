@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a sobol2007 simdesign to a nl object — simdesign_sobol2007 • nlrx</title>
+<title>Calculate spatial data from metrics.turtles and metrics.patches output — get_nl_spatial • nlrx</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Add a sobol2007 simdesign to a nl object — simdesign_sobol2007" />
+<meta property="og:title" content="Calculate spatial data from metrics.turtles and metrics.patches output — get_nl_spatial" />
 
-<meta property="og:description" content="Add a sobol2007 simdesign to a nl object" />
+<meta property="og:description" content="Execute NetLogo simulation from a nl object with a defined experiment and simdesign" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -117,72 +117,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a sobol2007 simdesign to a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_sobol2007.Rd</code></div>
+    <h1>Calculate spatial data from metrics.turtles and metrics.patches output</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/get_nl_spatial.R'><code>R/get_nl_spatial.R</code></a></small>
+    <div class="hidden name"><code>get_nl_spatial.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Add a sobol2007 simdesign to a nl object</p>
+    <p>Execute NetLogo simulation from a nl object with a defined experiment and simdesign</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>simdesign_sobol2007</span>(<span class='no'>nl</span>, <span class='no'>samples</span>, <span class='no'>sobolnboot</span>, <span class='no'>sobolconf</span>, <span class='no'>nseeds</span>, <span class='no'>precision</span>)</pre>
+    <pre class="usage"><span class='fu'>get_nl_spatial</span>(<span class='no'>nl</span>, <span class='kw'>turtles</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>patches</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>turtle_coords</span> <span class='kw'>=</span> <span class='st'>"px"</span>,
+  <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"spatial"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>nl</th>
-      <td><p>nl object with a defined experiment</p></td>
+      <td><p>nl object</p></td>
     </tr>
     <tr>
-      <th>samples</th>
-      <td><p>number of samples for the sobol sensitivity analysis</p></td>
+      <th>turtles</th>
+      <td><p>if TRUE, the function generates spatial point objects (sf) from metrics.turtles data</p></td>
     </tr>
     <tr>
-      <th>sobolnboot</th>
-      <td><p>number of bootstrap replicates of the sobol sensitivity analysis</p></td>
+      <th>patches</th>
+      <td><p>if TRUE, the function generates raster objects from metrics.patches data</p></td>
     </tr>
     <tr>
-      <th>sobolconf</th>
-      <td><p>the confidence level for bootstrap confidence intervals</p></td>
+      <th>turtle_coords</th>
+      <td><p>either "px" if turtle coordinates were measured as "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"</p></td>
     </tr>
     <tr>
-      <th>nseeds</th>
-      <td><p>number of seeds for this simulation design</p></td>
-    </tr>
-    <tr>
-      <th>precision</th>
-      <td><p>number of digits for the decimal fraction of parameter values</p></td>
+      <th>format</th>
+      <td><p>string indication wether to return spatial objects (RasterLayer, sf Points) or a rowbinded tibble</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>simdesign S4 class object</p>
+    <p>tibble with spatial data objects</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
-<p>Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).</p>
-<p>The sobol2007 simdesign uses the sensitivity package to set up a sobol2007 sensitivity analysis, including a simobject of class sobol and a input tibble for simulations.
-For details on method specific sensitivity analysis function parameters see ?sobol2007
-Finally, the function reports a simdesign object.</p>
+    <p>get_nl_spatial generates spatial point objects and raster objects from tdata that has been collected by metrics.turtles and metrics.patches.
+metrics.turtles and metrics.patches need to collect coordinates of turtles and patches.
+For patches this can be easily done by adding "pxcor" and "pycor" to metrics.patches.
+For turtles you can either add "pxcor" and "pycor" to metrics.turtles or "xcor" and "ycor".
+It is also possible to measure both coordinates, and select the type that is used for spatial object creation through the function parameter turtle_coords.
+"px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_sobol2007</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-<span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>1000</span>,
-<span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>100</span>,
-<span class='kw'>sobolconf</span><span class='kw'>=</span><span class='fl'>0.95</span>,
-<span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
-<span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+<span class='co'># Run parallel on local machine:</span>
+<span class='kw pkg'>future</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multisession</span>)
+<span class='co'># Run simulations:</span>
+<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='fu'><a href='run_nl_all.html'>run_nl_all</a></span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
+<span class='co'># Attach results to nl:</span>
+<span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>
+<span class='co'># Get spatial data:</span>
+<span class='no'>results_spatial</span> <span class='kw'>&lt;-</span> <span class='fu'>get_nl_spatial</span>(<span class='no'>nl</span>)
+
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
