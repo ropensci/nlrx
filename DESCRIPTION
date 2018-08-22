@@ -3,7 +3,8 @@ Type: Package
 Title: Setup, run and analyze NetLogo model simulations from R via XML
 Version: 0.1.0
 Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
-                     role = c("aut", "cre"), comment = c(ORCID = '0000-0002-9000-4229')))
+                     role = c("aut", "cre"), comment = c(ORCID = '0000-0002-9000-4229')),
+             person("Marco", "Sciaini", email = "sciaini.marco@gmail.com", role = c("aut"), comment = c(ORCID = '0000-0002-3042-5435')))
 Maintainer: Jan Salecker <jsaleck@gwdg.de>
 Description: The nlrx package provides tools to setup, run and analyze NetLogo model simulations in R.
     nlrx experiments use a similar structure as NetLogos Behavior Space experiments. 
