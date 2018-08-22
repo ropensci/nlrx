@@ -1,4 +1,3 @@
-
 #' Calculate spatial data from metrics.turtles and metrics.patches output
 #'
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
@@ -7,6 +6,7 @@
 #' @param turtles if TRUE, the function generates spatial point objects (sf) from metrics.turtles data
 #' @param patches if TRUE, the function generates raster objects from metrics.patches data
 #' @param turtle_coords either "px" if turtle coordinates were measured as "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
+#' @param format string indication wether to return spatial objects (RasterLayer, sf Points) or a rowbinded tibble
 #' @return tibble with spatial data objects
 #' @details
 #'
@@ -38,7 +38,8 @@
 get_nl_spatial <- function(nl,
                            turtles = TRUE,
                            patches = TRUE,
-                           turtle_coords = "px"){
+                           turtle_coords = "px",
+                           format = "spatial"){
 
   if (!isTRUE(turtles)) {
     turtles <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
@@ -58,10 +59,10 @@ get_nl_spatial <- function(nl,
       return(patches_raster)
     })
 
-    patches <- tibble::enframe(patches, "id", "patches")
-    patches$step <- getsim(nl, "simoutput")$`[step]`
-    patches$siminputrow <- getsim(nl, "simoutput")$siminputrow
-    patches$`random-seed` <- getsim(nl, "simoutput")$`random-seed`
+    patches_tib <- tibble::enframe(patches, "id", "patches")
+    patches_tib$step <- getsim(nl, "simoutput")$`[step]`
+    patches_tib$siminputrow <- getsim(nl, "simoutput")$siminputrow
+    patches_tib$`random-seed` <- getsim(nl, "simoutput")$`random-seed`
   }
 
   if (all(!is.na(getexp(nl, "metrics.turtles"))) && isTRUE(turtles)) {
@@ -98,13 +99,40 @@ get_nl_spatial <- function(nl,
       return(turtles)
     })
 
-    turtles <- tibble::enframe(turtles, "id", "turtles")
-    turtles$step <- getsim(nl, "simoutput")$`[step]`
-    turtles$siminputrow <- getsim(nl, "simoutput")$siminputrow
-    turtles$`random-seed` <- getsim(nl, "simoutput")$`random-seed`
+    turtles_tib <- tibble::enframe(turtles, "id", "turtles")
+    turtles_tib$step <- getsim(nl, "simoutput")$`[step]`
+    turtles_tib$siminputrow <- getsim(nl, "simoutput")$siminputrow
+    turtles_tib$`random-seed` <- getsim(nl, "simoutput")$`random-seed`
   }
 
-  nl_join <- dplyr::left_join(patches, turtles)
+  nl_join <- dplyr::left_join(patches_tib, turtles_tib)
+
+  if (format == "tibble") {
+
+    if (!is.data.frame(patches)) {
+      patches <- dplyr::mutate(patches_tib, maps = purrr::map(patches_tib$patches, function(x){
+        # Create empty tibble with the same dimension as the raster ----
+        grd <- tibble::as_tibble(expand.grid(x = seq(ceiling(raster::extent(x)[1]), floor(raster::extent(x)[2]), raster::res(x)[1]),
+                                             y = seq(ceiling(raster::extent(x)[3]), floor(raster::extent(x)[4]), raster::res(x)[2])))
+        # Fill with raster values ----
+        grd <- dplyr::bind_cols(grd, z = raster::values(x))
+      })) %>%
+        tidyr::unnest(maps)
+    }
+
+    if (!is.data.frame(turtles)) {
+      turtles <- turtles_tib %>%
+        unnest(turtles) %>%
+        sf::st_as_sf()
+      turtles <- turtles %>% sf::st_set_geometry(NULL) %>% cbind(sf::st_coordinates(turtles))
+    }
+
+    ## Bind tibbles:
+    patches$group <- "patches"
+    turtles$group <- "turtles"
+    nl_join <- dplyr::bind_rows(patches, turtles)
+
+  }
 
   return(nl_join)
 }
