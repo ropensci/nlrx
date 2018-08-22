@@ -45,19 +45,39 @@ get_nl_spatial <- function(nl,
     turtles <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
 
+
   if (!isTRUE(patches)) {
     patches <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), patches = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches"))) && isTRUE(patches)) {
 
+    if (turtle_coords == "px") {
+      x_coord_ind <- grepl(c("pxcor"), names(getsim(nl, "simoutput")$metrics.patches[[1]]))
+      x_coord_ind <- which(x_coord_ind == TRUE)
+      y_coord_ind <- grepl(c("pycor"), names(getsim(nl, "simoutput")$metrics.patches[[1]]))
+      y_coord_ind <- which(y_coord_ind == TRUE)
+    }
+
+    if (turtle_coords == "x") {
+      x_coord_ind <- grepl(c("xcor"), names(getsim(nl, "simoutput")$metrics.turtles[[1]]))
+      x_coord_ind <- which(x_coord_ind == TRUE)
+      y_coord_ind <- grepl(c("xcor"), names(getsim(nl, "simoutput")$metrics.turtles[[1]]))
+      y_coord_ind <- which(y_coord_ind == TRUE)
+    }
+
+    patches_own <- which(1:ncol(getsim(nl, "simoutput")$metrics.patches[[1]]) != c(x_coord_ind, y_coord_ind))
+
     patches <-  purrr::map(seq_along(getsim(nl, "simoutput")$metrics.patches), function(raster_ind){
 
-      patches_raster <- raster::rasterFromXYZ(getsim(nl, "simoutput")$metrics.patches[[raster_ind]])
-      patches_raster <- raster::flip(patches_raster, 2)
-      names(patches_raster) <- paste("S", getsim(nl, "simoutput")[raster_ind, "random-seed"],"_R", getsim(nl, "simoutput")[raster_ind, "siminputrow"], sep = "")
-      return(patches_raster)
-    })
+        patches_raster <- raster::rasterFromXYZ(getsim(nl, "simoutput")$metrics.patches[[raster_ind]][,c(x_coord_ind,
+                                                                                                         y_coord_ind,
+                                                                                                         patches_own)])
+        patches_raster <- raster::flip(patches_raster, 2)
+        names(patches_raster) <- rep(paste("S", getsim(nl, "simoutput")[raster_ind, "random-seed"],"_R", getsim(nl, "simoutput")[raster_ind, "siminputrow"], sep = ""),
+                                     length(patches_own))
+        return(patches_raster)
+      })
 
     patches_tib <- tibble::enframe(patches, "id", "patches")
     patches_tib$step <- getsim(nl, "simoutput")$`[step]`
@@ -110,12 +130,15 @@ get_nl_spatial <- function(nl,
   if (format == "tibble") {
 
     if (!is.data.frame(patches)) {
+
       patches <- dplyr::mutate(patches_tib, maps = purrr::map(patches_tib$patches, function(x){
         # Create empty tibble with the same dimension as the raster ----
         grd <- tibble::as_tibble(expand.grid(x = seq(ceiling(raster::extent(x)[1]), floor(raster::extent(x)[2]), raster::res(x)[1]),
                                              y = seq(ceiling(raster::extent(x)[3]), floor(raster::extent(x)[4]), raster::res(x)[2])))
         # Fill with raster values ----
-        grd <- dplyr::bind_cols(grd, z = raster::values(x))
+        patches_own_tib <- as.data.frame(raster::values(x))
+        names(patches_own_tib) <- names(getsim(nl, "simoutput")$metrics.patches[[1]][, patches_own])
+        grd <- dplyr::bind_cols(grd, patches_own_tib)
       })) %>%
         tidyr::unnest(maps)
     }
