@@ -5,8 +5,7 @@
 \title{Construct a new simdesign object}
 \usage{
 simdesign(simmethod = character(), siminput = tibble(),
-  simobject = list(), simseeds = NA_integer_, simoutput = tibble(),
-  ...)
+  simobject = list(), simseeds = NA_integer_, simoutput = tibble(), ...)
 }
 \arguments{
 \item{simmethod}{character string defining the method of the simulation design}
