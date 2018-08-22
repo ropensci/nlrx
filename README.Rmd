@@ -128,3 +128,11 @@ write_simoutput(nl)
 # Do further analysis:
 analyze_nl(nl)
 ``` 
+
+## Meta
+
+* Please [report any issues or bugs](https://github.com/nldoc/nlrx/issues/new/).
+* License: GPL3
+* Get citation information for `nlrx` in R doing `citation(package = 'nlrx')`
+* We are very open to contributions - if you are interested check [Contributing](CONTRIBUTING.md).
+    * Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
