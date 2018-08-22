@@ -158,7 +158,11 @@ results_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../re
 <li>turtle_coords - “px”/“x”, because turtle coordinates can be measured as pxcor/pycor or xcor/ycor this string defines which coordinates are used for creating the turtle sf objects. For instance, you can measure both coordinate pairs by entering them into metrics.turtles, and then decide for one type of coordinates to create spatial objects.</li>
 <li>format - “spatial”/“tibble”, the “spatial” option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format “tibble” report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2.</li>
 </ul>
-<p>For example, the spatial tibble output can be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
+</div>
+<div id="visualization-examples" class="section level2">
+<h2 class="hasAnchor">
+<a href="#visualization-examples" class="anchor"></a>Visualization examples</h2>
+<p>The spatial tibble output from get_nl_spatial() can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Report spatial data as tibble:</span>
 results_spatial_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,
                                   <span class="dt">turtles =</span> <span class="ot">TRUE</span>,
@@ -219,6 +223,7 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#gathering-spatial-output-from-netlogo-model-simulations">Gathering spatial output from NetLogo model simulations</a></li>
+      <li><a href="#visualization-examples">Visualization examples</a></li>
       </ul>
 </div>
       </div>

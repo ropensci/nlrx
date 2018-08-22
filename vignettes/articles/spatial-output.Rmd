@@ -97,7 +97,9 @@ The get_nl_spatial() function uses 4 function parameters:
 * turtle_coords - "px"/"x", because turtle coordinates can be measured as pxcor/pycor or xcor/ycor this string defines which coordinates are used for creating the turtle sf objects. For instance, you can measure both coordinate pairs by entering them into metrics.turtles, and then decide for one type of coordinates to create spatial objects.
 * format - "spatial"/"tibble", the "spatial" option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format "tibble" report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2. 
 
-For example, the spatial tibble output can be used to plot maps for different ticks of the model simulation.
+## Visualization examples
+
+The spatial tibble output from get_nl_spatial() can for example be used to plot maps for different ticks of the model simulation.
 Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:
 
 ```{r eval=FALSE}
