@@ -9,6 +9,8 @@ run_nl_dyn(nl, seed, cleanup = "all")
 \arguments{
 \item{nl}{nl object}
 
+\item{seed}{a random seed for the NetLogo simulation}
+
 \item{cleanup}{indicate which filetypes should be deleted}
 }
 \value{

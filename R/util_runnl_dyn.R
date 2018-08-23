@@ -56,10 +56,10 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl(nl = nl,
-                    siminputrow = 1,
-                    seed = seed,
-                    cleanup = cleanup)
+  results <- run_nl_one(nl = nl,
+                        siminputrow = 1,
+                        seed = seed,
+                        cleanup = cleanup)
 
   # Select metric for gensa:
   results <- results[[evalcrit]]
@@ -134,10 +134,10 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl(nl = nl,
-                    siminputrow = 1,
-                    seed = seed,
-                    cleanup = cleanup)
+  results <- run_nl_one(nl = nl,
+                        siminputrow = 1,
+                        seed = seed,
+                        cleanup = cleanup)
 
   # Select metric for gensa:
   results <- results[[evalcrit]]

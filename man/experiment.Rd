@@ -5,12 +5,11 @@
 \title{Construct a new experiment object}
 \usage{
 experiment(expname = "defaultexp", outpath = NA_character_,
-  repetition = 1, tickmetrics = "true", idsetup = "setup",
-  idgo = "go", idfinal = NA_character_, idrunnum = NA_character_,
-  runtime = 1, evalticks = seq(1, runtime, 1),
-  metrics = c("count turtles"), metrics.turtles = NA_character_,
-  metrics.patches = NA_character_, variables = list(),
-  constants = list(), ...)
+  repetition = 1, tickmetrics = "true", idsetup = "setup", idgo = "go",
+  idfinal = NA_character_, idrunnum = NA_character_, runtime = 1,
+  evalticks = seq(1, runtime, 1), metrics = c("count turtles"),
+  metrics.turtles = NA_character_, metrics.patches = NA_character_,
+  variables = list(), constants = list(), ...)
 }
 \arguments{
 \item{expname}{A character string defining the name of the experiment}

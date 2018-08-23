@@ -118,6 +118,7 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup="all") {
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets
 #'
 #' @param nl nl object
+#' @param seed a random seed for the NetLogo simulation
 #' @param cleanup indicate which filetypes should be deleted
 #' @return simulation output results can be tibble, list, ...
 #' @details

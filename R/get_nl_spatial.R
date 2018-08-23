@@ -145,7 +145,7 @@ get_nl_spatial <- function(nl,
 
     if (!is.data.frame(turtles)) {
       turtles <- turtles_tib %>%
-        unnest(turtles) %>%
+        tidyr::unnest(turtles) %>%
         sf::st_as_sf()
       turtles <- turtles %>% sf::st_set_geometry(NULL) %>% cbind(sf::st_coordinates(turtles)) %>%
         dplyr::rename(turtles_x = X,
