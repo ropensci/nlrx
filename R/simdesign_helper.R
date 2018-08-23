@@ -86,7 +86,7 @@ simdesign_distinct <- function(nl, nseeds) {
 
   # Create a tibble from the defined variable value vectors:
 
-  ff <- plyr::llply(getexp(nl, "variables"), function(i) {
+  ff <- purrr::map(getexp(nl, "variables"), function(i) {
 
     ## If values are not directly supplied generate values from distribution:
       i$values
@@ -154,7 +154,7 @@ simdesign_ff <- function(nl, nseeds) {
 
   # Add a full factorial simulatin design:
   # Generate vectors from variables data:
-  ff <- plyr::llply(getexp(nl, "variables"), function(i) {
+  ff <- purrr::map(getexp(nl, "variables"), function(i) {
 
     ## If values are not directly supplied generate values from distribution:
     if (is.null(i$values)) {

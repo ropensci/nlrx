@@ -26,7 +26,6 @@ Imports:
     sensitivity,
     dplyr,
     readr,
-    plyr,
     purrr,
     furrr,
     magrittr,
