@@ -333,7 +333,7 @@ util_read_write_batch <- function(nl) {
 
 .util_clean_metrics_turtles <- function(NLtable, nl){
 
-  turtles_string <- NLtable[, grepl(c("turtle"), names(NLtable))]
+  turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
 
   if (!any(getexp(nl, "metrics.turtles") == "breed")) {
 
@@ -403,7 +403,7 @@ util_read_write_batch <- function(nl) {
 
 .util_clean_metrics_patches <- function(NLtable, nl) {
 
-  patches_string <- NLtable[, grepl(c("patches"), names(NLtable))]
+  patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
 
   patches_owns <- purrr::map(seq_len(nrow(patches_string)), function(x){
 
@@ -419,10 +419,10 @@ util_read_write_batch <- function(nl) {
     patches_owns <- purrr::map_dfr(seq_along(patches_string[x,][[1]][[1]]), function(patches_index){
 
       # split patches owns into unique elements of a vector
-      patches_owns <- strsplit(patches_string[x,][[1]][[1]][patches_index], " ")[[1]]
-      patches_owns <- as.numeric(patches_owns)
-      as.data.frame(matrix(patches_owns, nrow = 1))
-
+      patches_owns <- noquote(toupper(strsplit(patches_string[x,][[1]][[1]][patches_index], " ")[[1]]))
+      #patches_owns <- as.numeric(patches_owns)
+      patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1), stringsAsFactors=FALSE)
+      patches_owns <- as.data.frame(lapply(as.list(patches_owns), type.convert, as.is=TRUE), stringsAsFactors=FALSE)
     })
       names(patches_owns) <- getexp(nl, "metrics.patches")
 
