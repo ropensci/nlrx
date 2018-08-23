@@ -112,6 +112,16 @@ globalVariables(c(".",
                   "metrics",
                   "random-seed",
                   "vars",
-                  "siminputrow"))
+                  "siminputrow",
+                  "seed",
+                  "maps",
+                  "x",
+                  "y",
+                  "X",
+                  "Y",
+                  "group",
+                  "var",
+                  "dist.missing",
+                  "values.missing"))
 
 

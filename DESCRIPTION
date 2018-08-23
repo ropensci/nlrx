@@ -32,7 +32,10 @@ Imports:
     stats,
     utils,
     GenSA,
-    genalg
+    genalg,
+    raster,
+    sf,
+    tidyr
 Depends:
    methods,
     tibble,
