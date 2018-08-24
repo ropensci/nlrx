@@ -419,10 +419,12 @@ util_read_write_batch <- function(nl) {
     patches_owns <- purrr::map_dfr(seq_along(patches_string[x,][[1]][[1]]), function(patches_index){
 
       # split patches owns into unique elements of a vector
-      patches_owns <- noquote(toupper(strsplit(patches_string[x,][[1]][[1]][patches_index], " ")[[1]]))
-      #patches_owns <- as.numeric(patches_owns)
-      patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1), stringsAsFactors=FALSE)
-      patches_owns <- as.data.frame(lapply(as.list(patches_owns), type.convert, as.is=TRUE), stringsAsFactors=FALSE)
+      patches_owns <- toupper(strsplit(patches_string[x,][[1]][[1]][patches_index], " ")[[1]])
+      patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1, byrow = T), stringsAsFactors=FALSE)
+      patches_owns <- utils::type.convert(patches_owns)
+
+      #patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1), stringsAsFactors=FALSE)
+      #patches_owns <- as.data.frame(lapply(as.list(patches_owns), type.convert, as.is=TRUE), stringsAsFactors=FALSE)
     })
       names(patches_owns) <- getexp(nl, "metrics.patches")
 
