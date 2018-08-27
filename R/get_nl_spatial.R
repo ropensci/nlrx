@@ -57,7 +57,7 @@ get_nl_spatial <- function(nl,
     y_coord_ind <- grepl(c("pycor"), names(getsim(nl, "simoutput")$metrics.patches[[1]]))
     y_coord_ind <- which(y_coord_ind == TRUE)
 
-    patches_own <- which(1:ncol(getsim(nl, "simoutput")$metrics.patches[[1]]) != c(x_coord_ind, y_coord_ind))
+    patches_own <- which(1:ncol(getsim(nl, "simoutput")$metrics.patches[[1]]) %in% c(x_coord_ind, y_coord_ind) == FALSE)
 
     patches_own_names <- names(getsim(nl, "simoutput")$metrics.patches[[1]])[patches_own]
 
