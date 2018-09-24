@@ -42,12 +42,12 @@ get_nl_spatial <- function(nl,
                            format = "spatial"){
 
   if (!isTRUE(turtles)) {
-    turtles <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
+    turtles_tib <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
 
 
   if (!isTRUE(patches)) {
-    patches <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), patches = rep(NA, nrow(getsim(nl, "simoutput"))))
+    patches_tib <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), patches = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches"))) && isTRUE(patches)) {
