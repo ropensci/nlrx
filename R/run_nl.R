@@ -4,6 +4,7 @@
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
+#' @param split number of parts the job should be split into
 #' @param cleanup indicate which filetypes should be deleted
 #' @return tibble with simulation output results
 #' @details
@@ -13,6 +14,13 @@
 #' The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
 #' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 #'
+#' When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
+#' the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
+#' The inner loop (siminputrows) distributes simulation tasks to these cores.
+#' However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
+#' This can be done using the split parameter. If split is > 1 the siminput matrix is split into smaller parts.
+#' Jobs are created for each combination of part and random seed.
+#' If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.
 #'
 #' @examples
 #' \dontrun{
@@ -27,18 +35,42 @@
 #'
 #' @export
 
-run_nl_all <- function(nl, cleanup="all") {
+run_nl_all <- function(nl, split=1, cleanup="all") {
+
+  ## Store the number of siminputrows
+  siminput_nrow <- nrow(getsim(nl, "siminput"))
+  ## Check if split parameter is valid:
+  if(siminput_nrow %% split != 0) {
+    stop("Modulo of split parameter and number of rows of the siminput matrix is not 0.
+         Please adjust split parameter to a valid value!", call.=FALSE)
+  }
+
+  ## Calculate size of one part:
+  n_per_part <- siminput_nrow / split
+  ## Generate job ids from seeds and parts:
+  jobs <- as.list(expand.grid(getsim(nl, "simseeds"), seq(1:split)))
+
 
   ## Execute on remote location
-  nl_results <- furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-      furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
+  nl_results <- furrr::future_map_dfr(seq_along(jobs[[1]]),
+                                      function(job){
 
-        run_nl_one(nl = nl,
-                   seed = seed,
-                   siminputrow = siminputrow,
-                   cleanup = "all")
-      })
-    })
+                                        ## Extract current seed and part from job id:
+                                        job_seed <- jobs[[1]][[job]]
+                                        job_part <- jobs[[2]][[job]]
+
+                                        ## Calculate rowids of the current part:
+                                        rowids <- seq(1:n_per_part) + (job_part - 1) * n_per_part
+
+                                        ## Start inner loop to run model simulations:
+                                        furrr::future_map_dfr(rowids,
+                                                              function(siminputrow) {
+                                                                run_nl_one(nl = nl,
+                                                                           seed = job_seed,
+                                                                           siminputrow = siminputrow,
+                                                                           cleanup = "all")
+                                                                })
+                                        })
 
   return(nl_results)
 }
@@ -163,8 +195,4 @@ run_nl_dyn <- function(nl, seed, cleanup="all") {
 
   return(nl_results)
 }
-
-
-
-
 
