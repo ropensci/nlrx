@@ -4,10 +4,12 @@
 \alias{run_nl_all}
 \title{Execute NetLogo simulation}
 \usage{
-run_nl_all(nl, cleanup = "all")
+run_nl_all(nl, split = 1, cleanup = "all")
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{split}{number of parts the job should be split into}
 
 \item{cleanup}{indicate which filetypes should be deleted}
 }
@@ -22,6 +24,14 @@ run_nl_all executes all simulations of the specified NetLogo model within the pr
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
 Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+
+When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
+the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
+The inner loop (siminputrows) distributes simulation tasks to these cores.
+However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
+This can be done using the split parameter. If split is > 1 the siminput matrix is split into smaller parts.
+Jobs are created for each combination of part and random seed.
+If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.
 }
 \examples{
 \dontrun{

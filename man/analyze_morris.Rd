@@ -4,10 +4,12 @@
 \alias{analyze_morris}
 \title{Analyze NetLogo simulation output of simdesign morris}
 \usage{
-analyze_morris(nl)
+analyze_morris(nl, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
 \description{
 Analyze NetLogo simulation output of simdesign morris

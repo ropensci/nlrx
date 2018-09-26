@@ -4,10 +4,12 @@
 \alias{analyze_lhs}
 \title{Analyze NetLogo simulation output of simdesign latin-hypercube}
 \usage{
-analyze_lhs(nl)
+analyze_lhs(nl, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
 \description{
 Analyze NetLogo simulation output of simdesign latin-hypercube

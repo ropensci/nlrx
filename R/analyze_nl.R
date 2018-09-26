@@ -1,4 +1,3 @@
-
 #' Write NetLogo simulation output to file
 #'
 #' @description Write NetLogo simulation output to file
@@ -47,6 +46,7 @@ write_simoutput <- function(nl) {
 #' @description Analyze NetLogo simulation output
 #'
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @return analysis summary tibble
 #'
 #' Runs basic analyses on NetLogo simulation output
@@ -67,7 +67,8 @@ write_simoutput <- function(nl) {
 #' setsim(nl, "simoutput") <- results
 #'
 #' # Perform analysis:
-#' analyze_nl(nl)
+#' myfuns <- dplyr::funs(mean, sd, min, max)
+#' analyze_nl(nl, myfuns)
 #'
 #' }
 #' @aliases analyze_nl
@@ -75,26 +76,26 @@ write_simoutput <- function(nl) {
 #'
 #' @export
 
-analyze_nl <- function(nl) {
+analyze_nl <- function(nl, funs) {
 
   method <- getsim(nl, "simmethod")
 
   if (method == "simple") {
-    out <- analyze_simple(nl)
+    out <- analyze_simple(nl, funs)
   } else if (method == "ff") {
-    out <- analyze_ff(nl)
+    out <- analyze_ff(nl, funs)
   } else if (method == "lhs") {
-    out <- analyze_lhs(nl)
+    out <- analyze_lhs(nl, funs)
   } else if (method == "morris") {
-    out <- analyze_morris(nl)
+    out <- analyze_morris(nl, funs)
   } else if (method == "sobol") {
-    out <- analyze_sobol(nl)
+    out <- analyze_sobol(nl, funs)
   } else if (method == "sobol2007") {
-    out <- analyze_sobol2007(nl)
+    out <- analyze_sobol2007(nl, funs)
   } else if (method == "soboljansen") {
-    out <- analyze_soboljansen(nl)
+    out <- analyze_soboljansen(nl, funs)
   } else if (method == "eFast") {
-    out <- analyze_eFast(nl)
+    out <- analyze_eFast(nl, funs)
   } else {
     stop(paste0("No applicable analysis method for simmethod: ", method))
   }
@@ -107,10 +108,11 @@ analyze_nl <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign simple
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_simple
 #' @rdname analyze_simple
 #' @keywords internal
-analyze_simple <- function(nl) {
+analyze_simple <- function(nl, funs) {
 
 }
 
@@ -119,15 +121,16 @@ analyze_simple <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign full-factorial
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_ff
 #' @rdname analyze_ff
 #' @keywords internal
-analyze_ff <- function(nl) {
+analyze_ff <- function(nl, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max)) %>%
+    dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 
   ffagg <- tibble::as.tibble(ffagg)
@@ -142,15 +145,16 @@ analyze_ff <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign latin-hypercube
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_lhs
 #' @rdname analyze_lhs
 #' @keywords internal
-analyze_lhs <- function(nl) {
+analyze_lhs <- function(nl, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(mean, stats::sd, min, max)) %>%
+    dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 
   lhsagg <- tibble::as.tibble(lhsagg)
@@ -164,10 +168,11 @@ analyze_lhs <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign sobol
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_sobol
 #' @rdname analyze_sobol
 #' @keywords internal
-analyze_sobol <- function(nl) {
+analyze_sobol <- function(nl, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -178,7 +183,7 @@ analyze_sobol <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
       dplyr::select_if(~!all(is.na(.)))
 
@@ -212,10 +217,11 @@ analyze_sobol <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign sobol2007
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_sobol2007
 #' @rdname analyze_sobol2007
 #' @keywords internal
-analyze_sobol2007 <- function(nl) {
+analyze_sobol2007 <- function(nl, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -226,7 +232,7 @@ analyze_sobol2007 <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
       dplyr::select_if(~!all(is.na(.)))
 
@@ -269,10 +275,11 @@ analyze_sobol2007 <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign soboljansen
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_soboljansen
 #' @rdname analyze_soboljansen
 #' @keywords internal
-analyze_soboljansen <- function(nl) {
+analyze_soboljansen <- function(nl, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -283,7 +290,7 @@ analyze_soboljansen <- function(nl) {
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
       dplyr::select_if(~!all(is.na(.)))
 
@@ -327,10 +334,11 @@ analyze_soboljansen <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign morris
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_morris
 #' @rdname analyze_morris
 #' @keywords internal
-analyze_morris <- function(nl) {
+analyze_morris <- function(nl, funs) {
 
   sensindex <- NULL
   mo <- getsim(nl, "simobject")[[1]]
@@ -342,7 +350,7 @@ analyze_morris <- function(nl) {
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
       dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
       dplyr::select_if(~!all(is.na(.)))
 
@@ -388,10 +396,11 @@ analyze_morris <- function(nl) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign eFast
 #' @param nl nl object
+#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_eFast
 #' @rdname analyze_eFast
 #' @keywords internal
-analyze_eFast <- function(nl) {
+analyze_eFast <- function(nl, funs) {
 
   sensindex <- NULL
   f99 <- getsim(nl, "simobject")[[1]]
@@ -403,7 +412,7 @@ analyze_eFast <- function(nl) {
     simoutput.i <- getsim(nl, "simoutput") %>%
       dplyr::filter(`random-seed` == i) %>%
       dplyr::group_by(siminputrow) %>%
-      dplyr::summarise_at(getexp(nl, "metrics"), dplyr::funs(min, max, mean, stats::sd)) %>%
+      dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
       dplyr::select_if(~!all(is.na(.)))
 

@@ -4,10 +4,12 @@
 \alias{analyze_nl}
 \title{Analyze NetLogo simulation output}
 \usage{
-analyze_nl(nl)
+analyze_nl(nl, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
 \value{
 analysis summary tibble
@@ -33,7 +35,8 @@ cleanup="all")
 setsim(nl, "simoutput") <- results
 
 # Perform analysis:
-analyze_nl(nl)
+myfuns <- dplyr::funs(mean, sd, min, max)
+analyze_nl(nl, myfuns)
 
 }
 }

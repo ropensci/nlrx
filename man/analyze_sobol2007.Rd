@@ -4,10 +4,12 @@
 \alias{analyze_sobol2007}
 \title{Analyze NetLogo simulation output of simdesign sobol2007}
 \usage{
-analyze_sobol2007(nl)
+analyze_sobol2007(nl, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
 \description{
 Analyze NetLogo simulation output of simdesign sobol2007

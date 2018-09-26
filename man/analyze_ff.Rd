@@ -4,10 +4,12 @@
 \alias{analyze_ff}
 \title{Analyze NetLogo simulation output of simdesign full-factorial}
 \usage{
-analyze_ff(nl)
+analyze_ff(nl, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
 \description{
 Analyze NetLogo simulation output of simdesign full-factorial
