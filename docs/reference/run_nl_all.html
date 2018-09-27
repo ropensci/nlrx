@@ -128,7 +128,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>split</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +136,10 @@
     <tr>
       <th>nl</th>
       <td><p>nl object</p></td>
+    </tr>
+    <tr>
+      <th>split</th>
+      <td><p>number of parts the job should be split into</p></td>
     </tr>
     <tr>
       <th>cleanup</th>
@@ -153,6 +157,13 @@
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
 Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.</p>
+<p>When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
+the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
+The inner loop (siminputrows) distributes simulation tasks to these cores.
+However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
+This can be done using the split parameter. If split is &gt; 1 the siminput matrix is split into smaller parts.
+Jobs are created for each combination of part and random seed.
+If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

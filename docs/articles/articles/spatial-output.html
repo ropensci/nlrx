@@ -86,7 +86,7 @@
       <h1>Spatial Output</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2018-08-23</h4>
+            <h4 class="date">2018-09-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/spatial-output.Rmd"><code>vignettes/articles/spatial-output.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-output.Rmd</code></div>
@@ -98,8 +98,8 @@
 <div id="gathering-spatial-output-from-netlogo-model-simulations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gathering-spatial-output-from-netlogo-model-simulations" class="anchor"></a>Gathering spatial output from NetLogo model simulations</h2>
-<p>nlrx is able to gather spatial output from your NetLogo simulations. The experiment class object provides two slots for measuring turtles and patches. The metrics.turtles slot accepts any vector of strings containing valid turtles-own variables of your NetLogo model. The metrics.patches slot accepts any vector of strings containing valid patches-own variables of your NetLogo model. The experiment class will soon be updated to also support capturing link variables.</p>
-<p>Basically, you can enter any variable of your model that is listed in turtles-own or patches-own, however if you add variables that contain strings, these strings must not contain any whitespaces or the output data will not be parsed correctly.</p>
+<p>nlrx is able to gather spatial output from your NetLogo simulations. The experiment class object provides two slots for measuring turtles and patches. The metrics.turtles slot accepts any vector of strings containing valid turtles-own variables of your NetLogo model. The metrics.patches slot accepts any vector of strings containing valid patches-own variables of your NetLogo model. The metrics.links slot accepts any vector of strings containing valid links-own variables of your NetLogo model.</p>
+<p>Basically, you can enter any variable of your model that is listed in turtles-own, patches-own or links-own, however if you add variables that contain strings, these strings must not contain any whitespaces or the output data will not be parsed correctly.</p>
 <p>For instance, we might want to measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We can then define our experiment and run the simulations:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># Define nl object</span>

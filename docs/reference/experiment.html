@@ -131,8 +131,9 @@
     <pre class="usage"><span class='fu'>experiment</span>(<span class='kw'>expname</span> <span class='kw'>=</span> <span class='st'>"defaultexp"</span>, <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
   <span class='kw'>repetition</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>tickmetrics</span> <span class='kw'>=</span> <span class='st'>"true"</span>, <span class='kw'>idsetup</span> <span class='kw'>=</span> <span class='st'>"setup"</span>, <span class='kw'>idgo</span> <span class='kw'>=</span> <span class='st'>"go"</span>,
   <span class='kw'>idfinal</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>idrunnum</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>runtime</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>evalticks</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='no'>runtime</span>, <span class='fl'>1</span>), <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"count turtles"</span>),
-  <span class='kw'>metrics.turtles</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>metrics.patches</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
+  <span class='kw'>evalticks</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>1</span>, <span class='no'>runtime</span>, <span class='fl'>1</span>), <span class='kw'>stopcond</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
+  <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"count turtles"</span>), <span class='kw'>metrics.turtles</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
+  <span class='kw'>metrics.patches</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>, <span class='kw'>metrics.links</span> <span class='kw'>=</span> <span class='fl'>NA_character_</span>,
   <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>constants</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -179,6 +180,10 @@
       <td><p>vector of tick numbers defining when measurements are taken</p></td>
     </tr>
     <tr>
+      <th>stopcond</th>
+      <td><p>a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")</p></td>
+    </tr>
+    <tr>
       <th>metrics</th>
       <td><p>vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))</p></td>
     </tr>
@@ -189,6 +194,10 @@
     <tr>
       <th>metrics.patches</th>
       <td><p>vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))</p></td>
+    </tr>
+    <tr>
+      <th>metrics.links</th>
+      <td><p>vector of strings defining valid links-own variables that are taken as output measurements (e.g. c("end1", "end2"))</p></td>
     </tr>
     <tr>
       <th>variables</th>
@@ -218,33 +227,34 @@ Each experiment also needs to have a specified simulation design in order to run
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-# Example for Wolf Sheep Predation model from NetLogo models library:
-nl@experiment <- experiment(expname="wolf-sheep",
-outpath="C:/out/",
-repetition=1,
-tickmetrics="true",
-idsetup="setup",
-idgo="go",
-idfinal=NA_character_,
-idrunnum=NA_character_,
-runtime=50,
-evalticks=seq(40,50),
-metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
-metrics.turtles=c("who", "pxcor", "pycor", "color"),
-metrics.patches=c("pxcor", "pycor", "pcolor")
-variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
-                 'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
-constants = list("model-version" = "\"sheep-wolves-grass\"",
-                 "grass-regrowth-time" = 30,
-                 "sheep-gain-from-food" = 4,
-                 "wolf-gain-from-food" = 20,
-                 "sheep-reproduce" = 4,
-                 "wolf-reproduce" = 5,
-                 "show-energy?" = "false"))
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+<span class='no'>nl</span>@<span class='kw'>experiment</span> <span class='kw'>&lt;-</span> <span class='fu'>experiment</span>(<span class='kw'>expname</span><span class='kw'>=</span><span class='st'>"wolf-sheep"</span>,
+<span class='kw'>outpath</span><span class='kw'>=</span><span class='st'>"C:/out/"</span>,
+<span class='kw'>repetition</span><span class='kw'>=</span><span class='fl'>1</span>,
+<span class='kw'>tickmetrics</span><span class='kw'>=</span><span class='st'>"true"</span>,
+<span class='kw'>idsetup</span><span class='kw'>=</span><span class='st'>"setup"</span>,
+<span class='kw'>idgo</span><span class='kw'>=</span><span class='st'>"go"</span>,
+<span class='kw'>idfinal</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
+<span class='kw'>idrunnum</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
+<span class='kw'>runtime</span><span class='kw'>=</span><span class='fl'>50</span>,
+<span class='kw'>evalticks</span><span class='kw'>=</span><span class='fu'>seq</span>(<span class='fl'>40</span>,<span class='fl'>50</span>),
+<span class='kw'>stopcond</span><span class='kw'>=</span><span class='st'>"not any? turtles"</span>,
+<span class='kw'>metrics</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"count sheep"</span>, <span class='st'>"count wolves"</span>, <span class='st'>"count patches with [pcolor = green]"</span>),
+<span class='kw'>metrics.turtles</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"who"</span>, <span class='st'>"pxcor"</span>, <span class='st'>"pycor"</span>, <span class='st'>"color"</span>),
+<span class='kw'>metrics.patches</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"pxcor"</span>, <span class='st'>"pycor"</span>, <span class='st'>"pcolor"</span>),
+<span class='kw'>metrics.links</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"end1"</span>,<span class='st'>"end2"</span>),
+<span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>'initial-number-sheep'</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>150</span>, <span class='kw'>step</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qfun</span><span class='kw'>=</span><span class='st'>"qunif"</span>),
+                 <span class='st'>'initial-number-wolves'</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>150</span>, <span class='kw'>step</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qfun</span><span class='kw'>=</span><span class='st'>"qunif"</span>)),
+<span class='kw'>constants</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='st'>"model-version"</span> <span class='kw'>=</span> <span class='st'>"\"sheep-wolves-grass\""</span>,
+                 <span class='st'>"grass-regrowth-time"</span> <span class='kw'>=</span> <span class='fl'>30</span>,
+                 <span class='st'>"sheep-gain-from-food"</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                 <span class='st'>"wolf-gain-from-food"</span> <span class='kw'>=</span> <span class='fl'>20</span>,
+                 <span class='st'>"sheep-reproduce"</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                 <span class='st'>"wolf-reproduce"</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+                 <span class='st'>"show-energy?"</span> <span class='kw'>=</span> <span class='st'>"false"</span>))
 
-# }
-<div class='input'>
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
