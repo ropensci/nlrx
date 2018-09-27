@@ -478,9 +478,14 @@ util_read_write_batch <- function(nl) {
       links_owns <- gsub("\\{", "", links_owns, perl=TRUE)
       links_owns <- gsub("\\}", "", links_owns, perl=TRUE)
       # Convert to data frame
-      as.data.frame(matrix(links_owns, nrow = 1))
+      links_owns <- as.data.frame(matrix(links_owns, nrow = 1))
 
     }))
+
+    ## If no data has been reported, create an empty data frame with NA:
+    if (purrr::is_empty(links_owns)) {
+      links_owns <- data.frame(t(rep(NA, length(getexp(nl, "metrics.links")))))
+    }
 
     names(links_owns) <- getexp(nl, "metrics.links")
     return(links_owns)
@@ -517,6 +522,11 @@ util_read_write_batch <- function(nl) {
       as.data.frame(matrix(turtles_owns, nrow = 1))
 
     }))
+
+    ## If no data has been reported, create an empty data frame with NA:
+    if (purrr::is_empty(turtles_owns)) {
+      turtles_owns <- data.frame(t(rep(NA, length(getexp(nl, "metrics.turtles")))))
+    }
 
     names(turtles_owns) <- getexp(nl, "metrics.turtles")
     return(turtles_owns)

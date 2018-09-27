@@ -42,6 +42,12 @@ get_nl_spatial <- function(nl,
                            format = "spatial"){
 
 
+  ## Check if results have been attached:
+  if (purrr::is_empty(getsim(nl, "simoutput"))) {
+    stop("In order to run get_nl_spatial, output results have to be attached to the simdesign of the nl object first: setsim(nl, \"simoutput\") <- results")
+  }
+
+
   if (!isTRUE(turtles)) {
     turtles_tib <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
@@ -53,7 +59,7 @@ get_nl_spatial <- function(nl,
 
   if (all(!is.na(getexp(nl, "metrics.patches"))) && isTRUE(patches)) {
 
-    if (!all(any(getexp(nl, "metrics.patches") %in% pxcor) & any(getexp(nl, "metrics.patches") %in% pycor))){
+    if (!all(any(getexp(nl, "metrics.patches") %in% c("pxcor")) & any(getexp(nl, "metrics.patches") %in% c("pycor")))){
       stop("get_nl_spatial needs pxcor and pycor for creating raster from patches. Please add pxcor and pycor to metrics.patches.")
     }
 
@@ -90,7 +96,7 @@ get_nl_spatial <- function(nl,
 
   if (all(!is.na(getexp(nl, "metrics.turtles"))) && isTRUE(turtles)) {
 
-    if (!all(any(getexp(nl, "metrics.turtles") %in% c(xcor, pxcor)) & any(getexp(nl, "metrics.turtles") %in% c(ycor, pycor)))){
+    if (!all(any(getexp(nl, "metrics.turtles") %in% c("xcor", "pxcor")) & any(getexp(nl, "metrics.turtles") %in% c("ycor", "pycor")))){
       stop("get_nl_spatial needs pxcor/xcor and pycor/ycor for creating sf points from turtles. Please add pxcor/xcor and pycor/ycor to metrics.turtles.")
     }
 

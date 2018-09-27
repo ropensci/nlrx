@@ -78,6 +78,11 @@ write_simoutput <- function(nl) {
 
 analyze_nl <- function(nl, funs=dplyr::funs(mean)) {
 
+  ## Check if results have been attached:
+  if (purrr::is_empty(getsim(nl, "simoutput"))) {
+    stop("In order to run analyze_nl, output results have to be attached to the simdesign of the nl object first: setsim(nl, \"simoutput\") <- results")
+  }
+
   method <- getsim(nl, "simmethod")
 
   if (method == "simple") {
@@ -129,7 +134,7 @@ analyze_ff <- function(nl, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars("siminputrow", "[step]", names(getsim(nl, "siminput")))) %>%
     dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 
@@ -153,7 +158,7 @@ analyze_lhs <- function(nl, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(dplyr::vars("[step]", names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars("siminputrow", "[step]", names(getsim(nl, "siminput")))) %>%
     dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 

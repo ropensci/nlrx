@@ -102,7 +102,7 @@ simdesign_distinct <- function(nl, nseeds) {
 
   seeds <- util_generate_seeds(nseeds = nseeds)
 
-  new_simdesign <- simdesign(simmethod="ff",
+  new_simdesign <- simdesign(simmethod="distinct",
                              siminput=ff,
                              simseeds=seeds)
 
