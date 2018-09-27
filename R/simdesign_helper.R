@@ -82,7 +82,7 @@ simdesign_distinct <- function(nl, nseeds) {
   util_eval_experiment(nl)
   util_eval_constants(nl)
   util_eval_variables_distinct(nl)
-  message("Creating simple simulation design")
+  message("Creating distinct simulation design")
 
   # Create a tibble from the defined variable value vectors:
 

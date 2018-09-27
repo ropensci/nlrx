@@ -68,9 +68,11 @@ nl <- function(nlversion = "6.0.2",
 #' @param idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
 #' @param runtime number of model ticks that should be run for each simulation
 #' @param evalticks vector of tick numbers defining when measurements are taken
+#' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
 #' @param metrics.turtles vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))
 #' @param metrics.patches vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))
+#' @param metrics.links vector of strings defining valid links-own variables that are taken as output measurements (e.g. c("end1", "end2"))
 #' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))
 #' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
 #' @param ... ...
@@ -98,9 +100,11 @@ nl <- function(nlversion = "6.0.2",
 #' idrunnum=NA_character_,
 #' runtime=50,
 #' evalticks=seq(40,50),
+#' stopcond="not any? turtles",
 #' metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
 #' metrics.turtles=c("who", "pxcor", "pycor", "color"),
-#' metrics.patches=c("pxcor", "pycor", "pcolor")
+#' metrics.patches=c("pxcor", "pycor", "pcolor"),
+#' metrics.links=c("end1","end2"),
 #' variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
 #'                  'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
 #' constants = list("model-version" = "\"sheep-wolves-grass\"",
@@ -127,9 +131,11 @@ experiment <- function(expname = "defaultexp",
                        idrunnum = NA_character_,
                        runtime = 1,
                        evalticks = seq(1,runtime,1),
+                       stopcond= NA_character_,
                        metrics = c("count turtles"),
                        metrics.turtles = NA_character_,
                        metrics.patches = NA_character_,
+                       metrics.links = NA_character_,
                        variables = list(),
                        constants = list(),
                        ...) {
@@ -145,9 +151,11 @@ experiment <- function(expname = "defaultexp",
                idrunnum=idrunnum,
                runtime=runtime,
                evalticks=evalticks,
+               stopcond=stopcond,
                metrics=metrics,
                metrics.turtles=metrics.turtles,
                metrics.patches=metrics.patches,
+               metrics.links=metrics.links,
                variables=variables,
                constants=constants,
                ...)

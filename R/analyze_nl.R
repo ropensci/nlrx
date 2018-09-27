@@ -76,7 +76,7 @@ write_simoutput <- function(nl) {
 #'
 #' @export
 
-analyze_nl <- function(nl, funs) {
+analyze_nl <- function(nl, funs=dplyr::funs(mean)) {
 
   method <- getsim(nl, "simmethod")
 

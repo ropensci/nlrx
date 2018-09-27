@@ -23,6 +23,7 @@ testthat::test_that("class objects are created with correct variables", {
                               idfinal = "final",
                               runtime = 10,
                               evalticks = seq(8,10),
+                              stopcond = "ticks = 3",
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
                                                'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),

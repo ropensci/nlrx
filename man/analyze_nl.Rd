@@ -4,7 +4,7 @@
 \alias{analyze_nl}
 \title{Analyze NetLogo simulation output}
 \usage{
-analyze_nl(nl, funs)
+analyze_nl(nl, funs = dplyr::funs(mean))
 }
 \arguments{
 \item{nl}{nl object}
