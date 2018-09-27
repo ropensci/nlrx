@@ -41,6 +41,7 @@ get_nl_spatial <- function(nl,
                            turtle_coords = "px",
                            format = "spatial"){
 
+
   if (!isTRUE(turtles)) {
     turtles_tib <- tibble(id = seq(1, nrow(getsim(nl, "simoutput"))), turtles = rep(NA, nrow(getsim(nl, "simoutput"))))
   }
@@ -51,6 +52,10 @@ get_nl_spatial <- function(nl,
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches"))) && isTRUE(patches)) {
+
+    if (!all(any(getexp(nl, "metrics.patches") %in% pxcor) & any(getexp(nl, "metrics.patches") %in% pycor))){
+      stop("get_nl_spatial needs pxcor and pycor for creating raster from patches. Please add pxcor and pycor to metrics.patches.")
+    }
 
     x_coord_ind <- grepl(c("pxcor"), names(getsim(nl, "simoutput")$metrics.patches[[1]]))
     x_coord_ind <- which(x_coord_ind == TRUE)
@@ -84,6 +89,10 @@ get_nl_spatial <- function(nl,
   }
 
   if (all(!is.na(getexp(nl, "metrics.turtles"))) && isTRUE(turtles)) {
+
+    if (!all(any(getexp(nl, "metrics.turtles") %in% c(xcor, pxcor)) & any(getexp(nl, "metrics.turtles") %in% c(ycor, pycor)))){
+      stop("get_nl_spatial needs pxcor/xcor and pycor/ycor for creating sf points from turtles. Please add pxcor/xcor and pycor/ycor to metrics.turtles.")
+    }
 
     turtles <-  purrr::map(seq_along(getsim(nl, "simoutput")$metrics.turtles), function(turtles_ind){
 
