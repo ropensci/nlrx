@@ -12,7 +12,7 @@ testthat::test_that("Analysis of sample data", {
 
   testthat::expect_match(class(ff)[1], "tbl_df")
   testthat::expect_equal(nrow(ff), 121, .01)
-  testthat::expect_equal(ncol(ff), 11, .01)
+  testthat::expect_equal(ncol(ff), 12, .01)
   testthat::expect_equal(mean(ff$`count sheep_mean`), 197.1322, .01)
   testthat::expect_equal(mean(ff$`count wolves_mean`), 62.34711, .01)
 
@@ -28,7 +28,7 @@ testthat::test_that("Analysis of sample data", {
 
   testthat::expect_match(class(lhs)[1], "tbl_df")
   testthat::expect_equal(nrow(lhs), 100, .01)
-  testthat::expect_equal(ncol(lhs), 18, .01)
+  testthat::expect_equal(ncol(lhs), 19, .01)
   testthat::expect_equal(mean(lhs$`count sheep_mean`), 129.48, .01)
   testthat::expect_equal(mean(lhs$`count wolves_mean`), 31.91, .01)
 
