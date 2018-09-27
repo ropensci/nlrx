@@ -8,7 +8,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_ff)[1], "nl")
 
   testthat::context("Analyze sample data ff")
-  ff <- analyze_nl(nl_ff, myfuns)
+  ff <- analyze_nl(nl_ff, funs=myfuns)
 
   testthat::expect_match(class(ff)[1], "tbl_df")
   testthat::expect_equal(nrow(ff), 121, .01)
@@ -24,7 +24,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_lhs)[1], "nl")
 
   testthat::context("Analyze sample data lhs")
-  lhs <- analyze_nl(nl_lhs, myfuns)
+  lhs <- analyze_nl(nl_lhs, funs=myfuns)
 
   testthat::expect_match(class(lhs)[1], "tbl_df")
   testthat::expect_equal(nrow(lhs), 100, .01)
@@ -40,7 +40,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_sobol)[1], "nl")
 
   testthat::context("Analyze sample data sobol")
-  sobol <- analyze_nl(nl_sobol, myfuns)
+  sobol <- analyze_nl(nl_sobol, funs=myfuns)
 
   testthat::expect_match(class(sobol)[1], "tbl_df")
   testthat::expect_equal(nrow(sobol), 18, .01)
@@ -55,7 +55,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_sobol2007)[1], "nl")
 
   testthat::context("Analyze sample data sobol2007")
-  sobol2007 <- analyze_nl(nl_sobol2007, myfuns)
+  sobol2007 <- analyze_nl(nl_sobol2007, funs=myfuns)
 
   testthat::expect_match(class(sobol2007)[1], "tbl_df")
   testthat::expect_equal(nrow(sobol2007), 24, .01)
@@ -70,7 +70,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_soboljansen)[1], "nl")
 
   testthat::context("Analyze sample data soboljansen")
-  soboljansen <- analyze_nl(nl_soboljansen, myfuns)
+  soboljansen <- analyze_nl(nl_soboljansen, funs=myfuns)
 
   testthat::expect_match(class(soboljansen)[1], "tbl_df")
   testthat::expect_equal(nrow(soboljansen), 24, .01)
@@ -85,7 +85,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_morris)[1], "nl")
 
   testthat::context("Analyze sample data morris")
-  morris <- analyze_nl(nl_morris, myfuns)
+  morris <- analyze_nl(nl_morris, funs=myfuns)
 
   testthat::expect_match(class(morris)[1], "tbl_df")
   testthat::expect_equal(nrow(morris), 36, .01)
@@ -100,7 +100,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(nl_eFast)[1], "nl")
 
   testthat::context("Analyze sample data eFast")
-  eFast <- analyze_nl(nl_eFast, myfuns)
+  eFast <- analyze_nl(nl_eFast, funs=myfuns)
 
   testthat::expect_match(class(eFast)[1], "tbl_df")
   testthat::expect_equal(nrow(eFast), 24, .01)

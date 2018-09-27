@@ -4,10 +4,12 @@
 \alias{analyze_nl}
 \title{Analyze NetLogo simulation output}
 \usage{
-analyze_nl(nl, funs = dplyr::funs(mean))
+analyze_nl(nl, metrics = getexp(nl, "metrics"), funs = dplyr::funs(mean))
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{metrics}{vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object}
 
 \item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }

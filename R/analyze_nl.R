@@ -46,6 +46,7 @@ write_simoutput <- function(nl) {
 #' @description Analyze NetLogo simulation output
 #'
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @return analysis summary tibble
 #'
@@ -76,31 +77,32 @@ write_simoutput <- function(nl) {
 #'
 #' @export
 
-analyze_nl <- function(nl, funs=dplyr::funs(mean)) {
+analyze_nl <- function(nl, metrics=getexp(nl, "metrics"), funs=dplyr::funs(mean)) {
 
   ## Check if results have been attached:
   if (purrr::is_empty(getsim(nl, "simoutput"))) {
     stop("In order to run analyze_nl, output results have to be attached to the simdesign of the nl object first: setsim(nl, \"simoutput\") <- results")
   }
 
+
   method <- getsim(nl, "simmethod")
 
   if (method == "simple") {
-    out <- analyze_simple(nl, funs)
+    out <- analyze_simple(nl, metrics, funs)
   } else if (method == "ff") {
-    out <- analyze_ff(nl, funs)
+    out <- analyze_ff(nl, metrics, funs)
   } else if (method == "lhs") {
-    out <- analyze_lhs(nl, funs)
+    out <- analyze_lhs(nl, metrics, funs)
   } else if (method == "morris") {
-    out <- analyze_morris(nl, funs)
+    out <- analyze_morris(nl, metrics, funs)
   } else if (method == "sobol") {
-    out <- analyze_sobol(nl, funs)
+    out <- analyze_sobol(nl, metrics, funs)
   } else if (method == "sobol2007") {
-    out <- analyze_sobol2007(nl, funs)
+    out <- analyze_sobol2007(nl, metrics, funs)
   } else if (method == "soboljansen") {
-    out <- analyze_soboljansen(nl, funs)
+    out <- analyze_soboljansen(nl, metrics, funs)
   } else if (method == "eFast") {
-    out <- analyze_eFast(nl, funs)
+    out <- analyze_eFast(nl, metrics, funs)
   } else {
     stop(paste0("No applicable analysis method for simmethod: ", method))
   }
@@ -113,11 +115,12 @@ analyze_nl <- function(nl, funs=dplyr::funs(mean)) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign simple
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_simple
 #' @rdname analyze_simple
 #' @keywords internal
-analyze_simple <- function(nl, funs) {
+analyze_simple <- function(nl, metrics, funs) {
 
 }
 
@@ -126,16 +129,17 @@ analyze_simple <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign full-factorial
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_ff
 #' @rdname analyze_ff
 #' @keywords internal
-analyze_ff <- function(nl, funs) {
+analyze_ff <- function(nl, metrics, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars("siminputrow", "[step]", names(getsim(nl, "siminput")))) %>%
-    dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
+    dplyr::summarise_at(metrics, funs) %>%
     dplyr::ungroup()
 
   ffagg <- tibble::as.tibble(ffagg)
@@ -150,11 +154,12 @@ analyze_ff <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign latin-hypercube
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_lhs
 #' @rdname analyze_lhs
 #' @keywords internal
-analyze_lhs <- function(nl, funs) {
+analyze_lhs <- function(nl, metrics, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
@@ -173,11 +178,12 @@ analyze_lhs <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign sobol
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_sobol
 #' @rdname analyze_sobol
 #' @keywords internal
-analyze_sobol <- function(nl, funs) {
+analyze_sobol <- function(nl, metrics, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -222,11 +228,12 @@ analyze_sobol <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign sobol2007
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_sobol2007
 #' @rdname analyze_sobol2007
 #' @keywords internal
-analyze_sobol2007 <- function(nl, funs) {
+analyze_sobol2007 <- function(nl, metrics, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -280,11 +287,12 @@ analyze_sobol2007 <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign soboljansen
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_soboljansen
 #' @rdname analyze_soboljansen
 #' @keywords internal
-analyze_soboljansen <- function(nl, funs) {
+analyze_soboljansen <- function(nl, metrics, funs) {
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -339,11 +347,12 @@ analyze_soboljansen <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign morris
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_morris
 #' @rdname analyze_morris
 #' @keywords internal
-analyze_morris <- function(nl, funs) {
+analyze_morris <- function(nl, metrics, funs) {
 
   sensindex <- NULL
   mo <- getsim(nl, "simobject")[[1]]
@@ -401,11 +410,12 @@ analyze_morris <- function(nl, funs) {
 #'
 #' @description Analyze NetLogo simulation output of simdesign eFast
 #' @param nl nl object
+#' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @aliases analyze_eFast
 #' @rdname analyze_eFast
 #' @keywords internal
-analyze_eFast <- function(nl, funs) {
+analyze_eFast <- function(nl, metrics, funs) {
 
   sensindex <- NULL
   f99 <- getsim(nl, "simobject")[[1]]

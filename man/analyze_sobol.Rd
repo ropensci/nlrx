@@ -4,10 +4,12 @@
 \alias{analyze_sobol}
 \title{Analyze NetLogo simulation output of simdesign sobol}
 \usage{
-analyze_sobol(nl, funs)
+analyze_sobol(nl, metrics, funs)
 }
 \arguments{
 \item{nl}{nl object}
+
+\item{metrics}{vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object}
 
 \item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
 }
