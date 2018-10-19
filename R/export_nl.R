@@ -30,7 +30,6 @@
 
 export_nl <- function(nl,
                       folder=dirname(getnl(nl, "modelpath")),
-                      nlstrip=FALSE,
                       outfile,
                       ...)
 {
