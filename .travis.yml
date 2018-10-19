@@ -23,7 +23,7 @@ before_install:
   - Rscript -e 'update.packages(ask = FALSE)'
 
 after_success:
-  - Rscript -e 'covr::codecov(branch = "develop")'
+  - Rscript -e 'covr::codecov()'
 
 notifications:
   email:

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_nl_spatial.R
 \name{get_nl_spatial}
 \alias{get_nl_spatial}
-\title{Calculate spatial data from metrics.turtles and metrics.patches output}
+\title{Get spatial data from metrics.turtles and metrics.patches output}
 \usage{
 get_nl_spatial(nl, turtles = TRUE, patches = TRUE,
   turtle_coords = "px", format = "spatial")
@@ -22,7 +22,7 @@ get_nl_spatial(nl, turtles = TRUE, patches = TRUE,
 tibble with spatial data objects
 }
 \description{
-Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+Turn results from NetLogo in spatial data objects
 }
 \details{
 get_nl_spatial generates spatial point objects and raster objects from tdata that has been collected by metrics.turtles and metrics.patches.

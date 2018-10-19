@@ -30,15 +30,14 @@
 
 export_nl <- function(nl,
                       folder=dirname(getnl(nl, "modelpath")),
-                      outfile,
-                      ...)
+                      outfile)
 {
 
   mywd <- getwd()
 
   ## Create zip:
   setwd(folder)
-  zip(zipfile=outfile, files = list.files(), extras = "-r")
+  utils::zip(zipfile=outfile, files = list.files(), extras = "-r")
 
   ## Add nl object:
   ## Create a rds file from the nl object
@@ -46,7 +45,7 @@ export_nl <- function(nl,
   nltempfile <- paste0(nltempdir, "/nlobject.rds")
   saveRDS(nl, nltempfile)
   setwd(nltempdir)
-  zip(zipfile=outfile, files="nlobject.rds", flags="-j")
+  utils::zip(zipfile=outfile, files="nlobject.rds", flags="-j")
 
   ## Reset wd:
   setwd(mywd)

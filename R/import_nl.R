@@ -2,9 +2,9 @@
 #'
 #' @description Import NetLogo Experiment from export_nl
 #'
-#' @param nl nl object
 #' @param folder Path to folder that contains files to run NetLogo experiment
 #' @param outfile Path to folder where the experiments gets extracted
+#' @param new_session If TRUE, opens a new RStudio Session with an Rproj
 #'
 #' @return The status value returned by the external command, invisibly.
 #'
@@ -28,12 +28,12 @@
 #'
 #' @export
 
-import_nl <- function(folder, outfile, ...){
-  unzip(folder, exdir = outfile, junkpaths = TRUE)
+import_nl <- function(folder, outfile, new_session = FALSE){
 
-  if(length(list.files(outfile, pattern = "Rproj")) == 1){
+  utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
+
+  if(length(list.files(outfile, pattern = "Rproj"))  == 1 && isTRUE(new_session)){
     rstudioapi::openProject(list.files(outfile, pattern = "Rproj", full.names	= TRUE))
-    readRDS("nlobject.rds")
   }
 
 }
