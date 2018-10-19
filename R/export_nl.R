@@ -30,17 +30,16 @@
 
 export_nl <- function(nl,
                       folder=dirname(getnl(nl, "modelpath")),
-                      outfile)
+                      nlstrip=FALSE,
+                      outfile,
+                      ...)
 {
-
-  folderpath <- dirname(folder)
-  foldername <- basename(folder)
 
   mywd <- getwd()
 
   ## Create zip:
-  setwd(folderpath)
-  zip(zipfile=outfile, files=foldername)
+  setwd(folder)
+  zip(zipfile=outfile, files = list.files(), extras = "-r")
 
   ## Add nl object:
   ## Create a rds file from the nl object

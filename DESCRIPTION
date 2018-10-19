@@ -34,6 +34,7 @@ Imports:
     GenSA,
     genalg,
     raster,
+    rstudioapi,
     sf,
     tidyr
 Depends:
