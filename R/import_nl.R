@@ -10,13 +10,16 @@
 #'
 #' @details
 #'
-#' xxx
+#' Imports NetLogo experiments that were saved with `export_nl`.
+#' If the folder comes with an .Rproj file (which is recommended because
+#' relative paths enhance the reproducability of your analysis),
+#' `import_nl` opens this project and loads the nl object in your R environment.
 #'
 #' @examples
 #' \dontrun{
 #'
-#' infile <- "/home/marco/Desktop/test.zip"
-#' outfile <- "/home/marco/Desktop/test"
+#' infile <- "/home/user/test.zip"
+#' outfile <- "/home/user/test"
 #' import_nl(infile, outfile)
 #'
 #' }
@@ -27,4 +30,10 @@
 
 import_nl <- function(folder, outfile, ...){
   unzip(folder, exdir = outfile, junkpaths = TRUE)
+
+  if(length(list.files(outfile, pattern = "Rproj")) == 1){
+    rstudioapi::openProject(list.files(outfile, pattern = "Rproj", full.names	= TRUE))
+    readRDS("nlobject.rds")
+  }
+
 }

@@ -10,13 +10,15 @@
 #'
 #' @details
 #'
-#' ccc
+#' Exports your folder that contains data and scripts for NetLogo + nlrx analyses
+#' as a zip file. Furthermore, `export_nl` takes your nl object and saves it in the
+#' zipped folder. This enables other person to run the same experiment as you.
 #'
 #' @examples
 #' \dontrun{
 #'
-#' folder <- "/home/marco/Documents/NetLogo 6.0.4/app/models/Code Examples/Extensions Examples/gis"
-#' outfile <- "/home/marco/Desktop/test.zip"
+#' folder <- "/home/user/test"
+#' outfile <- "/home/user/test.zip"
 #' export_nl(nl, folder=folder, outfile=outfile)
 #'
 #' }
