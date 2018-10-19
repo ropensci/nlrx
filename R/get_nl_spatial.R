@@ -1,6 +1,6 @@
-#' Calculate spatial data from metrics.turtles and metrics.patches output
+#' Get spatial data from metrics.turtles and metrics.patches output
 #'
-#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#' @description Turn results from NetLogo in spatial data objects
 #'
 #' @param nl nl object
 #' @param turtles if TRUE, the function generates spatial point objects (sf) from metrics.turtles data
