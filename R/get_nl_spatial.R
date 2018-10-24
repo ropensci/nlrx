@@ -79,7 +79,7 @@ get_nl_spatial <- function(nl,
     y_coord_ind <- which(y_coord_ind == TRUE)
 
     patches_own <-
-      which(1:ncol(getsim(nl, "simoutput")$metrics.patches[[1]]) %in%
+      which(seq_len(ncol(getsim(nl, "simoutput")$metrics.patches[[1]])) %in%
               c(x_coord_ind, y_coord_ind) == FALSE)
 
     patches_own_names <-
