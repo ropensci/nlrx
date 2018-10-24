@@ -708,7 +708,8 @@ simdesign_GenSA <- function(nl,
   evalcrit_reporter <- getexp(nl, "metrics")[evalcrit]
   # Check if the reporter exists:
   if (is.na(evalcrit_reporter)) {
-    stop(paste0("Error: No valid reporter at defined evalcrit position: ", evalcrit))
+    stop(paste0("Error: No valid reporter at defined evalcrit position: ",
+                evalcrit))
   }
 
   # Create a gsa object:
@@ -799,7 +800,8 @@ simdesign_GenAlg <- function(nl,
   evalcrit_reporter <- getexp(nl, "metrics")[evalcrit]
   # Check if the reporter exists:
   if (is.na(evalcrit_reporter)) {
-    stop(paste0("Error: No valid reporter at defined evalcrit position: ", evalcrit))
+    stop(paste0("Error: No valid reporter at defined evalcrit position: ",
+                evalcrit))
   }
 
   # Create a gsa object:

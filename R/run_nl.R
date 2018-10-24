@@ -1,4 +1,5 @@
 
+
 #' Execute NetLogo simulation
 #'
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
@@ -35,14 +36,16 @@
 #'
 #' @export
 
-run_nl_all <- function(nl, split=1, cleanup="all") {
-
+run_nl_all <- function(nl, split = 1, cleanup = "all") {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
-  if(siminput_nrow %% split != 0) {
-    stop("Modulo of split parameter and number of rows of the siminput matrix is not 0.
-         Please adjust split parameter to a valid value!", call.=FALSE)
+  if (siminput_nrow %% split != 0) {
+    stop(
+      "Modulo of split parameter and number of rows of the siminput matrix is not 0.
+         Please adjust split parameter to a valid value!",
+      call. = FALSE
+    )
   }
 
   ## Calculate size of one part:
@@ -53,24 +56,27 @@ run_nl_all <- function(nl, split=1, cleanup="all") {
 
   ## Execute on remote location
   nl_results <- furrr::future_map_dfr(seq_along(jobs[[1]]),
-                                      function(job){
+                          function(job) {
+                            ## Extract current seed and part from job id:
+                            job_seed <- jobs[[1]][[job]]
+                            job_part <- jobs[[2]][[job]]
 
-                                        ## Extract current seed and part from job id:
-                                        job_seed <- jobs[[1]][[job]]
-                                        job_part <- jobs[[2]][[job]]
+                            ## Calculate rowids of the current part:
+                            rowids <-
+                              seq(1:n_per_part) +
+                              (job_part - 1) * n_per_part
 
-                                        ## Calculate rowids of the current part:
-                                        rowids <- seq(1:n_per_part) + (job_part - 1) * n_per_part
-
-                                        ## Start inner loop to run model simulations:
-                                        furrr::future_map_dfr(rowids,
-                                                              function(siminputrow) {
-                                                                run_nl_one(nl = nl,
-                                                                           seed = job_seed,
-                                                                           siminputrow = siminputrow,
-                                                                           cleanup = "all")
-                                                                })
-                                        })
+                            ## Start inner loop to run model simulations:
+                            furrr::future_map_dfr(rowids,
+                                                  function(siminputrow) {
+                                                    run_nl_one(
+                                                      nl = nl,
+                                                      seed = job_seed,
+                                                      siminputrow = siminputrow,
+                                                      cleanup = "all"
+                                                    )
+                                                  })
+                          })
 
   return(nl_results)
 }
@@ -111,19 +117,20 @@ run_nl_all <- function(nl, split=1, cleanup="all") {
 #'
 #' @export
 
-run_nl_one <- function(nl, seed, siminputrow, cleanup="all") {
-
+run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
   util_eval_simdesign(nl)
 
   ## Write XML File:
-  xmlfile <- tempfile(pattern=paste0("nlrx", seed, "_", siminputrow),
-                      fileext=".xml")
+  xmlfile <-
+    tempfile(pattern = paste0("nlrx", seed, "_", siminputrow),
+             fileext = ".xml")
 
   util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 
   ## Execute:
-  outfile <- tempfile(pattern=paste0("nlrx", seed, "_", siminputrow),
-                      fileext=".csv")
+  outfile <-
+    tempfile(pattern = paste0("nlrx", seed, "_", siminputrow),
+             fileext = ".csv")
 
   batchpath <- util_read_write_batch(nl)
   util_call_nl(nl, xmlfile, outfile, batchpath)
@@ -132,11 +139,11 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup="all") {
   nl_results <- util_gather_results(nl, outfile, seed, siminputrow)
 
   ## Delete temporary files:
-  if(cleanup == "xml" | cleanup == "all") {
-    util_cleanup(nl, pattern=".xml")
+  if (cleanup == "xml" | cleanup == "all") {
+    util_cleanup(nl, pattern = ".xml")
   }
-  if(cleanup == "csv" | cleanup == "all") {
-    util_cleanup(nl, pattern=".csv")
+  if (cleanup == "csv" | cleanup == "all") {
+    util_cleanup(nl, pattern = ".csv")
   }
 
   return(nl_results)
@@ -173,26 +180,24 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup="all") {
 #'
 #' @export
 
-run_nl_dyn <- function(nl, seed, cleanup="all") {
-
+run_nl_dyn <- function(nl, seed, cleanup = "all") {
   nl_results <- NULL
 
 
-  if(getsim(nl, "simmethod") == "GenSA")
+  if (getsim(nl, "simmethod") == "GenSA")
   {
     nl_results <- util_run_nl_dyn_GenSA(nl = nl,
                                         seed = seed,
                                         cleanup = cleanup)
   }
 
-  if(getsim(nl, "simmethod") == "GenAlg")
+  if (getsim(nl, "simmethod") == "GenAlg")
   {
     nl_results <- util_run_nl_dyn_GenAlg(nl = nl,
-                                        seed = seed,
-                                        cleanup = cleanup)
+                                         seed = seed,
+                                         cleanup = cleanup)
   }
 
 
   return(nl_results)
 }
-

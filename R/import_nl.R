@@ -32,8 +32,11 @@ import_nl <- function(folder, outfile, new_session = FALSE){
 
   utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
 
-  if(length(list.files(outfile, pattern = "Rproj"))  == 1 && isTRUE(new_session)){
-    rstudioapi::openProject(list.files(outfile, pattern = "Rproj", full.names	= TRUE))
+  if(length(list.files(outfile, pattern = "Rproj"))  == 1 &&
+     isTRUE(new_session)){
+    rstudioapi::openProject(list.files(outfile,
+                                       pattern = "Rproj",
+                                       full.names	= TRUE))
   }
 
 }

@@ -38,17 +38,22 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   ## Add final commands if provided:
   if (!is.na(getexp(nl, "idfinal"))) {
     idfinal <- paste(getexp(nl, "idfinal"), sep="\n", collapse="\n")
-    XML::addChildren(experiment, XML::newXMLNode("final", idfinal, parent=experiment))
+    XML::addChildren(experiment, XML::newXMLNode("final",
+                                                 idfinal, parent = experiment))
   }
 
   ## Add timeLimit:
   runtime <- getexp(nl, "runtime")
-  XML::addChildren(experiment, XML::newXMLNode("timeLimit", attrs=c(steps=runtime), parent=experiment))
+  XML::addChildren(experiment, XML::newXMLNode("timeLimit",
+                                               attrs = c(steps = runtime),
+                                               parent = experiment))
 
   ## Add stop condition if provided:
   if (!is.na(getexp(nl, "stopcond"))) {
-    stopcond <- paste(getexp(nl, "stopcond"), sep="\n", collapse="\n")
-    XML::addChildren(experiment, XML::newXMLNode("exitCondition", stopcond, parent=experiment))
+    stopcond <- paste(getexp(nl, "stopcond"), sep = "\n", collapse = "\n")
+    XML::addChildren(experiment, XML::newXMLNode("exitCondition",
+                                                 stopcond,
+                                                 parent = experiment))
   }
 
   ## Add metrics:
@@ -56,34 +61,53 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # Add turtle metrics if defined
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    turtles.reporter <- paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.turtles"), collapse=" "), ")] of turtles\")")
+    turtles.reporter <- paste0("runresult (word \"[(list ",
+                               paste(getexp(nl, "metrics.turtles"),
+                                     collapse = " "), ")] of turtles\")")
     metrics <- c(metrics, turtles.reporter)
   }
 
   # add patch metrics if defined
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    patches.reporter <- paste0("runresult (word \"[(list ",  paste(getexp(nl, "metrics.patches"), collapse=" "), ")] of patches\")")
+    patches.reporter <- paste0("runresult (word \"[(list ",
+                               paste(getexp(nl, "metrics.patches"),
+                                     collapse = " "), ")] of patches\")")
     metrics <- c(metrics, patches.reporter)
   }
 
   # add link metrics if defined
   if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0("runresult (word \"[(list ",  paste(getexp(nl, "metrics.links"), collapse=" "), ")] of links\")")
+    links.reporter <- paste0("runresult (word \"[(list ",
+                             paste(getexp(nl, "metrics.links"),
+                                   collapse = " "), ")] of links\")")
     metrics <- c(metrics, links.reporter)
   }
 
 
   for (i in metrics) {
-    XML::addChildren(experiment, XML::newXMLNode("metric", i, parent=experiment))
+    XML::addChildren(experiment, XML::newXMLNode("metric",
+                                                 i,
+                                                 parent=experiment))
   }
 
   ## Add parameters and values:
   for (i in seq_along(simdata_run)) {
-    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet", attrs=c(variable=names(simdata_run[i])), XML::newXMLNode("value", attrs=c(value=simdata_run[[i]]))))
+    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
+                                                 attrs = c(variable =
+                                                             names(
+                                                               simdata_run[i])),
+                                                 XML::newXMLNode("value",
+                                                          attrs =
+                                                          c(value =
+                                                            simdata_run[[i]]))))
   }
   ## If repetition > 1 we use a ranodm seed, otherwise the provided seed:
   if (getexp(nl, "repetition") == 1) {
-    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet", attrs=c(variable="random-seed"), XML::newXMLNode("value", attrs=c(value=seed))))
+    XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
+                                                 attrs = c(variable =
+                                                             "random-seed"),
+                                                 XML::newXMLNode("value",
+                                                        attrs=c(value=seed))))
   }
 
   ## Use NetLogo specific prefix:
