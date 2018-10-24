@@ -128,7 +128,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>analyze_lhs</span>(<span class='no'>nl</span>, <span class='no'>funs</span>)</pre>
+    <pre class="usage"><span class='fu'>analyze_lhs</span>(<span class='no'>nl</span>, <span class='no'>metrics</span>, <span class='no'>funs</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +136,10 @@
     <tr>
       <th>nl</th>
       <td><p>nl object</p></td>
+    </tr>
+    <tr>
+      <th>metrics</th>
+      <td><p>vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object</p></td>
     </tr>
     <tr>
       <th>funs</th>
