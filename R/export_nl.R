@@ -37,6 +37,7 @@ export_nl <- function(nl,
 
   ## Create zip:
   setwd(folder)
+  on.exit(setwd(mywd))
   utils::zip(zipfile=outfile, files = list.files(), extras = "-r")
 
   ## Add nl object:
@@ -46,8 +47,5 @@ export_nl <- function(nl,
   saveRDS(nl, nltempfile)
   setwd(nltempdir)
   utils::zip(zipfile=outfile, files="nlobject.rds", flags="-j")
-
-  ## Reset wd:
-  setwd(mywd)
 
 }
