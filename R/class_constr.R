@@ -30,7 +30,6 @@
 #' jvmmem = 1024)
 #' }
 #'
-#' @import methods
 #' @name nl
 #' @rdname nl
 #' @export
@@ -117,7 +116,6 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' }
 #'
-#' @import methods
 #' @name experiment
 #' @rdname experiment
 #' @export
@@ -238,15 +236,14 @@ experiment <- function(expname = "defaultexp",
 #'
 #' }
 #'
-#' @import methods tibble
 #' @name simdesign
 #' @rdname simdesign
 #' @export
 simdesign <- function(simmethod = character(),
-                      siminput = tibble(),
+                      siminput = tibble::tibble(),
                       simobject = list(),
                       simseeds = NA_integer_,
-                      simoutput = tibble(),
+                      simoutput = tibble::tibble(),
                       ...) {
 
   methods::new("simdesign",

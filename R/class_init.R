@@ -7,7 +7,6 @@
   #' @slot simobject Store method object (e.g. sobol, morris, eFast)
   #' @slot simseeds A vector of model seeds
   #' @slot simoutput variable to attach simulation result tibbles
-  #' @import methods tibble
   #' @name simdesign-class
   #' @rdname simdesign-class
   #' @export
@@ -71,7 +70,6 @@
   #' the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE",
   #' "pSTRING"="\"default\""))
   #' @slot simdesign Holds a simdesign S4 class object
-  #' @import methods
   #' @name experiment-class
   #' @rdname experiment-class
   #' @export
@@ -127,7 +125,6 @@
   #' for simulations
   #' @slot jvmmem Java virtual machine memory capacity in megabytes
   #' @slot experiment Holds a experiment S4 class object
-  #' @import methods
   #' @name nl-class
   #' @rdname nl-class
   #' @export
@@ -146,8 +143,8 @@
       nlpath = NA_character_,
       modelpath = NA_character_,
       jvmmem = 1024,
-      experiment = new("experiment"),
-      simdesign = new("simdesign")
+      experiment = methods::new("experiment"),
+      simdesign = methods::new("simdesign")
     )
   )
 }

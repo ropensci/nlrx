@@ -103,7 +103,7 @@ setup_sample_data_nl <- function() {
   ## Step2: Add Experiment
 
   nl@experiment <- experiment(expname = "nlrx_simple",
-                              outpath = "/home/uni08/jsaleck/nlrxout",
+                              outpath = "/home/nlrxout",
                               repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                               tickmetrics = "false",
                               idsetup = "setup",   # you can define multiple setup procedures with c()

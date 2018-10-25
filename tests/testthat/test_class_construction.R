@@ -3,17 +3,14 @@ testthat::test_that("class objects are created with correct variables", {
   nl <- nl(
     nlversion = "6.0.2",
     nlpath = "C:/Program Files/NetLogo 6.0.2/",
-    modelpath = "C:/Program Files/NetLogo 6.0.2/app/models/
-    Sample Models/Biology/Wolf Sheep Predation.nlogo",
+    modelpath = "C:/Wolf Sheep Predation.nlogo",
     jvmmem = 1024
   )
 
   testthat::context("Class construction: nl")
   testthat::expect_match(getnl(nl, "nlversion"), "6.0.2")
   testthat::expect_match(getnl(nl, "nlpath"), "C:/Program Files/NetLogo 6.0.2/")
-  testthat::expect_match(getnl(nl, "modelpath"), "C:/Program Files/
-                         NetLogo 6.0.2/app/models/Sample Models/Biology/
-                         Wolf Sheep Predation.nlogo")
+  testthat::expect_match(getnl(nl, "modelpath"), "C:/Wolf Sheep Predation.nlogo")
   testthat::expect_equal(getnl(nl, "jvmmem"), 1024)
   testthat::expect_match(class(getnl(nl, "experiment"))[1], "experiment")
   testthat::expect_match(class(getnl(nl, "simdesign"))[1], "simdesign")

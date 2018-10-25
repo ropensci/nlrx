@@ -36,10 +36,10 @@ Imports:
     raster,
     rstudioapi,
     sf,
-    tidyr
+    tidyr,
+    methods,
+    tibble
 Depends:
-   methods,
-    tibble,
     R (>= 2.10)
 Suggests: 
     testthat,
