@@ -29,7 +29,6 @@ zipped folder. This enables other person to run the same experiment as you.
 
 folder <- "/home/user/test"
 outfile <- "/home/user/test.zip"
-export_nl(nl, folder=folder, outfile=outfile)
-
+export_nl(nl, folder = folder, outfile = outfile)
 }
 }

@@ -20,30 +20,51 @@
 #'
 #' @examples
 #' \dontrun{
-#' download_netlogo("/home/user/experiment/" , "6.0.3")
+#' download_netlogo("/home/user/experiment/", "6.0.3")
 #' }
-#'
+#' 
 #' @aliases download_netlogo
 #' @rdname download_netlogo
 #'
 #' @export
 
 
-download_netlogo <- function(to, version, extract=FALSE) {
-
+download_netlogo <- function(to, version, extract = FALSE) {
   switch(version,
-         "6.0.4" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.4/"},
-         "6.0.3" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.3/"},
-         "6.0.2" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.2/"},
-         "6.0.1" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.1/"},
-         "6.0" = {nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.0/"},
-         "5.3.1" = {nl_url <- "https://ccl.northwestern.edu/netlogo/5.3.1/"})
+    "6.0.4" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.4/"
+    },
+    "6.0.3" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.3/"
+    },
+    "6.0.2" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.2/"
+    },
+    "6.0.1" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.1/"
+    },
+    "6.0" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.0/"
+    },
+    "5.3.1" = {
+      nl_url <- "https://ccl.northwestern.edu/netlogo/5.3.1/"
+    }
+  )
 
   switch(util_get_os(),
-         "win" = {nl_file <- paste0("NetLogo-", version, "-64.msi")},
-         "mac" = {nl_file <- paste0("NetLogo-", version, ".dmg")},
-         "unix" = {nl_file <- paste0("NetLogo-", version, "-64.tgz")},
-         "Unknown OS" = {stop("Unknown OS. OS not supported by NetLogo")})
+    "win" = {
+      nl_file <- paste0("NetLogo-", version, "-64.msi")
+    },
+    "mac" = {
+      nl_file <- paste0("NetLogo-", version, ".dmg")
+    },
+    "unix" = {
+      nl_file <- paste0("NetLogo-", version, "-64.tgz")
+    },
+    "Unknown OS" = {
+      stop("Unknown OS. OS not supported by NetLogo")
+    }
+  )
 
   nl_dl <- paste0(nl_url, nl_file)
   to_file <- paste0(to, "/", nl_file)
@@ -54,4 +75,3 @@ download_netlogo <- function(to, version, extract=FALSE) {
     system(paste0("tar xvzf ", to_file))
   }
 }
-

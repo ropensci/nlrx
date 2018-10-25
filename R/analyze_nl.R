@@ -9,19 +9,20 @@
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' # Run one simulation:
-#' results <- run_nl(nl=nl,
-#' seed=getsim(nl, "simseeds")[1],
-#' run=1,
-#' cleanup="all")
-#'
+#' results <- run_nl(
+#'   nl = nl,
+#'   seed = getsim(nl, "simseeds")[1],
+#'   run = 1,
+#'   cleanup = "all"
+#' )
+#' 
 #' # Attach output to simdesign:
 #' setsim(nl, "simoutput") <- results
-#'
+#' 
 #' # Write output to outpath directory
 #' write_simoutput(nl)
-#'
 #' }
 #' @aliases write_simoutput
 #' @rdname write_simoutput
@@ -29,15 +30,15 @@
 #' @export
 
 write_simoutput <- function(nl) {
-
-  outfilename <- paste0(getexp(nl, "outpath"),
-                        getexp(nl, "expname"),
-                        "_",
-                        getsim(nl, "simmethod"),
-                        ".csv")
+  outfilename <- paste0(
+    getexp(nl, "outpath"),
+    getexp(nl, "expname"),
+    "_",
+    getsim(nl, "simmethod"),
+    ".csv"
+  )
 
   readr::write_csv(x = getsim(nl, "simoutput"), path = outfilename)
-
 }
 
 
@@ -57,28 +58,29 @@ write_simoutput <- function(nl) {
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' # Run one simulation:
-#' results <- run_nl(nl=nl,
-#' seed=getsim(nl, "simseeds")[1],
-#' run=1,
-#' cleanup="all")
-#'
+#' results <- run_nl(
+#'   nl = nl,
+#'   seed = getsim(nl, "simseeds")[1],
+#'   run = 1,
+#'   cleanup = "all"
+#' )
+#' 
 #' # Attach output to simdesign:
 #' setsim(nl, "simoutput") <- results
-#'
+#' 
 #' # Perform analysis:
 #' myfuns <- dplyr::funs(mean, sd, min, max)
 #' analyze_nl(nl, myfuns)
-#'
 #' }
 #' @aliases analyze_nl
 #' @rdname analyze_nl
 #'
 #' @export
 
-analyze_nl <- function(nl, metrics=getexp(nl, "metrics"),
-                       funs=dplyr::funs(mean)) {
+analyze_nl <- function(nl, metrics = getexp(nl, "metrics"),
+                       funs = dplyr::funs(mean)) {
 
   ## Check if results have been attached:
   if (purrr::is_empty(getsim(nl, "simoutput"))) {
@@ -141,15 +143,16 @@ analyze_ff <- function(nl, metrics, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(dplyr::vars("siminputrow", "[step]",
-                                   names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars(
+      "siminputrow", "[step]",
+      names(getsim(nl, "siminput"))
+    )) %>%
     dplyr::summarise_at(metrics, funs) %>%
     dplyr::ungroup()
 
   ffagg <- tibble::as.tibble(ffagg)
 
   return(ffagg)
-
 }
 
 
@@ -167,8 +170,10 @@ analyze_lhs <- function(nl, metrics, funs) {
 
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
-    dplyr::group_by_at(dplyr::vars("siminputrow", "[step]",
-                                   names(getsim(nl, "siminput")))) %>%
+    dplyr::group_by_at(dplyr::vars(
+      "siminputrow", "[step]",
+      names(getsim(nl, "siminput"))
+    )) %>%
     dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 
@@ -189,34 +194,34 @@ analyze_lhs <- function(nl, metrics, funs) {
 #' @rdname analyze_sobol
 #' @keywords internal
 analyze_sobol <- function(nl, metrics, funs) {
-
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
-  for(i in getsim(nl, "simseeds")) {
+  for (i in getsim(nl, "simseeds")) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::filter(`random-seed` == i) %>%
+      dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
-      dplyr::select_if(~!all(is.na(.)))
+      dplyr::select_if(~ !all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
 
     # Loop over metric columns and calculate sensitivity indices:
     for (j in seq_len(nrow(simoutput.i))) {
-           sensitivity::tell(so, simoutput.i[j,])
-           soS <- so$S
-           soS[soS < 0] <- 0
-           soS[soS > 1] <- 1
-           soS$parameter <- rownames(soS)
-           soS$metric <- metrics[j]
-           soS$seed <- i
+      sensitivity::tell(so, simoutput.i[j, ])
+      soS <- so$S
+      soS[soS < 0] <- 0
+      soS[soS > 1] <- 1
+      soS$parameter <- rownames(soS)
+      soS$metric <- metrics[j]
+      soS$seed <- i
 
-           sensindex <- rbind(sensindex, soS)
+      sensindex <- rbind(sensindex, soS)
     }
   }
   # Remove rownames
@@ -224,7 +229,6 @@ analyze_sobol <- function(nl, metrics, funs) {
   sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
-
 }
 
 
@@ -239,19 +243,19 @@ analyze_sobol <- function(nl, metrics, funs) {
 #' @rdname analyze_sobol2007
 #' @keywords internal
 analyze_sobol2007 <- function(nl, metrics, funs) {
-
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
-  for(i in getsim(nl, "simseeds")) {
+  for (i in getsim(nl, "simseeds")) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::filter(`random-seed` == i) %>%
+      dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
-      dplyr::select_if(~!all(is.na(.)))
+      dplyr::select_if(~ !all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -259,7 +263,7 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
 
     # Loop over metric columns and calculate sensitivity indices:
     for (j in seq_len(nrow(simoutput.i))) {
-      sensitivity::tell(so, simoutput.i[j,])
+      sensitivity::tell(so, simoutput.i[j, ])
       soS <- so$S
       soS[soS < 0] <- 0
       soS[soS > 1] <- 1
@@ -283,7 +287,6 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
   sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
-
 }
 
 
@@ -298,19 +301,19 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
 #' @rdname analyze_soboljansen
 #' @keywords internal
 analyze_soboljansen <- function(nl, metrics, funs) {
-
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
-  for(i in getsim(nl, "simseeds")) {
+  for (i in getsim(nl, "simseeds")) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
-      dplyr::filter(`random-seed` == i) %>% dplyr::group_by(siminputrow) %>%
+      dplyr::filter(`random-seed` == i) %>%
+      dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
-      dplyr::select_if(~!all(is.na(.)))
+      dplyr::select_if(~ !all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -318,7 +321,7 @@ analyze_soboljansen <- function(nl, metrics, funs) {
 
     # Loop over metric columns and calculate sensitivity indices:
     for (j in seq_len(nrow(simoutput.i))) {
-      sensitivity::tell(so, simoutput.i[j,])
+      sensitivity::tell(so, simoutput.i[j, ])
       soS <- so$S
       soS[soS < 0] <- 0
       soS[soS > 1] <- 1
@@ -342,7 +345,6 @@ analyze_soboljansen <- function(nl, metrics, funs) {
   sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
-
 }
 
 
@@ -358,12 +360,11 @@ analyze_soboljansen <- function(nl, metrics, funs) {
 #' @rdname analyze_morris
 #' @keywords internal
 analyze_morris <- function(nl, metrics, funs) {
-
   sensindex <- NULL
   mo <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
-  for(i in getsim(nl, "simseeds")) {
+  for (i in getsim(nl, "simseeds")) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
@@ -371,7 +372,7 @@ analyze_morris <- function(nl, metrics, funs) {
       dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
-      dplyr::select_if(~!all(is.na(.)))
+      dplyr::select_if(~ !all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -379,23 +380,29 @@ analyze_morris <- function(nl, metrics, funs) {
 
     # Loop over metric columns and calculate sensitivity indices:
     for (j in seq_len(nrow(simoutput.i))) {
-      sensitivity::tell(mo, simoutput.i[j,])
+      sensitivity::tell(mo, simoutput.i[j, ])
 
-      mustar <- tibble::tibble(metric=metrics[j],
-                               parameter=colnames(mo$ee),
-                               index="mustar",
-                               value=apply(mo$ee, 2, function(x) mean(abs(x))),
-                               seed=i)
-      mu <- tibble::tibble(metric=metrics[j],
-                           parameter=colnames(mo$ee),
-                           index="mu",
-                           value=apply(mo$ee, 2, mean),
-                           seed=i)
-      sigma <- tibble::tibble(metric=metrics[j],
-                              parameter=colnames(mo$ee),
-                              index="sigma",
-                              value=apply(mo$ee, 2, stats::sd),
-                              seed=i)
+      mustar <- tibble::tibble(
+        metric = metrics[j],
+        parameter = colnames(mo$ee),
+        index = "mustar",
+        value = apply(mo$ee, 2, function(x) mean(abs(x))),
+        seed = i
+      )
+      mu <- tibble::tibble(
+        metric = metrics[j],
+        parameter = colnames(mo$ee),
+        index = "mu",
+        value = apply(mo$ee, 2, mean),
+        seed = i
+      )
+      sigma <- tibble::tibble(
+        metric = metrics[j],
+        parameter = colnames(mo$ee),
+        index = "sigma",
+        value = apply(mo$ee, 2, stats::sd),
+        seed = i
+      )
 
       sensindex <- rbind(sensindex, mustar, mu, sigma)
     }
@@ -406,7 +413,6 @@ analyze_morris <- function(nl, metrics, funs) {
   sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
-
 }
 
 
@@ -421,12 +427,11 @@ analyze_morris <- function(nl, metrics, funs) {
 #' @rdname analyze_eFast
 #' @keywords internal
 analyze_eFast <- function(nl, metrics, funs) {
-
   sensindex <- NULL
   f99 <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
-  for(i in getsim(nl, "simseeds")) {
+  for (i in getsim(nl, "simseeds")) {
 
     # Select seed runs, aggregate across steps and select only output columns:
     simoutput.i <- getsim(nl, "simoutput") %>%
@@ -434,7 +439,7 @@ analyze_eFast <- function(nl, metrics, funs) {
       dplyr::group_by(siminputrow) %>%
       dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
       dplyr::select(-siminputrow) %>%
-      dplyr::select_if(~!all(is.na(.)))
+      dplyr::select_if(~ !all(is.na(.)))
 
     metrics <- colnames(simoutput.i)
     simoutput.i <- t(as.matrix(simoutput.i))
@@ -442,18 +447,22 @@ analyze_eFast <- function(nl, metrics, funs) {
 
     # Loop over metric columns and calculate sensitivity indices:
     for (j in seq_len(nrow(simoutput.i))) {
-      sensitivity::tell(f99, simoutput.i[j,])
+      sensitivity::tell(f99, simoutput.i[j, ])
 
-      D1 <- tibble::tibble(value = f99$D1,
-                           index="first-order",
-                           parameter=names(getexp(nl, "variables")),
-                           metric=metrics[j],
-                           seed=i)
-      Dt <- tibble::tibble(value = f99$Dt,
-                           index="total",
-                           parameter=names(getexp(nl, "variables")),
-                           metric=metrics[j],
-                           seed=i)
+      D1 <- tibble::tibble(
+        value = f99$D1,
+        index = "first-order",
+        parameter = names(getexp(nl, "variables")),
+        metric = metrics[j],
+        seed = i
+      )
+      Dt <- tibble::tibble(
+        value = f99$Dt,
+        index = "total",
+        parameter = names(getexp(nl, "variables")),
+        metric = metrics[j],
+        seed = i
+      )
 
       sensindex <- rbind(sensindex, D1, Dt)
     }
@@ -463,5 +472,4 @@ analyze_eFast <- function(nl, metrics, funs) {
   sensindex <- tibble::as.tibble(sensindex)
 
   return(sensindex)
-
 }

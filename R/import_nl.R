@@ -17,26 +17,24 @@
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' infile <- "/home/user/test.zip"
 #' outfile <- "/home/user/test"
 #' import_nl(infile, outfile)
-#'
 #' }
 #' @aliases import_nl
 #' @rdname import_nl
 #'
 #' @export
 
-import_nl <- function(folder, outfile, new_session = FALSE){
-
+import_nl <- function(folder, outfile, new_session = FALSE) {
   utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
 
-  if(length(list.files(outfile, pattern = "Rproj"))  == 1 &&
-     isTRUE(new_session)){
+  if (length(list.files(outfile, pattern = "Rproj")) == 1 &&
+    isTRUE(new_session)) {
     rstudioapi::openProject(list.files(outfile,
-                                       pattern = "Rproj",
-                                       full.names	= TRUE))
+      pattern = "Rproj",
+      full.names = TRUE
+    ))
   }
-
 }

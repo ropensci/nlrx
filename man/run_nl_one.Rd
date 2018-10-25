@@ -33,10 +33,11 @@ This function can be used to run single simulations of a NetLogo model.
 \dontrun{
 
 # Run one simulation:
-results <- run_nl_one(nl=nl,
-                      seed=getsims(nl, "simseeds")[1],
-                      siminputrow=1,
-                      cleanup="all")
-
+results <- run_nl_one(
+  nl = nl,
+  seed = getsims(nl, "simseeds")[1],
+  siminputrow = 1,
+  cleanup = "all"
+)
 }
 }

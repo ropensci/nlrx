@@ -29,7 +29,7 @@ Supported Versions for Download and Usage (parameter \code{version}):
 }
 \examples{
 \dontrun{
-download_netlogo("/home/user/experiment/" , "6.0.3")
+download_netlogo("/home/user/experiment/", "6.0.3")
 }
 
 }

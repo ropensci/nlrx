@@ -7,7 +7,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_simple"
-#> [1] "nl_simple"
+# > [1] "nl_simple"
 
 
 #' Wolf Sheep model sample data: simdesign ff
@@ -20,7 +20,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_ff"
-#> [1] "nl_ff"
+# > [1] "nl_ff"
 
 
 
@@ -34,7 +34,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_lhs"
-#> [1] "nl_lhs"
+# > [1] "nl_lhs"
 
 
 
@@ -48,7 +48,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_sobol"
-#> [1] "nl_sobol"
+# > [1] "nl_sobol"
 
 
 
@@ -62,7 +62,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_sobol2007"
-#> [1] "nl_sobol2007"
+# > [1] "nl_sobol2007"
 
 
 
@@ -76,7 +76,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_soboljansen"
-#> [1] "nl_soboljansen"
+# > [1] "nl_soboljansen"
 
 
 
@@ -90,7 +90,7 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_morris"
-#> [1] "nl_morris"
+# > [1] "nl_morris"
 
 
 
@@ -104,4 +104,4 @@
 #'
 #' @format nl object with defined experiment, simdesign and model output
 "nl_eFast"
-#> [1] "nl_eFast"
+# > [1] "nl_eFast"

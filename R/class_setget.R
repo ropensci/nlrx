@@ -32,8 +32,7 @@
 #'
 #' @export
 
-getnl <- function(nl, var)
-{
+getnl <- function(nl, var) {
   return(attr(nl, var))
 }
 
@@ -72,8 +71,7 @@ getnl <- function(nl, var)
 #'
 #' @export
 
-getexp <- function(nl, var)
-{
+getexp <- function(nl, var) {
   return(attr(nl@experiment, var))
 }
 
@@ -112,7 +110,6 @@ getexp <- function(nl, var)
 #'
 #' @export
 
-getsim <- function(nl, var)
-{
+getsim <- function(nl, var) {
   return(attr(nl@simdesign, var))
 }

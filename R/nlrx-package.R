@@ -104,24 +104,24 @@
 #' @keywords package
 "_PACKAGE"
 
-globalVariables(c(".",
-                  "[run number]",
-                  "[step]",
-                  "funs",
-                  "group_by",
-                  "metrics",
-                  "random-seed",
-                  "vars",
-                  "siminputrow",
-                  "seed",
-                  "maps",
-                  "x",
-                  "y",
-                  "X",
-                  "Y",
-                  "group",
-                  "var",
-                  "dist.missing",
-                  "values.missing"))
-
-
+globalVariables(c(
+  ".",
+  "[run number]",
+  "[step]",
+  "funs",
+  "group_by",
+  "metrics",
+  "random-seed",
+  "vars",
+  "siminputrow",
+  "seed",
+  "maps",
+  "x",
+  "y",
+  "X",
+  "Y",
+  "group",
+  "var",
+  "dist.missing",
+  "values.missing"
+))

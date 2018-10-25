@@ -33,8 +33,8 @@ util_create_lhs <- function(input, samples, precision) {
   lhs.design <- lhs::randomLHS(samples, length(input))
   # transform the standardized random values to the real input value range
   # and apply the desired random distribution
-  lhs.design <- lapply(seq(1,length(input)), function(i) {
-    match.fun(input[[i]]$qfun)(lhs.design[,i], input[[i]]$min, input[[i]]$max)
+  lhs.design <- lapply(seq(1, length(input)), function(i) {
+    match.fun(input[[i]]$qfun)(lhs.design[, i], input[[i]]$min, input[[i]]$max)
   })
   names(lhs.design) <- names(input)
   lhs.final <- tibble::as.tibble(lhs.design)
@@ -54,7 +54,6 @@ util_create_lhs <- function(input, samples, precision) {
 #' @rdname util_generate_seeds
 #' @keywords internal
 util_generate_seeds <- function(nseeds) {
-
   seeds <- ceiling(stats::runif(nseeds, 0, 10000))
   return(seeds)
 }
@@ -75,7 +74,7 @@ util_generate_seeds <- function(nseeds) {
 #' \dontrun{
 #' load_model_parameters(nl)
 #' }
-#'
+#' 
 #' @aliases load_model_parameters
 #' @rdname load_model_parameters
 #'
@@ -87,19 +86,17 @@ load_model_parameters <- function(nl) {
   model.code <- readLines(getnl(nl, "modelpath"))
 
   ## Find the line in the NetLogoCode where the interface definiton starts (separator: @#$#@#$#@)
-  model.code.s1 <- grep("@#$#@#$#@", model.code, fixed=TRUE)[1]
+  model.code.s1 <- grep("@#$#@#$#@", model.code, fixed = TRUE)[1]
 
   ## Remove model code before first separator:
-  if (is.na(model.code.s1) == FALSE)
-  {
+  if (is.na(model.code.s1) == FALSE) {
     model.code <- model.code[(model.code.s1 + 1):length(model.code)]
   }
   ## Find second separator where interface definiton ends:
-  model.code.s2 <- grep("@#$#@#$#@", model.code, fixed=TRUE)[1]
+  model.code.s2 <- grep("@#$#@#$#@", model.code, fixed = TRUE)[1]
 
   ## Remove model code following second separator:
-  if (is.na(model.code.s1) == FALSE)
-  {
+  if (is.na(model.code.s1) == FALSE) {
     model.code <- model.code[1:(model.code.s2 - 1)]
   }
 
@@ -112,48 +109,46 @@ load_model_parameters <- function(nl) {
     l <- model.code[i]
 
     ## Check if l is a definition element and of what kind:
-    if(l %in% c("SLIDER", "SWITCH", "INPUTBOX", "CHOOSER"))
-    {
-      if (l == "SLIDER")
-      {
+    if (l %in% c("SLIDER", "SWITCH", "INPUTBOX", "CHOOSER")) {
+      if (l == "SLIDER") {
         name <- as.character(model.code[i + 5])
 
-        entry <- list(type = l,
-                      value = as.numeric(as.character(model.code[i + 9])),
-                      min = as.numeric(as.character(model.code[i + 7])),
-                      max = as.numeric(as.character(model.code[i + 8])),
-                      incr = as.numeric(as.character(model.code[i + 10]))
-        )
-
-      }
-      if (l == "SWITCH")
-      {
-        name <- as.character(model.code[i + 5])
-
-        entry <- list(type = l,
-                      value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1, TRUE, FALSE)
+        entry <- list(
+          type = l,
+          value = as.numeric(as.character(model.code[i + 9])),
+          min = as.numeric(as.character(model.code[i + 7])),
+          max = as.numeric(as.character(model.code[i + 8])),
+          incr = as.numeric(as.character(model.code[i + 10]))
         )
       }
-      if (l == "INPUTBOX")
-      {
+      if (l == "SWITCH") {
         name <- as.character(model.code[i + 5])
 
-        entry <- list(type = l,
-                      value = model.code[i + 6],
-                      entrytype = model.code[i + 9]
+        entry <- list(
+          type = l,
+          value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1, TRUE, FALSE)
         )
       }
-      if (l == "CHOOSER")
-      {
+      if (l == "INPUTBOX") {
         name <- as.character(model.code[i + 5])
 
-        validvalues <- scan(text=(model.code[i + 7]), what="", quiet=TRUE)
+        entry <- list(
+          type = l,
+          value = model.code[i + 6],
+          entrytype = model.code[i + 9]
+        )
+      }
+      if (l == "CHOOSER") {
+        name <- as.character(model.code[i + 5])
+
+        validvalues <- scan(text = (model.code[i + 7]), what = "", quiet = TRUE)
         select_id <- (as.numeric(as.character(model.code[i + 8])) + 1)
         selectedvalue <- validvalues[select_id]
 
-        entry <- list(type = l,
-                      value = selectedvalue,
-                      validvalues = validvalues
+        entry <- list(
+          type = l,
+          value = selectedvalue,
+          validvalues = validvalues
         )
       }
 
@@ -163,5 +158,4 @@ load_model_parameters <- function(nl) {
   }
 
   return(modelparam)
-
 }

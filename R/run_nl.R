@@ -25,11 +25,10 @@
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' # Run parallel on local machine:
 #' future::plan(multisession)
-#' results %<-% run_nl_all(nl, cleanup="all")
-#'
+#' results %<-% run_nl_all(nl, cleanup = "all")
 #' }
 #' @aliases run_nl_all
 #' @rdname run_nl_all
@@ -55,28 +54,32 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 
 
   ## Execute on remote location
-  nl_results <- furrr::future_map_dfr(seq_along(jobs[[1]]),
-                          function(job) {
-                            ## Extract current seed and part from job id:
-                            job_seed <- jobs[[1]][[job]]
-                            job_part <- jobs[[2]][[job]]
+  nl_results <- furrr::future_map_dfr(
+    seq_along(jobs[[1]]),
+    function(job) {
+      ## Extract current seed and part from job id:
+      job_seed <- jobs[[1]][[job]]
+      job_part <- jobs[[2]][[job]]
 
-                            ## Calculate rowids of the current part:
-                            rowids <-
-                              seq(1:n_per_part) +
-                              (job_part - 1) * n_per_part
+      ## Calculate rowids of the current part:
+      rowids <-
+        seq(1:n_per_part) +
+        (job_part - 1) * n_per_part
 
-                            ## Start inner loop to run model simulations:
-                            furrr::future_map_dfr(rowids,
-                                                  function(siminputrow) {
-                                                    run_nl_one(
-                                                      nl = nl,
-                                                      seed = job_seed,
-                                                      siminputrow = siminputrow,
-                                                      cleanup = "all"
-                                                    )
-                                                  })
-                          })
+      ## Start inner loop to run model simulations:
+      furrr::future_map_dfr(
+        rowids,
+        function(siminputrow) {
+          run_nl_one(
+            nl = nl,
+            seed = job_seed,
+            siminputrow = siminputrow,
+            cleanup = "all"
+          )
+        }
+      )
+    }
+  )
 
   return(nl_results)
 }
@@ -104,13 +107,14 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' # Run one simulation:
-#' results <- run_nl_one(nl=nl,
-#'                       seed=getsims(nl, "simseeds")[1],
-#'                       siminputrow=1,
-#'                       cleanup="all")
-#'
+#' results <- run_nl_one(
+#'   nl = nl,
+#'   seed = getsims(nl, "simseeds")[1],
+#'   siminputrow = 1,
+#'   cleanup = "all"
+#' )
 #' }
 #' @aliases run_nl_one
 #' @rdname run_nl_one
@@ -122,15 +126,19 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 
   ## Write XML File:
   xmlfile <-
-    tempfile(pattern = paste0("nlrx", seed, "_", siminputrow),
-             fileext = ".xml")
+    tempfile(
+      pattern = paste0("nlrx", seed, "_", siminputrow),
+      fileext = ".xml"
+    )
 
   util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 
   ## Execute:
   outfile <-
-    tempfile(pattern = paste0("nlrx", seed, "_", siminputrow),
-             fileext = ".csv")
+    tempfile(
+      pattern = paste0("nlrx", seed, "_", siminputrow),
+      fileext = ".csv"
+    )
 
   batchpath <- util_read_write_batch(nl)
   util_call_nl(nl, xmlfile, outfile, batchpath)
@@ -169,11 +177,12 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #'
 #' @examples
 #' \dontrun{
-#'
+#' 
 #' # Run one simulation:
-#' results <- run_nl_dyn(nl=nl,
-#' cleanup="all")
-#'
+#' results <- run_nl_dyn(
+#'   nl = nl,
+#'   cleanup = "all"
+#' )
 #' }
 #' @aliases run_nl_dyn
 #' @rdname run_nl_dyn
@@ -184,18 +193,20 @@ run_nl_dyn <- function(nl, seed, cleanup = "all") {
   nl_results <- NULL
 
 
-  if (getsim(nl, "simmethod") == "GenSA")
-  {
-    nl_results <- util_run_nl_dyn_GenSA(nl = nl,
-                                        seed = seed,
-                                        cleanup = cleanup)
+  if (getsim(nl, "simmethod") == "GenSA") {
+    nl_results <- util_run_nl_dyn_GenSA(
+      nl = nl,
+      seed = seed,
+      cleanup = cleanup
+    )
   }
 
-  if (getsim(nl, "simmethod") == "GenAlg")
-  {
-    nl_results <- util_run_nl_dyn_GenAlg(nl = nl,
-                                         seed = seed,
-                                         cleanup = cleanup)
+  if (getsim(nl, "simmethod") == "GenAlg") {
+    nl_results <- util_run_nl_dyn_GenAlg(
+      nl = nl,
+      seed = seed,
+      cleanup = cleanup
+    )
   }
 
 

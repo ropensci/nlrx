@@ -38,7 +38,6 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 
 # Run parallel on local machine:
 future::plan(multisession)
-results \%<-\% run_nl_all(nl, cleanup="all")
-
+results \%<-\% run_nl_all(nl, cleanup = "all")
 }
 }

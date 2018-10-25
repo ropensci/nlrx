@@ -4,7 +4,8 @@
 \alias{analyze_nl}
 \title{Analyze NetLogo simulation output}
 \usage{
-analyze_nl(nl, metrics = getexp(nl, "metrics"), funs = dplyr::funs(mean))
+analyze_nl(nl, metrics = getexp(nl, "metrics"),
+  funs = dplyr::funs(mean))
 }
 \arguments{
 \item{nl}{nl object}
@@ -28,10 +29,12 @@ Analyze NetLogo simulation output
 \dontrun{
 
 # Run one simulation:
-results <- run_nl(nl=nl,
-seed=getsim(nl, "simseeds")[1],
-run=1,
-cleanup="all")
+results <- run_nl(
+  nl = nl,
+  seed = getsim(nl, "simseeds")[1],
+  run = 1,
+  cleanup = "all"
+)
 
 # Attach output to simdesign:
 setsim(nl, "simoutput") <- results
@@ -39,6 +42,5 @@ setsim(nl, "simoutput") <- results
 # Perform analysis:
 myfuns <- dplyr::funs(mean, sd, min, max)
 analyze_nl(nl, myfuns)
-
 }
 }

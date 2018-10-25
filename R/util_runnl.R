@@ -12,7 +12,7 @@
 util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   ### Get the current values from the siminput matrix:
-  simdata_run <- getsim(nl, "siminput")[siminputrow,]
+  simdata_run <- getsim(nl, "siminput")[siminputrow, ]
 
   ### Attach a runnum variable if needed:
   if (!is.na(getexp(nl, "idrunnum"))) {
@@ -23,37 +23,45 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   ### Create XML object:
   nlXML <- XML::newXMLDoc()
-  experiments <- XML::newXMLNode("experiments", doc=nlXML)
-  experiment <- XML::newXMLNode("experiment", attrs=c(name=getexp(nl, "expname"),
-                                                     repetitions=getexp(nl, "repetition"),
-                                                     runMetricsEveryStep=getexp(nl, "tickmetrics")),
-                               parent=experiments)
+  experiments <- XML::newXMLNode("experiments", doc = nlXML)
+  experiment <- XML::newXMLNode("experiment",
+    attrs = c(
+      name = getexp(nl, "expname"),
+      repetitions = getexp(nl, "repetition"),
+      runMetricsEveryStep = getexp(nl, "tickmetrics")
+    ),
+    parent = experiments
+  )
 
   ## Add Setup, go
-  idsetup <- paste(getexp(nl, "idsetup"), sep="\n", collapse="\n")
-  idgo <- paste(getexp(nl, "idgo"), sep="\n", collapse="\n")
-  XML::addChildren(experiment, XML::newXMLNode("setup", idsetup, parent=experiment))
-  XML::addChildren(experiment, XML::newXMLNode("go", idgo, parent=experiment))
+  idsetup <- paste(getexp(nl, "idsetup"), sep = "\n", collapse = "\n")
+  idgo <- paste(getexp(nl, "idgo"), sep = "\n", collapse = "\n")
+  XML::addChildren(experiment, XML::newXMLNode("setup", idsetup, parent = experiment))
+  XML::addChildren(experiment, XML::newXMLNode("go", idgo, parent = experiment))
 
   ## Add final commands if provided:
   if (!is.na(getexp(nl, "idfinal"))) {
-    idfinal <- paste(getexp(nl, "idfinal"), sep="\n", collapse="\n")
+    idfinal <- paste(getexp(nl, "idfinal"), sep = "\n", collapse = "\n")
     XML::addChildren(experiment, XML::newXMLNode("final",
-                                                 idfinal, parent = experiment))
+      idfinal,
+      parent = experiment
+    ))
   }
 
   ## Add timeLimit:
   runtime <- getexp(nl, "runtime")
   XML::addChildren(experiment, XML::newXMLNode("timeLimit",
-                                               attrs = c(steps = runtime),
-                                               parent = experiment))
+    attrs = c(steps = runtime),
+    parent = experiment
+  ))
 
   ## Add stop condition if provided:
   if (!is.na(getexp(nl, "stopcond"))) {
     stopcond <- paste(getexp(nl, "stopcond"), sep = "\n", collapse = "\n")
     XML::addChildren(experiment, XML::newXMLNode("exitCondition",
-                                                 stopcond,
-                                                 parent = experiment))
+      stopcond,
+      parent = experiment
+    ))
   }
 
   ## Add metrics:
@@ -61,61 +69,81 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # Add turtle metrics if defined
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    turtles.reporter <- paste0("runresult (word \"[(list ",
-                               paste(getexp(nl, "metrics.turtles"),
-                                     collapse = " "), ")] of turtles\")")
+    turtles.reporter <- paste0(
+      "runresult (word \"[(list ",
+      paste(getexp(nl, "metrics.turtles"),
+        collapse = " "
+      ), ")] of turtles\")"
+    )
     metrics <- c(metrics, turtles.reporter)
   }
 
   # add patch metrics if defined
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    patches.reporter <- paste0("runresult (word \"[(list ",
-                               paste(getexp(nl, "metrics.patches"),
-                                     collapse = " "), ")] of patches\")")
+    patches.reporter <- paste0(
+      "runresult (word \"[(list ",
+      paste(getexp(nl, "metrics.patches"),
+        collapse = " "
+      ), ")] of patches\")"
+    )
     metrics <- c(metrics, patches.reporter)
   }
 
   # add link metrics if defined
   if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0("runresult (word \"[(list ",
-                             paste(getexp(nl, "metrics.links"),
-                                   collapse = " "), ")] of links\")")
+    links.reporter <- paste0(
+      "runresult (word \"[(list ",
+      paste(getexp(nl, "metrics.links"),
+        collapse = " "
+      ), ")] of links\")"
+    )
     metrics <- c(metrics, links.reporter)
   }
 
 
   for (i in metrics) {
     XML::addChildren(experiment, XML::newXMLNode("metric",
-                                                 i,
-                                                 parent=experiment))
+      i,
+      parent = experiment
+    ))
   }
 
   ## Add parameters and values:
   for (i in seq_along(simdata_run)) {
     XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
-                                                 attrs = c(variable =
-                                                             names(
-                                                               simdata_run[i])),
-                                                 XML::newXMLNode("value",
-                                                          attrs =
-                                                          c(value =
-                                                            simdata_run[[i]]))))
+      attrs = c(
+        variable =
+          names(
+            simdata_run[i]
+          )
+      ),
+      XML::newXMLNode("value",
+        attrs =
+          c(
+            value =
+              simdata_run[[i]]
+          )
+      )
+    ))
   }
   ## If repetition > 1 we use a ranodm seed, otherwise the provided seed:
   if (getexp(nl, "repetition") == 1) {
     XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
-                                                 attrs = c(variable =
-                                                             "random-seed"),
-                                                 XML::newXMLNode("value",
-                                                        attrs=c(value=seed))))
+      attrs = c(
+        variable =
+          "random-seed"
+      ),
+      XML::newXMLNode("value",
+        attrs = c(value = seed)
+      )
+    ))
   }
 
   ## Use NetLogo specific prefix:
   prefix <- "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE experiments SYSTEM \"behaviorspace.dtd\">"
 
   # SAVE XML TO FILE
-  cat(XML::saveXML(nlXML, prefix=prefix), file=xmlfile)
-
+  cat(XML::saveXML(nlXML, prefix = prefix), file = xmlfile)
 }
 
 #' Setup and execute NetLogo via commandline
@@ -130,10 +158,8 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 #' @rdname util_call_nl
 #' @keywords internal
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
-
   NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"", getnl(nl, "modelpath"), "\"", " --setup-file ", "\"", xmlfile, "\"", " --experiment ", getexp(nl, "expname"), " --table ", "\"", outfile, "\"", " --threads ", 1)
-  system(NLcall, wait=TRUE)
-
+  system(NLcall, wait = TRUE)
 }
 
 #' Delete temporary files
@@ -146,9 +172,7 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #' @rdname util_cleanup
 #' @keywords internal
 util_cleanup <- function(nl, pattern) {
-
-  file.remove(dir(path=getexp(nl, "outpath"), pattern=pattern, full.names=TRUE))
-
+  file.remove(dir(path = getexp(nl, "outpath"), pattern = pattern, full.names = TRUE))
 }
 
 #' Load output file from simulations
@@ -163,8 +187,7 @@ util_cleanup <- function(nl, pattern) {
 #' @rdname util_gather_results
 #' @keywords internal
 util_gather_results <- function(nl, outfile, seed, siminputrow) {
-
-  NLtable <- readr::read_csv(outfile, skip=6, col_types = readr::cols())
+  NLtable <- readr::read_csv(outfile, skip = 6, col_types = readr::cols())
   NLtable$siminputrow <- siminputrow
 
   # Check if tickmetrics is true, if not, we only keep the last reported line:
@@ -172,8 +195,6 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
     # Report line with max step:
     NLtable <- NLtable %>% dplyr::filter(`[step]` == max(`[step]`))
-
-
   } else {
 
     # We filter all evalticks lines from the table
@@ -182,12 +203,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     # We then chek if there are ticks, that have reported no results:
     noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in% NLtable$`[step]`)]
 
-    if (length(noeval) > 0)
-    {
+    if (length(noeval) > 0) {
       message(paste0("No model results reported for siminputrow ", siminputrow, " on ticks ", noeval))
     }
-
-
   }
 
   # Finally check if the tibble is still empty:
@@ -195,7 +213,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
     # Create an na line:
     NArow <- tibble::tibble(`[run number]` = NA)
-    NArow <- cbind(NArow, getsim(nl, "siminput")[siminputrow,])
+    NArow <- cbind(NArow, getsim(nl, "siminput")[siminputrow, ])
     NArow <- cbind(NArow, tibble::tibble(`random-seed` = seed))
     NArow <- cbind(NArow, tibble::tibble(`[step]` = NA))
 
@@ -211,19 +229,19 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
     ## Rename column and clean turtle metrics
-    NLtable <- NLtable %>% dplyr::rename(metrics.turtles = paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.turtles"), collapse=" "), ")] of turtles\")"))
+    NLtable <- NLtable %>% dplyr::rename(metrics.turtles = paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.turtles"), collapse = " "), ")] of turtles\")"))
     NLtable[, grepl(c("metrics.turtles"), names(NLtable))] <- list(.util_clean_metrics_turtles(NLtable, nl))
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
     ## Rename column and clean patch metrics
-    NLtable <- NLtable %>% dplyr::rename(metrics.patches = paste0("runresult (word \"[(list ",  paste(getexp(nl, "metrics.patches"), collapse=" "), ")] of patches\")"))
+    NLtable <- NLtable %>% dplyr::rename(metrics.patches = paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.patches"), collapse = " "), ")] of patches\")"))
     NLtable[, grepl(c("metrics.patches"), names(NLtable))] <- list(.util_clean_metrics_patches(NLtable, nl))
   }
 
   if (all(!is.na(getexp(nl, "metrics.links")))) {
     ## Rename column and clean link metrics
-    NLtable <- NLtable %>% dplyr::rename(metrics.links = paste0("runresult (word \"[(list ",  paste(getexp(nl, "metrics.links"), collapse=" "), ")] of links\")"))
+    NLtable <- NLtable %>% dplyr::rename(metrics.links = paste0("runresult (word \"[(list ", paste(getexp(nl, "metrics.links"), collapse = " "), ")] of links\")"))
     NLtable[, grepl(c("metrics.links"), names(NLtable))] <- list(.util_clean_metrics_links(NLtable, nl))
   }
 
@@ -239,7 +257,6 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 #' @rdname util_read_write_batch
 #' @keywords internal
 util_read_write_batch <- function(nl) {
-
   os <- util_get_os()
   batchpath_temp <- NULL
 
@@ -249,16 +266,17 @@ util_read_write_batch <- function(nl) {
       ## Thus, we have to write the batchfile manually
 
       # Block 1 of the batch file:
-      block1 <- c("@echo off",
-                  "setlocal ENABLEDELAYEDEXPANSION",
-                  "set BASE_DIR=%~dp0",
-                  "if defined JAVA_HOME (",
-                  "  set \"JAVA=%JAVA_HOME%\\bin\\java.exe\"",
-                  ") ELSE (",
-                  "  ECHO JAVA_HOME not defined, using java on PATH.",
-                  "  ECHO If you encounter errors, set JAVA_HOME or update your PATH to include java.exe.",
-                  "  set \"JAVA=java.exe\"",
-                  ")"
+      block1 <- c(
+        "@echo off",
+        "setlocal ENABLEDELAYEDEXPANSION",
+        "set BASE_DIR=%~dp0",
+        "if defined JAVA_HOME (",
+        "  set \"JAVA=%JAVA_HOME%\\bin\\java.exe\"",
+        ") ELSE (",
+        "  ECHO JAVA_HOME not defined, using java on PATH.",
+        "  ECHO If you encounter errors, set JAVA_HOME or update your PATH to include java.exe.",
+        "  set \"JAVA=java.exe\"",
+        ")"
       )
 
       # JVM_OPTS line:
@@ -266,19 +284,21 @@ util_read_write_batch <- function(nl) {
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"), "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 -Dnetlogo.extensions.dir=^\"", extensionspath, "^\"\"")
 
       # Block 2 of the batch file:
-      block2 <- c("set ARGS=",
-                  "FOR %%a IN (%*) DO (",
-                  "  SET \"ARG=%%a\"",
-                  "  IF \"!ARG!\" == \"--3D\" (",
-                  "    SET \"JVM_OPTS=!JVM_OPTS! -Dorg.nlogo.is3d=true\"",
-                  "  ) ELSE (",
-                  "    IF \"!ARG:~0,2!\" == \"-D\" (",
-                  "      SET \"JVM_OPTS=!JVM_OPTS! !ARG!\"",
-                  "	  ) ELSE (",
-                  "      SET \"ARGS=!ARGS! !ARG!\"",
-                  "	  )",
-                  "  )",
-                  ")")
+      block2 <- c(
+        "set ARGS=",
+        "FOR %%a IN (%*) DO (",
+        "  SET \"ARG=%%a\"",
+        "  IF \"!ARG!\" == \"--3D\" (",
+        "    SET \"JVM_OPTS=!JVM_OPTS! -Dorg.nlogo.is3d=true\"",
+        "  ) ELSE (",
+        "    IF \"!ARG:~0,2!\" == \"-D\" (",
+        "      SET \"JVM_OPTS=!JVM_OPTS! !ARG!\"",
+        "	  ) ELSE (",
+        "      SET \"ARGS=!ARGS! !ARG!\"",
+        "	  )",
+        "  )",
+        ")"
+      )
 
       # Classpath line:
       jarpath <- paste0(getnl(nl, "nlpath"), "app/NetLogo.jar")
@@ -291,10 +311,8 @@ util_read_write_batch <- function(nl) {
       allblocks <- c(block1, jvmoptsline, block2, jarpathline, block3)
 
       ## Write batch file:
-      batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
+      batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".bat")
       writeLines(allblocks, batchpath_temp)
-
-
     } else {
       ## For all other NetLogo versions we can just copy the headless bat from the installation folder:
       # Prepare pathes:
@@ -320,9 +338,8 @@ util_read_write_batch <- function(nl) {
       batch[pos_jarpath] <- jarpathline
 
       # Create new batchfile:
-      batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".bat")
-      readr::write_lines(batch, path=batchpath_temp)
-
+      batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".bat")
+      readr::write_lines(batch, path = batchpath_temp)
     }
   }
   if (os == "unix") {
@@ -343,20 +360,19 @@ util_read_write_batch <- function(nl) {
       allblocks <- c(block1, basedirline, jvmoptsline)
 
       ## Write batch file:
-      batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
+      batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".sh")
       writeLines(allblocks, batchpath_temp)
 
       ## Make sh executable on linux:
       system(paste0("chmod +x ", batchpath_temp), wait = TRUE)
-
     } else {
       ## For all other NetLogo versions we can just copy and modify the headless sh from the installation folder:
       ## Create path variables:
       batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
-      batchpath_temp <- tempfile(pattern="netlogo-headless", fileext=".sh")
+      batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".sh")
 
       # Copy original file to temppath file
-      system(paste0("cp \"", batchpath, "\" \"", batchpath_temp, "\""), wait=TRUE)
+      system(paste0("cp \"", batchpath, "\" \"", batchpath_temp, "\""), wait = TRUE)
 
       # Define edited lines for shell script:
       basedirline <- paste0("BASE_DIR=\"", getnl(nl, "nlpath"), "\"")
@@ -365,13 +381,11 @@ util_read_write_batch <- function(nl) {
       ## Edit lines in place:
       system(paste0("sed -i -r 's!^BASE_DIR=.*!", basedirline, "!'", " \"", batchpath_temp, "\""))
       system(paste0("sed -i -r 's!^JVM_OPTS=.*!", jvmoptsline, "!'", " \"", batchpath_temp, "\""))
-
     }
   }
 
 
   return(batchpath_temp)
-
 }
 
 # .util_clean_metrics_turtles <- function(NLtable, nl){
@@ -446,64 +460,61 @@ util_read_write_batch <- function(nl) {
 
 ## Clean patch metrics
 .util_clean_metrics_patches <- function(NLtable, nl) {
-
   patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
 
-  patches_owns <- purrr::map(seq_len(nrow(patches_string)), function(x){
+  patches_owns <- purrr::map(seq_len(nrow(patches_string)), function(x) {
+    patches_breed <- regmatches(patches_string[x, ][[1]], gregexpr("(?<=\\{).*?(?=\\})", patches_string[x, ][[1]], perl = TRUE))
 
-    patches_breed <-  regmatches(patches_string[x,][[1]],gregexpr("(?<=\\{).*?(?=\\})", patches_string[x,][[1]], perl=TRUE))
+    patches_string[x, ][[1]] <- substring(patches_string[x, ][[1]], 2)
+    patches_string[x, ][[1]] <- substring(patches_string[x, ][[1]], 1, max(nchar(patches_string[x, ][[1]])) - 1)
 
-    patches_string[x,][[1]] <- substring(patches_string[x,][[1]], 2)
-    patches_string[x,][[1]] <- substring(patches_string[x,][[1]], 1, max(nchar(patches_string[x,][[1]])) - 1)
+    patches_string[x, ][[1]] <- gsub("(?<=\\{).*?(?=\\})", "\\1", patches_string[x, ][[1]], perl = TRUE)
+    patches_string[x, ][[1]] <- gsub("\\{\\}", "\\1", patches_string[x, ][[1]], perl = TRUE)
+    patches_string[x, ][[1]] <- regmatches(patches_string[x, ][[1]], gregexpr("(?<=\\[).*?(?=\\])", patches_string[x, ][[1]], perl = TRUE))
 
-    patches_string[x,][[1]]  <- gsub("(?<=\\{).*?(?=\\})", "\\1", patches_string[x,][[1]], perl=TRUE)
-    patches_string[x,][[1]]  <- gsub("\\{\\}", "\\1", patches_string[x,][[1]], perl=TRUE)
-    patches_string[x,][[1]]  <-  regmatches(patches_string[x,][[1]], gregexpr("(?<=\\[).*?(?=\\])",patches_string[x,][[1]], perl=TRUE))
-
-    patches_owns <- suppressWarnings(purrr::map_dfr(seq_along(patches_string[x,][[1]][[1]]), function(patches_index){
+    patches_owns <- suppressWarnings(purrr::map_dfr(seq_along(patches_string[x, ][[1]][[1]]), function(patches_index) {
 
       # split patches owns into unique elements of a vector
-      patches_owns <- toupper(strsplit(patches_string[x,][[1]][[1]][patches_index], " ")[[1]])
-      patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1, byrow = TRUE), stringsAsFactors=FALSE)
+      patches_owns <- toupper(strsplit(patches_string[x, ][[1]][[1]][patches_index], " ")[[1]])
+      patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1, byrow = TRUE), stringsAsFactors = FALSE)
       patches_owns <- utils::type.convert(patches_owns)
 
-      #patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1), stringsAsFactors=FALSE)
-      #patches_owns <- as.data.frame(lapply(as.list(patches_owns), type.convert, as.is=TRUE), stringsAsFactors=FALSE)
+      # patches_owns <- as.data.frame(matrix(patches_owns, nrow = 1), stringsAsFactors=FALSE)
+      # patches_owns <- as.data.frame(lapply(as.list(patches_owns), type.convert, as.is=TRUE), stringsAsFactors=FALSE)
     }))
-      names(patches_owns) <- getexp(nl, "metrics.patches")
+    names(patches_owns) <- getexp(nl, "metrics.patches")
 
-      return(patches_owns)
-    })
+    return(patches_owns)
+  })
   patches_owns
 }
 
 
-.util_clean_metrics_links <- function(NLtable, nl){
+.util_clean_metrics_links <- function(NLtable, nl) {
 
   ## Extract current string:
   links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
 
-  links_owns <- purrr::map(seq_len(nrow(links_string)), function(x){
+  links_owns <- purrr::map(seq_len(nrow(links_string)), function(x) {
 
     ## Remove the outer [] brackets
-    links_string[x,][[1]] <- substring(links_string[x,][[1]], 2)
-    links_string[x,][[1]] <- substring(links_string[x,][[1]], 1, max(nchar(links_string[x,][[1]])) - 1)
-    links_string[x,][[1]]  <- gsub("breed", "", links_string[x,][[1]], perl=TRUE)
-    #links_string[x,][[1]]  <- gsub("\\{", "(", links_string[x,][[1]], perl=TRUE)
-    #links_string[x,][[1]]  <- gsub("\\}", ")", links_string[x,][[1]], perl=TRUE)
-    links_string[x,][[1]]  <- gsub("^ *|(?<= ) | *$", "", links_string[x,][[1]], perl = TRUE)
-    links_string[x,][[1]]  <-  regmatches(links_string[x,][[1]], gregexpr("(?<=\\[).*?(?=\\])",links_string[x,][[1]], perl=TRUE))
+    links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 2)
+    links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 1, max(nchar(links_string[x, ][[1]])) - 1)
+    links_string[x, ][[1]] <- gsub("breed", "", links_string[x, ][[1]], perl = TRUE)
+    # links_string[x,][[1]]  <- gsub("\\{", "(", links_string[x,][[1]], perl=TRUE)
+    # links_string[x,][[1]]  <- gsub("\\}", ")", links_string[x,][[1]], perl=TRUE)
+    links_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "", links_string[x, ][[1]], perl = TRUE)
+    links_string[x, ][[1]] <- regmatches(links_string[x, ][[1]], gregexpr("(?<=\\[).*?(?=\\])", links_string[x, ][[1]], perl = TRUE))
 
-    links_owns <- suppressWarnings(purrr::map_dfr(seq_along(links_string[x,][[1]][[1]]), function(links_index){
+    links_owns <- suppressWarnings(purrr::map_dfr(seq_along(links_string[x, ][[1]][[1]]), function(links_index) {
 
       # split turtle owns into unique elements of a vector
-      links_owns <- strsplit(links_string[x,][[1]][[1]][links_index], "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ", perl=TRUE)[[1]]
+      links_owns <- strsplit(links_string[x, ][[1]][[1]][links_index], "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ", perl = TRUE)[[1]]
       # Remove braces
-      links_owns <- gsub("\\{", "", links_owns, perl=TRUE)
-      links_owns <- gsub("\\}", "", links_owns, perl=TRUE)
+      links_owns <- gsub("\\{", "", links_owns, perl = TRUE)
+      links_owns <- gsub("\\}", "", links_owns, perl = TRUE)
       # Convert to data frame
       links_owns <- as.data.frame(matrix(links_owns, nrow = 1))
-
     }))
 
     ## If no data has been reported, create an empty data frame with NA:
@@ -519,32 +530,31 @@ util_read_write_batch <- function(nl) {
 }
 
 ## Clean turtle metrics
-.util_clean_metrics_turtles <- function(NLtable, nl){
+.util_clean_metrics_turtles <- function(NLtable, nl) {
 
   ## Extract current string:
   turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
 
-  turtles_owns <- purrr::map(seq_len(nrow(turtles_string)), function(x){
+  turtles_owns <- purrr::map(seq_len(nrow(turtles_string)), function(x) {
 
     ## Remove the outer [] brackets
-    turtles_string[x,][[1]] <- substring(turtles_string[x,][[1]], 2)
-    turtles_string[x,][[1]] <- substring(turtles_string[x,][[1]], 1, max(nchar(turtles_string[x,][[1]])) - 1)
-    turtles_string[x,][[1]]  <- gsub("breed", "", turtles_string[x,][[1]], perl=TRUE)
-   # turtles_string[x,][[1]]  <- gsub("\\{", "(", turtles_string[x,][[1]], perl=TRUE)
-  #  turtles_string[x,][[1]]  <- gsub("\\}", ")", turtles_string[x,][[1]], perl=TRUE)
-    turtles_string[x,][[1]]  <- gsub("^ *|(?<= ) | *$", "", turtles_string[x,][[1]], perl = TRUE)
-    turtles_string[x,][[1]]  <-  regmatches(turtles_string[x,][[1]], gregexpr("(?<=\\[).*?(?=\\])",turtles_string[x,][[1]], perl=TRUE))
+    turtles_string[x, ][[1]] <- substring(turtles_string[x, ][[1]], 2)
+    turtles_string[x, ][[1]] <- substring(turtles_string[x, ][[1]], 1, max(nchar(turtles_string[x, ][[1]])) - 1)
+    turtles_string[x, ][[1]] <- gsub("breed", "", turtles_string[x, ][[1]], perl = TRUE)
+    # turtles_string[x,][[1]]  <- gsub("\\{", "(", turtles_string[x,][[1]], perl=TRUE)
+    #  turtles_string[x,][[1]]  <- gsub("\\}", ")", turtles_string[x,][[1]], perl=TRUE)
+    turtles_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "", turtles_string[x, ][[1]], perl = TRUE)
+    turtles_string[x, ][[1]] <- regmatches(turtles_string[x, ][[1]], gregexpr("(?<=\\[).*?(?=\\])", turtles_string[x, ][[1]], perl = TRUE))
 
-    turtles_owns <- suppressWarnings(purrr::map_dfr(seq_along(turtles_string[x,][[1]][[1]]), function(turtles_index){
+    turtles_owns <- suppressWarnings(purrr::map_dfr(seq_along(turtles_string[x, ][[1]][[1]]), function(turtles_index) {
 
       # split turtle owns into unique elements of a vector
-      turtles_owns <- strsplit(turtles_string[x,][[1]][[1]][turtles_index], "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ", perl=TRUE)[[1]]
+      turtles_owns <- strsplit(turtles_string[x, ][[1]][[1]][turtles_index], "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ", perl = TRUE)[[1]]
       # Remove braces
-      turtles_owns <- gsub("\\{", "", turtles_owns, perl=TRUE)
-      turtles_owns <- gsub("\\}", "", turtles_owns, perl=TRUE)
+      turtles_owns <- gsub("\\{", "", turtles_owns, perl = TRUE)
+      turtles_owns <- gsub("\\}", "", turtles_owns, perl = TRUE)
       # Convert to data frame
       as.data.frame(matrix(turtles_owns, nrow = 1))
-
     }))
 
     ## If no data has been reported, create an empty data frame with NA:

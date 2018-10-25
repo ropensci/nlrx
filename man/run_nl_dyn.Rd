@@ -28,8 +28,9 @@ Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv"
 \dontrun{
 
 # Run one simulation:
-results <- run_nl_dyn(nl=nl,
-cleanup="all")
-
+results <- run_nl_dyn(
+  nl = nl,
+  cleanup = "all"
+)
 }
 }

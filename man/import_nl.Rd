@@ -31,6 +31,5 @@ relative paths enhance the reproducability of your analysis),
 infile <- "/home/user/test.zip"
 outfile <- "/home/user/test"
 import_nl(infile, outfile)
-
 }
 }

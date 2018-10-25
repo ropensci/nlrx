@@ -15,20 +15,24 @@ util_run_nl_dyn_GenSA <- function(nl, seed, cleanup) {
   gensa <- getsim(nl, "simobject")
 
   # Call the GenSA function from the GenSA package:
-  results <- GenSA::GenSA(par = NULL,
-                          fn = function(par, ...) {
-                            util_run_nl_dyn_GenSA_fn(param = par,
-                                                     nl = nl,
-                                                     evalcrit = gensa$evalcrit,
-                                                     seed = seed,
-                                                     cleanup = cleanup,
-                                                     ...)},
-                          control=gensa$control,
-                          lower=as.vector(gensa$lower),
-                          upper=as.vector(gensa$upper))
+  results <- GenSA::GenSA(
+    par = NULL,
+    fn = function(par, ...) {
+      util_run_nl_dyn_GenSA_fn(
+        param = par,
+        nl = nl,
+        evalcrit = gensa$evalcrit,
+        seed = seed,
+        cleanup = cleanup,
+        ...
+      )
+    },
+    control = gensa$control,
+    lower = as.vector(gensa$lower),
+    upper = as.vector(gensa$upper)
+  )
 
   return(results)
-
 }
 
 
@@ -50,16 +54,19 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   names(param) <- names(getexp(nl, "variables"))
 
   gensa_param <- tibble::as.tibble(cbind(as.tibble(t(param)),
-                                         getexp(nl, "constants"),
-                                         stringsAsFactors=FALSE))
+    getexp(nl, "constants"),
+    stringsAsFactors = FALSE
+  ))
 
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl_one(nl = nl,
-                        siminputrow = 1,
-                        seed = seed,
-                        cleanup = cleanup)
+  results <- run_nl_one(
+    nl = nl,
+    siminputrow = 1,
+    seed = seed,
+    cleanup = cleanup
+  )
 
   # Select metric for gensa:
   results <- results[[evalcrit]]
@@ -70,7 +77,6 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   results <- as.numeric(results)
 
   return(results)
-
 }
 
 
@@ -90,23 +96,26 @@ util_run_nl_dyn_GenAlg <- function(nl, seed, cleanup) {
   galg <- getsim(nl, "simobject")
 
   # Call the GenSA function from the GenSA package:
-  results <- genalg::rbga(stringMin = galg$lower,
-                          stringMax = galg$upper,
-                          popSize = galg$popSize,
-                          iters = galg$iters,
-                          elitism = galg$elitism,
-                          mutationChance = galg$mutationChance,
-                          evalFunc = function(par, ...) {
-                            util_run_nl_dyn_GenAlg_fn(param = par,
-                                                      nl = nl,
-                                                      evalcrit = galg$evalcrit,
-                                                      seed = seed,
-                                                      cleanup = cleanup,
-                                                      ...)}
-                          )
+  results <- genalg::rbga(
+    stringMin = galg$lower,
+    stringMax = galg$upper,
+    popSize = galg$popSize,
+    iters = galg$iters,
+    elitism = galg$elitism,
+    mutationChance = galg$mutationChance,
+    evalFunc = function(par, ...) {
+      util_run_nl_dyn_GenAlg_fn(
+        param = par,
+        nl = nl,
+        evalcrit = galg$evalcrit,
+        seed = seed,
+        cleanup = cleanup,
+        ...
+      )
+    }
+  )
 
   return(results)
-
 }
 
 
@@ -128,16 +137,19 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
   names(param) <- names(getexp(nl, "variables"))
 
   gensa_param <- tibble::as.tibble(cbind(as.tibble(t(param)),
-                                         getexp(nl, "constants"),
-                                         stringsAsFactors=FALSE))
+    getexp(nl, "constants"),
+    stringsAsFactors = FALSE
+  ))
 
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl_one(nl = nl,
-                        siminputrow = 1,
-                        seed = seed,
-                        cleanup = cleanup)
+  results <- run_nl_one(
+    nl = nl,
+    siminputrow = 1,
+    seed = seed,
+    cleanup = cleanup
+  )
 
   # Select metric for gensa:
   results <- results[[evalcrit]]
@@ -148,8 +160,4 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
   results <- as.numeric(results)
 
   return(results)
-
 }
-
-
-

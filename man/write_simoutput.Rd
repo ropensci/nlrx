@@ -19,16 +19,17 @@ Write NetLogo simulation output to file
 \dontrun{
 
 # Run one simulation:
-results <- run_nl(nl=nl,
-seed=getsim(nl, "simseeds")[1],
-run=1,
-cleanup="all")
+results <- run_nl(
+  nl = nl,
+  seed = getsim(nl, "simseeds")[1],
+  run = 1,
+  cleanup = "all"
+)
 
 # Attach output to simdesign:
 setsim(nl, "simoutput") <- results
 
 # Write output to outpath directory
 write_simoutput(nl)
-
 }
 }
