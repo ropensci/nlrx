@@ -4,8 +4,8 @@
 \alias{get_nl_spatial}
 \title{Get spatial data from metrics.turtles and metrics.patches output}
 \usage{
-get_nl_spatial(nl, turtles = TRUE, patches = TRUE, turtle_coords = "px",
-  format = "spatial")
+get_nl_spatial(nl, turtles = TRUE, patches = TRUE,
+  turtle_coords = "px", format = "spatial")
 }
 \arguments{
 \item{nl}{nl object}

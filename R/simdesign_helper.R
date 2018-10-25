@@ -551,7 +551,7 @@ simdesign_morris <- function(nl,
                             bsup = maxs,
                             scale=TRUE)
 
-  moX <- tibble::as.tibble(cbind(as.tibble(mo$X),
+  moX <- tibble::as.tibble(cbind(tibble::as.tibble(mo$X),
                                  getexp(nl, "constants"),
                                  stringsAsFactors=FALSE))
 
@@ -626,7 +626,7 @@ simdesign_eFast <- function(nl,
                              q = q.functions,
                              q.arg = q.args)
 
-  f99X <- tibble::as.tibble(cbind(as.tibble(f99$X),
+  f99X <- tibble::as.tibble(cbind(tibble::as.tibble(f99$X),
                                   getexp(nl, "constants"),
                                   stringsAsFactors=FALSE))
 
