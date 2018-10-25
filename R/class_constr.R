@@ -37,8 +37,8 @@ nl <- function(nlversion = "6.0.2",
                nlpath = character(),
                modelpath = character(),
                jvmmem = 1024,
-               experiment=new("experiment"),
-               simdesign=new("simdesign"),
+               experiment = methods::new("experiment"),
+               simdesign = methods::new("simdesign"),
                ...) {
 
   methods::new("nl",
@@ -46,8 +46,8 @@ nl <- function(nlversion = "6.0.2",
                nlpath = nlpath,
                modelpath = modelpath,
                jvmmem = jvmmem,
-               experiment=new("experiment"),
-               simdesign=new("simdesign"),
+               experiment = methods::new("experiment"),
+               simdesign = methods::new("simdesign"),
                ...)
 }
 

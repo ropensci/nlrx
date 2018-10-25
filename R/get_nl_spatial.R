@@ -60,7 +60,7 @@ get_nl_spatial <- function(nl,
 
 
   if (!isTRUE(turtles)) {
-    turtles_tib <- tibble(
+    turtles_tib <- tibble::tibble(
       id = seq(1, nrow(getsim(nl, "simoutput"))),
       turtles = rep(NA, nrow(getsim(nl, "simoutput")))
     )
@@ -68,7 +68,7 @@ get_nl_spatial <- function(nl,
 
 
   if (!isTRUE(patches)) {
-    patches_tib <- tibble(
+    patches_tib <- tibble::tibble(
       id = seq(1, nrow(getsim(nl, "simoutput"))),
       patches = rep(NA, nrow(getsim(nl, "simoutput")))
     )
@@ -172,7 +172,7 @@ get_nl_spatial <- function(nl,
             getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]] %>%
             dplyr::mutate_at(which(coord_ind == TRUE), function(x)
               as.numeric(as.character(x))) %>%
-            as.tibble() %>%
+            tibble::as.tibble() %>%
             sf::st_as_sf(., coords = which(coord_ind == TRUE))
 
           return(turtles)
