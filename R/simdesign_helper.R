@@ -149,7 +149,7 @@ simdesign_ff <- function(nl, nseeds) {
   util_eval_experiment(nl)
   util_eval_variables(nl)
   util_eval_variables_ff(nl)
-  message("Creating full facotrial simulation design")
+  message("Creating full factorial simulation design")
 
 
   # Add a full factorial simulatin design:
