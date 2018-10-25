@@ -41,6 +41,7 @@ testthat::test_that("Run nl", {
                                 nseeds=1,
                                 precision=3)
 
+
   testthat::context("Create xml files:")
   xmlfile <-
     tempfile(pattern = "nlrx_test", fileext = ".xml")
@@ -68,7 +69,7 @@ testthat::test_that("Run nl", {
 
 
   testthat::context("Create batch files:")
-
+  ## WE NEED WORKING NETLOGO TO TEST THIS
 
 
 
