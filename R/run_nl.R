@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run parallel on local machine:
 #' future::plan(multisession)
 #' results %<-% run_nl_all(nl, cleanup = "all")
@@ -100,14 +100,15 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 #' run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
 #' The random seed is set within the NetLogo model to control stochasticity.
 #' The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-#' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+#' Cleanup can either be "xml" to delete all temporarily created xml files; "csv" to delete all temporarily created csv files,
+#' "bat" to create all temporarily created bat/sh files or "all" to delete all temporarily created files.
 #'
 #' This function can be used to run single simulations of a NetLogo model.
 #'
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl_one(
 #'   nl = nl,
@@ -148,10 +149,14 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 
   ## Delete temporary files:
   if (cleanup == "xml" | cleanup == "all") {
-    util_cleanup(nl, pattern = ".xml")
+    util_cleanup(nl, dirname(xmlfile), pattern = ".xml")
   }
   if (cleanup == "csv" | cleanup == "all") {
-    util_cleanup(nl, pattern = ".csv")
+    util_cleanup(nl, dirname(outfile), pattern = ".csv")
+  }
+  if (cleanup == "bat" | cleanup == "all") {
+    util_cleanup(nl, dirname(batchpath), pattern = ".bat")
+    util_cleanup(nl, dirname(batchpath), pattern = ".sh")
   }
 
   return(nl_results)
@@ -177,7 +182,7 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl_dyn(
 #'   nl = nl,
