@@ -4,7 +4,7 @@
 \alias{util_cleanup}
 \title{Delete temporary files}
 \usage{
-util_cleanup(nl, pattern)
+util_cleanup(nl, directory, pattern)
 }
 \arguments{
 \item{nl}{nl object}

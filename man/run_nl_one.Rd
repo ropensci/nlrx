@@ -25,7 +25,8 @@ Execute NetLogo simulation from a nl object with a defined experiment and simdes
 run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
 The random seed is set within the NetLogo model to control stochasticity.
 The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+Cleanup can either be "xml" to delete all temporarily created xml files; "csv" to delete all temporarily created csv files,
+"bat" to create all temporarily created bat/sh files or "all" to delete all temporarily created files.
 
 This function can be used to run single simulations of a NetLogo model.
 }
