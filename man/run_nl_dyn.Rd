@@ -21,7 +21,7 @@ Execute NetLogo simulation from a nl object with a defined experiment and simdes
 }
 \details{
 run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
-This is the case for dynamic designs, such as SImulated Annealing, where parametersets are dynamically generated, based on the output of previous simulations.
+This is the case for dynamic designs, such as Simulated Annealing, where parametersets are dynamically generated, based on the output of previous simulations.
 Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 }
 \examples{

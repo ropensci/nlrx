@@ -8,7 +8,7 @@ Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
 Maintainer: Jan Salecker <jsaleck@gwdg.de>
 Description: The nlrx package provides tools to setup, run and analyze NetLogo model simulations in R.
     nlrx experiments use a similar structure as NetLogos Behavior Space experiments. 
-    However, nlrx offers more flexibility and additional tools for running and anlyzing complex simulation designs and sensitivity analyses.
+    However, nlrx offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.
     The user defines all information that is needed in an intuitive framework, using S4 class objects.
     Experiments are submitted from R to NetLogo via XML files that are dynamically written, based on specifications defined by the user.
     By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.

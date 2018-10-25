@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_runnl.R
 \name{util_create_sim_XML}
 \alias{util_create_sim_XML}
-\title{Create a temporary behavior space xml file to setup NetLogo via commandline}
+\title{Create a temporary behavior space xml file to setup NetLogo via command line}
 \usage{
 util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 }
@@ -11,11 +11,13 @@ util_create_sim_XML(nl, seed, siminputrow, xmlfile)
 
 \item{seed}{random-seed for NetLogo simulation}
 
-\item{siminputrow}{row id of the simulation input tibble of the simdesign within the provided nl object}
+\item{siminputrow}{row id of the simulation input tibble of the simdesign
+within the provided nl object}
 
 \item{xmlfile}{filepath where the xml file is stored}
 }
 \description{
-Create a temporary behavior space xml file to setup NetLogo via commandline
+Create a temporary behavior space xml file to setup NetLogo via
+command line
 }
 \keyword{internal}

@@ -11,7 +11,8 @@ util_create_lhs(input, samples, precision)
 
 \item{samples}{number of lhs samples}
 
-\item{precision}{number of digits for the decimal fraction of parameter values}
+\item{precision}{number of digits for the decimal fraction of parameter
+values}
 }
 \description{
 Identify and report the current OS

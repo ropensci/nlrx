@@ -3,23 +3,33 @@
 #' @description Turn results from NetLogo in spatial data objects
 #'
 #' @param nl nl object
-#' @param turtles if TRUE, the function generates spatial point objects (sf) from metrics.turtles data
-#' @param patches if TRUE, the function generates raster objects from metrics.patches data
-#' @param turtle_coords either "px" if turtle coordinates were measured as "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
-#' @param format string indication wether to return spatial objects (RasterLayer, sf Points) or a rowbinded tibble
+#' @param turtles if TRUE, the function generates spatial point objects (sf)
+#' from metrics.turtles data
+#' @param patches if TRUE, the function generates raster objects from
+#' metrics.patches data
+#' @param turtle_coords either "px" if turtle coordinates were measured as
+#' "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
+#' @param format string indication whether to return spatial objects
+#' (RasterLayer, sf Points) or a rowbinded tibble
 #' @return tibble with spatial data objects
 #' @details
 #'
-#' get_nl_spatial generates spatial point objects and raster objects from tdata that has been collected by metrics.turtles and metrics.patches.
-#' metrics.turtles and metrics.patches need to collect coordinates of turtles and patches.
-#' For patches this can be easily done by adding "pxcor" and "pycor" to metrics.patches.
-#' For turtles you can either add "pxcor" and "pycor" to metrics.turtles or "xcor" and "ycor".
-#' It is also possible to measure both coordinates, and select the type that is used for spatial object creation through the function parameter turtle_coords.
+#' get_nl_spatial generates spatial point objects and raster objects from data
+#' that has been collected by metrics.turtles and metrics.patches.
+#' metrics.turtles and metrics.patches need to collect coordinates of turtles
+#' and patches.
+#' For patches this can be easily done by adding "pxcor" and "pycor" to
+#' metrics.patches.
+#' For turtles you can either add "pxcor" and "pycor" to metrics.turtles or
+#' "xcor" and "ycor".
+#' It is also possible to measure both coordinates, and select the type that is
+#'  used for spatial object creation through the function parameter
+#'  turtle_coords.
 #' "px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run parallel on local machine:
 #' future::plan(multisession)
 #' # Run simulations:
@@ -97,7 +107,9 @@ get_nl_spatial <- function(nl,
         seq_along(getsim(nl, "simoutput")$metrics.patches),
         function(raster_ind) {
           patches_raster <-
-            raster::rasterFromXYZ(getsim(nl, "simoutput")$metrics.patches[[raster_ind]][, c(
+            raster::rasterFromXYZ(getsim(nl,
+                                         "simoutput")$metrics.patches[[
+                                           raster_ind]][, c(
               x_coord_ind,
               y_coord_ind,
               patches_own
@@ -143,7 +155,9 @@ get_nl_spatial <- function(nl,
         function(turtles_ind) {
           if (turtle_coords == "px") {
             coord_ind <-
-              grepl(c("pxcor|pycor"), names(getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]]))
+              grepl(c("pxcor|pycor"), names(getsim(nl,
+                                          "simoutput")$metrics.turtles[[
+                                            turtles_ind]]))
           }
 
           if (turtle_coords == "x") {

@@ -9,7 +9,7 @@ write_simoutput(nl)
 \arguments{
 \item{nl}{nl object
 
-Write NetLogo simulation output to a csv file in the direcotry outpath of the nl object
+Write NetLogo simulation output to a csv file in the directory outpath of the nl object
 Output has to be attached to the simdesign first with simoutput(nl) <- results}
 }
 \description{

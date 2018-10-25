@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' infile <- "/home/user/test.zip"
 #' outfile <- "/home/user/test"
 #' import_nl(infile, outfile)

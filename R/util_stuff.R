@@ -23,7 +23,8 @@ util_get_os <- function() {
 #'
 #' @param input list with variables and value ranges
 #' @param samples number of lhs samples
-#' @param precision number of digits for the decimal fraction of parameter values
+#' @param precision number of digits for the decimal fraction of parameter
+#' values
 #' @aliases util_create_lhs
 #' @rdname util_create_lhs
 #' @keywords internal
@@ -60,21 +61,26 @@ util_generate_seeds <- function(nseeds) {
 
 #' Report globals from a NetLogo model that is defined within a nl object
 #'
-#' @description Report globals from a NetLogo model that is defined within a nl object
+#' @description Report globals from a NetLogo model that is defined within a nl
+#'  object
 #'
-#' @param nl nl object with a defined modelpath that points to a NetLogo model (*.nlogo)
+#' @param nl nl object with a defined modelpath that points to a NetLogo model
+#'  (*.nlogo)
 #'
 #' @details
 #'
-#' The function reads the NetLogo model file that is defined within the nl object and reports all global parameters that are defined as widget elements on the GUI of the NetLogo model.
-#' Only globals that are found by this function are valid globals that can be entered into the variables or constants vector of an experiment object.
+#' The function reads the NetLogo model file that is defined within the nl object
+#'  and reports all global parameters that are defined as widget elements on
+#'  the GUI of the NetLogo model.
+#' Only globals that are found by this function are valid globals that can be
+#'  entered into the variables or constants vector of an experiment object.
 #'
 #'
 #' @examples
 #' \dontrun{
 #' load_model_parameters(nl)
 #' }
-#' 
+#'
 #' @aliases load_model_parameters
 #' @rdname load_model_parameters
 #'
@@ -85,7 +91,8 @@ load_model_parameters <- function(nl) {
   ## Open the model as string
   model.code <- readLines(getnl(nl, "modelpath"))
 
-  ## Find the line in the NetLogoCode where the interface definiton starts (separator: @#$#@#$#@)
+  ## Find the line in the NetLogoCode where the interface definiton starts
+  ## (separator: @#$#@#$#@)
   model.code.s1 <- grep("@#$#@#$#@", model.code, fixed = TRUE)[1]
 
   ## Remove model code before first separator:
@@ -126,7 +133,8 @@ load_model_parameters <- function(nl) {
 
         entry <- list(
           type = l,
-          value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1, TRUE, FALSE)
+          value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1,
+                         TRUE, FALSE)
         )
       }
       if (l == "INPUTBOX") {

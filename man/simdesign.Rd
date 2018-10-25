@@ -17,7 +17,7 @@ simdesign(simmethod = character(), siminput = tibble(),
 
 \item{simseeds}{a vector or model random seeds}
 
-\item{simoutput}{tibble contatining model results}
+\item{simoutput}{tibble containing model results}
 
 \item{...}{...}
 }

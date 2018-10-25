@@ -4,12 +4,12 @@
 #'
 #' @param nl nl object
 #'
-#' Write NetLogo simulation output to a csv file in the direcotry outpath of the nl object
+#' Write NetLogo simulation output to a csv file in the directory outpath of the nl object
 #' Output has to be attached to the simdesign first with simoutput(nl) <- results
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl(
 #'   nl = nl,
@@ -17,10 +17,10 @@
 #'   run = 1,
 #'   cleanup = "all"
 #' )
-#' 
+#'
 #' # Attach output to simdesign:
 #' setsim(nl, "simoutput") <- results
-#' 
+#'
 #' # Write output to outpath directory
 #' write_simoutput(nl)
 #' }
@@ -58,7 +58,7 @@ write_simoutput <- function(nl) {
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl(
 #'   nl = nl,
@@ -66,10 +66,10 @@ write_simoutput <- function(nl) {
 #'   run = 1,
 #'   cleanup = "all"
 #' )
-#' 
+#'
 #' # Attach output to simdesign:
 #' setsim(nl, "simoutput") <- results
-#' 
+#'
 #' # Perform analysis:
 #' myfuns <- dplyr::funs(mean, sd, min, max)
 #' analyze_nl(nl, myfuns)
@@ -243,6 +243,7 @@ analyze_sobol <- function(nl, metrics, funs) {
 #' @rdname analyze_sobol2007
 #' @keywords internal
 analyze_sobol2007 <- function(nl, metrics, funs) {
+
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
@@ -271,7 +272,7 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
       soS$parameter <- rownames(soS)
       soS$metric <- metrics[j]
       soS$seed <- i
-      soT <- so$T
+      soT <- so["T"]
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"
@@ -329,7 +330,7 @@ analyze_soboljansen <- function(nl, metrics, funs) {
       soS$parameter <- rownames(soS)
       soS$metric <- metrics[j]
       soS$seed <- i
-      soT <- so$T
+      soT <- so["T"]
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"

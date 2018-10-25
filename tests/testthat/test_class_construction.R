@@ -3,14 +3,17 @@ testthat::test_that("class objects are created with correct variables", {
   nl <- nl(
     nlversion = "6.0.2",
     nlpath = "C:/Program Files/NetLogo 6.0.2/",
-    modelpath = "C:/Program Files/NetLogo 6.0.2/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+    modelpath = "C:/Program Files/NetLogo 6.0.2/app/models/
+    Sample Models/Biology/Wolf Sheep Predation.nlogo",
     jvmmem = 1024
   )
 
   testthat::context("Class construction: nl")
   testthat::expect_match(getnl(nl, "nlversion"), "6.0.2")
   testthat::expect_match(getnl(nl, "nlpath"), "C:/Program Files/NetLogo 6.0.2/")
-  testthat::expect_match(getnl(nl, "modelpath"), "C:/Program Files/NetLogo 6.0.2/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+  testthat::expect_match(getnl(nl, "modelpath"), "C:/Program Files/
+                         NetLogo 6.0.2/app/models/Sample Models/Biology/
+                         Wolf Sheep Predation.nlogo")
   testthat::expect_equal(getnl(nl, "jvmmem"), 1024)
   testthat::expect_match(class(getnl(nl, "experiment"))[1], "experiment")
   testthat::expect_match(class(getnl(nl, "simdesign"))[1], "simdesign")
@@ -28,8 +31,10 @@ testthat::test_that("class objects are created with correct variables", {
     stopcond = "ticks = 3",
     metrics = c("count sheep", "count wolves"),
     variables = list(
-      "initial-number-sheep" = list(min = 50, max = 150, step = 10, qfun = "qunif"),
-      "initial-number-wolves" = list(min = 50, max = 150, step = 10, qfun = "qunif")
+      "initial-number-sheep" = list(min = 50, max = 150, step = 10,
+                                    qfun = "qunif"),
+      "initial-number-wolves" = list(min = 50, max = 150, step = 10,
+                                     qfun = "qunif")
     ),
     constants = list(
       "model-version" = "\"sheep-wolves-grass\"",
@@ -54,18 +59,27 @@ testthat::test_that("class objects are created with correct variables", {
   testthat::expect_equal(getexp(nl, "evalticks"), seq(8, 10))
   testthat::expect_match(getexp(nl, "metrics")[1], "count sheep")
   testthat::expect_match(getexp(nl, "metrics")[2], "count wolves")
-  testthat::expect_match(names(getexp(nl, "variables"))[1], "initial-number-sheep")
-  testthat::expect_match(names(getexp(nl, "variables"))[2], "initial-number-wolves")
+  testthat::expect_match(names(getexp(nl, "variables"))[1],
+                         "initial-number-sheep")
+  testthat::expect_match(names(getexp(nl, "variables"))[2],
+                         "initial-number-wolves")
   testthat::expect_equal(length(getexp(nl, "variables")[[1]]), 4)
   testthat::expect_equal(length(getexp(nl, "variables")[[2]]), 4)
 
-  testthat::expect_match(names(getexp(nl, "constants"))[1], "model-version")
-  testthat::expect_match(names(getexp(nl, "constants"))[2], "grass-regrowth-time")
-  testthat::expect_match(names(getexp(nl, "constants"))[3], "sheep-gain-from-food")
-  testthat::expect_match(names(getexp(nl, "constants"))[4], "wolf-gain-from-food")
-  testthat::expect_match(names(getexp(nl, "constants"))[5], "sheep-reproduce")
-  testthat::expect_match(names(getexp(nl, "constants"))[6], "wolf-reproduce")
-  testthat::expect_match(names(getexp(nl, "constants"))[7], "show-energy?")
+  testthat::expect_match(names(getexp(nl, "constants"))[1],
+                         "model-version")
+  testthat::expect_match(names(getexp(nl, "constants"))[2],
+                         "grass-regrowth-time")
+  testthat::expect_match(names(getexp(nl, "constants"))[3],
+                         "sheep-gain-from-food")
+  testthat::expect_match(names(getexp(nl, "constants"))[4],
+                         "wolf-gain-from-food")
+  testthat::expect_match(names(getexp(nl, "constants"))[5],
+                         "sheep-reproduce")
+  testthat::expect_match(names(getexp(nl, "constants"))[6],
+                         "wolf-reproduce")
+  testthat::expect_match(names(getexp(nl, "constants"))[7],
+                         "show-energy?")
 
   testthat::expect_match(getexp(nl, "constants")[[1]], "\"sheep-wolves-grass\"")
   testthat::expect_equal(getexp(nl, "constants")[[2]], 30)

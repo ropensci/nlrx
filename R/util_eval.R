@@ -27,7 +27,8 @@ util_eval_variables <- function(nl) {
 #' @keywords internal
 util_eval_variables_distinct <- function(nl) {
 
-  # The function checks if there is enough variable information to create a ff simdesign
+  # The function checks if there is enough variable information to create a ff
+  # simdesign
   # The ff design needs either a set of min, max and step or distinct values
 
   vars <- getexp(nl, "variables")
@@ -80,22 +81,27 @@ util_eval_variables_distinct <- function(nl) {
 #' @keywords internal
 util_eval_variables_ff <- function(nl) {
 
-  # The function checks if there is enough variable information to create a ff simdesign
+  # The function checks if there is enough variable information to create a ff
+  # simdesign
   # The ff design needs either a set of min, max and step or distinct values
 
   vars <- getexp(nl, "variables")
   vars.values.missing <- lapply(vars, function(x) is.null(x$values))
-  vars.dist.missing <- lapply(vars, function(x) is.null(x$min) | is.null(x$max) | is.null(x$step))
-  vars.missing <- data.frame(cbind(values.missing = unlist(vars.values.missing), dist.missing = unlist(vars.dist.missing)))
+  vars.dist.missing <- lapply(vars, function(x) is.null(x$min) |
+                                is.null(x$max) | is.null(x$step))
+  vars.missing <- data.frame(cbind(values.missing = unlist(vars.values.missing),
+                                   dist.missing = unlist(vars.dist.missing)))
   vars.missing$variable <- rownames(vars.missing)
-  vars.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE && dist.missing == TRUE)
+  vars.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE &&
+                                                   dist.missing == TRUE)
 
   # Check if there are any variables defined
   if (nrow(vars.missing) > 0) {
-    stop(paste0("Error: Variable definition incomplete for variables: ", vars.missing$variable, ".
-          To setup a full factorial simulation design you need to provide for each variable
-          either a vector of distinct values (e.g. list(values=c(1,2,3,4)))
-          or a sequence with min, max and step (e.g. list(min=1, max=4, step=1))."), call. = FALSE)
+    stop(paste0("Error: Variable definition incomplete for variables: ",
+    vars.missing$variable, ". To setup a full factorial simulation design you
+    need to provide for each variable either a vector of distinct values
+    (e.g. list(values=c(1,2,3,4))) or a sequence with min, max and step
+    (e.g. list(min=1, max=4, step=1))."), call. = FALSE)
   }
 }
 
@@ -109,7 +115,8 @@ util_eval_variables_ff <- function(nl) {
 #' @keywords internal
 util_eval_variables_sa <- function(nl) {
 
-  # The function checks if there is enough variable information to create a sensitivity analysis simdesign
+  # The function checks if there is enough variable information to create a
+  # sensitivity analysis simdesign
   # The sa designs need a set of min, max and qfun
 
   vars <- getexp(nl, "variables")
@@ -124,9 +131,9 @@ util_eval_variables_sa <- function(nl) {
   if (nrow(vars.missing) > 0) {
     stop(paste0(
       "Error: Variable definition incomplete for variables: ",
-      vars.missing$variable, ". To setup a sensitivity analysis simulation design
-    you need to provide for each variable a distribution with min, max and qfun
-    (e.g. list(min=1, max=4, qfun=\"qunif\"))."
+      vars.missing$variable, ". To setup a sensitivity analysis simulation
+      design you need to provide for each variable a distribution with min, max
+      and qfun (e.g. list(min=1, max=4, qfun=\"qunif\"))."
     ), call. = FALSE)
   }
 }
@@ -142,7 +149,8 @@ util_eval_variables_sa <- function(nl) {
 #' @keywords internal
 util_eval_variables_op <- function(nl) {
 
-  # The function checks if there is enough variable information to create an optimization simdesign
+  # The function checks if there is enough variable information to create an
+  # optimization simdesign
   # The optimization designs need a set of min and max
 
   vars <- getexp(nl, "variables")
@@ -252,17 +260,22 @@ util_eval_simdesign <- function(nl) {
 #' @description Evaluate variables and constants defined in experiment
 #' @param nl nl object
 #' @details
-#' This function checks if the variables and constants that are defined in the experiment are valid.
-#' It loads the model code of the NetLogo model and checks if these variables and constants really exist.
-#' In case of nonvalid entries, the function throws an error message, indicating which variables and constants are not valid.
-#' Please note, that this function might fail if the supported modelpath does not point to an existing nlogo file.
-#' This might for example happen, if the modelpath is set up for a remote cluster execution.
+#' This function checks if the variables and constants that are defined in the
+#' experiment are valid.
+#' It loads the model code of the NetLogo model and checks if these variables
+#' and constants really exist.
+#' In case of nonvalid entries, the function throws an error message, indicating
+#'  which variables and constants are not valid.
+#' Please note, that this function might fail if the supported modelpath does
+#' not point to an existing nlogo file.
+#' This might for example happen, if the modelpath is set up for a remote
+#' cluster execution.
 #'
 #' @examples
 #' \dontrun{
 #' eval_variables_constants(nl)
 #' }
-#' 
+#'
 #' @aliases eval_variables_constants
 #' @rdname eval_variables_constants
 #' @export

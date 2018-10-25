@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run parallel on local machine:
 #' future::plan(multisession)
 #' results %<-% run_nl_all(nl, cleanup = "all")
@@ -41,8 +41,8 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
   ## Check if split parameter is valid:
   if (siminput_nrow %% split != 0) {
     stop(
-      "Modulo of split parameter and number of rows of the siminput matrix is not 0.
-         Please adjust split parameter to a valid value!",
+      "Modulo of split parameter and number of rows of the siminput matrix is
+      not 0. Please adjust split parameter to a valid value!",
       call. = FALSE
     )
   }
@@ -107,7 +107,7 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl_one(
 #'   nl = nl,
@@ -171,13 +171,13 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #' @details
 #'
 #' run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
-#' This is the case for dynamic designs, such as SImulated Annealing, where parametersets are dynamically generated, based on the output of previous simulations.
+#' This is the case for dynamic designs, such as Simulated Annealing, where parametersets are dynamically generated, based on the output of previous simulations.
 #' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 #'
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' # Run one simulation:
 #' results <- run_nl_dyn(
 #'   nl = nl,

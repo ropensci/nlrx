@@ -174,7 +174,7 @@ experiment <- function(expname = "defaultexp",
 #' @param siminput tibble providing input parameterisations for the NetLogo model (cols=parameter, rows=runs)
 #' @param simobject used for some methods to store additional information (sobol, morris, eFast)
 #' @param simseeds a vector or model random seeds
-#' @param simoutput tibble contatining model results
+#' @param simoutput tibble containing model results
 #' @param ... ...
 #' @return simdesign S4 class object
 #' @details
