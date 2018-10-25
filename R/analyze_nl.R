@@ -272,7 +272,7 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
       soS$parameter <- rownames(soS)
       soS$metric <- metrics[j]
       soS$seed <- i
-      soT <- so["T"]
+      soT <- so[["T"]]
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"
@@ -330,7 +330,7 @@ analyze_soboljansen <- function(nl, metrics, funs) {
       soS$parameter <- rownames(soS)
       soS$metric <- metrics[j]
       soS$seed <- i
-      soT <- so["T"]
+      soT <- so[["T"]]
       soT[soT < 0] <- 0
       soT[soT > 1] <- 1
       soT$index <- "total"
