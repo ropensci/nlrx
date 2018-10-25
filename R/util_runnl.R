@@ -180,10 +180,8 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #' @aliases util_cleanup
 #' @rdname util_cleanup
 #' @keywords internal
-util_cleanup <- function(nl, pattern) {
-  file.remove(dir(path = getexp(nl, "outpath"),
-                  pattern = pattern,
-                  full.names = TRUE))
+util_cleanup <- function(nl, directory, pattern) {
+  file.remove(dir(path = directory, pattern = pattern, full.names = TRUE))
 }
 
 #' Load output file from simulations
