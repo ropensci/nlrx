@@ -22,7 +22,7 @@
 #' \dontrun{
 #' download_netlogo("/home/user/experiment/", "6.0.3")
 #' }
-#' 
+#'
 #' @aliases download_netlogo
 #' @rdname download_netlogo
 #'
@@ -67,11 +67,11 @@ download_netlogo <- function(to, version, extract = FALSE) {
   )
 
   nl_dl <- paste0(nl_url, nl_file)
-  to_file <- paste0(to, "/", nl_file)
+  to_file <- paste0(to, nl_file)
   utils::download.file(nl_dl, to_file)
 
   ## Extract the archive if os=unix:
   if (util_get_os() == "unix") {
-    system(paste0("tar xvzf ", to_file))
+    system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
 }
