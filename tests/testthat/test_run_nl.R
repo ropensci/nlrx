@@ -18,7 +18,7 @@ testthat::test_that("Run nl", {
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
   modelpath <- file.path(nlpath, "app", "models", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = nlversion,
+  nl <- nl(nlversion = "6.0.3",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)

@@ -13,6 +13,7 @@ testthat::test_that("Download NetLogo", {
 
   ## Check that download worked and netlogo jar file exists:
   testthat::expect_true(file.exists(file.path(nlpath,
+                                              "NetLogo 6.0.3",
                                               "app",
                                               paste0("netlogo-",
                                                      nlversion,
