@@ -36,9 +36,6 @@ testthat::test_that("Run nl", {
                               runtime = 2,
                               evalticks = 1:2,
                               metrics = c("count sheep","count wolves"),
-                              metrics.patches = c("pxcor", "pycor", "pcolor"),
-                              metrics.turtles = c("who", "breed", "pxcor",
-                                                  "pycor", "xcor", "ycor"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif"),
