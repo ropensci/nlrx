@@ -17,6 +17,7 @@ matrix:
         - brew link --force curl
 
 before_install:
+  - wget "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz"
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
