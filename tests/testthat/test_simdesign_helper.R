@@ -2,23 +2,22 @@ testthat::context("Simdesign Helper")
 testthat::test_that("Simdesign objects are created properly", {
 
   nl <- nl(
-    nlversion = "6.0.2",
-    nlpath = "C:/Program Files/NetLogo 6.0.2/",
-    modelpath = "C:/WolfSheepPredation.nlogo",
+    nlversion = "6.0.3",
+    nlpath = "/home/travis/netlogo/NetLogo 6.0.3",
+    modelpath = "/home/travis/netlogo/NetLogo 6.0.3/app/models/Wolf Sheep Predation.nlogo",
     jvmmem = 1024
   )
 
   nl@experiment <- experiment(
     expname = "nlrxtest",
-    outpath = "C:/out/",
+    outpath = "/home/out",
     repetition = 1,
     tickmetrics = "true",
     idsetup = "setup",
     idgo = "go",
-    idfinal = "final",
+    idfinal = NA_character_,
     runtime = 10,
-    evalticks = seq(8, 10),
-    stopcond = "ticks = 3",
+    evalticks = seq(1, 10),
     metrics = c("count sheep", "count wolves"),
     variables = list(
       "initial-number-sheep" = list(min = 50, max = 150, step = 10,
