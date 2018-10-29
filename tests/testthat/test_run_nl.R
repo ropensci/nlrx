@@ -9,7 +9,7 @@ testthat::test_that("Run nl", {
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- "/home/travis/NetLogo 6.0.3/"
+  nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",
                                               "netlogo-6.0.3.jar")))
