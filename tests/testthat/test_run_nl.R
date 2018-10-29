@@ -68,7 +68,7 @@ testthat::test_that("Run nl", {
 
   testthat::expect_equal(xmlfileread$experiment$setup, "setup")
   testthat::expect_equal(xmlfileread$experiment$go, "go")
-  testthat::expect_equal(xmlfileread$experiment$timeLimit[["steps"]], "10")
+  testthat::expect_equal(xmlfileread$experiment$timeLimit[["steps"]], "2")
   testthat::expect_equal(xmlfileread$experiment$metric, "count sheep")
   testthat::expect_true(is.character(
     xmlfileread$experiment$enumeratedValueSet$value[["value"]]))
