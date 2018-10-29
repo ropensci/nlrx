@@ -65,7 +65,7 @@ testthat::test_that("Run nl", {
   testthat::context("Run one simulation with run_nl_one()")
   results <- run_nl_one(nl, seed, siminputrow, "all")
   testthat::expect_match(class(results)[1], "tbl_df")
-  testthat::expect_equal(nrow(results), 1)
+  testthat::expect_equal(nrow(results), 2)
 
   testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
