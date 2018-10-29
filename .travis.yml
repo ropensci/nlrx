@@ -26,7 +26,7 @@ before_install:
 
 script:
   - R CMD build .
-  - travis_wait 45 R CMD check cliR*tar.gz --as-cran
+  - travis_wait 45 R CMD check nlrx*tar.gz --as-cran
 
 after_success:
   - Rscript -e 'covr::codecov()'
