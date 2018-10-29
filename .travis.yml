@@ -21,12 +21,8 @@ before_install:
   - wget -qO- "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz --directory "/home/travis/netlogo"
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
+  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev openjdk-8-jdk
   - Rscript -e 'update.packages(ask = FALSE)'
-
-script:
-  - R CMD build .
-  - travis_wait 45 R CMD check nlrx*tar.gz --as-cran
 
 after_success:
   - Rscript -e 'covr::codecov()'
