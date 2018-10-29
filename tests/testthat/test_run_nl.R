@@ -34,7 +34,7 @@ testthat::test_that("Run nl", {
                               idgo = "go",
                               idfinal = NA_character_,
                               runtime = 2,
-                              evalticks = 1:2,
+                              evalticks = c(1,2),
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
@@ -52,7 +52,7 @@ testthat::test_that("Run nl", {
                                                "show-energy?" = "false"))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
-                                samples=10,
+                                samples=1,
                                 nseeds=1,
                                 precision=3)
 
