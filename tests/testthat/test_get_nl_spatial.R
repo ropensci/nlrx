@@ -62,6 +62,9 @@ testthat::test_that("Get nl spatial", {
 
   results <- run_nl_all(nl)
 
+  ## Attach results to nl:
+  setsim(nl, "simoutput") <- results
+
   testthat::context("Get spatial data with turtles px: raster/sf")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
                                     turtle_coords = "px", format = "spatial")
