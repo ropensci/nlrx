@@ -352,7 +352,7 @@ util_read_write_batch <- function(nl) {
       ## For all other NetLogo versions we can just copy the headless bat from
       ## the installation folder:
       # Prepare pathes:
-      batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.bat")
+      batchpath <- file.path(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
       # Extensions Folder:
       extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions")
@@ -415,7 +415,7 @@ util_read_write_batch <- function(nl) {
       ## For all other NetLogo versions we can just copy and modify the headless
       ## sh from the installation folder:
       ## Create path variables:
-      batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.sh")
+      batchpath <- file.path(getnl(nl, "nlpath"), "netlogo-headless.sh")
       batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".sh")
 
       # Copy original file to temppath file
