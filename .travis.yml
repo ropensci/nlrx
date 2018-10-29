@@ -24,6 +24,10 @@ before_install:
   - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev
   - Rscript -e 'update.packages(ask = FALSE)'
 
+script:
+  - R CMD build .
+  - travis_wait 45 R CMD check cliR*tar.gz --as-cran
+
 after_success:
   - Rscript -e 'covr::codecov()'
 
