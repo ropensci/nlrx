@@ -9,7 +9,7 @@ testthat::test_that("Run nl", {
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- "/home/travis/NetLogo 6.0.3/"
+  nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",
                                               "netlogo-6.0.3.jar")))
@@ -18,11 +18,12 @@ testthat::test_that("Run nl", {
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
   modelpath <- file.path(nlpath, "app", "models", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = nlversion,
+  nl <- nl(nlversion = "6.0.3",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
-  outpath <- file.path(nlpath, "out")
+
+  outpath <- tempdir()
 
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
@@ -31,13 +32,10 @@ testthat::test_that("Run nl", {
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
-                              idfinal = "reset-ticks",
-                              runtime = 10,
-                              evalticks = 1:10,
+                              idfinal = NA_character_,
+                              runtime = 2,
+                              evalticks = 1:2,
                               metrics = c("count sheep","count wolves"),
-                              metrics.patches = c("pxcor", "pycor", "pcolor"),
-                              metrics.turtles = c("who", "breed", "pxcor",
-                                                  "pycor", "xcor", "ycor"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif"),
@@ -64,13 +62,13 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
   util_create_sim_XML(nl, seed, siminputrow, xmlfile)
-
+  testthat::expect_true(file.exists(xmlfile))
   xmlfileread <- XML::xmlParse(file = xmlfile)
   xmlfileread <- XML::xmlToList(xmlfileread)
 
   testthat::expect_equal(xmlfileread$experiment$setup, "setup")
   testthat::expect_equal(xmlfileread$experiment$go, "go")
-  testthat::expect_equal(xmlfileread$experiment$timeLimit[["steps"]], "50")
+  testthat::expect_equal(xmlfileread$experiment$timeLimit[["steps"]], "10")
   testthat::expect_equal(xmlfileread$experiment$metric, "count sheep")
   testthat::expect_true(is.character(
     xmlfileread$experiment$enumeratedValueSet$value[["value"]]))
@@ -78,7 +76,7 @@ testthat::test_that("Run nl", {
     xmlfileread$experiment$enumeratedValueSet$.attrs[["variable"]],
     "initial-number-sheep")
   testthat::expect_equal(
-    xmlfileread$experiment$.attrs[["name"]], "nlrx_simple")
+    xmlfileread$experiment$.attrs[["name"]], "nlrx_test")
   testthat::expect_equal(xmlfileread$experiment$.attrs[["repetitions"]], "1")
   testthat::expect_equal(
     xmlfileread$experiment$.attrs[["runMetricsEveryStep"]], "true")
@@ -109,7 +107,10 @@ testthat::test_that("Run nl", {
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
   testthat::context("Cleanup:")
-  util_cleanup(nl, nl@experiment@outpath, "all")
+  util_cleanup(nl, outpath, "all")
+  util_cleanup(nl, dirname(xmlfile), pattern = "all")
+  util_cleanup(nl, dirname(batchpath), pattern = ".bat")
+  util_cleanup(nl, dirname(batchpath), pattern = ".sh")
   testthat::expect_false(file.exists(xmlfile))
   testthat::expect_false(file.exists(batchfile))
   testthat::expect_false(file.exists(outfile))
