@@ -86,11 +86,11 @@ testthat::test_that("Run nl", {
   batchfile <- util_read_write_batch(nl)
   testthat::expect_true(file.exists(batchfile))
 
-  # testthat::context("Call NetLogo batch file:")
-  # outfile <- file.path(nl@experiment@outpath, "nlrx_output_1.csv")
-  # util_call_nl(nl, xmlfile = xmlfile, batchfile = batchfile, outfile = outfile)
-  # expect_true(file.exists(outfile))
-  #
+  testthat::context("Call NetLogo batch file:")
+  outfile <- file.path(nl@experiment@outpath, "nlrx_output_1.csv")
+  util_call_nl(nl, xmlfile = xmlfile, batchfile = batchfile, outfile = outfile)
+  expect_true(file.exists(outfile))
+
   # testthat::context("Gather results:")
   # results <- util_gather_results(nl, outfile, seed, siminputrow)
   # testthat::expect_match(class(results)[1], "tbl_df")
