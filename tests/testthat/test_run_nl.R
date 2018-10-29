@@ -92,29 +92,29 @@ testthat::test_that("Run nl", {
   util_call_nl(nl, xmlfile = xmlfile, batchfile = batchfile, outfile = outfile)
   expect_true(file.exists(outfile))
 
-  # testthat::context("Gather results:")
-  # results <- util_gather_results(nl, outfile, seed, siminputrow)
-  # testthat::expect_match(class(results)[1], "tbl_df")
-  # testthat::expect_equal(nrow(results), 1)
-  #
-  # testthat::context("Run one simulation with run_nl_one()")
-  # results <- run_nl_one(nl, seed, siminputrow, "all")
-  # testthat::expect_match(class(results)[1], "tbl_df")
-  # testthat::expect_equal(nrow(results), 1)
-  #
-  # testthat::context("Run all simulations with run_nl_all()")
-  # results <- run_nl_all(nl, "all")
-  # testthat::expect_match(class(results)[1], "tbl_df")
-  # testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
-  #
-  # testthat::context("Cleanup:")
-  # util_cleanup(nl, outpath, "all")
-  # util_cleanup(nl, dirname(xmlfile), pattern = "all")
-  # util_cleanup(nl, dirname(batchpath), pattern = ".bat")
-  # util_cleanup(nl, dirname(batchpath), pattern = ".sh")
-  # testthat::expect_false(file.exists(xmlfile))
-  # testthat::expect_false(file.exists(batchfile))
-  # testthat::expect_false(file.exists(outfile))
+  testthat::context("Gather results:")
+  results <- util_gather_results(nl, outfile, seed, siminputrow)
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), 1)
+
+  testthat::context("Run one simulation with run_nl_one()")
+  results <- run_nl_one(nl, seed, siminputrow, "all")
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), 1)
+
+  testthat::context("Run all simulations with run_nl_all()")
+  results <- run_nl_all(nl, "all")
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
+
+  testthat::context("Cleanup:")
+  util_cleanup(nl, outpath, "all")
+  util_cleanup(nl, dirname(xmlfile), pattern = "all")
+  util_cleanup(nl, dirname(batchpath), pattern = ".bat")
+  util_cleanup(nl, dirname(batchpath), pattern = ".sh")
+  testthat::expect_false(file.exists(xmlfile))
+  testthat::expect_false(file.exists(batchfile))
+  testthat::expect_false(file.exists(outfile))
 
 
 })
