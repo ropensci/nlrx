@@ -91,7 +91,7 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
 
   testthat::context("Get spatial data without turtles: tibble")
-  results.spatial <- get_nl_spatial(nl, turtles = FALSE,patches=TRUE,
+  results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
                                     format = "tibble")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
 
