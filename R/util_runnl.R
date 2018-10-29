@@ -311,7 +311,7 @@ util_read_write_batch <- function(nl) {
       )
 
       # JVM_OPTS line:
-      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
+      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions")
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"),
                             "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 ",
                             "-Dnetlogo.extensions.dir=^\"", extensionspath,
@@ -355,7 +355,7 @@ util_read_write_batch <- function(nl) {
       batchpath <- paste0(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
       # Extensions Folder:
-      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
+      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions")
       jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-",
                         getnl(nl, "nlversion"), ".jar")
 
