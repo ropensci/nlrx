@@ -1,9 +1,8 @@
-testthat::context("Run nl tests")
-testthat::test_that("Run nl", {
+testthat::context("Get nl spatial")
+testthat::test_that("Get nl spatial", {
 
   # Run these tests only on TRAVIS:
   testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
-
 
   ## Check that JAVA is installed:
   testthat::expect_true(system('java -version') == 0)
@@ -37,6 +36,10 @@ testthat::test_that("Run nl", {
                               runtime = 2,
                               evalticks = c(1,2),
                               metrics = c("count sheep","count wolves"),
+                              metrics.turtles = c("who", "breed",
+                                                  "pxcor", "pycor",
+                                                  "xcor", "ycor"),
+                              metrics.patches = c("pxcor", "pycor", "pcolor"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif"),
@@ -57,19 +60,34 @@ testthat::test_that("Run nl", {
                                 nseeds=1,
                                 precision=3)
 
-
-
-  seed <- nl@simdesign@simseeds[1]
-  siminputrow <- 1
-
-  testthat::context("Run one simulation with run_nl_one()")
-  results <- run_nl_one(nl, seed, siminputrow, "all")
-  testthat::expect_match(class(results)[1], "tbl_df")
-  testthat::expect_equal(nrow(results), 1)
-
-  testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
-  testthat::expect_match(class(results)[1], "tbl_df")
-  testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
+
+  testthat::context("Get spatial data with turtles px: raster/sf")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, turtle_coords = "px",
+                                    format = "spatial")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+
+  testthat::context("Get spatial data with turtles px: tibble")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, turtle_coords = "px",
+                                    format = "tibble")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+
+  testthat::context("Get spatial data with turtles x: raster/sf")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, turtle_coords = "x",
+                                    format = "spatial")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+
+  testthat::context("Get spatial data with turtles x: tibble")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, turtle_coords = "x",
+                                    format = "tibble")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+
+  testthat::context("Get spatial data without turtles: raster")
+  results.spatial <- get_nl_spatial(nl, turtles = FALSE, format = "spatial")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+
+  testthat::context("Get spatial data without turtles: tibble")
+  results.spatial <- get_nl_spatial(nl, turtles = FALSE, format = "tibble")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
 
 })
