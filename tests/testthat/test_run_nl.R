@@ -22,7 +22,8 @@ testthat::test_that("Run nl", {
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
-  outpath <- file.path(nlpath, "out")
+
+  outpath <- tempdir()
 
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
