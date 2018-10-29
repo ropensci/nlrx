@@ -313,8 +313,8 @@ util_read_write_batch <- function(nl) {
       # JVM_OPTS line:
       extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions/")
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"),
-                            "m -XX:+UseParallelGC -Dfile.encoding=UTF-8
-                            -Dnetlogo.extensions.dir=^\"", extensionspath,
+                            "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 ",
+                            "-Dnetlogo.extensions.dir=^\"", extensionspath,
                             "^\"\"")
 
       # Block 2 of the batch file:
@@ -362,8 +362,8 @@ util_read_write_batch <- function(nl) {
       # jvmoptions string:
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx",
                             getnl(nl, "jvmmem"),
-                            "m -XX:+UseParallelGC -Dfile.encoding=UTF-8
-                            -Dnetlogo.extensions.dir=^\"",
+                            "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 ",
+                            "-Dnetlogo.extensions.dir=^\"",
                             extensionspath, "^\"\"")
       jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
@@ -399,8 +399,8 @@ util_read_write_batch <- function(nl) {
       # jvmoptsline:
       jvmoptsline <- paste0("java -Xmx",
                             getnl(nl, "jvmmem"),
-                            "m -Dfile.encoding=UTF-8 -classpath NetLogo.jar
-                            org.nlogo.headless.Main \"$@\"")
+                            "m -Dfile.encoding=UTF-8 -classpath NetLogo.jar ",
+                            "org.nlogo.headless.Main \"$@\"")
 
       # Put all blocks together:
       allblocks <- c(block1, basedirline, jvmoptsline)
