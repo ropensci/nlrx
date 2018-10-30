@@ -4,14 +4,14 @@
 \alias{export_nl}
 \title{Export NetLogo Experiment}
 \usage{
-export_nl(nl, folder = dirname(getnl(nl, "modelpath")), outfile)
+export_nl(nl, path = dirname(getnl(nl, "modelpath")), tarfile)
 }
 \arguments{
 \item{nl}{nl object}
 
-\item{folder}{Path to folder that contains files to run NetLogo experiment}
+\item{path}{Path to folder that contains files to run NetLogo experiment}
 
-\item{outfile}{Path to folder where the experiments gets stored as zip file}
+\item{tarfile}{Path to folder where the experiments gets stored as zip file}
 }
 \value{
 The status value returned by the external command, invisibly.
@@ -27,8 +27,8 @@ zipped folder. This enables other person to run the same experiment as you.
 \examples{
 \dontrun{
 
-folder <- "/home/user/test"
+path <- "/home/user/test"
 outfile <- "/home/user/test.zip"
-export_nl(nl, folder = folder, outfile = outfile)
+export_nl(nl, path = path, tarfile = outfile)
 }
 }

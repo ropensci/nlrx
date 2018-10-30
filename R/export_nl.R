@@ -19,7 +19,7 @@
 #'
 #' path <- "/home/user/test"
 #' outfile <- "/home/user/test.zip"
-#' export_nl(nl, path = path, outfile = outfile)
+#' export_nl(nl, path = path, tarfile = outfile)
 #' }
 #' @aliases export_nl
 #' @rdname export_nl

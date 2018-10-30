@@ -4,12 +4,12 @@
 \alias{import_nl}
 \title{Import NetLogo Experiment}
 \usage{
-import_nl(folder, outfile, new_session = FALSE)
+import_nl(tarfile, targetdir, new_session = FALSE)
 }
 \arguments{
-\item{folder}{Path to folder that contains files to run NetLogo experiment}
+\item{tarfile}{Path to tarfile that contains files to run NetLogo experiment}
 
-\item{outfile}{Path to folder where the experiments gets extracted}
+\item{targetdir}{Path to folder where the experiments gets extracted}
 
 \item{new_session}{If TRUE, opens a new RStudio Session with an Rproj}
 }
