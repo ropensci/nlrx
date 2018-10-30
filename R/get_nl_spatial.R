@@ -62,7 +62,7 @@ get_nl_spatial <- function(nl,
   if (!isTRUE(turtles)) {
     turtles_tib <- tibble::tibble(
       id = seq(1, nrow(getsim(nl, "simoutput"))),
-      turtles = rep(NA, nrow(getsim(nl, "simoutput")))
+      turtle.dat = rep(NA, nrow(getsim(nl, "simoutput")))
     )
   }
 
@@ -70,7 +70,7 @@ get_nl_spatial <- function(nl,
   if (!isTRUE(patches)) {
     patches_tib <- tibble::tibble(
       id = seq(1, nrow(getsim(nl, "simoutput"))),
-      patches = rep(NA, nrow(getsim(nl, "simoutput")))
+      patch.dat = rep(NA, nrow(getsim(nl, "simoutput")))
     )
   }
 
@@ -102,7 +102,7 @@ get_nl_spatial <- function(nl,
     patches_own_names <-
       names(getsim(nl, "simoutput")$metrics.patches[[1]])[patches_own]
 
-    patches <-
+    patch.dat <-
       purrr::map(
         seq_along(getsim(nl, "simoutput")$metrics.patches),
         function(raster_ind) {
@@ -132,7 +132,7 @@ get_nl_spatial <- function(nl,
         }
       )
 
-    patches_tib <- tibble::enframe(patches, "id", "patches")
+    patches_tib <- tibble::enframe(patch.dat, "id", "patches")
     patches_tib$step <- getsim(nl, "simoutput")$`[step]`
     patches_tib$siminputrow <- getsim(nl, "simoutput")$siminputrow
     patches_tib$`random-seed` <-
@@ -149,37 +149,35 @@ get_nl_spatial <- function(nl,
       )
     }
 
-    turtles <-
+    turtle.dat <-
       purrr::map(
         seq_along(getsim(nl, "simoutput")$metrics.turtles),
         function(turtles_ind) {
           if (turtle_coords == "px") {
             coord_ind <-
-              grepl(c("pxcor|pycor"), names(getsim(nl,
+              grepl(c("\\bpxcor\\b|\\bpycor\\b"), names(getsim(nl,
                                           "simoutput")$metrics.turtles[[
                                             turtles_ind]]))
           }
 
           if (turtle_coords == "x") {
             coord_ind <-
-              grepl(c("xcor|ycor"),
-                names(getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]]),
-                fixed = TRUE
-              )
+              grepl(c("\\bxcor\\b|\\bycor\\b"),
+                names(getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]]))
           }
 
-          turtles <-
+          turtle.dat <-
             getsim(nl, "simoutput")$metrics.turtles[[turtles_ind]] %>%
             dplyr::mutate_at(which(coord_ind == TRUE), function(x)
               as.numeric(as.character(x))) %>%
             tibble::as.tibble() %>%
             sf::st_as_sf(., coords = which(coord_ind == TRUE))
 
-          return(turtles)
+          return(turtle.dat)
         }
       )
 
-    turtles_tib <- tibble::enframe(turtles, "id", "turtles")
+    turtles_tib <- tibble::enframe(turtle.dat, "id", "turtles")
     turtles_tib$step <- getsim(nl, "simoutput")$`[step]`
     turtles_tib$siminputrow <- getsim(nl, "simoutput")$siminputrow
     turtles_tib$`random-seed` <-
@@ -189,8 +187,8 @@ get_nl_spatial <- function(nl,
   nl_join <- dplyr::left_join(patches_tib, turtles_tib)
 
   if (format == "tibble") {
-    if (!is.data.frame(patches)) {
-      patches <-
+    if (!is.data.frame(patch.dat)) {
+      patch.dat <-
         dplyr::mutate(patches_tib,
           maps = purrr::map(patches_tib$patches, function(x) {
             # Create empty tibble with the same dimension as the raster ----
@@ -221,14 +219,14 @@ get_nl_spatial <- function(nl,
         )
     }
 
-    if (!is.data.frame(turtles)) {
-      turtles <- turtles_tib %>%
-        tidyr::unnest(turtles) %>%
+    if(isTRUE(turtles)) {
+      turtle.dat <- turtles_tib %>%
+        tidyr::unnest(turtle.dat) %>%
         sf::st_as_sf()
-      turtles <-
-        turtles %>%
+      turtle.dat <-
+        turtle.dat %>%
         sf::st_set_geometry(NULL) %>%
-        cbind(sf::st_coordinates(turtles)) %>%
+        cbind(sf::st_coordinates(turtle.dat)) %>%
         dplyr::rename(
           turtles_x = X,
           turtles_y = Y
@@ -236,10 +234,26 @@ get_nl_spatial <- function(nl,
     }
 
     ## Bind tibbles:
-    patches$group <- "patches"
-    turtles$group <- "turtles"
-    nl_join <- dplyr::bind_rows(patches, turtles) %>%
-      dplyr::select(group, dplyr::everything())
+    if (isTRUE(patches) && isTRUE(turtles))
+    {
+      patch.dat$group <- "patches"
+      turtle.dat$group <- "turtles"
+      nl_join <- dplyr::bind_rows(patch.dat, turtle.dat) %>%
+        dplyr::select(group, dplyr::everything())
+    }
+    if (isTRUE(patches) && !isTRUE(turtles))
+    {
+      patch.dat$group <- "patches"
+      nl_join <- dplyr::bind_rows(patch.dat) %>%
+        dplyr::select(group, dplyr::everything())
+    }
+    if (!isTRUE(patches) && isTRUE(turtles))
+    {
+      turtle.dat$group <- "turtles"
+      nl_join <- dplyr::bind_rows(turtle.dat) %>%
+        dplyr::select(group, dplyr::everything())
+    }
+
   }
 
   return(nl_join)

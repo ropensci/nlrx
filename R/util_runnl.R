@@ -311,7 +311,7 @@ util_read_write_batch <- function(nl) {
       )
 
       # JVM_OPTS line:
-      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions")
+      extensionspath <- file.path(getnl(nl, "nlpath"), "app/extensions")
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx", getnl(nl, "jvmmem"),
                             "m -XX:+UseParallelGC -Dfile.encoding=UTF-8 ",
                             "-Dnetlogo.extensions.dir=^\"", extensionspath,
@@ -335,7 +335,7 @@ util_read_write_batch <- function(nl) {
       )
 
       # Classpath line:
-      jarpath <- paste0(getnl(nl, "nlpath"), "app/NetLogo.jar")
+      jarpath <- file.path(getnl(nl, "nlpath"), "app/NetLogo.jar")
       jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
       # Block 3 of the batch file:
@@ -355,9 +355,9 @@ util_read_write_batch <- function(nl) {
       batchpath <- file.path(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
       # Extensions Folder:
-      extensionspath <- paste0(getnl(nl, "nlpath"), "app/extensions")
-      jarpath <- paste0(getnl(nl, "nlpath"), "app/netlogo-",
-                        getnl(nl, "nlversion"), ".jar")
+      extensionspath <- file.path(getnl(nl, "nlpath"), "app/extensions")
+      jarpath <- file.path(getnl(nl, "nlpath"), paste0("app/netlogo-",
+                        getnl(nl, "nlversion"), ".jar"))
 
       # jvmoptions string:
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx",

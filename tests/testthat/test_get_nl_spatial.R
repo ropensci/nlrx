@@ -69,30 +69,48 @@ testthat::test_that("Get nl spatial", {
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
                                     turtle_coords = "px", format = "spatial")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
+  testthat::expect_match(class(results.spatial$turtles[[1]])[1], "sf")
 
   testthat::context("Get spatial data with turtles px: tibble")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
                                     turtle_coords = "px", format = "tibble")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_false(is.null(results.spatial$patches_x))
+  testthat::expect_false(is.null(results.spatial$patches_y))
+  testthat::expect_false(is.null(results.spatial$turtles_x))
+  testthat::expect_false(is.null(results.spatial$turtles_y))
 
-  # testthat::context("Get spatial data with turtles x: raster/sf")
-  # results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-  #                                   turtle_coords = "x", format = "spatial")
-  # testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  #
-  # testthat::context("Get spatial data with turtles x: tibble")
-  # results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-  #                                   turtle_coords = "x", format = "tibble")
-  # testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::context("Get spatial data with turtles x: raster/sf")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
+                                    turtle_coords = "x", format = "spatial")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
+  testthat::expect_match(class(results.spatial$turtles[[1]])[1], "sf")
+
+  testthat::context("Get spatial data with turtles x: tibble")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
+                                    turtle_coords = "x", format = "tibble")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_false(is.null(results.spatial$patches_x))
+  testthat::expect_false(is.null(results.spatial$patches_y))
+  testthat::expect_false(is.null(results.spatial$turtles_x))
+  testthat::expect_false(is.null(results.spatial$turtles_y))
 
   testthat::context("Get spatial data without turtles: raster")
   results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
                                     format = "spatial")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
+  testthat::expect_false(exists("results.spatial$turtles"))
 
   testthat::context("Get spatial data without turtles: tibble")
   results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
                                     format = "tibble")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_false(is.null(results.spatial$patches_x))
+  testthat::expect_false(is.null(results.spatial$patches_y))
+  testthat::expect_false(exists("results.spatial$turtles_x"))
+  testthat::expect_false(exists("results.spatial$turtles_y"))
 
-})
+  })
