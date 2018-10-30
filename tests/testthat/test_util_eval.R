@@ -1,5 +1,5 @@
-testthat::context("export_nl tests")
-testthat::test_that("export_nl", {
+testthat::context("util_eval")
+testthat::test_that("util_eval", {
 
   # Run these tests only on TRAVIS:
   testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
@@ -13,16 +13,26 @@ testthat::test_that("export_nl", {
                                               "app",
                                               "netlogo-6.0.3.jar")))
 
+
+  ## Now we check if we can run a simple simulation:
+  ## Step1: Create a nl obejct:
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
                          "Biology", "Wolf Sheep Predation.nlogo")
 
-  nl <- nl(nlversion = "6.0.3",
+   nl <- nl(nlversion = "6.0.3",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
 
+
+  ## Without proper experiment, this should throw an error:
+  testthat::expect_error(util_eval_variables(nl), "Error: Experiment Variable list is empty.\n         You need to define a variable list with at least one element!")
+  testthat::expect_error(util_eval_constants(nl), "Error: Experiment constants list is empty.\n         You need to define a constants list with at least one element!")
+  testthat::expect_error(util_eval_experiment(nl), "Error: To add a sim design to a nl object you need to\n    define a proper experiment first. The following elements are missing without\n    default: expname ; outpath ; runtime ; metrics ; variables or constants")
+
   outpath <- tempdir()
 
+  ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
                               repetition = 1,
@@ -35,10 +45,12 @@ testthat::test_that("export_nl", {
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
-                                                      step=10, qfun="qunif"),
+                                                      step=10, qfun="qunif",
+                                                      values=c(1, 2, 3)),
                                                'initial-number-wolves' =
                                                  list(min=50, max=150,
-                                                      step=10, qfun="qunif")),
+                                                      step=10, qfun="qunif",
+                                                      values=c(1, 2, 3))),
                               constants = list("model-version" =
                                                  "\"sheep-wolves-grass\"",
                                                "grass-regrowth-time" = 30,
@@ -48,21 +60,27 @@ testthat::test_that("export_nl", {
                                                "wolf-reproduce" = 5,
                                                "show-energy?" = "false"))
 
+
+  ## Check variable definitions:
+  testthat::expect_true(is.null(util_eval_variables(nl)))
+  testthat::expect_true(is.null(util_eval_constants(nl)))
+  testthat::expect_true(is.null(util_eval_experiment(nl)))
+  testthat::expect_message(eval_variables_constants(nl), "All defined variables and constants are valid!")
+
+
+  ## Check specific combinations for simdesigns:
+  testthat::expect_true(is.null(util_eval_variables_distinct(nl)))
+  testthat::expect_true(is.null(util_eval_variables_ff(nl)))
+  testthat::expect_true(is.null(util_eval_variables_sa(nl)))
+  testthat::expect_true(is.null(util_eval_variables_op(nl)))
+
+
+  ## Create a simdesign:
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
                                 nseeds=1,
                                 precision=3)
 
-
-  ## Store the nl object and the model folder as zip file:
-  outfile <- tempfile(fileext = ".zip")
-  export_nl(nl, folder = nl@modelpath, outfile = outfile)
-
-  ## Now read the zip file again:
-  extractdir <- tempdir()
-  import_nl(folder = outfile, outfile = extractdir, new_session = FALSE)
-
-  nlobjectfile <- file.path(extractdir, "nlobject.rds")
-  testthat::expect_true(file.exists(nlobjectfile))
+  testthat::expect_true(is.null(util_eval_simdesign(nl)))
 
 })

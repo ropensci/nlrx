@@ -72,4 +72,16 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
+
+
+  testthat::context("Run optimization with run_nl_dyn()")
+  nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,
+                                   evalcrit = 1, elitism = NA,
+                                   mutationChance = NA, nseeds = 1)
+
+  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  testthat::expect_match(class(results.dyn)[1], "rbga")
+  testthat::expect_equal(length(results.dyn), 12)
+
+
 })
