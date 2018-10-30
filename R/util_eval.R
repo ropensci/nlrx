@@ -92,7 +92,7 @@ util_eval_variables_ff <- function(nl) {
   vars.missing <- data.frame(cbind(values.missing = unlist(vars.values.missing),
                                    dist.missing = unlist(vars.dist.missing)))
   vars.missing$variable <- rownames(vars.missing)
-  vars.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE &&
+  vars.missing <- vars.missing %>% dplyr::filter(values.missing == TRUE &
                                                    dist.missing == TRUE)
 
   # Check if there are any variables defined

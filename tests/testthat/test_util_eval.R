@@ -26,11 +26,72 @@ testthat::test_that("util_eval", {
 
 
   ## Without proper experiment, this should throw an error:
-  testthat::expect_error(util_eval_variables(nl), "Error: Experiment Variable list is empty.\n         You need to define a variable list with at least one element!")
-  testthat::expect_error(util_eval_constants(nl), "Error: Experiment constants list is empty.\n         You need to define a constants list with at least one element!")
-  testthat::expect_error(util_eval_experiment(nl), "Error: To add a sim design to a nl object you need to\n    define a proper experiment first. The following elements are missing without\n    default: expname ; outpath ; runtime ; metrics ; variables or constants")
+  testthat::expect_error(util_eval_variables(nl), "Error")
+  testthat::expect_error(util_eval_constants(nl), "Error")
+  testthat::expect_error(util_eval_experiment(nl), "Error")
 
   outpath <- tempdir()
+  ## Add an experiment with incomplete variables:
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "true",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 2,
+                              evalticks = c(1,2),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('number-sheep' =
+                                                 list(min=50,
+                                                      values=c(1, 2, 3)),
+                                               'number-wolves' =
+                                                 list(qfun="qunif")),
+                              constants = list("version" =
+                                                 "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+
+  testthat::expect_error(util_eval_variables_distinct(nl), "Error")
+  testthat::expect_error(util_eval_variables_ff(nl), "Error")
+  testthat::expect_error(util_eval_variables_sa(nl), "Error")
+  testthat::expect_error(util_eval_variables_op(nl), "Error")
+  testthat::expect_error(eval_variables_constants(nl), "Warning")
+
+  ## Add an experiment with different number of values and distinct
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "fail",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 2,
+                              evalticks = c(1,2),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('initial-number-sheep' =
+                                                 list(min=50,
+                                                      values=c(1, 2, 3)),
+                                               'initial-number-wolves' =
+                                                 list(qfun="qunif",
+                                                      values=c(2,3))),
+                              constants = list("model-version" =
+                                                 "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  testthat::expect_error(util_eval_variables_distinct(nl), "Error")
+  testthat::expect_error(util_eval_experiment(nl), "Error")
+
 
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
@@ -76,6 +137,8 @@ testthat::test_that("util_eval", {
 
 
   ## Create a simdesign:
+  testthat::expect_error(util_eval_simdesign(nl), "Error")
+
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
                                 nseeds=1,

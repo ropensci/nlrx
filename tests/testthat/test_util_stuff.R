@@ -2,6 +2,37 @@ testthat::context("Util stuff")
 testthat::test_that("Util stuff", {
 
 
+  testthat::context("load_model_parameters")
+
+  # Run these tests only on TRAVIS:
+  testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
+
+  ## Check that JAVA is installed:
+  testthat::expect_true(system('java -version') == 0)
+
+  ## Check that netLogo installation worked:
+  nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
+  testthat::expect_true(file.exists(file.path(nlpath,
+                                              "app",
+                                              "netlogo-6.0.3.jar")))
+
+
+  ## Now we check if we can run a simple simulation:
+  ## Step1: Create a nl obejct:
+  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogo")
+
+  nl <- nl(nlversion = "6.0.3",
+           nlpath = nlpath,
+           modelpath = modelpath,
+           jvmmem = 1024)
+
+
+  params <- load_model_parameters(nl)
+
+  testthat::expect_match(class(params), "list")
+  testthat::expect_equal(length(params), 9)
+
   testthat::context("Test util_generate_seeds()")
 
   n <- 50
