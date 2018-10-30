@@ -39,16 +39,16 @@ export_nl <- function(nl,
   tempfile <- file.path(tempdir, "modelfiles.tar.gz")
 
   ## Create the tar file:
-  system(paste("tar -czf", tempfile, "-C", path, folder))
+  system(paste0("tar -czf \"", tempfile, "\" -C \"", path, "\" ", folder))
 
   ## Unpack the tarfile:
-  system(paste("tar -zxvf", tempfile, "-C", tempdir))
+  system(paste0("tar -zxvf \"", tempfile, "\" -C \"", tempdir, "\""))
 
   ## Create a rds file from the provided nl object:
   tempfile_nl <- file.path(tempdir, folder, "nlobject.rds")
   saveRDS(nl, tempfile_nl)
 
   ## Pack it up again:
-  system(paste("tar -czf", tarfile, "-C", tempdir, folder))
+  system(paste0("tar -czf \"", tarfile, "\" -C \"", tempdir, "\" ", folder))
 
 }

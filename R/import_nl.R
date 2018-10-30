@@ -30,7 +30,7 @@
 import_nl <- function(tarfile, targetdir, new_session = FALSE) {
   #utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
 
-  system(paste("tar -zxvf", tarfile, "-C", targetdir))
+  system(paste0("tar -zxvf \"", tarfile, "\" -C \"", targetdir, "\""))
 
   if (length(list.files(tarfile, pattern = "Rproj")) == 1 &&
     isTRUE(new_session)) {
