@@ -56,7 +56,7 @@ testthat::test_that("export_nl", {
 
   ## Store the nl object and the model folder as zip file:
   outfile <- tempfile(fileext = ".zip")
-  export_nl(nl, folder = nl@modelpath, outfile = outfile)
+  export_nl(nl, folder = dirname(nl@modelpath), outfile = outfile)
 
   testthat::expect_true(file.exists(outfile))
 
