@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' 
+#'
 #' folder <- "/home/user/test"
 #' outfile <- "/home/user/test.zip"
 #' export_nl(nl, folder = folder, outfile = outfile)
@@ -29,18 +29,20 @@
 export_nl <- function(nl,
                       folder = dirname(getnl(nl, "modelpath")),
                       outfile) {
-  mywd <- getwd()
+  #mywd <- getwd()
 
   ## Create zip:
-  setwd(folder)
-  on.exit(setwd(mywd))
-  utils::zip(zipfile = outfile, files = list.files(), extras = "-r")
+  #setwd(folder)
+  #on.exit(setwd(mywd))
+  utils::zip(zipfile = outfile,
+             files = list.files(folder, full.names = TRUE),
+             extras = "-r")
 
   ## Add nl object:
   ## Create a rds file from the nl object
   nltempdir <- tempdir()
   nltempfile <- paste0(nltempdir, "/nlobject.rds")
   saveRDS(nl, nltempfile)
-  setwd(nltempdir)
+  #setwd(nltempdir)
   utils::zip(zipfile = outfile, files = "nlobject.rds", flags = "-j")
 }
