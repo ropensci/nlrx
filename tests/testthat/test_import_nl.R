@@ -53,16 +53,18 @@ testthat::test_that("export_nl", {
                                 nseeds=1,
                                 precision=3)
 
-
   ## Store the nl object and the model folder as zip file:
-  outfile <- tempfile(fileext = ".zip")
-  export_nl(nl, folder = dirname(nl@modelpath), outfile = outfile)
+  path <- dirname(nl@modelpath)
+  tarfile <- tempfile(fileext = ".tar.gz")
+  export_nl(nl, path=path, tarfile = tarfile)
+
+  testthat::expect_true(file.exists(tarfile))
 
   ## Now read the zip file again:
-  extractdir <- tempdir()
-  import_nl(folder = outfile, outfile = extractdir, new_session = FALSE)
+  targetdir <- tempdir()
+  import_nl(tarfile = tarfile, targetdir = targetdir, new_session = FALSE)
 
-  nlobjectfile <- file.path(extractdir, "nlobject.rds")
+  nlobjectfile <- file.path(targetdir, basename(path), "nlobject.rds")
   testthat::expect_true(file.exists(nlobjectfile))
 
 })

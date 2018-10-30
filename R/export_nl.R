@@ -3,8 +3,8 @@
 #' @description Export NetLogo Experiment as zip file
 #'
 #' @param nl nl object
-#' @param folder Path to folder that contains files to run NetLogo experiment
-#' @param outfile Path to folder where the experiments gets stored as zip file
+#' @param path Path to folder that contains files to run NetLogo experiment
+#' @param tarfile Path to folder where the experiments gets stored as zip file
 #'
 #' @return The status value returned by the external command, invisibly.
 #'
@@ -17,9 +17,9 @@
 #' @examples
 #' \dontrun{
 #'
-#' folder <- "/home/user/test"
+#' path <- "/home/user/test"
 #' outfile <- "/home/user/test.zip"
-#' export_nl(nl, folder = folder, outfile = outfile)
+#' export_nl(nl, path = path, outfile = outfile)
 #' }
 #' @aliases export_nl
 #' @rdname export_nl
@@ -27,22 +27,28 @@
 #' @export
 
 export_nl <- function(nl,
-                      folder = dirname(getnl(nl, "modelpath")),
-                      outfile) {
-  #mywd <- getwd()
+                      path = dirname(getnl(nl, "modelpath")),
+                      tarfile) {
 
-  ## Create zip:
-  #setwd(folder)
-  #on.exit(setwd(mywd))
-  utils::zip(zipfile = outfile,
-             files = list.files(folder, full.names = TRUE),
-             extras = "-r")
+  ## Set pathes:
+  folder <- basename(path)
+  path <- dirname(path)
 
-  ## Add nl object:
-  ## Create a rds file from the nl object
-  nltempdir <- tempdir()
-  nltempfile <- paste0(nltempdir, "/nlobject.rds")
-  saveRDS(nl, nltempfile)
-  #setwd(nltempdir)
-  utils::zip(zipfile = outfile, files = "nlobject.rds", flags = "-j")
+  ## Create first tar file in tempdir:
+  tempdir <- tempdir()
+  tempfile <- file.path(tempdir, "modelfiles.tar.gz")
+
+  ## Create the tar file:
+  system(paste("tar -czf", tempfile, "-C", path, folder))
+
+  ## Unpack the tarfile:
+  system(paste("tar -zxvf", tempfile, "-C", tempdir))
+
+  ## Create a rds file from the provided nl object:
+  tempfile_nl <- file.path(tempdir, folder, "nlobject.rds")
+  saveRDS(nl, tempfile_nl)
+
+  ## Pack it up again:
+  system(paste("tar -czf", tarfile, "-C", tempdir, folder))
+
 }

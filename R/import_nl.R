@@ -2,8 +2,8 @@
 #'
 #' @description Import NetLogo Experiment from export_nl
 #'
-#' @param folder Path to folder that contains files to run NetLogo experiment
-#' @param outfile Path to folder where the experiments gets extracted
+#' @param tarfile Path to tarfile that contains files to run NetLogo experiment
+#' @param targetdir Path to folder where the experiments gets extracted
 #' @param new_session If TRUE, opens a new RStudio Session with an Rproj
 #'
 #' @return The status value returned by the external command, invisibly.
@@ -27,8 +27,10 @@
 #'
 #' @export
 
-import_nl <- function(folder, outfile, new_session = FALSE) {
-  utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
+import_nl <- function(tarfile, targetdir, new_session = FALSE) {
+  #utils::unzip(folder, exdir = outfile, junkpaths = TRUE)
+
+  system(paste("tar -zxvf", tarfile, "-C", targetdir))
 
   if (length(list.files(outfile, pattern = "Rproj")) == 1 &&
     isTRUE(new_session)) {
