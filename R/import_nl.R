@@ -32,9 +32,9 @@ import_nl <- function(tarfile, targetdir, new_session = FALSE) {
 
   system(paste("tar -zxvf", tarfile, "-C", targetdir))
 
-  if (length(list.files(outfile, pattern = "Rproj")) == 1 &&
+  if (length(list.files(tarfile, pattern = "Rproj")) == 1 &&
     isTRUE(new_session)) {
-    rstudioapi::openProject(list.files(outfile,
+    rstudioapi::openProject(list.files(tarfile,
       pattern = "Rproj",
       full.names = TRUE
     ))
