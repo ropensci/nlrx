@@ -109,7 +109,6 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_false(exists("results.spatial$turtles"))
 
   testthat::context("Get spatial data without turtles: tibble")
-
   results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
                                     format = "tibble")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
@@ -117,5 +116,15 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_false(is.null(results.spatial$patches_y))
   testthat::expect_false(exists("results.spatial$turtles_x"))
   testthat::expect_false(exists("results.spatial$turtles_y"))
+
+  testthat::context("Get spatial data without patches: tibble")
+  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=FALSE,
+                                    format = "tibble")
+  testthat::expect_match(class(results.spatial)[1], "tbl_df")
+  testthat::expect_false(exists("results.spatial$patches_x"))
+  testthat::expect_false(exists("results.spatial$patches_y"))
+  testthat::expect_false(is.null(results.spatial$turtles_x))
+  testthat::expect_false(is.null(results.spatial$turtles_y))
+
 
   })
