@@ -187,7 +187,7 @@ get_nl_spatial <- function(nl,
   nl_join <- dplyr::left_join(patches_tib, turtles_tib)
 
   if (format == "tibble") {
-    if (!is.data.frame(patch.dat)) {
+    if (isTRUE(patches)) {
       patch.dat <-
         dplyr::mutate(patches_tib,
           maps = purrr::map(patches_tib$patches, function(x) {
@@ -256,5 +256,5 @@ get_nl_spatial <- function(nl,
 
   }
 
-  return(nl_join)
+  return(tibble::as.tibble(nl_join))
 }
