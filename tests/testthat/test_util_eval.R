@@ -52,7 +52,7 @@ testthat::test_that("util_eval", {
                                                  "\"sheep-wolves-grass\""))
 
   ## Without proper constants, this should throw an error:
-  testthat::expect_error(util_eval_experiment(nl), "Error")
+  testthat::expect_error(eval_variables_constants(nl))
 
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
