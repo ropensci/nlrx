@@ -14,11 +14,9 @@ testthat::test_that("Download NetLogo", {
 
   ### Check that download worked and netlogo jar file exists:
   testthat::expect_true(file.exists(file.path(nlpath,
-                                              "NetLogo 5.3.1",
+                                              "netlogo-5.3.1-64",
                                               "app",
-                                              paste0("netlogo-",
-                                                     nlversion,
-                                                     ".jar"))))
+                                              paste0("NetLogo.jar"))))
   ## Version 6.0.0
   nlversion <- "6.0"
   nlpath <- tempdir()
