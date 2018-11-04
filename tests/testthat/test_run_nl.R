@@ -73,14 +73,24 @@ testthat::test_that("Run nl", {
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
 
+  testthat::context("Run optimization with run_nl_dyn() GenAlg")
+  nl@simdesign <- simdesign_GenSA(nl,
+                                   par=NULL,
+                                   evalcrit=1,
+                                   control=list(max.time = 12),
+                                   nseeds=1)
 
-  testthat::context("Run optimization with run_nl_dyn()")
+  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  testthat::expect_match(class(results.dyn), "list")
+  testthat::expect_equal(length(results.dyn), 4)
+
+  testthat::context("Run optimization with run_nl_dyn() GenAlg")
   nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,
                                    evalcrit = 1, elitism = NA,
                                    mutationChance = NA, nseeds = 1)
 
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
-  testthat::expect_match(class(results.dyn)[1], "rbga")
+  testthat::expect_match(class(results.dyn), "rbga")
   testthat::expect_equal(length(results.dyn), 12)
 
 
