@@ -102,6 +102,7 @@
 #' @name nlrx-package
 #' @author Jan Salecker \email{jsaleck@gwdg.de}
 #' @keywords package
+#nocov start
 "_PACKAGE"
 
 globalVariables(c(
@@ -125,3 +126,4 @@ globalVariables(c(
   "dist.missing",
   "values.missing"
 ))
+#nocov end
