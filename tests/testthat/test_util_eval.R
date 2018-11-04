@@ -31,6 +31,29 @@ testthat::test_that("util_eval", {
   testthat::expect_error(util_eval_experiment(nl), "Error")
 
   outpath <- tempdir()
+
+  ## Add an experiment with incomplete variables:
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "true",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 2,
+                              evalticks = c(1,2),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('number-sheep' =
+                                                 list(min=50,
+                                                      values=c(1, 2, 3)),
+                                               'number-wolves' =
+                                                 list(qfun="qunif")),
+                              constants = list("versionzzzz" =
+                                                 "\"sheep-wolves-grass\""))
+
+  ## Without proper constants, this should throw an error:
+  testthat::expect_error(util_eval_experiment(nl), "Error")
+
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,

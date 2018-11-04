@@ -6,15 +6,19 @@
 #' @rdname util_get_os
 #' @keywords internal
 util_get_os <- function() {
+  # nocov start
   if (.Platform$OS.type == "windows") {
     "win"
   } else if (Sys.info()["sysname"] == "Darwin") {
     "mac"
+  # nocov end
   } else if (.Platform$OS.type == "unix") {
     "unix"
+  # nocov start
   } else {
     stop("Unknown OS")
   }
+  # nocov end
 }
 
 #' Identify and report the current OS
@@ -137,6 +141,7 @@ load_model_parameters <- function(nl) {
                          TRUE, FALSE)
         )
       }
+      # nocov start
       if (l == "INPUTBOX") {
         name <- as.character(model.code[i + 5])
 
@@ -146,6 +151,7 @@ load_model_parameters <- function(nl) {
           entrytype = model.code[i + 9]
         )
       }
+      # nocov end
       if (l == "CHOOSER") {
         name <- as.character(model.code[i + 5])
 
