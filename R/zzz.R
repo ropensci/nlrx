@@ -2,8 +2,8 @@
 #   where <- match(paste("package:", pkgname, sep=""), search())
 #   .initClasses(where)
 # }
-#nocov start
+# nocov start
 .onLoad <- function(libname, pkgname) {
   .initClasses()
 }
-#nocov end
+# nocov end

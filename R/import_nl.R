@@ -32,6 +32,7 @@ import_nl <- function(tarfile, targetdir, new_session = FALSE) {
 
   system(paste0("tar -zxvf \"", tarfile, "\" -C \"", targetdir, "\""))
 
+  # nocov start
   if (length(list.files(tarfile, pattern = "Rproj")) == 1 &&
     isTRUE(new_session)) {
     rstudioapi::openProject(list.files(tarfile,
@@ -39,4 +40,5 @@ import_nl <- function(tarfile, targetdir, new_session = FALSE) {
       full.names = TRUE
     ))
   }
+  # nocov end
 }

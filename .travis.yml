@@ -10,11 +10,6 @@ warnings_are_errors: false
 matrix:
   include:
     - os: linux
-    - os: osx
-      osx_image: xcode9.2
-      before_install:
-        - brew install curl
-        - brew link --force curl
 
 before_install:
   - sudo apt-get update
