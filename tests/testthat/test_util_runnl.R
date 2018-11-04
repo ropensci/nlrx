@@ -14,7 +14,56 @@ testthat::test_that("util_runnl", {
                                               "app",
                                               "netlogo-6.0.3.jar")))
 
+  ## Check that util_create_sim_XML can handle idrunnumber
+  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogo")
+  nl <- nl(nlversion = "6.0.3",
+           nlpath = nlpath,
+           modelpath = modelpath,
+           jvmmem = 1024)
 
+  outpath <- tempdir()
+
+  ## Step2: Add Experiment
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "true",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = "final",
+                              idrunnum = "test",
+                              stopcond = "not any? turtles",
+                              runtime = 2,
+                              evalticks = c(1,2),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('initial-number-sheep' =
+                                                 list(min=50, max=150,
+                                                      step=10, qfun="qunif"),
+                                               'initial-number-wolves' =
+                                                 list(min=50, max=150,
+                                                      step=10, qfun="qunif")),
+                              constants = list("model-version" =
+                                                 "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  nl@simdesign <- simdesign_lhs(nl=nl,
+                                samples=1,
+                                nseeds=1,
+                                precision=3)
+
+  xmlfile <- file.path(nl@experiment@outpath, "nlrx_test.xml")
+  seed <- nl@simdesign@simseeds[1]
+  siminputrow <- 1
+  util_create_sim_XML(nl, seed, siminputrow, xmlfile)
+  testthat::expect_true(file.exists(xmlfile))
+
+  # Test more strict for everything else
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
