@@ -6,10 +6,10 @@ testthat::test_that("class objects are initialized", {
  # nl <- methods::new("nl")
  # exp <- methods::new("experiment")
  # sd <- methods::new("simdesign")
-
- nl <- nl()
-
- testthat::expect_match(class(nl)[[1]], "nl")
+#
+#  nl <- nl()
+#
+#  testthat::expect_match(class(nl)[[1]], "nl")
  # testthat::expect_match(class(exp)[[1]], "experiment")
  # testthat::expect_match(class(sd)[[1]], "simdesign")
 
