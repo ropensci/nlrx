@@ -94,6 +94,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   }
 
   # add link metrics if defined
+  # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
     links.reporter <- paste0(
       "runresult (word \"[(list ",
@@ -103,7 +104,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
     )
     metrics <- c(metrics, links.reporter)
   }
-
+  # nocov end
 
   for (i in metrics) {
     XML::addChildren(experiment, XML::newXMLNode("metric",

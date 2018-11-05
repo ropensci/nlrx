@@ -93,5 +93,87 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results.dyn), "rbga")
   testthat::expect_equal(length(results.dyn), 12)
 
+  ## Step3: Test tickmetrics = false
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "false",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 2,
+                              evalticks = c(1,2),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('initial-number-sheep' =
+                                                 list(min=50, max=150,
+                                                      step=10, qfun="qunif"),
+                                               'initial-number-wolves' =
+                                                 list(min=50, max=150,
+                                                      step=10, qfun="qunif")),
+                              constants = list("model-version" =
+                                                 "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  nl@simdesign <- simdesign_lhs(nl=nl,
+                                samples=1,
+                                nseeds=1,
+                                precision=3)
+
+
+
+  seed <- nl@simdesign@simseeds[1]
+  siminputrow <- 1
+
+  testthat::context("Run one simulation with run_nl_one() and tickmetrics false")
+  results <- run_nl_one(nl, seed, siminputrow, "all")
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), 1)
+
+  ## Step4: Test NLtable == 0
+  ## Step3: Test tickmetrics = false
+  nl@experiment <- experiment(expname = "nlrx_test",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "true",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 15,
+                              evalticks = c(15),
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('initial-number-sheep' =
+                                                 list(min=1, max=1,
+                                                      step=1, qfun="qunif"),
+                                               'initial-number-wolves' =
+                                                 list(min=400, max=500,
+                                                      step=10, qfun="qunif")),
+                              constants = list("model-version" =
+                                                 "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 1,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  nl@simdesign <- simdesign_lhs(nl=nl,
+                                samples=1,
+                                nseeds=1,
+                                precision=3)
+
+
+
+  seed <- nl@simdesign@simseeds[1]
+  siminputrow <- 1
+
+  testthat::context("Run one simulation with run_nl_one() and tickmetrics false")
+  results <- run_nl_one(nl, seed, siminputrow, "all")
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), 1)
 
 })
