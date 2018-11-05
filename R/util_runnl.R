@@ -262,6 +262,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       list(.util_clean_metrics_patches(NLtable, nl))
   }
 
+  # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
     ## Rename column and clean link metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.links =
@@ -273,6 +274,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     NLtable[, grepl(c("metrics.links"), names(NLtable))] <-
       list(.util_clean_metrics_links(NLtable, nl))
   }
+  # nocov end
 
   return(NLtable)
 }
@@ -289,6 +291,7 @@ util_read_write_batch <- function(nl) {
   os <- util_get_os()
   batchpath_temp <- NULL
 
+  # nocov start
   if (os == "win") {
     if (getnl(nl, "nlversion") == "5.3.1") {
       ## NetLogo 5.3.1 does not contain a premade batchfile in the
@@ -348,6 +351,7 @@ util_read_write_batch <- function(nl) {
       ## Write batch file:
       batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".bat")
       writeLines(allblocks, batchpath_temp)
+
     } else {
       ## For all other NetLogo versions we can just copy the headless bat from
       ## the installation folder:
@@ -384,6 +388,7 @@ util_read_write_batch <- function(nl) {
       readr::write_lines(batch, path = batchpath_temp)
     }
   }
+  # nocov end
   if (os == "unix") {
     if (getnl(nl, "nlversion") == "5.3.1") {
       ## NetLogo 5.3.1 does not contain a premade shfile in the installation
@@ -492,7 +497,7 @@ util_read_write_batch <- function(nl) {
   patches_owns
 }
 
-
+# nocov start
 .util_clean_metrics_links <- function(NLtable, nl) {
 
   ## Extract current string:
@@ -540,7 +545,7 @@ util_read_write_batch <- function(nl) {
 
   links_owns
 }
-
+# nocov end
 ## Clean turtle metrics
 .util_clean_metrics_turtles <- function(NLtable, nl) {
 
