@@ -4,7 +4,6 @@ testthat::test_that("util_runnl", {
   # Run these tests only on TRAVIS:
   testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
 
-
   ## Check that JAVA is installed:
   testthat::expect_true(system('java -version') == 0)
 
