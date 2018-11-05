@@ -59,7 +59,7 @@ download_netlogo <- function(to, version, extract = FALSE) {
     "mac" = {
       nl_file <- paste0("NetLogo-", version, ".dmg")
     },
-    # nocov start
+    # nocov end
     "unix" = {
       nl_file <- paste0("NetLogo-", version, "-64.tgz")
     },
