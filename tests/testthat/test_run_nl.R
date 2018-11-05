@@ -73,11 +73,11 @@ testthat::test_that("Run nl", {
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
 
-  testthat::context("Run optimization with run_nl_dyn() GenAlg")
+  testthat::context("Run optimization with run_nl_dyn() GenSA")
   nl@simdesign <- simdesign_GenSA(nl,
                                    par=NULL,
                                    evalcrit=1,
-                                   control=list(max.time = 12),
+                                   control=list(max.time = 1),
                                    nseeds=1)
 
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
