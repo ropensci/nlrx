@@ -128,3 +128,4 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_false(is.null(results.spatial$turtles_y))
 
 })
+

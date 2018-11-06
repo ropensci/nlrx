@@ -111,7 +111,11 @@ get_nl_spatial <- function(nl,
       names(getsim(nl, "simoutput")$metrics.patches[[1]])[patches_own]
 
     ## map through every tick and return results
-    patch.dat <- get_patches(nl)
+    patch.dat <- get_patches(nl,
+                             x_coord_ind,
+                             y_coord_ind,
+                             patches_own,
+                             patches_own_names)
 
     ## streamline return
     patches_tib <- tibble::enframe(patch.dat, "id", "patches")
@@ -136,7 +140,7 @@ get_nl_spatial <- function(nl,
     }
 
     ## map through all the ticks to get turtle data
-    turtle.dat <- get_turtles(nl)
+    turtle.dat <- get_turtles(nl, turtle_coords)
 
     ## streamline output
     turtles_tib <- tibble::enframe(turtle.dat, "id", "turtles")
@@ -224,7 +228,7 @@ get_nl_spatial <- function(nl,
   return(tibble::as.tibble(nl_join))
 }
 
-get_turtles <- function(nl){
+get_turtles <- function(nl, turtle_coords){
   purrr::map(
     seq_along(getsim(nl, "simoutput")$metrics.turtles),
     function(turtles_ind) {
@@ -259,16 +263,14 @@ get_turtles <- function(nl){
       return(turtle.dat)
     }
   )
-
-  turtles_tib <- tibble::enframe(turtle.dat, "id", "turtles")
-  turtles_tib$step <- getsim(nl, "simoutput")$`[step]`
-  turtles_tib$siminputrow <- getsim(nl, "simoutput")$siminputrow
-  turtles_tib$`random-seed` <-
-    getsim(nl, "simoutput")$`random-seed`
 }
 
 
-get_patches <- function(nl){
+get_patches <- function(nl,
+                        x_coord_ind,
+                        y_coord_ind,
+                        patches_own,
+                        patches_own_names){
   purrr::map(
     seq_along(getsim(nl, "simoutput")$metrics.patches),
     function(raster_ind) {
