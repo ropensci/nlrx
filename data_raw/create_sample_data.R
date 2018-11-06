@@ -1,36 +1,43 @@
 create_sample_data <- function() {
 
+  ## Set random seed
   set.seed(593472)
+
+  ## Set nl path, model path and output path
+  nlpath <- "C:/Program Files/NetLogo 6.0.3/"
+  modelpath <- "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"
+  outpath <- "C:/out"
+
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_simple(nl = nl,
                                    nseeds = 1)
   # Store data
   nl_simple <- run_sample_data(nl)
-  devtools::use_data(nl_simple, compress = "gzip")
+  devtools::use_data(nl_simple, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_ff(nl = nl,
                                nseeds = 1)
   # Store data
   nl_ff <- run_sample_data(nl)
-  devtools::use_data(nl_ff, compress = "gzip")
+  devtools::use_data(nl_ff, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=100,
                                 nseeds=1,
                                 precision=3)
   # Store data
   nl_lhs <- run_sample_data(nl)
-  devtools::use_data(nl_lhs, compress = "gzip")
+  devtools::use_data(nl_lhs, compress = "gzip", overwrite = TRUE)
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_sobol(nl=nl,
                                   samples=1000,
                                   sobolorder=2,
@@ -40,11 +47,11 @@ create_sample_data <- function() {
                                   precision=3)
   # Store data
   nl_sobol <- run_sample_data(nl)
-  devtools::use_data(nl_sobol, compress = "gzip")
+  devtools::use_data(nl_sobol, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_sobol2007(nl=nl,
                                       samples=1000,
                                       sobolnboot=100,
@@ -53,11 +60,11 @@ create_sample_data <- function() {
                                       precision=3)
   # Store data
   nl_sobol2007 <- run_sample_data(nl)
-  devtools::use_data(nl_sobol2007, compress = "gzip")
+  devtools::use_data(nl_sobol2007, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_soboljansen(nl=nl,
                                         samples=1000,
                                         sobolnboot=100,
@@ -66,11 +73,11 @@ create_sample_data <- function() {
                                         precision=3)
   # Store data
   nl_soboljansen <- run_sample_data(nl)
-  devtools::use_data(nl_soboljansen, compress = "gzip")
+  devtools::use_data(nl_soboljansen, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_morris(nl=nl,
                                    morristype="oat",
                                    morrislevels=4,
@@ -79,38 +86,37 @@ create_sample_data <- function() {
                                    nseeds=1)
   # Store data
   nl_morris <- run_sample_data(nl)
-  devtools::use_data(nl_morris, compress = "gzip")
+  devtools::use_data(nl_morris, compress = "gzip", overwrite = TRUE)
 
 
   # Create nl
-  nl <- setup_sample_data_nl()
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_eFast(nl=nl,
                                   samples=100,
                                   nseeds=1)
   # Store data
   nl_eFast <- run_sample_data(nl)
-  devtools::use_data(nl_eFast, compress = "gzip")
+  devtools::use_data(nl_eFast, compress = "gzip", overwrite = TRUE)
 }
 
-setup_sample_data_nl <- function() {
+setup_sample_data_nl <- function(nlpath, modelpath, outpath) {
 
   ## Step1: Create a nl obejct:
-  nl <- nl(nlversion = "6.0.2",
-           nlpath = "/home/uni08/jsaleck/NetLogo_6.0.2/",
-           modelpath = "/home/uni08/jsaleck/NetLogo_6.0.2/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+  nl <- nl(nlversion = "6.0.3",
+           nlpath = nlpath,
+           modelpath = modelpath,
            jvmmem = 1000)
 
   ## Step2: Add Experiment
-
-  nl@experiment <- experiment(expname = "nlrx_simple",
-                              outpath = "/home/nlrxout",
-                              repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+  nl@experiment <- experiment(expname = "nlrx",
+                              outpath = outpath,
+                              repetition = 1,
                               tickmetrics = "false",
-                              idsetup = "setup",   # you can define multiple setup procedures with c()
-                              idgo = "go",         # you can define multiple go procedures with c()
-                              idfinal = NA_character_,  # you can define one or more final commands here
-                              runtime = 50,
-                              evalticks = 50,
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 10,
+                              evalticks = 10,
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
                                                'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
@@ -129,30 +135,7 @@ setup_sample_data_nl <- function() {
 run_sample_data <- function (nl) {
 
   library(future)
-  library(furrr)
-  library(future.batchtools)
-  library(debugme)
-  Sys.setenv(DEBUGME='batchtools')
-  library(batchtools)
-
-
-  options(future.makeNodePSOCK.rshopts = c("-i", "C:/Users/Jan/ownCloud/Coding/GWDG_HPC_Cluster/puttyprivate.ppk"))
-  login <- tweak(remote, workers="gwdu101.gwdg.de", user="jsaleck")
-
-  ## Define plan for future environment:
-  bsub <- tweak(batchtools_lsf, template = 'lsf.tmpl',
-                # workers = "export LSF_ENVDIR=/opt/lsf/conf",
-                resources = list(job.name = 'poplar',
-                                 log.file = 'poplar.log',
-                                 queue = 'mpi',
-                                 walltime = '01:00',   #12:00
-                                 coremem = 2000,   # mb RAM per core
-                                 processes = 12))   #8
-
-
-  plan(list(login,
-            bsub,
-            multisession))
+  plan(multisession)
 
   results <- run_nl_all(nl = nl, cleanup = "all")
 
@@ -161,3 +144,5 @@ run_sample_data <- function (nl) {
 
   return(nl)
 }
+
+
