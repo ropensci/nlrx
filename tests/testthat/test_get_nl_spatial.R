@@ -63,8 +63,9 @@ testthat::test_that("Get nl spatial", {
   results <- run_nl_all(nl)
 
   testthat::context("Simoutput attached")
-  testthat::expect_error(get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                                        turtle_coords = "px", format = "spatial"))
+  testthat::expect_error(
+    get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
+                   turtle_coords = "px", format = "spatial"))
 
   ## Attach results to nl:
   setsim(nl, "simoutput") <- results

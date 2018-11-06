@@ -129,7 +129,8 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  testthat::context("Run one simulation with run_nl_one() and tickmetrics false")
+  testthat::context("Run one simulation with run_nl_one()
+                    and tickmetrics false")
   results <- run_nl_one(nl, seed, siminputrow, "all")
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 1)
@@ -171,7 +172,8 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  testthat::context("Run one simulation with run_nl_one() and tickmetrics false")
+  testthat::context("Run one simulation with run_nl_one()
+                    and tickmetrics false")
   results <- run_nl_one(nl, seed, siminputrow, "all")
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 1)

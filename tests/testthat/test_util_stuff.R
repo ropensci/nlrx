@@ -59,10 +59,10 @@ testthat::test_that("Util stuff", {
   testthat::expect_equal(names(input), names(lhs))
   testthat::expect_equal(nrow(lhs), samples)
   testthat::expect_equal(ncol(lhs), length(input))
-  testthat::expect_true(max(sapply(lhs[[1]], FUN=function(x)
+  testthat::expect_true(max(vapply(lhs[[1]], FUN=function(x)
     nchar(strsplit(as.character(x), "\\.")[[1]][2])), na.rm=TRUE) <=
                          precision)
-  testthat::expect_true(max(sapply(lhs[[2]], FUN=function(x)
+  testthat::expect_true(max(vapply(lhs[[2]], FUN=function(x)
     nchar(strsplit(as.character(x), "\\.")[[1]][2])), na.rm=TRUE) <=
     precision)
 
