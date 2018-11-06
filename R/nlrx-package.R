@@ -124,6 +124,12 @@ globalVariables(c(
   "group",
   "var",
   "dist.missing",
-  "values.missing"
+  "values.missing",
+  "x_coord_ind",
+  "y_coord_ind",
+  "patches_own",
+  "patches_own_names",
+  "turtle_coords",
+  "turtle.dat"
 ))
 # nocov end
