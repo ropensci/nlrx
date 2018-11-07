@@ -84,7 +84,9 @@ get_nl_spatial <- function(nl,
 
     patches_tib <- getsim(nl, "simoutput") %>%
       dplyr::select(-metrics.turtles) %>%
-      tidyr::unnest(metrics.patches)
+      tidyr::unnest(metrics.patches) %>%
+      dplyr::rename(patches_x = pxcor,
+                    patches_y = pycor)
 
   }
 
@@ -170,8 +172,13 @@ get_nl_spatial <- function(nl,
 
   }
 
-  dplyr::left_join(patches_tib, turtles_tib)
+  turtles_tib$group <- "turtles"
+  patches_tib$group <- "patches"
 
+  agentdata <- dplyr::left_join(patches_tib, turtles_tib) %>%
+    dplyr::rename(step = `[step]`,
+                  runnumber = `[run number]`)
 
+  return(agentdata)
 
 }
