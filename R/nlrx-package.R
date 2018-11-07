@@ -130,6 +130,10 @@ globalVariables(c(
   "patches_own",
   "patches_own_names",
   "turtle_coords",
-  "turtle.dat"
+  "value",
+  "metrics.patches",
+  "metrics.turtles",
+  "pxcor",
+  "pycor"
 ))
 # nocov end
