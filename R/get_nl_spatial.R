@@ -49,51 +49,50 @@ get_nl_spatial <- function(nl,
                            patches = TRUE,
                            turtle_coords = "px",
                            format = "spatial") {
-
-
   ## Check if results have been attached:
   if (purrr::is_empty(getsim(nl, "simoutput"))) {
     stop(
       "In order to run get_nl_spatial, output results have to be attached to
-         the simdesign of the nl object first: setsim(nl, \"simoutput\")
-         <- results"
-    )
+      the simdesign of the nl object first: setsim(nl, \"simoutput\")
+      <- results"
+      )
   }
 
-  ## If no turtles shall be returned, create empty tibble
-  if (!isTRUE(turtles)) {
-    turtles_tib <- tibble::tibble(
-      id = seq(1, nrow(getsim(nl, "simoutput"))),
-      turtle.dat = rep(NA, nrow(getsim(nl, "simoutput")))
-    )
-  } else {
 
-    turtles_tib <- getsim(nl, "simoutput") %>%
-      dplyr::select(-metrics.patches) %>%
-      tidyr::unnest(metrics.turtles)
-
-  }
-
-  ## If no patches shall be returned, create empty tibble
-  if (!isTRUE(patches)) {
-    patches_tib <- tibble::tibble(
-      id = seq(1, nrow(getsim(nl, "simoutput"))),
-      patch.dat = rep(NA, nrow(getsim(nl, "simoutput")))
-    )
-  } else {
-
-    patches_tib <- getsim(nl, "simoutput") %>%
-      dplyr::select(-metrics.turtles) %>%
-      tidyr::unnest(metrics.patches) %>%
-      dplyr::rename(patches_x = pxcor,
-                    patches_y = pycor)
-
-  }
-
-  if(format == "spatial"){
-
+  if (format == "tibble")
+  {
+    ## If no turtles shall be returned, create empty tibble
     if (isTRUE(turtles)) {
+      turtles_tib <- getsim(nl, "simoutput") %>%
+        dplyr::select(-metrics.patches) %>%
+        tidyr::unnest(metrics.turtles)
 
+      agentdata <- turtles_tib
+    }
+
+    ## If no patches shall be returned, create empty tibble
+    if (isTRUE(patches)) {
+      patches_tib <- getsim(nl, "simoutput") %>%
+        dplyr::select(-metrics.turtles) %>%
+        tidyr::unnest(metrics.patches) %>%
+        dplyr::rename(patches_x = pxcor,
+                      patches_y = pycor)
+
+      agentdata <- patches_tib
+    }
+
+    if (all(isTRUE(turtles) && isTRUE(patches)))
+    {
+      turtles_tib$group <- "turtles"
+      patches_tib$group <- "patches"
+      agentdata <- dplyr::full_join(patches_tib, turtles_tib)
+    }
+  }
+
+
+  ## Spatial output
+  if (format == "spatial") {
+    if (isTRUE(turtles)) {
       if (turtle_coords == "px") {
         coord_ind <-
           grepl(c("\\bpxcor\\b|\\bpycor\\b"),
@@ -107,17 +106,16 @@ get_nl_spatial <- function(nl,
                 names(getsim(nl, "simoutput")$metrics.turtles[[1]]))
       }
 
-      turtles <- getsim(nl, "simoutput") %>%
+      turtles_dat <- getsim(nl, "simoutput") %>%
         dplyr::select(-metrics.patches) %>%
         dplyr::pull(metrics.turtles)
 
       turtles_tib <- getsim(nl, "simoutput") %>%
         dplyr::select(-metrics.patches) %>%
-        dplyr::mutate(metrics.turtles = purrr::map(seq_along(turtles), function(x){
+        dplyr::mutate(metrics.turtles = purrr::map(seq_along(turtles_dat), function(x) {
+          turtles_ind <- turtles_dat[[x]]
 
-          turtles_ind <- turtles[[x]]
-
-          if(anyNA(turtles_ind[ , which(coord_ind == TRUE)])){
+          if (anyNA(turtles_ind[, which(coord_ind == TRUE)])) {
             NA
           } else {
             sf::st_as_sf(turtles_ind, coords = which(coord_ind == TRUE))
@@ -126,59 +124,56 @@ get_nl_spatial <- function(nl,
 
         }))
 
+      agentdata <- turtles_tib
+
     }
 
     if (isTRUE(patches)) {
-
       ## grab x coords
-      x_coord_ind <- grepl(
-        c("pxcor"),
-        names(getsim(nl, "simoutput")$metrics.patches[[1]])
-      )
+      x_coord_ind <- grepl(c("pxcor"),
+                           names(getsim(nl, "simoutput")$metrics.patches[[1]]))
       x_coord_ind <- which(x_coord_ind == TRUE)
 
       ## grab y coords
-      y_coord_ind <- grepl(
-        c("pycor"),
-        names(getsim(nl, "simoutput")$metrics.patches[[1]])
-      )
+      y_coord_ind <- grepl(c("pycor"),
+                           names(getsim(nl, "simoutput")$metrics.patches[[1]]))
       y_coord_ind <- which(y_coord_ind == TRUE)
 
       patches_own <-
-        which(seq_len(ncol(getsim(nl, "simoutput")$metrics.patches[[1]])) %in%
-                c(x_coord_ind, y_coord_ind) == FALSE)
+        which(seq_len(ncol(
+          getsim(nl, "simoutput")$metrics.patches[[1]]
+        )) %in%
+          c(x_coord_ind, y_coord_ind) == FALSE)
 
-      patches <- getsim(nl, "simoutput") %>%
+      patches_dat <- getsim(nl, "simoutput") %>%
         dplyr::select(-metrics.turtles) %>%
         dplyr::pull(metrics.patches)
 
       patches_tib <- getsim(nl, "simoutput") %>%
         dplyr::select(-metrics.turtles) %>%
-        dplyr::mutate(metrics.patches = purrr::map(seq_along(patches), function(x){
-
-          patches_ind <- patches[[x]]
+        dplyr::mutate(metrics.patches = purrr::map(seq_along(patches_dat), function(x) {
+          patches_ind <- patches_dat[[x]]
           raster::rasterFromXYZ(patches_ind[, c(x_coord_ind,
                                                 y_coord_ind,
-                                                patches_own
-          )
-          ]
-          )
-        }
-        )
-        )
+                                                patches_own)])
+        }))
+
+      agentdata <- patches_tib
 
     }
 
+    if (all(isTRUE(turtles) && isTRUE(patches)))
+    {
+      agentdata <-  dplyr::left_join(patches_tib, turtles_tib)
+    }
 
   }
 
-  turtles_tib$group <- "turtles"
-  patches_tib$group <- "patches"
+  ## Rename:
+  agentdata <- agentdata %>% dplyr::rename(step = `[step]`,
+                                           runnumber = `[run number]`)
 
-  agentdata <- dplyr::left_join(patches_tib, turtles_tib) %>%
-    dplyr::rename(step = `[step]`,
-                  runnumber = `[run number]`)
 
   return(agentdata)
 
-}
+  }

@@ -74,8 +74,8 @@ testthat::test_that("Get nl spatial", {
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
                                     turtle_coords = "px", format = "spatial")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
-  testthat::expect_match(class(results.spatial$turtles[[1]])[1], "sf")
+  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
+  testthat::expect_match(class(results.spatial$metrics.turtles[[1]])[1], "sf")
 
   testthat::context("Get spatial data with turtles px: tibble")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
@@ -83,15 +83,15 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
   testthat::expect_false(is.null(results.spatial$patches_x))
   testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(is.null(results.spatial$turtles_x))
-  testthat::expect_false(is.null(results.spatial$turtles_y))
+  testthat::expect_false(is.null(results.spatial$pxcor))
+  testthat::expect_false(is.null(results.spatial$pycor))
 
   testthat::context("Get spatial data with turtles x: raster/sf")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
                                     turtle_coords = "x", format = "spatial")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
-  testthat::expect_match(class(results.spatial$turtles[[1]])[1], "sf")
+  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
+  testthat::expect_match(class(results.spatial$metrics.turtles[[1]])[1], "sf")
 
   testthat::context("Get spatial data with turtles x: tibble")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
@@ -99,14 +99,14 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
   testthat::expect_false(is.null(results.spatial$patches_x))
   testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(is.null(results.spatial$turtles_x))
-  testthat::expect_false(is.null(results.spatial$turtles_y))
+  testthat::expect_false(is.null(results.spatial$xcor))
+  testthat::expect_false(is.null(results.spatial$ycor))
 
   testthat::context("Get spatial data without turtles: raster")
   results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
                                     format = "spatial")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$patches[[1]])[1], "RasterLayer")
+  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
   testthat::expect_false(exists("results.spatial$turtles"))
 
   testthat::context("Get spatial data without turtles: tibble")
@@ -115,8 +115,8 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
   testthat::expect_false(is.null(results.spatial$patches_x))
   testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(exists("results.spatial$turtles_x"))
-  testthat::expect_false(exists("results.spatial$turtles_y"))
+  testthat::expect_false(exists("results.spatial$pxcor"))
+  testthat::expect_false(exists("results.spatial$pycor"))
 
   testthat::context("Get spatial data without patches: tibble")
   results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=FALSE,
@@ -124,8 +124,8 @@ testthat::test_that("Get nl spatial", {
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
   testthat::expect_false(exists("results.spatial$patches_x"))
   testthat::expect_false(exists("results.spatial$patches_y"))
-  testthat::expect_false(is.null(results.spatial$turtles_x))
-  testthat::expect_false(is.null(results.spatial$turtles_y))
+  testthat::expect_false(is.null(results.spatial$pxcor))
+  testthat::expect_false(is.null(results.spatial$pycor))
 
 })
 
