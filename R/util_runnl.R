@@ -73,35 +73,20 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # Add turtle metrics if defined
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    turtles.reporter <- paste0(
-      "runresult (word \"[(list ",
-      paste(getexp(nl, "metrics.turtles"),
-        collapse = " "
-      ), ")] of turtles\")"
-    )
+    turtles.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)")
     metrics <- c(metrics, turtles.reporter)
   }
 
   # add patch metrics if defined
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    patches.reporter <- paste0(
-      "runresult (word \"[(list ",
-      paste(getexp(nl, "metrics.patches"),
-        collapse = " "
-      ), ")] of patches\")"
-    )
+    patches.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)")
     metrics <- c(metrics, patches.reporter)
   }
 
   # add link metrics if defined
   # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0(
-      "runresult (word \"[(list ",
-      paste(getexp(nl, "metrics.links"),
-        collapse = " "
-      ), ")] of links\")"
-    )
+    links.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)")
     metrics <- c(metrics, links.reporter)
   }
   # nocov end
@@ -242,11 +227,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
     ## Rename column and clean turtle metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.turtles =
-                                           paste0("runresult (word \"[(list ",
-                                                  paste(getexp(nl,
-                                                        "metrics.turtles"),
-                                                        collapse = " "),
-                                                  ")] of turtles\")"))
+                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)"))
     NLtable[, grepl(c("metrics.turtles"), names(NLtable))] <-
       list(.util_clean_metrics_turtles(NLtable, nl))
   }
@@ -254,24 +235,16 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
     ## Rename column and clean patch metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.patches =
-                                           paste0("runresult (word \"[(list ",
-                                                  paste(getexp(nl,
-                                                      "metrics.patches"),
-                                                      collapse = " "),
-                                                  ")] of patches\")"))
-    NLtable[, grepl(c("metrics.patches"), names(NLtable))] <-
-      list(.util_clean_metrics_patches(NLtable, nl))
+                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
+    NLtable$metrics.patches <-
+      .util_clean_metrics_patches(NLtable, nl)
   }
 
   # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
     ## Rename column and clean link metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.links =
-                                           paste0("runresult (word \"[(list ",
-                                                  paste(getexp(nl,
-                                                        "metrics.links"),
-                                                        collapse = " "),
-                                                  ")] of links\")"))
+                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)"))
     NLtable[, grepl(c("metrics.links"), names(NLtable))] <-
       list(.util_clean_metrics_links(NLtable, nl))
   }
@@ -279,6 +252,72 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   return(NLtable)
 }
+
+
+
+## Clean patch metrics
+.util_clean_metrics_patches <- function(NLtable, nl) {
+
+  patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
+  patches_string <- stringr::str_split(patches_string$metrics.patches, " ")
+  patches_string <- purrr::map(patches_string, function(x) {
+    patches_owns <- tibble::as.tibble(x = x)
+    patches_owns <- tidyr::separate(patches_owns, value,
+                                    getexp(nl, "metrics.patches"), sep=",")
+    patches_owns <- dplyr::mutate_all(patches_owns, function(x) {
+      suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
+                              as.character(x),
+                              as.numeric(as.character(x))))
+    })
+    return(patches_owns)
+  })
+  return(patches_string)
+}
+
+
+.util_clean_metrics_turtles <- function(NLtable, nl) {
+
+  turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
+  turtles_string <- stringr::str_split(turtles_string$metrics.turtles, " ")
+  turtles_string <- purrr::map(turtles_string, function(x) {
+    turtles_owns <- tibble::as.tibble(x = x)
+    turtles_owns <- tidyr::separate(turtles_owns, value,
+                                    getexp(nl, "metrics.turtles"), sep=",")
+    turtles_owns <- dplyr::mutate_all(turtles_owns, function(x) {
+      suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
+                              as.character(x),
+                              as.numeric(as.character(x))))
+    })
+    return(turtles_owns)
+  })
+  return(turtles_string)
+}
+
+# nocov start
+.util_clean_metrics_links <- function(NLtable, nl) {
+
+  links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
+  links_string <- stringr::str_split(links_string$metrics.links, " ")
+  links_string <- purrr::map(links_string, function(x) {
+    links_owns <- tibble::as.tibble(x = x)
+    links_owns <- tidyr::separate(links_owns, value,
+                                  getexp(nl, "metrics.links"), sep=",")
+    links_owns <- dplyr::mutate_all(links_owns, function(x) {
+      suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
+                              as.character(x),
+                              as.numeric(as.character(x))))
+    })
+    return(links_owns)
+  })
+  return(links_string)
+
+
+}
+# nocov end
+
+
+
+
 
 #' Write a modified batchfile that executes NetLogo
 #'
@@ -448,152 +487,155 @@ util_read_write_batch <- function(nl) {
   return(batchpath_temp)
 }
 
-## Clean patch metrics
-.util_clean_metrics_patches <- function(NLtable, nl) {
-  patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
 
-  patches_owns <- purrr::map(seq_len(nrow(patches_string)), function(x) {
-    patches_breed <- regmatches(patches_string[x, ][[1]],
-                                gregexpr("(?<=\\{).*?(?=\\})",
-                                         patches_string[x, ][[1]], perl = TRUE))
-
-    patches_string[x, ][[1]] <- substring(patches_string[x, ][[1]], 2)
-    patches_string[x, ][[1]] <-
-      substring(patches_string[x, ][[1]],
-                1,
-                max(nchar(patches_string[x, ][[1]])) - 1)
-
-    patches_string[x, ][[1]] <- gsub("(?<=\\{).*?(?=\\})",
-                                     "\\1",
-                                     patches_string[x, ][[1]],
-                                     perl = TRUE)
-    patches_string[x, ][[1]] <- gsub("\\{\\}",
-                                     "\\1",
-                                     patches_string[x, ][[1]],
-                                     perl = TRUE)
-    patches_string[x, ][[1]] <- regmatches(patches_string[x, ][[1]],
-                                           gregexpr("(?<=\\[).*?(?=\\])",
-                                                    patches_string[x, ][[1]],
-                                                    perl = TRUE))
-
-    patches_owns <-
-      suppressWarnings(purrr::map_dfr(seq_along(patches_string[x, ][[1]][[1]]),
-                                      function(patches_index) {
-
-      # split patches owns into unique elements of a vector
-      patches_owns <-
-        toupper(strsplit(patches_string[x, ][[1]][[1]][patches_index],
-                         " ")[[1]])
-      patches_owns <- as.data.frame(matrix(patches_owns,
-                                           nrow = 1,
-                                           byrow = TRUE),
-                                    stringsAsFactors = FALSE)
-      patches_owns <- utils::type.convert(patches_owns)
-
-    }))
-    names(patches_owns) <- getexp(nl, "metrics.patches")
-
-    return(patches_owns)
-  })
-  patches_owns
-}
-
-# nocov start
-.util_clean_metrics_links <- function(NLtable, nl) {
-
-  ## Extract current string:
-  links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
-
-  links_owns <- purrr::map(seq_len(nrow(links_string)), function(x) {
-
-    ## Remove the outer [] brackets
-    links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 2)
-    links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 1,
-                                        max(nchar(links_string[x, ][[1]])) - 1)
-    links_string[x, ][[1]] <- gsub("breed", "", links_string[x, ][[1]],
-                                   perl = TRUE)
-
-    links_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "",
-                                   links_string[x, ][[1]], perl = TRUE)
-    links_string[x, ][[1]] <- regmatches(links_string[x, ][[1]],
-                                         gregexpr("(?<=\\[).*?(?=\\])",
-                                                  links_string[x, ][[1]],
-                                                  perl = TRUE))
-
-    links_owns <-
-      suppressWarnings(purrr::map_dfr(seq_along(links_string[x, ][[1]][[1]]),
-                                      function(links_index) {
-
-      # split turtle owns into unique elements of a vector
-      links_owns <- strsplit(links_string[x, ][[1]][[1]][links_index],
-                             "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ",
-                             perl = TRUE)[[1]]
-      # Remove braces
-      links_owns <- gsub("\\{", "", links_owns, perl = TRUE)
-      links_owns <- gsub("\\}", "", links_owns, perl = TRUE)
-      # Convert to data frame
-      links_owns <- as.data.frame(matrix(links_owns, nrow = 1))
-    }))
-
-    ## If no data has been reported, create an empty data frame with NA:
-    if (purrr::is_empty(links_owns)) {
-      links_owns <- data.frame(t(rep(NA, length(getexp(nl, "metrics.links")))))
-    }
-
-    names(links_owns) <- getexp(nl, "metrics.links")
-    return(links_owns)
-  })
-
-  links_owns
-}
-# nocov end
+#
+#
+#
+#
+# ## Clean patch metrics
+# .util_clean_metrics_patches <- function(NLtable, nl) {
+#   patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
+#
+#   patches_owns <- purrr::map(seq_len(nrow(patches_string)), function(x) {
+#     patches_breed <- regmatches(patches_string[x, ][[1]],
+#                                 gregexpr("(?<=\\{).*?(?=\\})",
+#                                          patches_string[x, ][[1]], perl = TRUE))
+#
+#     patches_string[x, ][[1]] <- substring(patches_string[x, ][[1]], 2)
+#     patches_string[x, ][[1]] <-
+#       substring(patches_string[x, ][[1]],
+#                 1,
+#                 max(nchar(patches_string[x, ][[1]])) - 1)
+#
+#     patches_string[x, ][[1]] <- gsub("(?<=\\{).*?(?=\\})",
+#                                      "\\1",
+#                                      patches_string[x, ][[1]],
+#                                      perl = TRUE)
+#     patches_string[x, ][[1]] <- gsub("\\{\\}",
+#                                      "\\1",
+#                                      patches_string[x, ][[1]],
+#                                      perl = TRUE)
+#     patches_string[x, ][[1]] <- regmatches(patches_string[x, ][[1]],
+#                                            gregexpr("(?<=\\[).*?(?=\\])",
+#                                                     patches_string[x, ][[1]],
+#                                                     perl = TRUE))
+#
+#     patches_owns <-
+#       suppressWarnings(purrr::map_dfr(seq_along(patches_string[x, ][[1]][[1]]),
+#                                       function(patches_index) {
+#
+#       # split patches owns into unique elements of a vector
+#       patches_owns <-
+#         toupper(strsplit(patches_string[x, ][[1]][[1]][patches_index],
+#                          " ")[[1]])
+#       patches_owns <- as.data.frame(matrix(patches_owns,
+#                                            nrow = 1,
+#                                            byrow = TRUE),
+#                                     stringsAsFactors = FALSE)
+#       patches_owns <- utils::type.convert(patches_owns)
+#
+#     }))
+#     names(patches_owns) <- getexp(nl, "metrics.patches")
+#
+#     return(patches_owns)
+#   })
+#   patches_owns
+# }
+#
+# .util_clean_metrics_links <- function(NLtable, nl) {
+#
+#   ## Extract current string:
+#   links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
+#
+#   links_owns <- purrr::map(seq_len(nrow(links_string)), function(x) {
+#
+#     ## Remove the outer [] brackets
+#     links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 2)
+#     links_string[x, ][[1]] <- substring(links_string[x, ][[1]], 1,
+#                                         max(nchar(links_string[x, ][[1]])) - 1)
+#     links_string[x, ][[1]] <- gsub("breed", "", links_string[x, ][[1]],
+#                                    perl = TRUE)
+#
+#     links_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "",
+#                                    links_string[x, ][[1]], perl = TRUE)
+#     links_string[x, ][[1]] <- regmatches(links_string[x, ][[1]],
+#                                          gregexpr("(?<=\\[).*?(?=\\])",
+#                                                   links_string[x, ][[1]],
+#                                                   perl = TRUE))
+#
+#     links_owns <-
+#       suppressWarnings(purrr::map_dfr(seq_along(links_string[x, ][[1]][[1]]),
+#                                       function(links_index) {
+#
+#       # split turtle owns into unique elements of a vector
+#       links_owns <- strsplit(links_string[x, ][[1]][[1]][links_index],
+#                              "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ",
+#                              perl = TRUE)[[1]]
+#       # Remove braces
+#       links_owns <- gsub("\\{", "", links_owns, perl = TRUE)
+#       links_owns <- gsub("\\}", "", links_owns, perl = TRUE)
+#       # Convert to data frame
+#       links_owns <- as.data.frame(matrix(links_owns, nrow = 1))
+#     }))
+#
+#     ## If no data has been reported, create an empty data frame with NA:
+#     if (purrr::is_empty(links_owns)) {
+#       links_owns <- data.frame(t(rep(NA, length(getexp(nl, "metrics.links")))))
+#     }
+#
+#     names(links_owns) <- getexp(nl, "metrics.links")
+#     return(links_owns)
+#   })
+#
+#   links_owns
+# }
 ## Clean turtle metrics
-.util_clean_metrics_turtles <- function(NLtable, nl) {
-
-  ## Extract current string:
-  turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
-
-  turtles_owns <- purrr::map(seq_len(nrow(turtles_string)), function(x) {
-
-    ## Remove the outer [] brackets
-    turtles_string[x, ][[1]] <- substring(turtles_string[x, ][[1]], 2)
-    turtles_string[x, ][[1]] <-
-      substring(turtles_string[x, ][[1]], 1,
-                max(nchar(turtles_string[x, ][[1]])) - 1)
-    turtles_string[x, ][[1]] <- gsub("breed", "",
-                                     turtles_string[x, ][[1]], perl = TRUE)
-
-    turtles_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "",
-                                     turtles_string[x, ][[1]], perl = TRUE)
-    turtles_string[x, ][[1]] <- regmatches(turtles_string[x, ][[1]],
-                                           gregexpr("(?<=\\[).*?(?=\\])",
-                                                    turtles_string[x, ][[1]],
-                                                    perl = TRUE))
-
-    turtles_owns <-
-      suppressWarnings(purrr::map_dfr(seq_along(turtles_string[x, ][[1]][[1]]),
-                                      function(turtles_index) {
-
-      # split turtle owns into unique elements of a vector
-      turtles_owns <- strsplit(turtles_string[x, ][[1]][[1]][turtles_index],
-                               "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ",
-                               perl = TRUE)[[1]]
-      # Remove braces
-      turtles_owns <- gsub("\\{", "", turtles_owns, perl = TRUE)
-      turtles_owns <- gsub("\\}", "", turtles_owns, perl = TRUE)
-      # Convert to data frame
-      as.data.frame(matrix(turtles_owns, nrow = 1))
-    }))
-
-    ## If no data has been reported, create an empty data frame with NA:
-    if (purrr::is_empty(turtles_owns)) {
-      turtles_owns <- data.frame(t(rep(NA, length(getexp(nl,
-                                                         "metrics.turtles")))))
-    }
-
-    names(turtles_owns) <- getexp(nl, "metrics.turtles")
-    return(turtles_owns)
-  })
-
-  turtles_owns
-}
+# .util_clean_metrics_turtles <- function(NLtable, nl) {
+#
+#   ## Extract current string:
+#   turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
+#
+#   turtles_owns <- purrr::map(seq_len(nrow(turtles_string)), function(x) {
+#
+#     ## Remove the outer [] brackets
+#     turtles_string[x, ][[1]] <- substring(turtles_string[x, ][[1]], 2)
+#     turtles_string[x, ][[1]] <-
+#       substring(turtles_string[x, ][[1]], 1,
+#                 max(nchar(turtles_string[x, ][[1]])) - 1)
+#     turtles_string[x, ][[1]] <- gsub("breed", "",
+#                                      turtles_string[x, ][[1]], perl = TRUE)
+#
+#     turtles_string[x, ][[1]] <- gsub("^ *|(?<= ) | *$", "",
+#                                      turtles_string[x, ][[1]], perl = TRUE)
+#     turtles_string[x, ][[1]] <- regmatches(turtles_string[x, ][[1]],
+#                                            gregexpr("(?<=\\[).*?(?=\\])",
+#                                                     turtles_string[x, ][[1]],
+#                                                     perl = TRUE))
+#
+#     turtles_owns <-
+#       suppressWarnings(purrr::map_dfr(seq_along(turtles_string[x, ][[1]][[1]]),
+#                                       function(turtles_index) {
+#
+#       # split turtle owns into unique elements of a vector
+#       turtles_owns <- strsplit(turtles_string[x, ][[1]][[1]][turtles_index],
+#                                "(\\{(?:[^{}]++|(?1))*\\})(*SKIP)(*F)| ",
+#                                perl = TRUE)[[1]]
+#       # Remove braces
+#       turtles_owns <- gsub("\\{", "", turtles_owns, perl = TRUE)
+#       turtles_owns <- gsub("\\}", "", turtles_owns, perl = TRUE)
+#       # Convert to data frame
+#       as.data.frame(matrix(turtles_owns, nrow = 1))
+#     }))
+#
+#     ## If no data has been reported, create an empty data frame with NA:
+#     if (purrr::is_empty(turtles_owns)) {
+#       turtles_owns <- data.frame(t(rep(NA, length(getexp(nl,
+#                                                          "metrics.turtles")))))
+#     }
+#
+#     names(turtles_owns) <- getexp(nl, "metrics.turtles")
+#     return(turtles_owns)
+#   })
+#
+#   turtles_owns
+# }
