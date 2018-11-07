@@ -73,20 +73,20 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # Add turtle metrics if defined
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    turtles.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)")
+    turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)")
     metrics <- c(metrics, turtles.reporter)
   }
 
   # add patch metrics if defined
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    patches.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)")
+    patches.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)")
     metrics <- c(metrics, patches.reporter)
   }
 
   # add link metrics if defined
   # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)")
+    links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)")
     metrics <- c(metrics, links.reporter)
   }
   # nocov end
@@ -227,7 +227,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
     ## Rename column and clean turtle metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.turtles =
-                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)"))
+                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)"))
     NLtable[, grepl(c("metrics.turtles"), names(NLtable))] <-
       list(.util_clean_metrics_turtles(NLtable, nl))
   }
@@ -235,7 +235,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
     ## Rename column and clean patch metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.patches =
-                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
+                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
     NLtable$metrics.patches <-
       .util_clean_metrics_patches(NLtable, nl)
   }
@@ -244,7 +244,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   if (all(!is.na(getexp(nl, "metrics.links")))) {
     ## Rename column and clean link metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.links =
-                                           paste0("but-first but-last (word [(word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)"))
+                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)"))
     NLtable[, grepl(c("metrics.links"), names(NLtable))] <-
       list(.util_clean_metrics_links(NLtable, nl))
   }
