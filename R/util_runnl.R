@@ -310,8 +310,6 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     return(links_owns)
   })
   return(links_string)
-
-
 }
 # nocov end
 
