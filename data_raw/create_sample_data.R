@@ -47,7 +47,7 @@ create_sample_data <- function() {
                                   precision=3)
   # Store data
   nl_sobol <- run_sample_data(nl)
-  devtools::use_data(nl_sobol, compress = "gzip", overwrite = TRUE)
+  devtools::use_data(nl_sobol, compress = "xz", overwrite = TRUE)
 
 
   # Create nl
@@ -60,7 +60,7 @@ create_sample_data <- function() {
                                       precision=3)
   # Store data
   nl_sobol2007 <- run_sample_data(nl)
-  devtools::use_data(nl_sobol2007, compress = "gzip", overwrite = TRUE)
+  devtools::use_data(nl_sobol2007, compress = "xz", overwrite = TRUE)
 
 
   # Create nl
@@ -73,7 +73,7 @@ create_sample_data <- function() {
                                         precision=3)
   # Store data
   nl_soboljansen <- run_sample_data(nl)
-  devtools::use_data(nl_soboljansen, compress = "gzip", overwrite = TRUE)
+  devtools::use_data(nl_soboljansen, compress = "xz", overwrite = TRUE)
 
 
   # Create nl
