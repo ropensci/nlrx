@@ -95,11 +95,13 @@ simdesign_distinct <- function(nl, nseeds) {
 
   ff <- tibble::as.tibble(ff)
 
-  ff <- tibble::as.tibble(cbind(ff,
-                                getexp(nl, "constants"),
-                                stringsAsFactors=FALSE))
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    ff <- tibble::as.tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  }
 
-
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   new_simdesign <- simdesign(simmethod="distinct",
@@ -167,11 +169,13 @@ simdesign_ff <- function(nl, nseeds) {
 
   ff <- tibble::as.tibble(expand.grid(ff, stringsAsFactors = FALSE))
 
-  ff <- tibble::as.tibble(cbind(ff,
-                                getexp(nl, "constants"),
-                                stringsAsFactors=FALSE))
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    ff <- tibble::as.tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
+  }
 
-
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   new_simdesign <- simdesign(simmethod="ff",
