@@ -53,10 +53,17 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
 
-  gensa_param <- tibble::as.tibble(cbind(tibble::as.tibble(t(param)),
-    getexp(nl, "constants"),
-    stringsAsFactors = FALSE
-  ))
+  ## Generate parameterset
+  gensa_param <- tibble::as.tibble(t(param))
+
+  ## Add constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    gensa_param <- tibble::as.tibble(cbind(gensa_param,
+                                           getexp(nl, "constants"),
+                                           stringsAsFactors = FALSE))
+
+  }
 
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
@@ -136,10 +143,17 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
 
-  gensa_param <- tibble::as.tibble(cbind(tibble::as.tibble(t(param)),
-    getexp(nl, "constants"),
-    stringsAsFactors = FALSE
-  ))
+  ## Generate parameterset
+  gensa_param <- tibble::as.tibble(t(param))
+
+  ## Add constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    gensa_param <- tibble::as.tibble(cbind(gensa_param,
+                                           getexp(nl, "constants"),
+                                           stringsAsFactors = FALSE))
+
+  }
 
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param

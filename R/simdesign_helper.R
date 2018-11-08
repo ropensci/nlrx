@@ -225,10 +225,16 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
                          samples = samples,
                          precision = precision)
 
-  lhs <- tibble::as.tibble(cbind(lhs,
-                                 getexp(nl, "constants"),
-                                 stringsAsFactors=FALSE))
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    lhs <- cbind(lhs, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
 
+  ## Convert to tibble:
+  lhs <- tibble::as.tibble(lhs)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   # Add simdesign to nl
@@ -307,10 +313,18 @@ simdesign_sobol <- function(nl,
                            nboot = sobolnboot,
                            conf=sobolconf)
 
-  soX <- tibble::as.tibble(cbind(so$X,
-                                 getexp(nl, "constants"),
-                                 stringsAsFactors=FALSE))
+  ## Export parameter matrix:
+  soX <- so$X
 
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    soX <- cbind(soX, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
+  ## Convert to tibble
+  soX <- tibble::as.tibble(soX)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -386,10 +400,19 @@ simdesign_sobol2007 <- function(nl,
                                nboot = sobolnboot,
                                conf=sobolconf)
 
-  soX <- tibble::as.tibble(cbind(so$X,
-                                 getexp(nl, "constants"),
-                                 stringsAsFactors=FALSE))
+  # Export parameter matrix:
+  soX <- so$X
 
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    soX <- cbind(soX, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
+
+  ## Convert to tibble
+  soX <- tibble::as.tibble(soX)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -466,10 +489,19 @@ simdesign_soboljansen <- function(nl,
                                  nboot = sobolnboot,
                                  conf=sobolconf)
 
-  soX <- tibble::as.tibble(cbind(so$X,
-                                 getexp(nl, "constants"),
-                                 stringsAsFactors=FALSE))
+  # Export parameter matrix:
+  soX <- so$X
 
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    soX <- cbind(soX, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
+
+  ## Convert to tibble
+  soX <- tibble::as.tibble(soX)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
 
   # Add simdesign to nl
@@ -551,10 +583,19 @@ simdesign_morris <- function(nl,
                             bsup = maxs,
                             scale=TRUE)
 
-  moX <- tibble::as.tibble(cbind(tibble::as.tibble(mo$X),
-                                 getexp(nl, "constants"),
-                                 stringsAsFactors=FALSE))
+  # Export parameter matrix:
+  moX <- tibble::as.tibble(mo$X)
 
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    moX <- cbind(moX, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
+
+  ## Convert to tibble
+  moX <- tibble::as.tibble(moX)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
@@ -626,10 +667,19 @@ simdesign_eFast <- function(nl,
                              q = q.functions,
                              q.arg = q.args)
 
-  f99X <- tibble::as.tibble(cbind(tibble::as.tibble(f99$X),
-                                  getexp(nl, "constants"),
-                                  stringsAsFactors=FALSE))
+  # Export parameter matrix:
+  f99X <- tibble::as.tibble(f99$X)
 
+  ## Bind constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    f99X <- cbind(f99X, getexp(nl, "constants"), stringsAsFactors=FALSE)
+  }
+
+  ## Convert to tibble
+  f99X <- tibble::as.tibble(f99X)
+
+  ## Generate seeds
   seeds <- util_generate_seeds(nseeds)
 
   # Add simdesign to nl
