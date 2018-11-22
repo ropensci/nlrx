@@ -1,6 +1,6 @@
-pandoc: 1.19.2.1
+pandoc: 2.3.1
 pkgdown: 1.1.0.9000
-pkgdown_sha: 982bd327f97b623554b4cca90b86b4fb084aa634
+pkgdown_sha: b62fef53d0a5633adea58b9c503d35e465a9af43
 articles:
   spatial-output: articles/spatial-output.html
   getstarted: getstarted.html

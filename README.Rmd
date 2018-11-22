@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/nldoc/nlrx)
 [![Codecov test coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/nldoc/nlrx?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
 
 The nlrx package provides tools to setup NetLogo simulations in R.
 It uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running sensitivity analyses.
