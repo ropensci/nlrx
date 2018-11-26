@@ -150,14 +150,15 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 #' @rdname util_call_nl
 #' @keywords internal
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
-  if (util_get_os() == "win" | util_get_os() == "unix")
+  os <- util_get_os()
+  if (is %in% c("win", "unix"))
   {
     NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"",
                      getnl(nl, "modelpath"), "\"", " --setup-file ", "\"",
                      xmlfile, "\"", " --experiment ", getexp(nl, "expname"),
                      " --table ", "\"", outfile, "\"", " --threads ", 1)
   }
-  if (util_get_os() == "mac")
+  if (os == "mac")
   {
     NLcall <- paste0("sh \"", batchfile, "\"", " --model ", "\"",
                      getnl(nl, "modelpath"), "\"", " --setup-file ", "\"",
@@ -437,7 +438,7 @@ util_read_write_batch <- function(nl) {
     }
   }
   # nocov end
-  if (os == "unix") {
+  if (os %in% c("unix", "mac")) {
     if (getnl(nl, "nlversion") == "5.3.1") {
       ## NetLogo 5.3.1 does not contain a premade shfile in the installation
       ## directory
