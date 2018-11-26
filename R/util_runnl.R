@@ -151,7 +151,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 #' @keywords internal
 util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
   os <- util_get_os()
-  if (is %in% c("win", "unix"))
+  if (os %in% c("win", "unix"))
   {
     NLcall <- paste0("\"", batchfile, "\"", " --model ", "\"",
                      getnl(nl, "modelpath"), "\"", " --setup-file ", "\"",
