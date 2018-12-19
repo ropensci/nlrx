@@ -2,7 +2,7 @@
 #'
 #' @description Auxiliary function to download NetLogo
 #'
-#' @param to      Character string with the name where the downloaded file is saved.
+#' @param to      Path to folder where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of `to` (only unix)
 #' @details

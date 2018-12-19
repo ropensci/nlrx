@@ -7,7 +7,7 @@
 download_netlogo(to, version, extract = FALSE)
 }
 \arguments{
-\item{to}{Character string with the name where the downloaded file is saved.}
+\item{to}{Path to folder where the downloaded file is saved.}
 
 \item{version}{Character string naming which NetLogo Version to download (see Details)}
 
