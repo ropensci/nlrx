@@ -29,6 +29,7 @@ Basically, you can enter any variable of your model that is listed in turtles-ow
 For instance, we might want to measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We can then define our experiment and run the simulations:
 
 ```{r eval=FALSE}
+library(nlrx)
 
 # Define nl object
 nl <- nl(nlversion = "6.0.3",
@@ -66,9 +67,7 @@ nl@simdesign <- simdesign_simple(nl=nl,
                                  nseeds=1)
 
 # Run simulations and store output in results
-future::plan(multisession)
-results %<-% run_nl_all(nl = nl, cleanup = "all")
-
+results <- run_nl_all(nl = nl, cleanup = "all")
 ```
 
 This experiment will run for 100 ticks and collects all metrics, metrics.turtles and metrics.patches on each tick.
@@ -112,11 +111,11 @@ results_spatial_tibble <- get_nl_spatial(nl,
 
 
 results_spatial_tibble %>% dplyr::filter(step %in% seq(0,80,10)) %>% 
-ggplot() +
+  ggplot() +
   facet_wrap(~step, ncol=4) +
   coord_equal() +
   geom_tile(aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
-  geom_point(aes(x = turtles_x, y = turtles_y, color = breed), size=2) +
+  geom_point(aes(x = pxcor, y = pycor, color = breed), size=2) +
   scale_fill_manual(breaks=c("35", "55"), values = c("35" = "#D9AF6B", "55" = "#68855C")) +
   scale_color_manual(breaks=c("sheep", "wolves"), values = c("sheep" = "beige", "wolves" = "black")) +
   guides(fill=guide_legend(title="LandCover")) +
@@ -140,14 +139,14 @@ results_spatial_tibble <- get_nl_spatial(nl,
                                   turtle_coords = "px",
                                   format="tibble")
 
-# Load libraries (gganimate available from https://github.com/thomasp85/gganimate)
+# Load libraries 
 library(ggplot2)
-library(gganimate)
+library(gganimate) # devtools::install_github('thomasp85/gganimate')
 
 # Create an animated plot, using the step column as animation variable
 p1 <- ggplot(results_spatial_tibble) +
   geom_tile(aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
-  geom_point(aes(x = turtles_x, y = turtles_y, group=who, color = breed), size=2) +
+  geom_point(aes(x = pxcor, y = pycor, group=who, color = breed), size=2) +
   scale_fill_manual(breaks=c("35", "55"), values = c("35" = "#D9AF6B", "55" = "#68855C")) +
   scale_color_manual(breaks=c("sheep", "wolves"), values = c("sheep" = "beige", "wolves" = "black")) +
   guides(fill=guide_legend(title="LandCover")) +
