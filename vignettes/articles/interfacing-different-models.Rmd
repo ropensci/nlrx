@@ -1,0 +1,33 @@
+---
+title: "Interfacing a variety of different NetLogo models"
+author: "Marco Sciaini"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+---
+
+Examples on how to interface a variety of different NetLogo models.
+As they can be quite complex in their interface, we try to capture 
+a wide range of different models to show how you can **nlrx** for 
+many different applications.
+
+All the following examples show how to create a gif animation from a NetLogo model.
+This always higlights how to setup very different model types.
+
+### [nlrx_ants_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_ants_gif.R)
+
+![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_ants_gif.gif)
+
+
+### [nlrx_diffusion_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_diffusion_gif.R)
+
+![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/diffusion.gif)
+
+
+### [nlrx_fir_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_fire_gif.R)
+
+![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/fire.gif)
+
+### [nlrx_waves_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_waves_gif.R)
+
+![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/waves.gif)
+pkg

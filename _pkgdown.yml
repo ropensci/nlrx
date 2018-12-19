@@ -1,0 +1,37 @@
+title: nlrx | NetLogo from R
+
+template:
+  params:
+   bootswatch: sandstone
+
+navbar:
+  title: landscapemetrics
+  left:
+    - text: "Get Started"
+      icon: fa fa-magic
+      href: articles/getstarted.html
+    - text: "More"
+      icon: fa-graduation-cap
+      menu:
+       - text: "Simdesign examples"
+         icon: fa-book
+         href: articles/simdesign-examples.html
+       - text: "Further notes"
+         icon: fa-sticky-note
+         href: articles/furthernotes.html
+       - text: "Capturing spatial NetLogo output"
+         icon: fa-calculator
+         href: articles/articles/spatial-output.html
+       - text: "Interfacing a variety of different NetLogo models"
+         icon: fa-file-text-o
+         href: articles/articles/interfacing-different-models.html
+  right:
+    - icon: fa-newspaper-o
+      text: "news"
+      href: news/index.html
+    - icon: fa-gears
+      text: "functions"
+      href: reference/index.html
+    - icon: fa-github fa-lg
+      text: "github"
+      href: https://github.com/r-spatialecology/landscapemetric
