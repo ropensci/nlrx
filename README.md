@@ -18,7 +18,7 @@ In summary, the nlrx package uses a similar structure as NetLogos Behavior Space
 Prerequirements
 ---------------
 
-In order to use the nlrx package, NetLogo needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. Because NetLogo is executed in a Java virtual machine, Java needs to be installed on the local/remote system as well. We recommend the [Oracle Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). While the nlrx package might work without setting the Java system path explicitly, we recommend to make sure that JAVA\_HOME points to the correct Java installation of the system.
+In order to use the nlrx package, NetLogo needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (`download_netlogo()`) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system. Because NetLogo is executed in a Java virtual machine, Java needs to be installed on the local/remote system as well. We recommend the [Oracle Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). While the nlrx package might work without setting the Java system path explicitly, we recommend to make sure that JAVA\_HOME points to the correct Java installation of the system.
 
 Installation
 ------------
@@ -37,8 +37,7 @@ Get started
 
 The main focus of nlrx is to define and execute NetLogo model simulation experiments from R. All information that is needed to run NetLogo simulations remotely is stored within a `nl` class object. The `nl` class object is the main class in nlrx which stores information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine. Nested within this `nl` class are the classes `experiment` and `simdesign`. The `experiment` class stores all experiment specifications, such as runtime, variables with variable ranges, constants, output metrics, and more. A `nl` class object containing a valid `experiment` class object can then be used to automatically generate a `simdesign` class object that is attached to the `nl` class object, by using one of the simdesign helper functions. These helper functions create different parameter input matrices from the experiment variable definitions that can then be executed by the `run_nl_one()` and `run_nl_all()` functions. The nested design allows to store everything related to the experiment within one R object. Additionally, different simdesign helper functions can be applied to the same `nl` object in order to repeat the same experiment with different parameter exploration methods (simdesigns).
 
-Step by step application example
---------------------------------
+### Step by step application example
 
 The "Wolf Sheep Predation" model from the NetLogo models library is used to present a basic example on how to setup and run NetLogo model simulations from R. The following steps guide you trough the process on how to setup, run and analyze the NetLogo model simulations with nlrx.
 
@@ -122,11 +121,11 @@ nl@simdesign <- simdesign_lhs(nl=nl,
 
 #### Step 4: Run simulations
 
-All information that is needed to run the simulations is now stored within the nl object. The run\_nl\_one() function allows to run one specific simulation from the siminput parameter table. The run\_nl\_all() function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are created by calling furr::future\_map\_dfr which allows running the function either locally or on remote HPC machines.
+All information that is needed to run the simulations is now stored within the nl object. The run\_nl\_one() function allows to run one specific simulation from the siminput parameter table. The run\_nl\_all() function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are created by calling furr::future\_map\_dfr which allows running the function either locally or on remote HPC machines. Here we use the [future package](https://github.com/HenrikBengtsson/future) to distribute each of the three parameter matrix repetitions (`nseeds=3`) to another processor.
 
 ``` r
-future::plan(multisession)
-
+library(future)
+plan(multisession)
 results %<-% run_nl_all(nl = nl, cleanup = "all")
 ```
 
