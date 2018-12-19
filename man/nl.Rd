@@ -38,13 +38,10 @@ To run simulation experiments, a experiment needs to be added to the nl object.
 Each experiment also needs to have a specified simulation design in order to run simulations.
 }
 \examples{
-\dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl <- nl(nlversion = "6.0.3",
-nlpath = "C:/Program Files/NetLogo 6.0.3/",
-modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/
-Sample Models/Biology/Wolf Sheep Predation.nlogo",
+nlpath = "/home/user/NetLogo 6.0.3/",
+modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
 jvmmem = 1024)
-}
 
 }
