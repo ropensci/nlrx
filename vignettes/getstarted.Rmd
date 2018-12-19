@@ -16,6 +16,31 @@ knitr::opts_chunk$set(
 )
 ```
 
+# nlrx
+
+The nlrx package provides tools to setup and execute NetLogo simulations from R.
+NetLogo is a free, open-source and cross-platform modelling environment for simulating natural and social phenomena.
+NetLogo focusses on implementation of agent-based and spatially explicit simulation models, although system dynamics models are supported as well.
+NetLogo is developed and maintained at the Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
+More details on NetLogo itself are available online: [NetLogo online documentation](https://ccl.northwestern.edu/netlogo/docs/)
+
+NetLogo comes with the built-in experiment tool [Behavior Space](https://ccl.northwestern.edu/netlogo/docs/behaviorspace.html) that allows to setup and execute model simulations with different settings and parameter variations and to collect model output. This experiment tool can be executed via command line in combination with an XML file that contains the experiment specifications, such as runtime, output measurements, stop conditions, and more. One limitation of Behavior Space is, that it only supports full-factorial parameter designs, which may not be appropriate for complex model analyses. Furthermore, Behavior Space experiment specifications are stored within the NetLogo file and are not easily accessible from R for further reproducible analysis.
+
+The nlrx package utilizes the commandline functionality of Behavior Space to execute NetLogo simulations directly from R.
+Instead of defining experiments within NetLogo Behavior Space, experiments are defined in R using the class objects of the nlrx package.
+These class objects hold all the information that is needed to run these experiments remotely from R, such as path to NetLogo installation folder, path to the model file and the experiment specifications itself. nlrx provides useful helper functions to generate parameter input matrices from parameter range definitions that cover a wide range of parameter exploration approaches. By storing all relevant information on simulation experiments, including the output of the model simulations in one class object, experiments can be easily stored and shared.
+
+In summary, the nlrx package uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running reproducible complex model analyses directly from R.
+
+## Prerequirements
+
+### NetLogo
+In order to use the nlrx package, [NetLogo](http://netlogoweb.org/) (>=5.3.1) needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (`download_netlogo()`) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system.
+
+### Java
+Because NetLogo is executed in a Java virtual machine, Java needs to be installed on the local/remote system as well. We recommend the [Oracle Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+While the nlrx package might work without setting the Java system path explicitly, we recommend to make sure that JAVA_HOME points to the correct Java installation of the system.
+
 ## Installation
 
 ~~You can install the released version of nlrx from~~
@@ -29,33 +54,45 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("nldoc/nlrx")
 ```
 
-## Example
+## Get started
 
-The nlrx package uses S4 classes to store basic information on NetLogo, the model experiment and the simulation design.
-Experiment and simulation design class objects are stored within the nl class object.
-This allows to have a complete simulation setup within one single R object.
+General information that is needed to run NetLogo simulations remotely, such as path to the NetLogo installation folder is stored within a `nl` class object.
+Nested within this `nl` class are the classes `experiment` and `simdesign`. The `experiment` class stores all experiment specifications. After attaching a valid experiment, a `simdesign` class object can be attached to the `nl` class object, by using one of the simdesign helper functions. These helper functions create different parameter input matrices from the experiment variable definitions that can then be executed by the `run_nl_one()` and `run_nl_all()` functions. The nested design allows to store everything related to the experiment within one R object. Additionally, different simdesign helper functions can be applied to the same `nl` object in order to repeat the same experiment with different parameter exploration methods (simdesigns).
 
-The following steps guide you trough the process on how to setup, run and analyze NetLogo model simulations with nlrx
+### Step by step application example
+
+The "Wolf Sheep Predation" model from the NetLogo models library is used to present a basic example on how to setup and run NetLogo model simulations from R.
 
 #### Step 1: Create a nl object:
 
-The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
+The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine. Depending on the operation system, paths to NetLogo and the model need to be adjusted.
 
 ```{r eval=FALSE}
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
 nl <- nl(nlversion = "6.0.3",
-         nlpath = "C:/Program Files/NetLogo 6.0.3/",
-         modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+         nlpath = netlogopath,
+         modelpath = modelpath,
          jvmmem = 1024)
 ```
 
 #### Step 2: Attach an experiment
 
-The experiment object is organized in a similar fashion as NetLogo BehaviorSpace experiments.
-It holds information on model variables, constants, metrics, runtime, ...
+The experiment object is organized in a similar fashion as NetLogo Behavior Space experiments.
+It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations.
+Details on the specific slots of the experiment class can be found in the package documentation (`?experiment`) and the "Further Notes" vignette.
 
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
-                            outpath="C:/out/",
+                            outpath=outpath,
                             repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
@@ -65,8 +102,8 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             runtime=50,
                             evalticks=seq(40,50),
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
-                            variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
-                                             'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
+                            variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
+                                             'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
                             constants = list("model-version" = "\"sheep-wolves-grass\"",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
@@ -80,7 +117,8 @@ nl@experiment <- experiment(expname="wolf-sheep",
 
 While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
-A simulation design is attached to a nl object by using one of these simdesign functions:
+All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Further Notes" vignette for more information on random-seed and repetition management).
+A simulation design is attached to a nl object by using one of the simdesign helper functions:
 
 ```{r eval=FALSE}
 nl@simdesign <- simdesign_lhs(nl=nl,
@@ -95,10 +133,11 @@ All information that is needed to run the simulations is now stored within the n
 The run_nl_one() function allows to run one specific simulation from the siminput parameter table.
 The run_nl_all() function runs a loop over all simseeds and rows of the parameter input table siminput.
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
+Here we use the [future package](https://github.com/HenrikBengtsson/future) to distribute each of the three parameter matrix repetitions (`nseeds=3`) to another core of the processor.
 
 ```{r eval=FALSE}
-future::plan(multisession)
-
+library(future)
+plan(multisession)
 results %<-% run_nl_all(nl = nl, cleanup = "all")
 ```
 
@@ -120,82 +159,4 @@ write_simoutput(nl)
 analyze_nl(nl)
 ``` 
 
-## Further notes
 
-#### Comments on simdesigns and variable definitions
-
-Correctly defining variables within the experiment class object is crucial for creating simdesigns.
-The implemented simdesigns have different requirements for variable definitions:
-
-   Simdesign       | Variable requirements              |  data type 
------------------- | ---------------------------------- | -----------
-simdesign_simple   | only constants are used            | any
-simdesign_distinct | values (need to have equal length) | any
-simdesign_ff       | values, or min, max, step (values is prioritized) | any
-simdesign_lhs      | min, max, qfun                     | numeric
-simdesign_sobol    | min, max, qfun                     | numeric
-simdesign_sobol2007 | min, max, qfun                     | numeric
-simdesign_soboljansen | min, max, qfun                     | numeric
-simdesign_morris   | min, max, qfun                     | numeric
-simdesign_eFast    | min, max, qfun                     | numeric
-simdesign_genSA    | min, max                     | numeric
-simdesign_genAlg    | min, max                     | numeric
-
-Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
-Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\\"string\\"").
-Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
-
-#### Comments on self-written output
-
-The experiment provides a slot called "idrunnum".
-This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
-To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
-The name of this widget can be entered into the "idrunnum" field of the experiment.
-During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
-For self-written output In NetLogo, we suggest to include this global vairable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
-
-#### Comments on seed management
-
-The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization.
-This is only useful if you manually generate a new random-seed during the setup of your model.
-By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object.
-If your model does not reset the random seed manually, the seed will always be the same for each repetition.
-
-However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices. Thus we suggest to set the experiment repetition to 1 and instead use the nseeds variable of the desired simdesign to run multiple simulations with different random seeds.
-
-In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds.
-Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
-
-#### Comments on measurements
-
-Three slots of the experiment class define how measurements are taken:
-
-* tickmetrics, defines if measurements are taken at the end of the simulation or on each tick
-
-* evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks
-
-* metrics, definition of valid NetLogo reporters that are used to collect data
-
-Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected.
-In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
-
-Although the metrics slot accepts any valid NetLogo reporter, such as "count patches", reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clear results data frame.
-For example, the NetLogo reporter "count patches with [pcolor = green]" could be written as a NetLogo reporter function:
-```{r eval=FALSE}
-to-report green.patches
-  report count patches with [pcolor = green]
-end
-```
-In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with [pcolor = green]".
-
-
-#### Further notes on the future concept
-
-The run_nl_all function uses the map_dfr functions from the furrr package. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign.
-
-We suggest to always use a future operator (%<-%) when you call this function:
-```{r eval=FALSE}
-future::plan(multisession)
-
-results %<-% run_nl_all(nl = nl, cleanup = "all")
-```

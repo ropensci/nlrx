@@ -1,0 +1,103 @@
+---
+title: "Further notes"
+author: "Jan Salecker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Further notes
+
+#### Notes on variables and constants definitions
+
+Correctly defining variables within the experiment class object is crucial for creating simdesigns.
+The implemented simdesigns have different requirements for variable definitions:
+
+   Simdesign       | Variable requirements              |  data type 
+------------------ | ---------------------------------- | -----------
+simdesign_simple   | only constants are used            | any
+simdesign_distinct | values (need to have equal length) | any
+simdesign_ff       | values, or min, max, step (values is prioritized) | any
+simdesign_lhs      | min, max, qfun                     | numeric
+simdesign_sobol    | min, max, qfun                     | numeric
+simdesign_sobol2007 | min, max, qfun                     | numeric
+simdesign_soboljansen | min, max, qfun                     | numeric
+simdesign_morris   | min, max, qfun                     | numeric
+simdesign_eFast    | min, max, qfun                     | numeric
+simdesign_genSA    | min, max                     | numeric
+simdesign_genAlg    | min, max                     | numeric
+
+* Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
+* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\\"string\\"").
+* Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
+* It is not allowed to list the same variable in the variables and constants list. 
+* NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
+
+
+#### Notes on self-written output
+
+The experiment provides a slot called "idrunnum".
+This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
+To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
+The name of this widget can be entered into the "idrunnum" field of the experiment.
+During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
+For self-written output In NetLogo, we suggest to include this global vairable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
+
+#### Notes on random-seed and repetitions management
+
+The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization.
+This is only useful if you manually generate a new random-seed during the setup of your model.
+By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object.
+If your model does not reset the random seed manually, the seed will always be the same for each repetition.
+
+However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices. Thus we suggest to set the experiment repetition to 1 and instead use the nseeds variable of the desired simdesign to run multiple simulations with different random seeds.
+
+In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds.
+Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
+
+#### Notes on measurements
+
+Three slots of the experiment class define how measurements are taken:
+
+* tickmetrics, defines if measurements are taken at the end of the simulation or on each tick
+
+* evalticks, if tickmetrics = "true" evalticks can be used to filter the results for defined ticks
+
+* metrics, definition of valid NetLogo reporters that are used to collect data
+
+Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected.
+In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.
+
+Although the metrics slot accepts any valid NetLogo reporter, such as "count patches", reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clear results data frame.
+For example, the NetLogo reporter "count patches with [pcolor = green]" could be written as a NetLogo reporter function:
+```{r eval=FALSE}
+to-report green.patches
+  report count patches with [pcolor = green]
+end
+```
+In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with [pcolor = green]".
+
+
+#### Notes on parallelisation and the future concept
+
+The run_nl_all function uses the map_dfr functions from the furrr package. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. 
+
+We suggest to always use a future operator (%<-%) when you call this function:
+```{r eval=FALSE}
+library(future)
+plan(multisession)
+results %<-% run_nl_all(nl = nl, cleanup = "all")
+```
+
+In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the run_nl_all function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.
+
