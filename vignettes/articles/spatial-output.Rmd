@@ -26,6 +26,8 @@ For instance, we might want to measure coordinates, who numbers and the breed of
 
 ```{r eval=FALSE}
 library(nlrx)
+library(ggplot2)
+library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependencie
 
 # Define nl object
 nl <- nl(nlversion = "6.0.3",
@@ -134,10 +136,6 @@ results_spatial_tibble <- get_nl_spatial(nl,
                                   patches = TRUE,
                                   turtle_coords = "px",
                                   format="tibble")
-
-# Load libraries 
-library(ggplot2)
-library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependencie
 
 # Create an animated plot, using the step column as animation variable
 p1 <- ggplot(results_spatial_tibble) +
