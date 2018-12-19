@@ -137,7 +137,7 @@ results_spatial_tibble <- get_nl_spatial(nl,
 
 # Load libraries 
 library(ggplot2)
-library(gganimate) # devtools::install_github('thomasp85/gganimate')
+library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependencie
 
 # Create an animated plot, using the step column as animation variable
 p1 <- ggplot(results_spatial_tibble) +
