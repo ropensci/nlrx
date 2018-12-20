@@ -162,7 +162,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_one</span>(<span class='no'>nl</span>, <span class='no'>seed</span>, <span class='no'>siminputrow</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>run_nl_one</span>(<span class='no'>nl</span>, <span class='no'>seed</span>, <span class='no'>siminputrow</span>, <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,8 +181,16 @@
       <td><p>rownumber of the input tibble within the attached simdesign object that should be executed</p></td>
     </tr>
     <tr>
-      <th>cleanup</th>
-      <td><p>indicate which filetypes should be deleted</p></td>
+      <th>cleanup.csv</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.xml</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.bat</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></td>
     </tr>
     </table>
     
@@ -194,20 +203,20 @@
     <p>run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
 The random seed is set within the NetLogo model to control stochasticity.
 The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-Cleanup can either be "xml" to delete all temporarily created xml files; "csv" to delete all temporarily created csv files,
-"bat" to create all temporarily created bat/sh files or "all" to delete all temporarily created files.</p>
+The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+cleanup.csv deletes/keeps the temporary generated model output files from each run.
+cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.</p>
 <p>This function can be used to run single simulations of a NetLogo model.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_one</span>(
-  <span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'>getsims</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
-  <span class='kw'>siminputrow</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>
-)
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_one</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+                      <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'>getsims</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
+                      <span class='kw'>siminputrow</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

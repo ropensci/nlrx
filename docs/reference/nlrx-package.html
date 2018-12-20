@@ -222,8 +222,7 @@ The <code>run_nl_all</code> function runs a loop over all simseeds and rows of t
 The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.</p>
 <p><code>
 future::plan(multisession)
-    results <!-- %&lt;-% run_nl_all(nl = nl, -->
-                        cleanup = "all")
+    results <!-- %&lt;-% run_nl_all(nl = nl) -->
     </code></p>
 <p>Step 5: Attach results to nl and run analysis</p>
 <p>nlrx provides method specific analysis functions for each simulation design.

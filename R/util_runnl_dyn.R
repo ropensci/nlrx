@@ -5,11 +5,17 @@
 #'
 #' @param nl nl object
 #' @param seed current model seed
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @aliases util_run_nl_dyn_GenSA
 #' @rdname util_run_nl_dyn_GenSA
 #' @keywords internal
-util_run_nl_dyn_GenSA <- function(nl, seed, cleanup) {
+util_run_nl_dyn_GenSA <- function(nl,
+                                  seed,
+                                  cleanup.csv,
+                                  cleanup.xml,
+                                  cleanup.bat) {
 
   # Get GenSA object from simdesign:
   gensa <- getsim(nl, "simobject")
@@ -23,7 +29,9 @@ util_run_nl_dyn_GenSA <- function(nl, seed, cleanup) {
         nl = nl,
         evalcrit = gensa$evalcrit,
         seed = seed,
-        cleanup = cleanup,
+        cleanup.csv = cleanup.csv,
+        cleanup.xml = cleanup.xml,
+        cleanup.bat = cleanup.bat,
         ...
       )
     },
@@ -44,11 +52,19 @@ util_run_nl_dyn_GenSA <- function(nl, seed, cleanup) {
 #' @param nl nl object
 #' @param evalcrit evaluation criterion for simulated annealing
 #' @param seed current model seed
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @aliases util_run_nl_dyn_GenSA_fn
 #' @rdname util_run_nl_dyn_GenSA_fn
 #' @keywords internal
-util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
+util_run_nl_dyn_GenSA_fn <- function(param,
+                                     nl,
+                                     evalcrit,
+                                     seed,
+                                     cleanup.csv,
+                                     cleanup.xml,
+                                     cleanup.bat) {
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -72,7 +88,9 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
     nl = nl,
     siminputrow = 1,
     seed = seed,
-    cleanup = cleanup
+    cleanup.csv = cleanup.csv,
+    cleanup.xml = cleanup.xml,
+    cleanup.bat = cleanup.bat
   )
 
   # Select metric for gensa:
@@ -93,11 +111,17 @@ util_run_nl_dyn_GenSA_fn <- function(param, nl, evalcrit, seed, cleanup) {
 #'
 #' @param nl nl object
 #' @param seed current model seed
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @aliases util_run_nl_dyn_GenAlg
 #' @rdname util_run_nl_dyn_GenAlg
 #' @keywords internal
-util_run_nl_dyn_GenAlg <- function(nl, seed, cleanup) {
+util_run_nl_dyn_GenAlg <- function(nl,
+                                   seed,
+                                   cleanup.csv,
+                                   cleanup.xml,
+                                   cleanup.bat) {
 
   # Get GenSA object from simdesign:
   galg <- getsim(nl, "simobject")
@@ -116,7 +140,9 @@ util_run_nl_dyn_GenAlg <- function(nl, seed, cleanup) {
         nl = nl,
         evalcrit = galg$evalcrit,
         seed = seed,
-        cleanup = cleanup,
+        cleanup.csv = cleanup.csv,
+        cleanup.xml = cleanup.xml,
+        cleanup.bat = cleanup.bat,
         ...
       )
     }
@@ -134,11 +160,19 @@ util_run_nl_dyn_GenAlg <- function(nl, seed, cleanup) {
 #' @param nl nl object
 #' @param evalcrit evaluation criterion for simulated annealing
 #' @param seed current model seed
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @aliases util_run_nl_dyn_GenAlg_fn
 #' @rdname util_run_nl_dyn_GenAlg_fn
 #' @keywords internal
-util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
+util_run_nl_dyn_GenAlg_fn <- function(param,
+                                      nl,
+                                      evalcrit,
+                                      seed,
+                                      cleanup.csv,
+                                      cleanup.xml,
+                                      cleanup.bat) {
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -162,7 +196,9 @@ util_run_nl_dyn_GenAlg_fn <- function(param, nl, evalcrit, seed, cleanup) {
     nl = nl,
     siminputrow = 1,
     seed = seed,
-    cleanup = cleanup
+    cleanup.csv = cleanup.csv,
+    cleanup.xml = cleanup.xml,
+    cleanup.bat = cleanup.bat
   )
 
   # Select metric for gensa:

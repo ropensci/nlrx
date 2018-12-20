@@ -31,9 +31,10 @@
 #' \dontrun{
 #'
 #' # Run parallel on local machine:
-#' future::plan(multisession)
+#' library(future)
+#' plan(multisession)
 #' # Run simulations:
-#' results %<-% run_nl_all(nl = nl, cleanup = "all")
+#' results %<-% run_nl_all(nl = nl)
 #' # Attach results to nl:
 #' setsim(nl, "simoutput") <- results
 #' # Get spatial data:

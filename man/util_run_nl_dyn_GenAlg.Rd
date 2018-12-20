@@ -4,14 +4,18 @@
 \alias{util_run_nl_dyn_GenAlg}
 \title{Genetic Algorithm call simulations function}
 \usage{
-util_run_nl_dyn_GenAlg(nl, seed, cleanup)
+util_run_nl_dyn_GenAlg(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{current model seed}
 
-\item{cleanup}{indicate which filetypes should be deleted}
+\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+
+\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+
+\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
 }
 \description{
 Genetic Algorithm call simulations function

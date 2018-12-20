@@ -146,9 +146,15 @@ testthat::test_that("util_runnl", {
   testthat::expect_equal(nrow(results), 2)
 
   testthat::context("Cleanup:")
-  util_cleanup(nl, outpath, ".csv")
-  util_cleanup(nl, dirname(xmlfile), pattern = ".xml")
-  util_cleanup(nl, dirname(batchfile), pattern = ".sh")
+  cleanup.files <- list("csv" = outfile,
+                        "xml" = xmlfile,
+                        "bat" = batchpath)
+  util_cleanup(nl,
+               cleanup.csv = TRUE,
+               cleanup.xml = TRUE,
+               cleanup.bat = TRUE,
+               cleanup.files)
+
   testthat::expect_false(file.exists(xmlfile))
   testthat::expect_false(file.exists(batchfile))
   testthat::expect_false(file.exists(outfile))

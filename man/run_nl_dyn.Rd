@@ -4,14 +4,19 @@
 \alias{run_nl_dyn}
 \title{Execute NetLogo simulation without pregenerated parametersets}
 \usage{
-run_nl_dyn(nl, seed, cleanup = "all")
+run_nl_dyn(nl, seed, cleanup.csv = TRUE, cleanup.xml = TRUE,
+  cleanup.bat = TRUE)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{a random seed for the NetLogo simulation}
 
-\item{cleanup}{indicate which filetypes should be deleted}
+\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+
+\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+
+\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
 }
 \value{
 simulation output results can be tibble, list, ...
@@ -22,7 +27,10 @@ Execute NetLogo simulation from a nl object with a defined experiment and simdes
 \details{
 run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
 This is the case for dynamic designs, such as Simulated Annealing and Genetic Algorithms, where parametersets are dynamically generated, based on the output of previous simulations.
-Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+cleanup.csv deletes/keeps the temporary generated model output files from each run.
+cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
 }
 \examples{
 \dontrun{

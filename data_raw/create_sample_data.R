@@ -137,7 +137,7 @@ run_sample_data <- function (nl) {
   library(future)
   plan(multisession)
 
-  results <- run_nl_all(nl = nl, cleanup = "all")
+  results <- run_nl_all(nl = nl)
 
   ## Attach output to nl
   setsim(nl, "simoutput") <- results

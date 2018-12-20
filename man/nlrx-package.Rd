@@ -80,8 +80,7 @@ The loops are created by calling furr::future_map_dfr which allows running the f
 \code{
 future::plan(multisession)
 
-results %<-% run_nl_all(nl = nl,
-                        cleanup = "all")
+results %<-% run_nl_all(nl = nl)
 
 }
 

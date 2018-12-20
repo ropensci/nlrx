@@ -4,14 +4,19 @@
 \alias{run_nl_all}
 \title{Execute all NetLogo simulations from a nl object}
 \usage{
-run_nl_all(nl, split = 1, cleanup = "all")
+run_nl_all(nl, split = 1, cleanup.csv = TRUE, cleanup.xml = TRUE,
+  cleanup.bat = TRUE)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{split}{number of parts the job should be split into}
 
-\item{cleanup}{indicate which filetypes should be deleted}
+\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+
+\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+
+\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
 }
 \value{
 tibble with simulation output results
@@ -23,7 +28,10 @@ Execute all NetLogo simulations from a nl object with a defined experiment and s
 run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
 The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
-Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+cleanup.csv deletes/keeps the temporary generated model output files from each run.
+cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
 
 When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
 the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.

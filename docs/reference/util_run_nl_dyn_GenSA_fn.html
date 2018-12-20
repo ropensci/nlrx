@@ -162,7 +162,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>util_run_nl_dyn_GenSA_fn</span>(<span class='no'>param</span>, <span class='no'>nl</span>, <span class='no'>evalcrit</span>, <span class='no'>seed</span>, <span class='no'>cleanup</span>)</pre>
+    <pre class="usage"><span class='fu'>util_run_nl_dyn_GenSA_fn</span>(<span class='no'>param</span>, <span class='no'>nl</span>, <span class='no'>evalcrit</span>, <span class='no'>seed</span>, <span class='no'>cleanup.csv</span>,
+  <span class='no'>cleanup.xml</span>, <span class='no'>cleanup.bat</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,8 +185,16 @@
       <td><p>current model seed</p></td>
     </tr>
     <tr>
-      <th>cleanup</th>
-      <td><p>indicate which filetypes should be deleted</p></td>
+      <th>cleanup.csv</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.xml</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.bat</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></td>
     </tr>
     </table>
     

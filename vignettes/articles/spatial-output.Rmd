@@ -65,7 +65,7 @@ nl@simdesign <- simdesign_simple(nl=nl,
                                  nseeds=1)
 
 # Run simulations and store output in results
-results <- run_nl_all(nl = nl, cleanup = "all")
+results <- run_nl_all(nl = nl)
 ```
 
 This experiment will run for 100 ticks and collects all metrics, metrics.turtles and metrics.patches on each tick.

@@ -4,12 +4,19 @@
 \alias{util_cleanup}
 \title{Delete temporary files}
 \usage{
-util_cleanup(nl, directory, pattern)
+util_cleanup(nl, cleanup.csv = TRUE, cleanup.xml = TRUE,
+  cleanup.bat = TRUE, cleanup.files)
 }
 \arguments{
 \item{nl}{nl object}
 
-\item{pattern}{defines file types to be deleted (".xml", ".csv" or "all")}
+\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+
+\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+
+\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+
+\item{cleanup.files}{vector with paths to temporary created files (csv, xml, bat)}
 }
 \description{
 Delete temporary files

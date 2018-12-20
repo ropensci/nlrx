@@ -162,7 +162,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>util_cleanup</span>(<span class='no'>nl</span>, <span class='no'>directory</span>, <span class='no'>pattern</span>)</pre>
+    <pre class="usage"><span class='fu'>util_cleanup</span>(<span class='no'>nl</span>, <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>cleanup.files</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,8 +173,20 @@
       <td><p>nl object</p></td>
     </tr>
     <tr>
-      <th>pattern</th>
-      <td><p>defines file types to be deleted (".xml", ".csv" or "all")</p></td>
+      <th>cleanup.csv</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.xml</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.bat</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.files</th>
+      <td><p>vector with paths to temporary created files (csv, xml, bat)</p></td>
     </tr>
     </table>
     

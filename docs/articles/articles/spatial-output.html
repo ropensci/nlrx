@@ -175,7 +175,7 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
                                  <span class="dt">nseeds=</span><span class="dv">1</span>)
 
 <span class="co"># Run simulations and store output in results</span>
-results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">cleanup =</span> <span class="st">"all"</span>)</code></pre></div>
+results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</code></pre></div>
 <p>This experiment will run for 100 ticks and collects all metrics, metrics.turtles and metrics.patches on each tick. Thus, running run_nl_all() will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble. This lists already contain all measured agent metrics and can for example be used to analyse distributions of these variables for specific agent groups.</p>
 <p>In case of spatial data containing coordinates (pxcor/pycor for patches or pxcor/pycor and/or xcor/ycor for turtles), nlrx provides a function to transform the measured output into spatial objects. In order to use the function get_nl_spatial() you first have to attach your simulation output results to the nl object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attach results to nl object:</span>

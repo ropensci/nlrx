@@ -173,12 +173,27 @@ util_call_nl <- function(nl, xmlfile, outfile, batchfile) {
 #' @description Delete temporary files
 #'
 #' @param nl nl object
-#' @param pattern defines file types to be deleted (".xml", ".csv" or "all")
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param cleanup.files vector with paths to temporary created files (csv, xml, bat)
 #' @aliases util_cleanup
 #' @rdname util_cleanup
 #' @keywords internal
-util_cleanup <- function(nl, directory, pattern) {
-  file.remove(dir(path = directory, pattern = pattern, full.names = TRUE))
+util_cleanup <- function(nl,
+                         cleanup.csv = TRUE,
+                         cleanup.xml = TRUE,
+                         cleanup.bat = TRUE,
+                         cleanup.files) {
+  if (isTRUE(cleanup.csv)) {
+    file.remove(cleanup.files$csv[[1]])
+  }
+  if (isTRUE(cleanup.xml)) {
+    file.remove(cleanup.files$xml[[1]])
+  }
+  if (isTRUE(cleanup.bat)) {
+    file.remove(cleanup.files$bat[[1]])
+  }
 }
 
 #' Load output file from simulations

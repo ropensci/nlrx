@@ -162,7 +162,8 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>split</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)</pre>
+    <pre class="usage"><span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>split</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -176,8 +177,16 @@
       <td><p>number of parts the job should be split into</p></td>
     </tr>
     <tr>
-      <th>cleanup</th>
-      <td><p>indicate which filetypes should be deleted</p></td>
+      <th>cleanup.csv</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.xml</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.</p></td>
+    </tr>
+    <tr>
+      <th>cleanup.bat</th>
+      <td><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></td>
     </tr>
     </table>
     
@@ -190,7 +199,10 @@
     <p>run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
 The loops are created by calling <a href='http://www.rdocumentation.org/packages/furrr/topics/future_map'>future_map_dfr</a>, which allows running the function either locally or on remote HPC machines.
-Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.</p>
+The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+cleanup.csv deletes/keeps the temporary generated model output files from each run.
+cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.</p>
 <p>When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
 the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
 The inner loop (siminputrows) distributes simulation tasks to these cores.

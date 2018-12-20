@@ -6,14 +6,19 @@
 #'
 #' @param nl nl object
 #' @param split number of parts the job should be split into
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @return tibble with simulation output results
 #' @details
 #'
 #' run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 #' The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
 #' The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
-#' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
+#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
+#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+#' cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
 #'
 #' When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
 #' the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
@@ -40,7 +45,11 @@
 #'
 #' @export
 
-run_nl_all <- function(nl, split = 1, cleanup = "all") {
+run_nl_all <- function(nl,
+                       split = 1,
+                       cleanup.csv = TRUE,
+                       cleanup.xml = TRUE,
+                       cleanup.bat = TRUE) {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
@@ -98,15 +107,19 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
 #' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @return tibble with simulation output results
 #' @details
 #'
 #' run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
 #' The random seed is set within the NetLogo model to control stochasticity.
 #' The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-#' Cleanup can either be "xml" to delete all temporarily created xml files; "csv" to delete all temporarily created csv files,
-#' "bat" to create all temporarily created bat/sh files or "all" to delete all temporarily created files.
+#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
+#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+#' cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
 #'
 #' This function can be used to run single simulations of a NetLogo model.
 #'
@@ -115,19 +128,23 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 #' \dontrun{
 #'
 #' # Run one simulation:
-#' results <- run_nl_one(
-#'   nl = nl,
-#'   seed = getsims(nl, "simseeds")[1],
-#'   siminputrow = 1,
-#'   cleanup = "all"
-#' )
+#' results <- run_nl_one(nl = nl,
+#'                       seed = getsims(nl, "simseeds")[1],
+#'                       siminputrow = 1)
+#'
 #' }
 #' @aliases run_nl_one
 #' @rdname run_nl_one
 #'
 #' @export
 
-run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
+run_nl_one <- function(nl,
+                       seed,
+                       siminputrow,
+                       cleanup.csv = TRUE,
+                       cleanup.xml = TRUE,
+                       cleanup.bat = TRUE) {
+
   util_eval_simdesign(nl)
 
   ## Write XML File:
@@ -153,16 +170,12 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
   nl_results <- util_gather_results(nl, outfile, seed, siminputrow)
 
   ## Delete temporary files:
-  if (cleanup == "xml" | cleanup == "all") {
-    util_cleanup(nl, dirname(xmlfile), pattern = ".xml")
-  }
-  if (cleanup == "csv" | cleanup == "all") {
-    util_cleanup(nl, dirname(outfile), pattern = ".csv")
-  }
-  if (cleanup == "bat" | cleanup == "all") {
-    util_cleanup(nl, dirname(batchpath), pattern = ".bat")
-    util_cleanup(nl, dirname(batchpath), pattern = ".sh")
-  }
+  cleanup.files <- list("csv" = outfile,
+                        "xml" = xmlfile,
+                        "bat" = batchpath)
+
+  util_cleanup(nl, cleanup.csv, cleanup.xml, cleanup.bat, cleanup.files)
+
 
   return(nl_results)
 }
@@ -176,14 +189,18 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #'
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
-#' @param cleanup indicate which filetypes should be deleted
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @return simulation output results can be tibble, list, ...
 #' @details
 #'
 #' run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
 #' This is the case for dynamic designs, such as Simulated Annealing and Genetic Algorithms, where parametersets are dynamically generated, based on the output of previous simulations.
-#' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
-#'
+#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
+#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
+#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
+#' cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
 #'
 #' @examples
 #' \dontrun{
@@ -197,7 +214,11 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #'
 #' @export
 
-run_nl_dyn <- function(nl, seed, cleanup = "all") {
+run_nl_dyn <- function(nl,
+                       seed,
+                       cleanup.csv = TRUE,
+                       cleanup.xml = TRUE,
+                       cleanup.bat = TRUE) {
   nl_results <- NULL
 
 
@@ -205,7 +226,9 @@ run_nl_dyn <- function(nl, seed, cleanup = "all") {
     nl_results <- util_run_nl_dyn_GenSA(
       nl = nl,
       seed = seed,
-      cleanup = cleanup
+      cleanup.csv = cleanup.csv,
+      cleanup.xml = cleanup.xml,
+      cleanup.bat = cleanup.bat
     )
   }
 
@@ -213,7 +236,9 @@ run_nl_dyn <- function(nl, seed, cleanup = "all") {
     nl_results <- util_run_nl_dyn_GenAlg(
       nl = nl,
       seed = seed,
-      cleanup = cleanup
+      cleanup.csv = cleanup.csv,
+      cleanup.xml = cleanup.xml,
+      cleanup.bat = cleanup.bat
     )
   }
 
