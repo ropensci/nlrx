@@ -2,7 +2,7 @@ testthat::context("Util stuff")
 testthat::test_that("Util stuff", {
 
 
-  testthat::context("load_model_parameters")
+  testthat::context("report_model_parameters")
 
   # Run these tests only on TRAVIS:
   testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
@@ -28,7 +28,7 @@ testthat::test_that("Util stuff", {
            jvmmem = 1024)
 
 
-  params <- load_model_parameters(nl)
+  params <- report_model_parameters(nl)
 
   testthat::expect_match(class(params), "list")
   testthat::expect_equal(length(params), 9)

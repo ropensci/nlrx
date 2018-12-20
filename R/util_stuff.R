@@ -82,15 +82,15 @@ util_generate_seeds <- function(nseeds) {
 #'
 #' @examples
 #' \dontrun{
-#' load_model_parameters(nl)
+#' report_model_parameters(nl)
 #' }
 #'
-#' @aliases load_model_parameters
-#' @rdname load_model_parameters
+#' @aliases report_model_parameters
+#' @rdname report_model_parameters
 #'
 #' @export
 
-load_model_parameters <- function(nl) {
+report_model_parameters <- function(nl) {
 
   ## Open the model as string
   model.code <- readLines(getnl(nl, "modelpath"))

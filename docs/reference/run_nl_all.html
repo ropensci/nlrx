@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Execute NetLogo simulation — run_nl_all • nlrx | NetLogo from R</title>
+<title>Execute all NetLogo simulations from a nl object — run_nl_all • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Execute NetLogo simulation — run_nl_all" />
+<meta property="og:title" content="Execute all NetLogo simulations from a nl object — run_nl_all" />
 
-<meta property="og:description" content="Execute NetLogo simulation from a nl object with a defined experiment and simdesign" />
+<meta property="og:description" content="Execute all NetLogo simulations from a nl object with a defined experiment and simdesign" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -151,14 +151,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Execute NetLogo simulation</h1>
+    <h1>Execute all NetLogo simulations from a nl object</h1>
     <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
     <div class="hidden name"><code>run_nl_all.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Execute NetLogo simulation from a nl object with a defined experiment and simdesign</p>
+    <p>Execute all NetLogo simulations from a nl object with a defined experiment and simdesign</p>
     
     </div>
 
@@ -189,7 +189,7 @@
 
     <p>run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
+The loops are created by calling <a href='http://www.rdocumentation.org/packages/furrr/topics/future_map'>future_map_dfr</a>, which allows running the function either locally or on remote HPC machines.
 Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.</p>
 <p>When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
 the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
@@ -202,9 +202,14 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Run parallel on local machine:</span>
-<span class='kw pkg'>future</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multisession</span>)
-<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>, <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>)
+<span class='co'># Execute all simulations from an nl object with properly attached simdesign.</span>
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>)
+
+<span class='co'># Run in parallel on local machine:</span>
+<span class='fu'>library</span>(<span class='no'>future</span>)
+<span class='fu'><a href='http://www.rdocumentation.org/packages/future/topics/plan'>plan</a></span>(<span class='no'>multisession</span>)
+<span class='no'>results</span> <span class='kw'>%&lt;-%</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>)
+
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
