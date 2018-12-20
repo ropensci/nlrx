@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_nl.R
 \name{run_nl_one}
 \alias{run_nl_one}
-\title{Execute NetLogo simulation}
+\title{Execute one NetLogo simulation from a nl object}
 \usage{
 run_nl_one(nl, seed, siminputrow, cleanup = "all")
 }
@@ -19,7 +19,7 @@ run_nl_one(nl, seed, siminputrow, cleanup = "all")
 tibble with simulation output results
 }
 \description{
-Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+Execute one NetLogo simulation from a nl object with a defined experiment and simdesign
 }
 \details{
 run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.

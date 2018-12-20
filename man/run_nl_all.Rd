@@ -2,7 +2,7 @@
 % Please edit documentation in R/run_nl.R
 \name{run_nl_all}
 \alias{run_nl_all}
-\title{Execute NetLogo simulation}
+\title{Execute all NetLogo simulations from a nl object}
 \usage{
 run_nl_all(nl, split = 1, cleanup = "all")
 }
@@ -17,12 +17,12 @@ run_nl_all(nl, split = 1, cleanup = "all")
 tibble with simulation output results
 }
 \description{
-Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+Execute all NetLogo simulations from a nl object with a defined experiment and simdesign
 }
 \details{
 run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
+The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
 Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 
 When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
@@ -36,8 +36,13 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 \examples{
 \dontrun{
 
-# Run parallel on local machine:
-future::plan(multisession)
-results \%<-\% run_nl_all(nl, cleanup = "all")
+# Execute all simulations from an nl object with properly attached simdesign.
+results <- run_nl_all(nl)
+
+# Run in parallel on local machine:
+library(future)
+plan(multisession)
+results \%<-\% run_nl_all(nl)
+
 }
 }

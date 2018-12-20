@@ -1,8 +1,8 @@
 
 
-#' Execute NetLogo simulation
+#' Execute all NetLogo simulations from a nl object
 #'
-#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#' @description Execute all NetLogo simulations from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
 #' @param split number of parts the job should be split into
@@ -12,7 +12,7 @@
 #'
 #' run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 #' The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-#' The loops are created by calling furr::future_map_dfr which allows running the function either locally or on remote HPC machines.
+#' The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
 #' Cleanup can either be ".xml" to delete all temporarily created xml files; ".csv" to delete all temporarily created csv files or "all" to delete all temporarily created files.
 #'
 #' When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
@@ -26,9 +26,14 @@
 #' @examples
 #' \dontrun{
 #'
-#' # Run parallel on local machine:
-#' future::plan(multisession)
-#' results %<-% run_nl_all(nl, cleanup = "all")
+#' # Execute all simulations from an nl object with properly attached simdesign.
+#' results <- run_nl_all(nl)
+#'
+#' # Run in parallel on local machine:
+#' library(future)
+#' plan(multisession)
+#' results %<-% run_nl_all(nl)
+#'
 #' }
 #' @aliases run_nl_all
 #' @rdname run_nl_all
@@ -86,9 +91,9 @@ run_nl_all <- function(nl, split = 1, cleanup = "all") {
 
 
 
-#' Execute NetLogo simulation
+#' Execute one NetLogo simulation from a nl object
 #'
-#' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign
+#' @description Execute one NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
@@ -184,10 +189,8 @@ run_nl_one <- function(nl, seed, siminputrow, cleanup = "all") {
 #' \dontrun{
 #'
 #' # Run one simulation:
-#' results <- run_nl_dyn(
-#'   nl = nl,
-#'   cleanup = "all"
-#' )
+#' results <- run_nl_dyn(nl)
+#'
 #' }
 #' @aliases run_nl_dyn
 #' @rdname run_nl_dyn
