@@ -16,7 +16,7 @@ navbar:
        - text: "Simdesign examples"
          icon: fa-book
          href: articles/simdesign-examples.html
-       - text: "Further notes"
+       - text: "Advanced configuration"
          icon: fa-sticky-note
          href: articles/furthernotes.html
        - text: "Capturing spatial NetLogo output"
