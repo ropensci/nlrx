@@ -1,7 +1,10 @@
-#' Evaluate variables list of an experiment object
+#' Evaluate if variables list of an experiment object is empty
 #'
-#' @description Evaluate variables list of an experiment object
+#' @description Evaluate if variables list of an experiment object is empty
 #' @param nl nl object
+#' @details
+#' util_eval_variables checks if the variables list of an experiment within a nl object is empty.
+#' It reports an error message if no variables were defined.
 #' @aliases util_eval_variables
 #' @rdname util_eval_variables
 #' @keywords internal
@@ -18,18 +21,17 @@ util_eval_variables <- function(nl) {
 
 
 
-#' Evaluate variables list of an experiment object
+#' Evaluate variables list of an experiment object for distinct simdesign
 #'
-#' @description Evaluate variables list of an experiment object
+#' @description Evaluate variables list of an experiment object for distinct simdesign
 #' @param nl nl object
+#' @details
+#' util_eval_variables_distinct checks if the variables list of an experiment within a nl object has enough information to create a \link[nlrx]{simdesign_distinct}.
+#' It reports an error message if at least one variable does not have a vector of distinct values or if there is a mismatch in length of these values vectors.
 #' @aliases util_eval_variables_distinct
 #' @rdname util_eval_variables_distinct
 #' @keywords internal
 util_eval_variables_distinct <- function(nl) {
-
-  # The function checks if there is enough variable information to create a ff
-  # simdesign
-  # The ff design needs either a set of min, max and step or distinct values
 
   vars <- getexp(nl, "variables")
   vars.values.missing <- lapply(vars, function(x) is.null(x$values))
@@ -72,10 +74,13 @@ util_eval_variables_distinct <- function(nl) {
 
 
 
-#' Evaluate variables list of an experiment object
+#' Evaluate variables list of an experiment object for full-factorial simdesign
 #'
-#' @description Evaluate variables list of an experiment object
+#' @description Evaluate variables list of an experiment object for full-factorial simdesign
 #' @param nl nl object
+#' @details
+#' util_eval_variables_ff checks if the variables list of an experiment within a nl object has enough information to create a \link[nlrx]{simdesign_ff}.
+#' It reports an error message if at least one variable does not have a defined sequence (min, max, step) or a vector of distinct values.
 #' @aliases util_eval_variables_ff
 #' @rdname util_eval_variables_ff
 #' @keywords internal
@@ -106,10 +111,13 @@ util_eval_variables_ff <- function(nl) {
 }
 
 
-#' Evaluate variables list of an experiment object
+#' Evaluate variables list of an experiment object for sensitivity analysis simdesigns
 #'
-#' @description Evaluate variables list of an experiment object
+#' @description Evaluate variables list of an experiment object for sensitivity analysis simdesigns
 #' @param nl nl object
+#' @details
+#' util_eval_variables_sa checks if the variables list of an experiment within a nl object has enough information to create a sensitivity analysis simdesign.
+#' It reports an error message if at least one variable does not have a defined distribution (min, max, qfun).
 #' @aliases util_eval_variables_sa
 #' @rdname util_eval_variables_sa
 #' @keywords internal
@@ -140,10 +148,13 @@ util_eval_variables_sa <- function(nl) {
 
 
 
-#' Evaluate variables list of an experiment object
+#' Evaluate variables list of an experiment object for optimization simdesigns
 #'
-#' @description Evaluate variables list of an experiment object
+#' @description Evaluate variables list of an experiment object for optimization simdesigns
 #' @param nl nl object
+#' @details
+#' util_eval_variables_op checks if the variables list of an experiment within a nl object has enough information to create an optimization simdesign.
+#' It reports an error message if at least one variable does not have a defined range (min, max).
 #' @aliases util_eval_variables_op
 #' @rdname util_eval_variables_op
 #' @keywords internal
@@ -173,10 +184,12 @@ util_eval_variables_op <- function(nl) {
 
 
 
-#' Evaluate constants list of an experiment object
+#' Evaluate if constants list of an experiment object is empty
 #'
-#' @description Evaluate constants list of an experiment object
+#' @description Evaluate if constants list of an experiment object is empty
 #' @param nl nl object
+#' util_eval_constants checks if the constants list of an experiment within a nl object is empty.
+#' It reports an error message if no constants were defined. This evaluation is only done for \link[nlrx]{simdesign_simple}.
 #' @aliases util_eval_constants
 #' @rdname util_eval_constants
 #' @keywords internal
@@ -189,10 +202,12 @@ util_eval_constants <- function(nl) {
   }
 }
 
-#' Evaluate experiment object
+#' Evaluate all slots of an experiment object
 #'
-#' @description Evaluate experiment object
+#' @description Evaluate all slots of an experiment object
 #' @param nl nl object
+#' @details
+#' util_eval_experiment checks if the information stored within the experiment slots are valid.
 #' @aliases util_eval_experiment
 #' @rdname util_eval_experiment
 #' @keywords internal
@@ -226,10 +241,12 @@ util_eval_experiment <- function(nl) {
   }
 }
 
-#' Evaluate simdesign object
+#' Evaluate all slots of a simdesign object
 #'
-#' @description Evaluate simdesign object
+#' @description Evaluate all slots of a simdesign object
 #' @param nl nl object
+#' @details
+#' util_eval_simdesign checks if the information stored within the simdesign slots are valid.
 #' @aliases util_eval_simdesign
 #' @rdname util_eval_simdesign
 #' @keywords internal

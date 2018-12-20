@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_simdesign}
 \alias{util_eval_simdesign}
-\title{Evaluate simdesign object}
+\title{Evaluate all slots of a simdesign object}
 \usage{
 util_eval_simdesign(nl)
 }
@@ -10,6 +10,9 @@ util_eval_simdesign(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate simdesign object
+Evaluate all slots of a simdesign object
+}
+\details{
+util_eval_simdesign checks if the information stored within the simdesign slots are valid.
 }
 \keyword{internal}

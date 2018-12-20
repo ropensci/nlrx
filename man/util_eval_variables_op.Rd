@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_variables_op}
 \alias{util_eval_variables_op}
-\title{Evaluate variables list of an experiment object}
+\title{Evaluate variables list of an experiment object for optimization simdesigns}
 \usage{
 util_eval_variables_op(nl)
 }
@@ -10,6 +10,10 @@ util_eval_variables_op(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate variables list of an experiment object
+Evaluate variables list of an experiment object for optimization simdesigns
+}
+\details{
+util_eval_variables_op checks if the variables list of an experiment within a nl object has enough information to create an optimization simdesign.
+It reports an error message if at least one variable does not have a defined range (min, max).
 }
 \keyword{internal}

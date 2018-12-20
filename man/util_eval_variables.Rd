@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_variables}
 \alias{util_eval_variables}
-\title{Evaluate variables list of an experiment object}
+\title{Evaluate if variables list of an experiment object is empty}
 \usage{
 util_eval_variables(nl)
 }
@@ -10,6 +10,10 @@ util_eval_variables(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate variables list of an experiment object
+Evaluate if variables list of an experiment object is empty
+}
+\details{
+util_eval_variables checks if the variables list of an experiment within a nl object is empty.
+It reports an error message if no variables were defined.
 }
 \keyword{internal}

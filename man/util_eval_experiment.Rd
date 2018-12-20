@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_experiment}
 \alias{util_eval_experiment}
-\title{Evaluate experiment object}
+\title{Evaluate all slots of an experiment object}
 \usage{
 util_eval_experiment(nl)
 }
@@ -10,6 +10,9 @@ util_eval_experiment(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate experiment object
+Evaluate all slots of an experiment object
+}
+\details{
+util_eval_experiment checks if the information stored within the experiment slots are valid.
 }
 \keyword{internal}

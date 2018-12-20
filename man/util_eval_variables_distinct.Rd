@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_variables_distinct}
 \alias{util_eval_variables_distinct}
-\title{Evaluate variables list of an experiment object}
+\title{Evaluate variables list of an experiment object for distinct simdesign}
 \usage{
 util_eval_variables_distinct(nl)
 }
@@ -10,6 +10,10 @@ util_eval_variables_distinct(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate variables list of an experiment object
+Evaluate variables list of an experiment object for distinct simdesign
+}
+\details{
+util_eval_variables_distinct checks if the variables list of an experiment within a nl object has enough information to create a \link[nlrx]{simdesign_distinct}.
+It reports an error message if at least one variable does not have a vector of distinct values or if there is a mismatch in length of these values vectors.
 }
 \keyword{internal}

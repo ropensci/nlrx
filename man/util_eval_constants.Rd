@@ -2,14 +2,16 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_constants}
 \alias{util_eval_constants}
-\title{Evaluate constants list of an experiment object}
+\title{Evaluate if constants list of an experiment object is empty}
 \usage{
 util_eval_constants(nl)
 }
 \arguments{
-\item{nl}{nl object}
+\item{nl}{nl object
+util_eval_constants checks if the constants list of an experiment within a nl object is empty.
+It reports an error message if no constants were defined. This evaluation is only done for \link[nlrx]{simdesign_simple}.}
 }
 \description{
-Evaluate constants list of an experiment object
+Evaluate if constants list of an experiment object is empty
 }
 \keyword{internal}

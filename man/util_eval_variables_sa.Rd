@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_variables_sa}
 \alias{util_eval_variables_sa}
-\title{Evaluate variables list of an experiment object}
+\title{Evaluate variables list of an experiment object for sensitivity analysis simdesigns}
 \usage{
 util_eval_variables_sa(nl)
 }
@@ -10,6 +10,10 @@ util_eval_variables_sa(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate variables list of an experiment object
+Evaluate variables list of an experiment object for sensitivity analysis simdesigns
+}
+\details{
+util_eval_variables_sa checks if the variables list of an experiment within a nl object has enough information to create a sensitivity analysis simdesign.
+It reports an error message if at least one variable does not have a defined distribution (min, max, qfun).
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_eval.R
 \name{util_eval_variables_ff}
 \alias{util_eval_variables_ff}
-\title{Evaluate variables list of an experiment object}
+\title{Evaluate variables list of an experiment object for full-factorial simdesign}
 \usage{
 util_eval_variables_ff(nl)
 }
@@ -10,6 +10,10 @@ util_eval_variables_ff(nl)
 \item{nl}{nl object}
 }
 \description{
-Evaluate variables list of an experiment object
+Evaluate variables list of an experiment object for full-factorial simdesign
+}
+\details{
+util_eval_variables_ff checks if the variables list of an experiment within a nl object has enough information to create a \link[nlrx]{simdesign_ff}.
+It reports an error message if at least one variable does not have a defined sequence (min, max, step) or a vector of distinct values.
 }
 \keyword{internal}
