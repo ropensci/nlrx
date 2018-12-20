@@ -69,10 +69,58 @@ setsim(nl, \"simoutput\") <- results")
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
 #' @return analysis summary tibble
 #'
-#' Runs basic analyses on NetLogo simulation output
-#' Output has to be attached to the simdesign first with \code{setsim(nl, "output") <- results}
+#' @details
+#' The analyze_nl function runs basic analyses on NetLogo simulation output.
+#' In order to execute this function, simulation output needs to be attached to the simdesign first with \code{setsim(nl, "output") <- results}.
 #'
-#' The functions calls post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
+#' analyze_nl calls different post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
+#'
+#' The following simdesign are currently supported:
+#'
+#' \link[nlrx]{simdesign_ff}
+#'
+#' Calls \link[nlrx]{analyze_ff}.
+#' The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+#'
+#' \link[nlrx]{simdesign_lhs}
+#'
+#' Calls \link[nlrx]{analyze_lhs}.
+#' The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+#'
+#' \link[nlrx]{simdesign_sobol}
+#'
+#' Calls \link[nlrx]{analyze_sobol}.
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
+#' \link[nlrx]{simdesign_sobol2007}
+#'
+#' Calls \link[nlrx]{analyze_sobol2007}.
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
+#' \link[nlrx]{simdesign_soboljansen}
+#'
+#' Calls \link[nlrx]{analyze_soboljansen}.
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
+#' \link[nlrx]{simdesign_morris}
+#'
+#' Calls \link[nlrx]{analyze_morris}.
+#' The function calculates morris sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
+#' \link[nlrx]{simdesign_eFast}
+#'
+#' Calls \link[nlrx]{analyze_eFast}.
+#' The function calculates eFast sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
+#'
+#'
+#'
+#' For the following simdesign no postprocessing analysis function has been implemented yet:
+#'
+#' \link[nlrx]{simdesign_simple},
+#' \link[nlrx]{simdesign_distinct},
+#' \link[nlrx]{simdesign_GenSA},
+#' \link[nlrx]{simdesign_GenAlg}
 #'
 #' @examples
 #' \dontrun{
@@ -139,7 +187,7 @@ analyze_nl <- function(nl, metrics = getexp(nl, "metrics"),
 #' @rdname analyze_simple
 #' @keywords internal
 analyze_simple <- function(nl, metrics, funs) {
-
+  warning("simdesign_simple analysis function is not yet supported!")
 }
 
 
@@ -154,7 +202,7 @@ analyze_simple <- function(nl, metrics, funs) {
 #' @keywords internal
 analyze_ff <- function(nl, metrics, funs) {
 
-  ## For lhs we compute mean and sd values of each run/tick combination:
+  ## For ff we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars(
       "siminputrow", "[step]",
