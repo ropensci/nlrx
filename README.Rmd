@@ -94,7 +94,7 @@ nl <- nl(nlversion = "6.0.3",
 
 The experiment object is organized in a similar fashion as NetLogo Behavior Space experiments.
 It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations.
-Details on the specific slots of the experiment class can be found in the package documentation (`?experiment`) and the "Further Notes" vignette.
+Details on the specific slots of the experiment class can be found in the package documentation (`?experiment`) and the "Advanced configuration" vignette.
 
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
@@ -121,7 +121,7 @@ nl@experiment <- experiment(expname="wolf-sheep",
 
 While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns).
-All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Further Notes" vignette for more information on random-seed and repetition management).
+All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
 A simulation design is attached to a nl object by using one of the simdesign helper functions:
 
 ```{r eval=FALSE}
@@ -136,7 +136,7 @@ nl@simdesign <- simdesign_lhs(nl=nl,
 All information that is needed to run the simulations is now stored within the nl object.
 The `run_nl_one()` function allows to run one specific simulation from the siminput parameter table.
 The `run_nl_all()` function runs a loop over all simseeds and rows of the parameter input table siminput.
-The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Further Notes" vignette for more information on parallelisation).
+The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
 
 ```{r eval=FALSE}
 results <- run_nl_all(nl)

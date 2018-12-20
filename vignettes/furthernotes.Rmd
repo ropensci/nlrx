@@ -1,5 +1,5 @@
 ---
-title: "Further notes"
+title: "Advanced configuration"
 author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Further notes
+## Advanced configuration notes
 
 #### Notes on variables and constants definitions
 
@@ -52,6 +52,19 @@ To use this functionality, a string input field widget needs to be created on th
 The name of this widget can be entered into the "idrunnum" field of the experiment.
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 For self-written output In NetLogo, we suggest to include this global vairable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
+
+#### Notes on temporary files management
+
+nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files.
+These temporary files are stored in the default temporary files directory of the R session.
+By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the run_nl functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).
+
+On unix systems, it can happen that system processes delete files in the default temporary files folder. Thus, we recommend to reassign the temporary files folder for the R-session to another folder. The R-package [unixtools](https://www.rforge.net/unixtools/) provides a function to reassign the temporary files folder for the current R-session:
+```{r eval=FALSE}
+install.packages('unixtools', repos = 'http://www.rforge.net/')
+unixtools::set.tempdir("<path-to-temp-dir>")
+```
+
 
 #### Notes on random-seed and repetitions management
 
