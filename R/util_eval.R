@@ -233,6 +233,10 @@ util_eval_experiment <- function(nl) {
     purrr::is_empty(getexp(nl, "constants"))) {
     notvalid <- c(notvalid, "variables or constants")
   }
+  if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
+    notvalid <- c(notvalid,
+                  "same netlogo parameter present in variables AND constants")
+  }
 
   if (length(notvalid) > 0) {
     stop(paste0("Error: To add a sim design to a nl object you need to
