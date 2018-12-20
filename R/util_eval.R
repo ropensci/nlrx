@@ -338,5 +338,23 @@ eval_variables_constants <- function(nl) {
     ), call. = FALSE)
   }
 
+  # Check if NetLogo model has parameters that are neither defined in constants
+  # or variables and print a warning that they will be setup
+  # with the default value from the NetLogo gui
+  netlogo_variables_defined_in_exp <-
+    names(report_model_parameters(nl)) %in% c(names(getexp(nl, "variables")),
+                                              names(getexp(nl, "constants")))
+  netlogo_variables_not_defined_in_exp <-
+  names(report_model_parameters(nl))[which(netlogo_variables_defined_in_exp
+                                           == FALSE)]
+  if (length(netlogo_variables_not_defined_in_exp) > 0) {
+    warning(paste0(
+      "One ore more parameters of the NetLogo model are neither defined in constants or variables slot of the experiment: ",
+      netlogo_variables_not_defined_in_exp,
+      ". When running this experiment, these NetLogo parameters will be setup with their current default value from the NetLogo Interface."
+    ), call. = FALSE)
+  }
+
+
   message("All defined variables and constants are valid!")
 }
