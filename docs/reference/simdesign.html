@@ -225,6 +225,8 @@ Alternatively, a sequence can be defined by setting min, max and step.
 However, if both (values and min, max, step) are defined, the values vector is prioritized.</p>
 <p><a href='simdesign_lhs.html'>simdesign_lhs</a>
 The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
+The method can be used to generate a near-random sample of parameter values from the defined parameter distributions.
+More Details on Latin Hypercube Sampling can be found in McKay 1979 (https://doi.org/10.2307<!-- %2F1268522). -->
 To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).</p>
 <p>Sensitivity Analyses: <a href='simdesign_sobol.html'>simdesign_sobol</a>, <a href='simdesign_sobol2007.html'>simdesign_sobol2007</a>, <a href='simdesign_soboljansen.html'>simdesign_soboljansen</a>, <a href='simdesign_morris.html'>simdesign_morris</a>, <a href='simdesign_eFast.html'>simdesign_eFast</a>
 Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.

@@ -155,7 +155,7 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nl.html"
 <div id="simple-simulation-using-constants-simdesign_simple" class="section level4">
 <h4 class="hasAnchor">
 <a href="#simple-simulation-using-constants-simdesign_simple" class="anchor"></a>Simple simulation using constants (simdesign_simple)</h4>
-<p>The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization. To setup a simple simdesign, no variables have to be defined.</p>
+<p>The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization. To setup a simple simdesign, no variables have to be defined. The simple simdesign can be used to test a specific parameterisation of the model. It is also useful to for creating animated output of one specific parameterisation (see “Capturing Spatial NetLogo Output” vignette).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,
@@ -240,6 +240,7 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 <div id="latin-hypercube-sampling-simdesign_lhs" class="section level4">
 <h4 class="hasAnchor">
 <a href="#latin-hypercube-sampling-simdesign_lhs" class="anchor"></a>Latin Hypercube Sampling (simdesign_lhs)</h4>
+<p>The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix. The method can be used to generate a near-random sample of parameter values from the defined parameter distributions. More Details on Latin Hypercube Sampling can be found in <a href="https://doi.org/10.2307%2F1268522">McKay 1979</a>. To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,

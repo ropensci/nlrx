@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Write NetLogo simulation output to file — write_simoutput • nlrx | NetLogo from R</title>
+<title>Write attached NetLogo simulation output to file — write_simoutput • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Write NetLogo simulation output to file — write_simoutput" />
+<meta property="og:title" content="Write attached NetLogo simulation output to file — write_simoutput" />
 
-<meta property="og:description" content="Write NetLogo simulation output to file" />
+<meta property="og:description" content="Write attached NetLogo simulation output to file" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -151,27 +151,32 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Write NetLogo simulation output to file</h1>
+    <h1>Write attached NetLogo simulation output to file</h1>
     <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/analyze_nl.R'><code>R/analyze_nl.R</code></a></small>
     <div class="hidden name"><code>write_simoutput.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Write NetLogo simulation output to file</p>
+    <p>Write attached NetLogo simulation output to file</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>write_simoutput</span>(<span class='no'>nl</span>)</pre>
+    <pre class="usage"><span class='fu'>write_simoutput</span>(<span class='no'>nl</span>, <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>nl</th>
-      <td><p>nl object</p>
+      <td><p>nl object</p></td>
+    </tr>
+    <tr>
+      <th>outpath</th>
+      <td><p>optional path to directory where output is written</p>
 <p>Write NetLogo simulation output to a csv file in the directory outpath of the nl object
-Output has to be attached to the simdesign first with simoutput(nl) &lt;- results</p></td>
+Output has to be attached to the simdesign first with simoutput(nl) &lt;- results
+The outpath argument can be optionally used to write output to a different directory than the defined outpath of the nl object.</p></td>
     </tr>
     </table>
     
@@ -179,12 +184,7 @@ Output has to be attached to the simdesign first with simoutput(nl) &lt;- result
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl</span>(
-  <span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
-  <span class='kw'>run</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>
-)
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_nl_all.html'>run_nl_all</a></span>(<span class='no'>nl</span>)
 
 <span class='co'># Attach output to simdesign:</span>
 <span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>

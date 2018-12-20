@@ -185,20 +185,45 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>analysis summary tibble</p>
-<p>Runs basic analyses on NetLogo simulation output
-Output has to be attached to the simdesign first with <code>setsim(nl, "output") &lt;- results</code></p>
-<p>The functions calls post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The analyze_nl function runs basic analyses on NetLogo simulation output.
+In order to execute this function, simulation output needs to be attached to the simdesign first with <code>setsim(nl, "output") &lt;- results</code>.</p>
+<p>analyze_nl calls different post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.</p>
+<p>The following simdesign are currently supported:</p>
+<p><a href='simdesign_ff.html'>simdesign_ff</a></p>
+<p>Calls <a href='analyze_ff.html'>analyze_ff</a>.
+The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.</p>
+<p><a href='simdesign_lhs.html'>simdesign_lhs</a></p>
+<p>Calls <a href='analyze_lhs.html'>analyze_lhs</a>.
+The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.</p>
+<p><a href='simdesign_sobol.html'>simdesign_sobol</a></p>
+<p>Calls <a href='analyze_sobol.html'>analyze_sobol</a>.
+The function calculates sobol sensitivity indices from the output results using the <a href='http://www.rdocumentation.org/packages/sensitivity/topics/sensitivity-package'>sensitivity</a> package.</p>
+<p><a href='simdesign_sobol2007.html'>simdesign_sobol2007</a></p>
+<p>Calls <a href='analyze_sobol2007.html'>analyze_sobol2007</a>.
+The function calculates sobol sensitivity indices from the output results using the <a href='http://www.rdocumentation.org/packages/sensitivity/topics/sensitivity-package'>sensitivity</a> package.</p>
+<p><a href='simdesign_soboljansen.html'>simdesign_soboljansen</a></p>
+<p>Calls <a href='analyze_soboljansen.html'>analyze_soboljansen</a>.
+The function calculates sobol sensitivity indices from the output results using the <a href='http://www.rdocumentation.org/packages/sensitivity/topics/sensitivity-package'>sensitivity</a> package.</p>
+<p><a href='simdesign_morris.html'>simdesign_morris</a></p>
+<p>Calls <a href='analyze_morris.html'>analyze_morris</a>.
+The function calculates morris sensitivity indices from the output results using the <a href='http://www.rdocumentation.org/packages/sensitivity/topics/sensitivity-package'>sensitivity</a> package.</p>
+<p><a href='simdesign_eFast.html'>simdesign_eFast</a></p>
+<p>Calls <a href='analyze_eFast.html'>analyze_eFast</a>.
+The function calculates eFast sensitivity indices from the output results using the <a href='http://www.rdocumentation.org/packages/sensitivity/topics/sensitivity-package'>sensitivity</a> package.</p>
+<p>For the following simdesign no postprocessing analysis function has been implemented yet:</p>
+<p><a href='simdesign_simple.html'>simdesign_simple</a>,
+<a href='simdesign_distinct.html'>simdesign_distinct</a>,
+<a href='simdesign_GenSA.html'>simdesign_GenSA</a>,
+<a href='simdesign_GenAlg.html'>simdesign_GenAlg</a></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
 <span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl</span>(
-  <span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
-  <span class='kw'>run</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cleanup</span> <span class='kw'>=</span> <span class='st'>"all"</span>
-)
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_nl_all.html'>run_nl_all</a></span>(<span class='no'>nl</span>)
 
 <span class='co'># Attach output to simdesign:</span>
 <span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>
@@ -214,6 +239,8 @@ Output has to be attached to the simdesign first with <code>setsim(nl, "output")
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
