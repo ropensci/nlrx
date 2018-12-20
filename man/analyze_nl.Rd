@@ -29,12 +29,7 @@ Analyze NetLogo simulation output
 \dontrun{
 
 # Run one simulation:
-results <- run_nl(
-  nl = nl,
-  seed = getsim(nl, "simseeds")[1],
-  run = 1,
-  cleanup = "all"
-)
+results <- run_nl_all(nl)
 
 # Attach output to simdesign:
 setsim(nl, "simoutput") <- results

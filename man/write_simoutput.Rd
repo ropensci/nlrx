@@ -2,29 +2,27 @@
 % Please edit documentation in R/analyze_nl.R
 \name{write_simoutput}
 \alias{write_simoutput}
-\title{Write NetLogo simulation output to file}
+\title{Write attached NetLogo simulation output to file}
 \usage{
-write_simoutput(nl)
+write_simoutput(nl, outpath = NA)
 }
 \arguments{
-\item{nl}{nl object
+\item{nl}{nl object}
+
+\item{outpath}{optional path to directory where output is written
 
 Write NetLogo simulation output to a csv file in the directory outpath of the nl object
-Output has to be attached to the simdesign first with simoutput(nl) <- results}
+Output has to be attached to the simdesign first with simoutput(nl) <- results
+The outpath argument can be optionally used to write output to a different directory than the defined outpath of the nl object.}
 }
 \description{
-Write NetLogo simulation output to file
+Write attached NetLogo simulation output to file
 }
 \examples{
 \dontrun{
 
 # Run one simulation:
-results <- run_nl(
-  nl = nl,
-  seed = getsim(nl, "simseeds")[1],
-  run = 1,
-  cleanup = "all"
-)
+results <- run_nl_all(nl)
 
 # Attach output to simdesign:
 setsim(nl, "simoutput") <- results
