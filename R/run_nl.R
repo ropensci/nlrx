@@ -88,7 +88,9 @@ run_nl_all <- function(nl,
             nl = nl,
             seed = job_seed,
             siminputrow = siminputrow,
-            cleanup = "all"
+            cleanup.csv = cleanup.csv,
+            cleanup.xml = cleanup.xml,
+            cleanup.bat = cleanup.bat
           )
         }
       )
