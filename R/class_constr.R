@@ -15,17 +15,31 @@
 #' nl objects are the main class objects used in the nlrx package.
 #' These objects store all information that is needed to run NetLogo simulations.
 #' nl objects are initialized with basic information on Netlogo and the model.
-#' To run simulation experiments, a experiment needs to be added to the nl object.
-#' Each experiment also needs to have a specified simulation design in order to run simulations.
+#'
+#' After setting up the nl object, an experiment needs to be attached \link[nlrx]{experiment}.
+#' The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
+#' variables, constants, measurements, and more.
+#'
+#' After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
+#' The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 #'
 #'
 #'
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
+#' # Windows default NetLogo installation path (adjust to your needs!):
+#' netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' outpath <- file.path("C:/out")
+#' # Unix default NetLogo installation path (adjust to your needs!):
+#' netlogopath <- file.path("/home/NetLogo 6.0.3")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' outpath <- file.path("/home/out")
+#'
 #' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
-#' jvmmem = 1024)
+#'          nlpath = netlogopath,
+#'          modelpath = modelpath,
+#'          jvmmem = 1024)
 #'
 #' @name nl
 #' @rdname nl
@@ -75,11 +89,12 @@ nl <- function(nlversion = "6.0.2",
 #' @return experiment S4 class object
 #' @details
 #'
-#' nl objects are the main class objects used in the nlrx package.
-#' These objects store all information that is needed to run NetLogo simulations.
-#' nl objects are initialized with basic information on Netlogo and the model (more Details, see class definition of S4 class nl).
-#' To run simulation experiments, a experiment needs to be added to the nl object.
-#' Each experiment also needs to have a specified simulation design in order to run simulations.
+#' The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
+#' variables, constants, measurements, and more.
+#' When setting up an experiment, it is usually attached to an already defined \link[nlrx]{nl} object (see examples).
+#'
+#' After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
+#' The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 #'
 #'
 #'
@@ -87,29 +102,29 @@ nl <- function(nlversion = "6.0.2",
 #' \dontrun{
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl@@experiment <- experiment(expname="wolf-sheep",
-#' outpath="C:/out/",
-#' repetition=1,
-#' tickmetrics="true",
-#' idsetup="setup",
-#' idgo="go",
-#' idfinal=NA_character_,
-#' idrunnum=NA_character_,
-#' runtime=50,
-#' evalticks=seq(40,50),
-#' stopcond="not any? turtles",
-#' metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
-#' metrics.turtles=c("who", "pxcor", "pycor", "color"),
-#' metrics.patches=c("pxcor", "pycor", "pcolor"),
-#' metrics.links=c("end1","end2"),
-#' variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
-#'                  'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
-#' constants = list("model-version" = "\"sheep-wolves-grass\"",
-#'                  "grass-regrowth-time" = 30,
-#'                  "sheep-gain-from-food" = 4,
-#'                  "wolf-gain-from-food" = 20,
-#'                  "sheep-reproduce" = 4,
-#'                  "wolf-reproduce" = 5,
-#'                  "show-energy?" = "false"))
+#'                              outpath="C:/out/",
+#'                              repetition=1,
+#'                              tickmetrics="true",
+#'                              idsetup="setup",
+#'                              idgo="go",
+#'                              idfinal=NA_character_,
+#'                              idrunnum=NA_character_,
+#'                              runtime=50,
+#'                              evalticks=seq(40,50),
+#'                              stopcond="not any? turtles",
+#'                              metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+#'                              metrics.turtles=c("who", "pxcor", "pycor", "color"),
+#'                              metrics.patches=c("pxcor", "pycor", "pcolor"),
+#'                              metrics.links=c("end1","end2"),
+#'                              variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
+#'                  '                             initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
+#'                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+#'                                               "grass-regrowth-time" = 30,
+#'                                               "sheep-gain-from-food" = 4,
+#'                                               "wolf-gain-from-food" = 20,
+#'                                               "sheep-reproduce" = 4,
+#'                                               "wolf-reproduce" = 5,
+#'                                               "show-energy?" = "false"))
 #'
 #' }
 #'
@@ -177,9 +192,44 @@ experiment <- function(expname = "defaultexp",
 #' The simulation design class holds information on the input parameter design of model simulations.
 #' It also stores information that is needed to run method specific analysis functions.
 #' The simseeds can be used to run all model simulations that are defined within the siminput tibble several times with changing random-seeds.
-#' While it is possible to add simdesign directly with this function, we suggest to use our predefined simdesign functions.
-#' nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
-#' A simulation design is attached to a nl object by using on of these simdesign functions (see examples).
+#' While it is possible to add simdesign directly with this function, we suggest to use our simdesign_helper functions.
+#' A simulation design can be attached to a nl object by using one of these simdesign_helper functions on an already defined \link[nlrx]{nl}
+#' object with a valid \link[nlrx]{experiment}.
+#' All simdesign helpers use the defined constants and variables of the experiment to create the siminput tibble.
+#' NetLogo parameters that are not defined in constants or variables will be set with their default value from the NetLogo interface.
+#'
+#' Currently, following simdesign_helper functions are provided:
+#'
+#' \link[nlrx]{simdesign_simple}
+#' The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization.
+#' To setup a simple simdesign, no variables have to be defined.
+#'
+#' \link[nlrx]{simdesign_distinct}
+#' The distinct simdesign can be used to run distinct parameter combinations.
+#' To setup a distinct simdesign, vectors of values need to be defined for each variable.
+#' These vectors must have the same number of elemtents across all variables.
+#' The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
+#'
+#' \link[nlrx]{simdesign_ff}
+#' The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values.
+#' To setup a full-factorial simdesign, vectors of values need to be defined for each variable.
+#' Alternatively, a sequence can be defined by setting min, max and step.
+#' However, if both (values and min, max, step) are defined, the values vector is prioritized.
+#'
+#' \link[nlrx]{simdesign_lhs}
+#' The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
+#' To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).
+#'
+#' Sensitivity Analyses: \link[nlrx]{simdesign_sobol}, \link[nlrx]{simdesign_sobol2007}, \link[nlrx]{simdesign_soboljansen}, \link[nlrx]{simdesign_morris}, \link[nlrx]{simdesign_eFast}
+#' Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.
+#' All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination.
+#' These indices can be calculated by using the \link[nlrx]{analyze_nl} function after attaching the simulation results to the nl object.
+#' To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.
+#'
+#' Optimization techniques: \link[nlrx]{simdesign_GenSA}, \link[nlrx]{simdesign_GenAlg}
+#' Optimization techniques are a powerful tool to search the parameter space for specific solutions.
+#' Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm) or randomly (simulated annealing) changing the model parameters within the allowed ranges.
+#' To setup optimization simdesigns, variable ranges (min, max) need to be defined.
 #'
 #'
 #' @examples
@@ -188,6 +238,9 @@ experiment <- function(expname = "defaultexp",
 #'
 #' nl@simdesign <- simdesign_simple(nl = nl,
 #'                                  nseeds = 3)
+#'
+#' nl@simdesign <- simdesign_distinct(nl=nl,
+#'                                    nseeds=3)
 #'
 #' nl@simdesign <- simdesign_ff(nl = nl,
 #'                              nseeds = 3)
@@ -230,6 +283,20 @@ experiment <- function(expname = "defaultexp",
 #' nl@simdesign <- simdesign_eFast(nl=nl,
 #'                                 samples=100,
 #'                                 nseeds=3)
+#'
+#' nl@simdesign <- simdesign_GenAlg(nl=nl,
+#'                                  popSize = 200,
+#'                                  iters = 100,
+#'                                  evalcrit = 1,
+#'                                  elitism = NA,
+#'                                  mutationChance = NA,
+#'                                  nseeds = 1)
+#'
+#' nl@simdesign <- simdesign_GenSA(nl=nl,
+#'                                 par=NULL,
+#'                                 evalcrit=1,
+#'                                 control=list(max.time = 600),
+#'                                 nseeds=1)
 #'
 #' }
 #'

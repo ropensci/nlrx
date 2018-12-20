@@ -7,7 +7,7 @@ nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
 The nlrx package provides tools to setup and execute NetLogo simulations from R. NetLogo is a free, open-source and cross-platform modelling environment for simulating natural and social phenomena. NetLogo focusses on implementation of agent-based and spatially explicit simulation models, although system dynamics models are supported as well. NetLogo is developed and maintained at the Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL. More details on NetLogo itself are available online: [NetLogo online documentation](https://ccl.northwestern.edu/netlogo/docs/)
 
-NetLogo comes with the built-in experiment tool [Behavior Space](https://ccl.northwestern.edu/netlogo/docs/behaviorspace.html) that allows to setup and execute model simulations with different settings and parameter variations and to collect model output. This experiment tool can be executed via command line in combination with an XML file that contains the experiment specifications, such as runtime, output measurements, stop conditions, and more. One limitation of Behavior Space is, that it only supports full-factorial parameter designs, which may not be appropriate for complex model analyses. Furthermore, Behavior Space experiment specifications are stored within the NetLogo file and are not easily accessible from R for further reproducible analysis.
+NetLogo comes with the built-in experiment tool [Behavior Space](https://ccl.northwestern.edu/netlogo/docs/behaviorspace.html) that allows to setup and execute model simulations with different settings and parameter variations and to collect model output. This experiment tool can be executed via command line in combination with an XML file that contains the experiment specifications, such as runtime, variables, output measurements, stop conditions, and more. One limitation of Behavior Space is, that it only supports full-factorial parameter designs, which may not be appropriate for complex model analyses. Furthermore, Behavior Space experiment specifications are stored within the NetLogo file and are not easily accessible from R. However, in many cases it is useful to store such specifications along with the model output and analyses results in order to enable fully reproducible model analyses.
 
 The nlrx package utilizes the commandline functionality of Behavior Space to execute NetLogo simulations directly from R. Instead of defining experiments within NetLogo Behavior Space, experiments are defined in R using the class objects of the nlrx package. These class objects hold all the information that is needed to run these experiments remotely from R, such as path to NetLogo installation folder, path to the model file and the experiment specifications itself. nlrx provides useful helper functions to generate parameter input matrices from parameter range definitions that cover a wide range of parameter exploration approaches. By storing all relevant information on simulation experiments, including the output of the model simulations in one class object, experiments can be easily stored and shared.
 
@@ -77,8 +77,6 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
-                            idfinal=NA_character_,
-                            idrunnum=NA_character_,
                             runtime=50,
                             evalticks=seq(40,50),
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
@@ -95,7 +93,7 @@ nl@experiment <- experiment(expname="wolf-sheep",
 
 #### Step 3: Attach a simulation design
 
-While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method. nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast. All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Further Notes" vignette for more information on random-seed and repetition management). A simulation design is attached to a nl object by using one of the simdesign helper functions:
+While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method. nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns). All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Further Notes" vignette for more information on random-seed and repetition management). A simulation design is attached to a nl object by using one of the simdesign helper functions:
 
 ``` r
 nl@simdesign <- simdesign_lhs(nl=nl,
@@ -106,12 +104,10 @@ nl@simdesign <- simdesign_lhs(nl=nl,
 
 #### Step 4: Run simulations
 
-All information that is needed to run the simulations is now stored within the nl object. The run\_nl\_one() function allows to run one specific simulation from the siminput parameter table. The run\_nl\_all() function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are created by calling furr::future\_map\_dfr which allows running the function either locally or on remote HPC machines. Here we use the [future package](https://github.com/HenrikBengtsson/future) to distribute each of the three parameter matrix repetitions (`nseeds=3`) to another core of the processor.
+All information that is needed to run the simulations is now stored within the nl object. The `run_nl_one()` function allows to run one specific simulation from the siminput parameter table. The `run_nl_all()` function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Further Notes" vignette for more information on parallelisation).
 
 ``` r
-library(future)
-plan(multisession)
-results %<-% run_nl_all(nl = nl, cleanup = "all")
+results <- run_nl_all(nl)
 ```
 
 #### Step 5: Attach results to nl and run analysis

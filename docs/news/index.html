@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a Simulated Annealing simdesign to a nl object — simdesign_GenSA • nlrx | NetLogo from R</title>
+<title>Changelog • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,7 @@
 
 
 
-<meta property="og:title" content="Add a Simulated Annealing simdesign to a nl object — simdesign_GenSA" />
-
-<meta property="og:description" content="Add a Simulated Annealing simdesign to a nl object" />
+<meta property="og:title" content="Changelog" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -51,7 +49,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -151,87 +149,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a Simulated Annealing simdesign to a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_GenSA.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/nldoc/nlrx/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    
-    <p>Add a Simulated Annealing simdesign to a nl object</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>simdesign_GenSA</span>(<span class='no'>nl</span>, <span class='kw'>par</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>evalcrit</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
-  <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>nl</th>
-      <td><p>nl object with a defined experiment</p></td>
-    </tr>
-    <tr>
-      <th>par</th>
-      <td><p>optional vector of start values for each parameter defined in variables of experiment</p></td>
-    </tr>
-    <tr>
-      <th>evalcrit</th>
-      <td><p>position of evaluation criterion within defined NetLogo metrics of nl experiment</p></td>
-    </tr>
-    <tr>
-      <th>control</th>
-      <td><p>list with further arguments passed to the GenSA function (see ?GenSA for details)</p></td>
-    </tr>
-    <tr>
-      <th>nseeds</th>
-      <td><p>number of seeds for this simulation design</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>simdesign S4 class object</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
-<p>Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).</p>
-<p>The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
-that are defined in the variables field of the experiment object within the nl object.
-The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
-The reporter is defined within the experiment metrics vector.
-For the simulated annealing function we only refer to the position of the reporter that we want to use for evaluation.
-The function uses the GenSA package to set up a Simulated Annealing function.
-For details on the GenSA function parameters see ?GenSA
-Finally, the function reports a simdesign object.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_GenSA</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-                                 <span class='kw'>par</span><span class='kw'>=</span><span class='kw'>NULL</span>,
-                                 <span class='kw'>evalcrit</span><span class='kw'>=</span><span class='fl'>1</span>,
-                                 <span class='kw'>control</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='kw'>max.time</span> <span class='kw'>=</span> <span class='fl'>600</span>),
-                                 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+    <div id="nlrx-0-1-0" class="section level1">
+<h1 class="page-header">
+<a href="#nlrx-0-1-0" class="anchor"></a>nlrx 0.1.0</h1>
+<ul>
+<li>First release to CRAN.</li>
+</ul>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#nlrx-0-1-0">0.1.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>

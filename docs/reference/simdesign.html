@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Construct a new simdesign object — simdesign • nlrx</title>
+<title>Construct a new simdesign object — simdesign • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -62,7 +62,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">nlrx</a>
+        <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
@@ -70,32 +70,48 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+  <a href="../articles/getstarted.html">
+    <span class="fa fa fa fa-magic"></span>
      
+    Get Started
   </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    <span class="fa fa-graduation-cap"></span>
+     
+    More
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/spatial-output.html">Spatial Output</a>
+      <a href="../articles/simdesign-examples.html">
+        <span class="fa fa-book"></span>
+         
+        Simdesign examples
+      </a>
     </li>
     <li>
-      <a href="../articles/furthernotes.html">Further notes</a>
+      <a href="../articles/furthernotes.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Further notes
+      </a>
     </li>
     <li>
-      <a href="../articles/getstarted.html">Get Started</a>
+      <a href="../articles/articles/spatial-output.html">
+        <span class="fa fa-calculator"></span>
+         
+        Capturing spatial NetLogo output
+      </a>
     </li>
     <li>
-      <a href="../articles/simdesign-examples.html">Simdesign examples</a>
+      <a href="../articles/articles/interfacing-different-models.html">
+        <span class="fa fa-file-text-o"></span>
+         
+        Interfacing a variety of different NetLogo models
+      </a>
     </li>
   </ul>
 </li>
@@ -103,9 +119,24 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/nldoc/nlrx">
+  <a href="../news/index.html">
+    <span class="fa fa-newspaper-o"></span>
+     
+    news
+  </a>
+</li>
+<li>
+  <a href="../reference/index.html">
+    <span class="fa fa-gears"></span>
+     
+    functions
+  </a>
+</li>
+<li>
+  <a href="https://github.com/r-spatialecology/landscapemetric">
     <span class="fa fa-github fa-lg"></span>
      
+    github
   </a>
 </li>
       </ul>
@@ -173,9 +204,37 @@
     <p>The simulation design class holds information on the input parameter design of model simulations.
 It also stores information that is needed to run method specific analysis functions.
 The simseeds can be used to run all model simulations that are defined within the siminput tibble several times with changing random-seeds.
-While it is possible to add simdesign directly with this function, we suggest to use our predefined simdesign functions.
-nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast.
-A simulation design is attached to a nl object by using on of these simdesign functions (see examples).</p>
+While it is possible to add simdesign directly with this function, we suggest to use our simdesign_helper functions.
+A simulation design can be attached to a nl object by using one of these simdesign_helper functions on an already defined <a href='nl.html'>nl</a>
+object with a valid <a href='experiment.html'>experiment</a>.
+All simdesign helpers use the defined constants and variables of the experiment to create the siminput tibble.
+NetLogo parameters that are not defined in constants or variables will be set with their default value from the NetLogo interface.</p>
+<p>Currently, following simdesign_helper functions are provided:</p>
+<p><a href='simdesign_simple.html'>simdesign_simple</a>
+The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization.
+To setup a simple simdesign, no variables have to be defined.</p>
+<p><a href='simdesign_distinct.html'>simdesign_distinct</a>
+The distinct simdesign can be used to run distinct parameter combinations.
+To setup a distinct simdesign, vectors of values need to be defined for each variable.
+These vectors must have the same number of elemtents across all variables.
+The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.</p>
+<p><a href='simdesign_ff.html'>simdesign_ff</a>
+The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values.
+To setup a full-factorial simdesign, vectors of values need to be defined for each variable.
+Alternatively, a sequence can be defined by setting min, max and step.
+However, if both (values and min, max, step) are defined, the values vector is prioritized.</p>
+<p><a href='simdesign_lhs.html'>simdesign_lhs</a>
+The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
+To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).</p>
+<p>Sensitivity Analyses: <a href='simdesign_sobol.html'>simdesign_sobol</a>, <a href='simdesign_sobol2007.html'>simdesign_sobol2007</a>, <a href='simdesign_soboljansen.html'>simdesign_soboljansen</a>, <a href='simdesign_morris.html'>simdesign_morris</a>, <a href='simdesign_eFast.html'>simdesign_eFast</a>
+Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.
+All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination.
+These indices can be calculated by using the <a href='analyze_nl.html'>analyze_nl</a> function after attaching the simulation results to the nl object.
+To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.</p>
+<p>Optimization techniques: <a href='simdesign_GenSA.html'>simdesign_GenSA</a>, <a href='simdesign_GenAlg.html'>simdesign_GenAlg</a>
+Optimization techniques are a powerful tool to search the parameter space for specific solutions.
+Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm) or randomly (simulated annealing) changing the model parameters within the allowed ranges.
+To setup optimization simdesigns, variable ranges (min, max) need to be defined.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -184,6 +243,9 @@ A simulation design is attached to a nl object by using on of these simdesign fu
 
 <span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_simple.html'>simdesign_simple</a></span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                                  <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_distinct.html'>simdesign_distinct</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                   <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>)
 
 <span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_ff.html'>simdesign_ff</a></span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                              <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)
@@ -226,6 +288,20 @@ A simulation design is attached to a nl object by using on of these simdesign fu
 <span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_eFast.html'>simdesign_eFast</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
                                 <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>100</span>,
                                 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>)
+
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_GenAlg.html'>simdesign_GenAlg</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                 <span class='kw'>popSize</span> <span class='kw'>=</span> <span class='fl'>200</span>,
+                                 <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+                                 <span class='kw'>evalcrit</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                                 <span class='kw'>elitism</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+                                 <span class='kw'>mutationChance</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+                                 <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_GenSA.html'>simdesign_GenSA</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                <span class='kw'>par</span><span class='kw'>=</span><span class='kw'>NULL</span>,
+                                <span class='kw'>evalcrit</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                <span class='kw'>control</span><span class='kw'>=</span><span class='fu'>list</span>(<span class='kw'>max.time</span> <span class='kw'>=</span> <span class='fl'>600</span>),
+                                <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)
 
 <span class='co'># }</span><div class='input'>
 </div></pre>

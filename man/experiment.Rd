@@ -57,39 +57,40 @@ experiment S4 class object
 Construct a new experiment object
 }
 \details{
-nl objects are the main class objects used in the nlrx package.
-These objects store all information that is needed to run NetLogo simulations.
-nl objects are initialized with basic information on Netlogo and the model (more Details, see class definition of S4 class nl).
-To run simulation experiments, a experiment needs to be added to the nl object.
-Each experiment also needs to have a specified simulation design in order to run simulations.
+The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
+variables, constants, measurements, and more.
+When setting up an experiment, it is usually attached to an already defined \link[nlrx]{nl} object (see examples).
+
+After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
+The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 }
 \examples{
 \dontrun{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl@experiment <- experiment(expname="wolf-sheep",
-outpath="C:/out/",
-repetition=1,
-tickmetrics="true",
-idsetup="setup",
-idgo="go",
-idfinal=NA_character_,
-idrunnum=NA_character_,
-runtime=50,
-evalticks=seq(40,50),
-stopcond="not any? turtles",
-metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
-metrics.turtles=c("who", "pxcor", "pycor", "color"),
-metrics.patches=c("pxcor", "pycor", "pcolor"),
-metrics.links=c("end1","end2"),
-variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
-                 'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
-constants = list("model-version" = "\\"sheep-wolves-grass\\"",
-                 "grass-regrowth-time" = 30,
-                 "sheep-gain-from-food" = 4,
-                 "wolf-gain-from-food" = 20,
-                 "sheep-reproduce" = 4,
-                 "wolf-reproduce" = 5,
-                 "show-energy?" = "false"))
+                             outpath="C:/out/",
+                             repetition=1,
+                             tickmetrics="true",
+                             idsetup="setup",
+                             idgo="go",
+                             idfinal=NA_character_,
+                             idrunnum=NA_character_,
+                             runtime=50,
+                             evalticks=seq(40,50),
+                             stopcond="not any? turtles",
+                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                             metrics.turtles=c("who", "pxcor", "pycor", "color"),
+                             metrics.patches=c("pxcor", "pycor", "pcolor"),
+                             metrics.links=c("end1","end2"),
+                             variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
+                 '                             initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
+                             constants = list("model-version" = "\\"sheep-wolves-grass\\"",
+                                              "grass-regrowth-time" = 30,
+                                              "sheep-gain-from-food" = 4,
+                                              "wolf-gain-from-food" = 20,
+                                              "sheep-reproduce" = 4,
+                                              "wolf-reproduce" = 5,
+                                              "show-energy?" = "false"))
 
 }
 

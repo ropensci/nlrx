@@ -34,14 +34,28 @@ Construct a new nl object
 nl objects are the main class objects used in the nlrx package.
 These objects store all information that is needed to run NetLogo simulations.
 nl objects are initialized with basic information on Netlogo and the model.
-To run simulation experiments, a experiment needs to be added to the nl object.
-Each experiment also needs to have a specified simulation design in order to run simulations.
+
+After setting up the nl object, an experiment needs to be attached \link[nlrx]{experiment}.
+The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
+variables, constants, measurements, and more.
+
+After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
+The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 }
 \examples{
 # Example for Wolf Sheep Predation model from NetLogo models library:
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
 nl <- nl(nlversion = "6.0.3",
-nlpath = "/home/user/NetLogo 6.0.3/",
-modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
-jvmmem = 1024)
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
 
 }

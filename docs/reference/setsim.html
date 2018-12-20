@@ -6,13 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Setter function to set a variable of a simdesign object — setsim&lt;- • nlrx</title>
+<title>Setter function to set a variable of a simdesign object — setsim&lt;- • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -62,7 +62,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">nlrx</a>
+        <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
       </span>
     </div>
@@ -70,32 +70,48 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+  <a href="../articles/getstarted.html">
+    <span class="fa fa fa fa-magic"></span>
      
+    Get Started
   </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    <span class="fa fa-graduation-cap"></span>
+     
+    More
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/spatial-output.html">Spatial Output</a>
+      <a href="../articles/simdesign-examples.html">
+        <span class="fa fa-book"></span>
+         
+        Simdesign examples
+      </a>
     </li>
     <li>
-      <a href="../articles/furthernotes.html">Further notes</a>
+      <a href="../articles/furthernotes.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Further notes
+      </a>
     </li>
     <li>
-      <a href="../articles/getstarted.html">Get Started</a>
+      <a href="../articles/articles/spatial-output.html">
+        <span class="fa fa-calculator"></span>
+         
+        Capturing spatial NetLogo output
+      </a>
     </li>
     <li>
-      <a href="../articles/simdesign-examples.html">Simdesign examples</a>
+      <a href="../articles/articles/interfacing-different-models.html">
+        <span class="fa fa-file-text-o"></span>
+         
+        Interfacing a variety of different NetLogo models
+      </a>
     </li>
   </ul>
 </li>
@@ -103,9 +119,24 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/nldoc/nlrx">
+  <a href="../news/index.html">
+    <span class="fa fa-newspaper-o"></span>
+     
+    news
+  </a>
+</li>
+<li>
+  <a href="../reference/index.html">
+    <span class="fa fa-gears"></span>
+     
+    functions
+  </a>
+</li>
+<li>
+  <a href="https://github.com/r-spatialecology/landscapemetric">
     <span class="fa fa-github fa-lg"></span>
      
+    github
   </a>
 </li>
       </ul>
@@ -152,9 +183,14 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>setsim</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>123</span>, <span class='fl'>456</span>, <span class='fl'>789</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='nl.html'>nl</a></span>(<span class='kw'>nlversion</span> <span class='kw'>=</span> <span class='st'>"6.0.3"</span>,
+<span class='kw'>nlpath</span> <span class='kw'>=</span> <span class='st'>"/home/user/NetLogo 6.0.3/"</span>,
+<span class='kw'>modelpath</span> <span class='kw'>=</span> <span class='st'>"/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>,
+<span class='kw'>jvmmem</span> <span class='kw'>=</span> <span class='fl'>1024</span>)
+
+<span class='co'># Set simulation seeds</span>
+<span class='fu'>setsim</span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='fl'>123</span>, <span class='fl'>456</span>, <span class='fl'>789</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
