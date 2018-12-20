@@ -37,6 +37,8 @@ For the simulated annealing function we only refer to the position of the report
 The function uses the GenSA package to set up a Simulated Annealing function.
 For details on the GenSA function parameters see ?GenSA
 Finally, the function reports a simdesign object.
+
+Simulated Annealing simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 }
 \examples{
 \dontrun{

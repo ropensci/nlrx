@@ -41,6 +41,8 @@ For the Genetic Algorithm function we only refer to the position of the reporter
 The function uses the genalg package to set up a Genetic Algorithm function.
 For details on the genalg function parameters see ?genalg::rbga
 Finally, the function reports a simdesign object.
+
+Genetic Algorithm simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 }
 \examples{
 \dontrun{

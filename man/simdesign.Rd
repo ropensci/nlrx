@@ -71,6 +71,7 @@ Optimization techniques: \link[nlrx]{simdesign_GenSA}, \link[nlrx]{simdesign_Gen
 Optimization techniques are a powerful tool to search the parameter space for specific solutions.
 Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm) or randomly (simulated annealing) changing the model parameters within the allowed ranges.
 To setup optimization simdesigns, variable ranges (min, max) need to be defined.
+Optimization simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 }
 \examples{
 \dontrun{

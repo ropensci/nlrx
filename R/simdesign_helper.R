@@ -724,6 +724,8 @@ simdesign_eFast <- function(nl,
 #' For details on the GenSA function parameters see ?GenSA
 #' Finally, the function reports a simdesign object.
 #'
+#' Simulated Annealing simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
+#'
 #'
 #'
 #'
@@ -817,7 +819,7 @@ simdesign_GenSA <- function(nl,
 #' For details on the genalg function parameters see ?genalg::rbga
 #' Finally, the function reports a simdesign object.
 #'
-#'
+#' Genetic Algorithm simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 #'
 #'
 #' @examples
