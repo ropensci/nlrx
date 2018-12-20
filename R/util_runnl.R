@@ -208,7 +208,23 @@ util_cleanup <- function(nl,
 #' @rdname util_gather_results
 #' @keywords internal
 util_gather_results <- function(nl, outfile, seed, siminputrow) {
+
+  # Check if csv file exists:
+  if (!file.exists(outfile))
+  {
+    stop(paste0("Temporary output file ", outfile, "not found. On unix systems this can happen if the default system temp folder is used.
+                Try reassigning the default temp folder for this R session (unixtools package)."))
+  }
+
   NLtable <- readr::read_csv(outfile, skip = 6, col_types = readr::cols())
+
+  ## Check if results is empty:
+  if (purrr::is_empty(NLtable)) {
+    stop("Output file is empty - simulation aborted due to a runtime error!
+         Make sure that parameter value definitions of the experiment are valid and the model code is running properly!")
+  }
+
+  ## if we have results, add siminputrow
   NLtable$siminputrow <- siminputrow
 
   # Check if tickmetrics is true, if not, we only keep the last reported line:
