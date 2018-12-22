@@ -13,21 +13,364 @@ many different applications.
 All the following examples show how to create a gif animation from a NetLogo model.
 This always higlights how to setup very different model types.
 
-### [nlrx_ants_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_ants_gif.R)
+First, we need to load a bunch of packages, mainly for the subsetting of the spatial data
+and the plotting:
 
-![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_ants_gif.gif)
+```{r eval = FALSE}
+## Load packages
+library(nlrx)
+library(tidyverse)
+library(ggplot2)
+library(gganimate)
+library(emojifont) 
+library(cartography) 
+```
+
+... and now are ready to interface some of the models of the NetLogo model library.  If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!
+
+### Ants model
+```{r eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
+         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Biology/Ants.nlogo",
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "nlrxtest",
+                            outpath = "C:/out",
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            runtime = 1000,
+                            evalticks = seq(1,1000),
+                            metrics.turtles = c("who", "pxcor", "pycor", "breed"),
+                            metrics.patches = c("pxcor", "pycor", "pcolor", "chemical", "food", "food-source-number"),
+                            constants = list("population" = 125,
+                                             'diffusion-rate' = 50,
+                                             'evaporation-rate' = 10))
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_simple(nl = nl,
+                                 nseeds = 1)
 
 
-### [nlrx_diffusion_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_diffusion_gif.R)
+## Step4: Run simulations:
+results <- run_nl_all(nl = nl)
 
-![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/diffusion.gif)
+## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
+setsim(nl, "simoutput") <- results
+nl_spatial <- get_nl_spatial(nl, format = "tibble")
+
+## Step6: Prepare data for plotting
+nmax <- 900
+food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, step)
+chem_dat <- nl_spatial %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, chemical, step)
+chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
+turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
+nest_dat <- data.frame(x=rep(0, nmax), y=rep(0, nmax), step=1:nmax)
+
+p1 <- ggplot(food_dat) +
+  geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
+  geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
+  geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label=emoji("ant")) +
+  geom_point(data=nest_dat, aes(x=x, y=y), color="brown", fill="white", size=30, stroke=2, shape=21) +
+  scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
+  scale_color_gradient_tableau(palette="Orange") +
+  transition_time(step) +
+  guides(fill="none", color="none") +
+  coord_equal() +
+  labs(title = 'Step: {frame_time}') +
+  theme_void()
+
+## Step8: Animate the plot and use 1 frame for each step of the model simulations
+gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=10)
+```
+
+<center>
+<img src="nlrx_ants_gif.gif" align="center" width="50%" />
+</center>
+
+### Diffusion model
+
+```{r  eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
+         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Art/Diffusion Graphics.nlogo",
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "diffusion",
+                            outpath = "/home/marco/Desktop/",
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            idfinal = NA_character_,  # you can define one or more final commands here
+                            idrunnum = NA_character_,
+                            runtime = 500,
+                            evalticks = seq(1,500),
+                            constants = list("num-turtles" = 20,
+                                             "diffusion-rate" = 1,
+                                             "turtle-heat" = 139,
+                                             "turtle-speed" = 1.0,
+                                             "wander?" = "TRUE"),
+                            metrics.turtles = c("who", "xcor", "ycor"),
+                            metrics.patches = c("pxcor", "pycor", "pcolor", "heat"))
+
+# Evaluate if variables and constants are valid:
+eval_variables_constants(nl)
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_simple(nl = nl,
+                                 nseeds = 1)
 
 
-### [nlrx_fir_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_fire_gif.R)
+# Step4: Run simulations:
+results <- run_nl_all(nl = nl, cleanup = "all")
 
-![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/fire.gif)
+## Postprocessing:
+## Step1: Attach results to nl:
+setsim(nl, "simoutput") <- results
 
-### [nlrx_waves_gif.R](https://github.com/nldoc/nlrx_playground/blob/master/nlrx_waves_gif.R)
 
-![Alt Text](https://github.com/nldoc/nlrx_playground/blob/master/waves.gif)
-pkg
+# Prepare data for plotting
+nl_spatial <- get_nl_spatial(nl, format = "tibble")
+
+n <- 500
+
+turtles <- nl_spatial %>% dplyr::filter(group == "turtles" & step < n) %>% dplyr::select(xcor, ycor, step, who)
+patches <- nl_spatial %>% dplyr::filter(group == "patches"& step < n) %>% dplyr::select(patches_x, patches_y, pcolor, step)
+
+## Plot animation:
+p1 <- ggplot() +
+  geom_tile(data = patches, aes(x=patches_x, y = patches_y, fill=pcolor)) +
+  geom_point(data = turtles, aes(x = xcor, y = ycor, group = who), size=2) +
+  rcartocolor::scale_fill_carto_c(palette = "Prism") +
+  transition_time(step) +
+  guides(fill="none", color="none") +
+  coord_equal() +
+  # labs(title = 'Step: {frame_time}') +
+  theme_void() 
+
+gganimate::animate(p1, width=800, height=800, duration=6)
+```
+
+<center>
+<img src="diffusion.gif" align="center" width="50%" />
+</center>
+
+### Fire model
+
+```{r  eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
+         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Art/Diffusion Graphics.nlogo",
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "firegif",
+                            outpath = "/home/marco/Desktop/",
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            idfinal = NA_character_,  # you can define one or more final commands here
+                            idrunnum = NA_character_,
+                            runtime = 500,
+                            evalticks = seq(1,500),
+                            metrics = c("count patches"),
+                            metrics.turtles = c("who", "pxcor", "pycor", "breed", "color"),
+                            metrics.patches = c("pxcor", "pycor", "pcolor"),
+                            constants = list('density' = 62)
+)
+
+# Evaluate if variables and constants are valid:
+eval_variables_constants(nl)
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_simple(nl = nl,
+                                 nseeds = 1)
+
+
+# Step4: Run simulations:
+results <- run_nl_all(nl = nl, cleanup = "all")
+
+## Postprocessing:
+## Step1: Attach results to nl:
+setsim(nl, "simoutput") <- results
+
+nl_spatial <- get_nl_spatial(nl, format = "tibble")
+
+n <- 461
+
+embers <- nl_spatial %>% dplyr::filter(breed == "embers" & group == "turtles" & step < n) %>% dplyr::select(pxcor, pycor, step, color, who)
+fires <- nl_spatial %>% dplyr::filter(breed == "fires" & group == "turtles" & step < n) %>% dplyr::select(pxcor, pycor, step, color, who)
+patches <- nl_spatial %>% dplyr::filter(group == "patches" & step < n) %>% dplyr::select(patches_x, patches_y, pcolor, step)
+
+# make same space in the memory
+rm(nl)
+rm(results)
+rm(nl_spatial)
+gc()
+
+#----------------------------------
+## Plot animation:
+p1 <- ggplot(embers) +
+  geom_tile(data = patches, aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
+  geom_point(data = embers, aes(x = pxcor, y = pycor, color = color, group = who), size=2) +
+  scale_color_gradientn(colors = rev(cartography::carto.pal("orange.pal", n1 = 8))) +
+  geom_point(data = fires, aes(x = pxcor, y = pycor, color = color, group = who), size=3) +
+  scale_fill_manual(values = c("0" = "gray24", "55" = "#83B37D", "11.4" = "#B59A89")) +
+  transition_time(step) +
+  guides(fill="none", color="none") +
+  coord_equal() +
+  theme_void() 
+  
+g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
+```
+
+<center>
+<img src="fire.gif" align="center" width="50%" />
+</center>
+
+### Waves model
+
+```{r  eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
+         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo",
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "waves",
+                            outpath = "/home/marco/Desktop/",
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            idfinal = NA_character_,  # you can define one or more final commands here
+                            idrunnum = NA_character_,
+                            runtime = 100,
+                            evalticks = seq(1,100),
+                            variables = list('friction' = list(values = c(5,25,50,90))),
+                            constants = list("stiffness" = 20),
+                            metrics.turtles = c("who", "xcor", "ycor", "driver?", "edge?", "color"))
+
+
+# Evaluate if variables and constants are valid:
+eval_variables_constants(nl)
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_distinct(nl = nl,
+                                   nseeds = 1)
+
+
+# Step4: Run simulations:
+results <- run_nl_all(nl = nl, cleanup = "all")
+
+## Postprocessing:
+## Step1: Attach results to nl:
+setsim(nl, "simoutput") <- results
+
+
+# Prepare data for plotting
+nl_spatial <- get_nl_spatial(nl, format = "tibble", patches = FALSE)
+
+nl_spatial$friction <- factor(nl_spatial$friction)
+levels(nl_spatial$friction) <- c("Friction = 5",
+                                 "Friction = 25",
+                                 "Friction = 50",
+                                 "Friction = 90")
+
+n <- 100
+
+waves  <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "false" & step < n) %>% dplyr::select(xcor, ycor, step, who, color, friction)
+egde   <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "true" & step < n) %>% dplyr::select(xcor, ycor, step, who, friction)
+driver <- nl_spatial %>% dplyr::filter(`driver?` == "true" & `edge?` == "false" & step < n) %>% dplyr::select(xcor, ycor, step, who, friction)
+
+p1 <- ggplot(waves) +
+  geom_point(data = waves, aes(x = xcor, y = ycor, group = who, color = color), size=2) +
+  geom_point(data = driver, aes(x = xcor, y = ycor, group = who), size=2, color = "grey") +
+  geom_point(data = egde, aes(x = xcor, y = ycor, group = who), size=2, color = "black") +
+  facet_wrap(~friction) +
+  transition_time(step) +
+  guides(color="none") +
+  coord_equal() +
+  theme_void() 
+
+gganimate::animate(p1, width=800, height=800, duration = 6)
+```
+
+<center>
+<img src="waves.gif" align="center" width="50%" />
+</center>
+
+## Flocking Model
+
+```{r eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
+         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Biology/Flocking.nlogo",
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "waves",
+                            outpath = "/home/marco/Desktop/",
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            idfinal = NA_character_,  # you can define one or more final commands here
+                            idrunnum = NA_character_,
+                            runtime = 300,
+                            evalticks = seq(1,300),
+                            constants = list("population" = 100,
+                                             "vision" = 5,
+                                             "minimum-separation" = 1, 
+                                             "max-align-turn" = 4,
+                                             "max-cohere-turn" = 4,
+                                             "max-separate-turn" = 4),
+                            metrics.turtles = c("who", "xcor", "ycor", "heading", "color"))
+
+# Evaluate if variables and constants are valid:
+eval_variables_constants(nl)
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_simple(nl = nl,
+                                 nseeds = 1)
+
+
+# Step4: Run simulations:
+results <- run_nl_all(nl = nl)
+
+setsim(nl, "simoutput") <- results
+
+nl_spatial <- get_nl_spatial(nl,
+                             patches = FALSE,
+                             turtle_coords = "x",
+                             format = "tibble")
+
+nl_spatial <- nl_spatial %>% 
+  dplyr::select(step, who, xcor, ycor, heading, color) 
+
+p1 <- ggplot(nl_spatial, aes(xcor, ycor)) +
+  geom_point(aes(color = who)) +
+  scale_color_viridis_c() +
+  guides(color = FALSE) +
+  geom_spoke(aes(angle = heading), radius = 0.7) +
+  transition_time(step) +
+  coord_equal() +
+  theme_void() 
+
+gganimate::animate(p1, width=800, height=800, fps = 5)
+```
+
+<center>
+<img src="flocking.gif" align="center" width="50%" />
+</center>
