@@ -89,7 +89,7 @@ gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=
 ```
 
 <center>
-<img src="nlrx_ants_gif.gif" align="center" width="50%" />
+<img src="nlrx_ants_gif.gif" align="center" width="100%" />
 </center>
 
 ### Diffusion model
@@ -159,7 +159,7 @@ gganimate::animate(p1, width=800, height=800, duration=6)
 ```
 
 <center>
-<img src="diffusion.gif" align="center" width="50%" />
+<img src="diffusion.gif" align="center" width="100%" />
 </center>
 
 ### Fire model
@@ -234,7 +234,7 @@ g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
 ```
 
 <center>
-<img src="fire.gif" align="center" width="50%" />
+<img src="fire.gif" align="center" width="100%" />
 </center>
 
 ### Waves model
@@ -307,7 +307,7 @@ gganimate::animate(p1, width=800, height=800, duration = 6)
 ```
 
 <center>
-<img src="waves.gif" align="center" width="50%" />
+<img src="waves.gif" align="center" width="100%" />
 </center>
 
 ## Flocking Model
@@ -372,5 +372,5 @@ gganimate::animate(p1, width=800, height=800, fps = 5)
 ```
 
 <center>
-<img src="flocking.gif" align="center" width="50%" />
+<img src="flocking.gif" align="center" width="100%" />
 </center>
