@@ -28,7 +28,7 @@ library(cartography)
 
 ... and now are ready to interface some of the models of the NetLogo model library.  If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!
 
-### Ants model
+## Ants model
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
@@ -92,7 +92,7 @@ gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=
 <img src="nlrx_ants_gif.gif" align="center" width="100%" />
 </center>
 
-### Diffusion model
+## Diffusion model
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
@@ -162,7 +162,7 @@ gganimate::animate(p1, width=800, height=800, duration=6)
 <img src="diffusion.gif" align="center" width="100%" />
 </center>
 
-### Fire model
+## Fire model
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
@@ -237,7 +237,7 @@ g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
 <img src="fire.gif" align="center" width="100%" />
 </center>
 
-### Waves model
+## Waves model
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
