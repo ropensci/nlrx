@@ -148,7 +148,7 @@ testthat::test_that("util_runnl", {
   testthat::context("Cleanup:")
   cleanup.files <- list("csv" = outfile,
                         "xml" = xmlfile,
-                        "bat" = batchpath)
+                        "bat" = batchfile)
   util_cleanup(nl,
                cleanup.csv = TRUE,
                cleanup.xml = TRUE,
