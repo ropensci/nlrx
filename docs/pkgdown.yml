@@ -1,6 +1,6 @@
 pandoc: 1.19.2.1
-pkgdown: 1.1.0.9000
-pkgdown_sha: 982bd327f97b623554b4cca90b86b4fb084aa634
+pkgdown: 1.3.0
+pkgdown_sha: ~
 articles:
   interfacing-different-models: articles/interfacing-different-models.html
   spatial-output: articles/spatial-output.html

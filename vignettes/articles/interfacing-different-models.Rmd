@@ -26,19 +26,31 @@ library(emojifont)
 library(cartography) 
 ```
 
+Second, we need to define the path variables pointing to the NetLogo installation.
+Depending on the operation system, the NetLogo and output paths need to be adjusted.
+
+```{r eval = FALSE}
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.4")
+outpath <- file.path("/home/out")
+```
+
 ... and now are ready to interface some of the models of the NetLogo model library.  If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!
 
 ## Ants model
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
-         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
-         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Biology/Ants.nlogo",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Ants.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
-nl@experiment <- experiment(expname = "nlrxtest",
-                            outpath = "C:/out",
+nl@experiment <- experiment(expname = "ants",
+                            outpath = outpath,
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -97,13 +109,13 @@ gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
-         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
-         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Art/Diffusion Graphics.nlogo",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Art/Diffusion Graphics.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "diffusion",
-                            outpath = "/home/marco/Desktop/",
+                            outpath = outpath,
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -167,13 +179,13 @@ gganimate::animate(p1, width=800, height=800, duration=6)
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
-         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
-         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Art/Diffusion Graphics.nlogo",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Art/Diffusion Graphics.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
-nl@experiment <- experiment(expname = "firegif",
-                            outpath = "/home/marco/Desktop/",
+nl@experiment <- experiment(expname = "diffusion",
+                            outpath = outpath,
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -242,13 +254,13 @@ g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
-         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
-         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "waves",
-                            outpath = "/home/marco/Desktop/",
+                            outpath = outpath,
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -312,16 +324,26 @@ gganimate::animate(p1, width=800, height=800, duration = 6)
 
 ## Flocking Model
 
+The flocking model describes bird flocking formation using very simplified movement rules.
+For this model, headings (=viewing angles) of agents are crucial.
+The NetLogo heading system is measured in degree, ranging from 0 to 359. An agent with heading = 0 is pointing straight to the top border of the lattice.
+In order to transfer the NetLogo heading system to the ggplot and gganimate angle system, some conversions need to be done. The type of conversion depends on the geom that is used for plotting.
+We present two examples for heading conversion:
+
+(a) geom_text can be used to plot arrows pointing into the heading of the agent. geom_text also uses degree angles, however an angle of 0 means text is pointing to the right edge of the plotting area. Furthermore, angles are counter-clockwise, whereas NetLogo headings are defined in clockwise direction. In our case we use a right-pointing ASCII-arrow as geom_text label. Thus, we need to shift all NetLogo headings by 90 degree to the right and invert the direction by multiplying all headings with -1.
+
+(b) geom_spoke can be used to plot arrows pointing into the heading of the agent. geom_spoke uses radians angles. Similar to geom_text angles, an angle of 0 is pointing to the right and angles are defined in counter-clockwise direction. Thus, we need to shift NetLogo headings by 90 degree to the right, inverse the direction by multiplying all headings with -1 and finally transform the degree angles to radians angles.
+
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
-         nlpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/",
-         modelpath = "/home/marco/Documents/rpackages/nlrx_usecase/1_Helper/NetLogo 6.0.4/app/models/Sample Models/Biology/Flocking.nlogo",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Flocking.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
-nl@experiment <- experiment(expname = "waves",
-                            outpath = "/home/marco/Desktop/",
+nl@experiment <- experiment(expname = "flocking",
+                            outpath = outpath,
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -356,21 +378,45 @@ nl_spatial <- get_nl_spatial(nl,
                              turtle_coords = "x",
                              format = "tibble")
 
+## Calculate angles for plotting:
+# (a) convert NetLogo degree headings (clockwise with 0 = top) to geom_text degree angle (counter-clockwise with 0 = right)
+# (b) convert geom_text degree angle to geom_spoke radians angle
 nl_spatial <- nl_spatial %>% 
-  dplyr::select(step, who, xcor, ycor, heading, color) 
+  dplyr::select(step, who, xcor, ycor, heading, color) %>% 
+  mutate(heading_text = ((heading * -1) + 90)) %>% 
+  mutate(heading_radians = ((heading_text * pi) / 180))
 
-p1 <- ggplot(nl_spatial, aes(xcor, ycor)) +
-  geom_point(aes(color = who)) +
+# Plot with geom_point and geom_spoke
+p1 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
+  geom_point(aes(color=color, group=who)) +
+  geom_spoke(aes(color=color, group=who, angle=heading_radians), arrow=arrow(length=unit(0.2, "inches")), radius=1) +
   scale_color_viridis_c() +
-  guides(color = FALSE) +
-  geom_spoke(aes(angle = heading), radius = 0.7) +
+  guides(color=FALSE) +
   transition_time(step) +
   coord_equal() +
   theme_void() 
 
-gganimate::animate(p1, width=800, height=800, fps = 5)
+gganimate::animate(p1, nframes=max(nl_spatial$step), width=600, height=600, fps=20)
 ```
 
 <center>
-<img src="flocking.gif" align="center" width="100%" />
+<img src="flocking_spoke.gif" align="center" width="75%" />
+</center>
+
+```{r eval = FALSE}
+# Plot with geom_text
+p2 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
+  geom_text(aes(color=color, group=who, angle=heading_text), label="→", size=5) +
+  scale_color_viridis_c() +
+  guides(color=FALSE) +
+  transition_time(step) +
+  coord_equal() +
+  theme_void() 
+
+gganimate::animate(p2, nframes=max(nl_spatial$step), width=600, height=600, fps=20)
+
+```
+
+<center>
+<img src="flocking_text.gif" align="center" width="75%" />
 </center>

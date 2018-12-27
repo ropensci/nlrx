@@ -29,15 +29,24 @@ library(nlrx)
 library(ggplot2)
 library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependencie
 
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
 # Define nl object
 nl <- nl(nlversion = "6.0.3",
-         nlpath = "C:/Program Files/NetLogo 6.0.3/",
-         modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+         nlpath = netlogopath,
+         modelpath = modelpath,
          jvmmem = 1024)
 
 # Define experiment
 nl@experiment <- experiment(expname = "nlrx_spatial",
-                            outpath="C:/out/",
+                            outpath = outpath,
                             repetition = 1,      
                             tickmetrics = "true",
                             idsetup = "setup",   
