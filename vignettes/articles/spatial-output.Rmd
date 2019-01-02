@@ -3,6 +3,8 @@ title: "Spatial Output"
 author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -27,7 +29,7 @@ For instance, we might want to measure coordinates, who numbers and the breed of
 ```{r eval=FALSE}
 library(nlrx)
 library(ggplot2)
-library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependencie
+library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency
 
 # Windows default NetLogo installation path (adjust to your needs!):
 netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
