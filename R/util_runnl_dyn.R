@@ -8,6 +8,7 @@
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @aliases util_run_nl_dyn_GenSA
 #' @rdname util_run_nl_dyn_GenSA
 #' @keywords internal
@@ -15,7 +16,8 @@ util_run_nl_dyn_GenSA <- function(nl,
                                   seed,
                                   cleanup.csv,
                                   cleanup.xml,
-                                  cleanup.bat) {
+                                  cleanup.bat,
+                                  silent) {
 
   # Get GenSA object from simdesign:
   gensa <- getsim(nl, "simobject")
@@ -32,6 +34,7 @@ util_run_nl_dyn_GenSA <- function(nl,
         cleanup.csv = cleanup.csv,
         cleanup.xml = cleanup.xml,
         cleanup.bat = cleanup.bat,
+        silent = silent,
         ...
       )
     },
@@ -55,6 +58,7 @@ util_run_nl_dyn_GenSA <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @aliases util_run_nl_dyn_GenSA_fn
 #' @rdname util_run_nl_dyn_GenSA_fn
 #' @keywords internal
@@ -64,7 +68,8 @@ util_run_nl_dyn_GenSA_fn <- function(param,
                                      seed,
                                      cleanup.csv,
                                      cleanup.xml,
-                                     cleanup.bat) {
+                                     cleanup.bat,
+                                     silent) {
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -90,7 +95,8 @@ util_run_nl_dyn_GenSA_fn <- function(param,
     seed = seed,
     cleanup.csv = cleanup.csv,
     cleanup.xml = cleanup.xml,
-    cleanup.bat = cleanup.bat
+    cleanup.bat = cleanup.bat,
+    silent = silent
   )
 
   # Select metric for gensa:
@@ -114,6 +120,7 @@ util_run_nl_dyn_GenSA_fn <- function(param,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @aliases util_run_nl_dyn_GenAlg
 #' @rdname util_run_nl_dyn_GenAlg
 #' @keywords internal
@@ -121,7 +128,8 @@ util_run_nl_dyn_GenAlg <- function(nl,
                                    seed,
                                    cleanup.csv,
                                    cleanup.xml,
-                                   cleanup.bat) {
+                                   cleanup.bat,
+                                   silent) {
 
   # Get GenSA object from simdesign:
   galg <- getsim(nl, "simobject")
@@ -143,6 +151,7 @@ util_run_nl_dyn_GenAlg <- function(nl,
         cleanup.csv = cleanup.csv,
         cleanup.xml = cleanup.xml,
         cleanup.bat = cleanup.bat,
+        silent = silent,
         ...
       )
     }
@@ -163,6 +172,7 @@ util_run_nl_dyn_GenAlg <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @aliases util_run_nl_dyn_GenAlg_fn
 #' @rdname util_run_nl_dyn_GenAlg_fn
 #' @keywords internal
@@ -172,7 +182,8 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
                                       seed,
                                       cleanup.csv,
                                       cleanup.xml,
-                                      cleanup.bat) {
+                                      cleanup.bat,
+                                      silent) {
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -198,7 +209,8 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
     seed = seed,
     cleanup.csv = cleanup.csv,
     cleanup.xml = cleanup.xml,
-    cleanup.bat = cleanup.bat
+    cleanup.bat = cleanup.bat,
+    silent = silent
   )
 
   # Select metric for gensa:

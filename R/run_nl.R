@@ -9,6 +9,7 @@
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -49,7 +50,8 @@ run_nl_all <- function(nl,
                        split = 1,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE) {
+                       cleanup.bat = TRUE,
+                       silent = TRUE) {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
@@ -90,7 +92,8 @@ run_nl_all <- function(nl,
             siminputrow = siminputrow,
             cleanup.csv = cleanup.csv,
             cleanup.xml = cleanup.xml,
-            cleanup.bat = cleanup.bat
+            cleanup.bat = cleanup.bat,
+            silent = silent
           )
         }
       )
@@ -112,6 +115,7 @@ run_nl_all <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -145,7 +149,8 @@ run_nl_one <- function(nl,
                        siminputrow,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE) {
+                       cleanup.bat = TRUE,
+                       silent = TRUE) {
 
   util_eval_simdesign(nl)
 
@@ -178,6 +183,9 @@ run_nl_one <- function(nl,
 
   util_cleanup(nl, cleanup.csv, cleanup.xml, cleanup.bat, cleanup.files)
 
+  if(!isTRUE(silent)) {
+    message(paste0("Finished simulation with random-seed: ", seed, " and siminputrow: ", siminputrow))
+  }
 
   return(nl_results)
 }
@@ -194,6 +202,7 @@ run_nl_one <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @return simulation output results can be tibble, list, ...
 #' @details
 #'
@@ -220,7 +229,8 @@ run_nl_dyn <- function(nl,
                        seed,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE) {
+                       cleanup.bat = TRUE,
+                       silent = TRUE) {
   nl_results <- NULL
 
 
@@ -230,7 +240,8 @@ run_nl_dyn <- function(nl,
       seed = seed,
       cleanup.csv = cleanup.csv,
       cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat
+      cleanup.bat = cleanup.bat,
+      silent = silent
     )
   }
 
@@ -240,7 +251,8 @@ run_nl_dyn <- function(nl,
       seed = seed,
       cleanup.csv = cleanup.csv,
       cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat
+      cleanup.bat = cleanup.bat,
+      silent = silent
     )
   }
 

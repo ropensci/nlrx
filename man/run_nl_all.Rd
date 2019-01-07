@@ -5,7 +5,7 @@
 \title{Execute all NetLogo simulations from a nl object}
 \usage{
 run_nl_all(nl, split = 1, cleanup.csv = TRUE, cleanup.xml = TRUE,
-  cleanup.bat = TRUE)
+  cleanup.bat = TRUE, silent = TRUE)
 }
 \arguments{
 \item{nl}{nl object}
@@ -17,6 +17,8 @@ run_nl_all(nl, split = 1, cleanup.csv = TRUE, cleanup.xml = TRUE,
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+
+\item{silent}{TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).}
 }
 \value{
 tibble with simulation output results
