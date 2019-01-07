@@ -141,7 +141,7 @@ nl@simdesign <- simdesign_simple(nl = nl,
 
 
 # Step4: Run simulations:
-results <- run_nl_all(nl = nl, cleanup = "all")
+results <- run_nl_all(nl = nl)
 
 ## Postprocessing:
 ## Step1: Attach results to nl:
@@ -209,7 +209,7 @@ nl@simdesign <- simdesign_simple(nl = nl,
 
 
 # Step4: Run simulations:
-results <- run_nl_all(nl = nl, cleanup = "all")
+results <- run_nl_all(nl = nl)
 
 ## Postprocessing:
 ## Step1: Attach results to nl:
@@ -283,7 +283,7 @@ nl@simdesign <- simdesign_distinct(nl = nl,
 
 
 # Step4: Run simulations:
-results <- run_nl_all(nl = nl, cleanup = "all")
+results <- run_nl_all(nl = nl)
 
 ## Postprocessing:
 ## Step1: Attach results to nl:

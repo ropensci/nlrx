@@ -16,4 +16,7 @@ analyze_sobol(nl, metrics, funs)
 \description{
 Analyze NetLogo simulation output of simdesign sobol
 }
+\details{
+The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+}
 \keyword{internal}

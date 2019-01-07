@@ -57,12 +57,84 @@ experiment S4 class object
 Construct a new experiment object
 }
 \details{
-The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
-variables, constants, measurements, and more.
+The experiment class stores all information related to the NetLogo simulation experiment.
+The class holds all information that is typically entered into NetLogo Behavior Space experiments.
 When setting up an experiment, it is usually attached to an already defined \link[nlrx]{nl} object (see examples).
-
 After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
 The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
+
+\strong{The following class slots are obligatory to run an experiment:}
+
+\emph{repetition}
+
+In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
+In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with diffferent random seeds.
+
+\emph{tickmetrics}
+
+If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurments are taken only on the last tick.
+
+\emph{idsetup, idgo}
+
+These two class slots accept strings, or vectors of strings, defining NetLogo model procedures that should be executed for model setup (idestup) and model execution (idgo).
+
+\emph{runtime}
+
+Defines the maximum number of simulation ticks that are executed.
+
+\strong{Depending on the simdesign, the following slots may be obligatory:}
+
+\emph{metrics}
+
+A vector of valid netlogo reporters that defines which measurements are taken.
+The optimization simdesigns need at least one defined metrics reporter for fitness calculation of the optimization algorithm.
+
+\emph{constants, variables}
+
+These slots accept lists with NetLogo parameters that should be varied within a simdesign (variables) or should be kept constant (constants) for each simulation.
+Any NetLogo parameter that is not entered in at least one of these two lists will be set up as constant with the default value from the NetLogo interface.
+It is not possible to enter a NetLogo parameter in both lists (a warning message will appear when a simdesign is attached to such an experiment).
+All simdesigns except \link[nlrx]{simdesign_simple} need defined variables for setting up a parameter matrix.
+Variables can be defined as distinct values, value distributions or range with increment.
+The information that is needed, depends on the chosen simdesign (details on variable definition requiements can be found in the helpfiles of each simdesign helper function).
+
+\strong{All remaining slots are optional:}
+
+\emph{expname}
+
+A character string defining the name of the experiment, useful for documentation purposes.
+
+\emph{outpath}
+
+A valid path to an existing directory. The directory is used by the \link[nlrx]{write_simoutput} function to store attached simulation results to disk in csv format.
+
+\emph{idfinal}
+
+A character string or vector of strings defining NetLogo procedures that are executed at the end of each simulation (e.g. cleanup or self-written output procedures).
+
+\emph{idrunnum}
+
+This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
+To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
+The name of this widget can be entered into the "idrunnum" field of the experiment.
+During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
+For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
+
+\emph{evalticks}
+
+A vector of integers, defining the ticks for which the defined metrics will be measured.
+
+\emph{stopcond}
+
+The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
+Each simulation will be stopped automatically, once the reporter reports true.
+
+\emph{metrics.turtles, metrics.patches}
+
+These two slots can be used to enter turtles-own (metrics.turtles) and patches-own (metrics.patches) variables of the NetLogo model.
+These agent variables are measured in addition to the defined metrics.
+After attaching the simulation results to the nl object, the measured output from these agent variables needs to be postprocessed by \link[nlrx]{get_nl_spatial}.
+Please note that NetLogo models may contain a huge number of patches and turtles and output measurements of agent variables on each tick may need a lot of ressources.
 }
 \examples{
 \dontrun{

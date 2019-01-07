@@ -16,4 +16,7 @@ analyze_lhs(nl, metrics, funs)
 \description{
 Analyze NetLogo simulation output of simdesign latin-hypercube
 }
+\details{
+The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+}
 \keyword{internal}

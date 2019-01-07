@@ -26,7 +26,7 @@ In order to execute this function, simulation output needs to be attached to the
 
 analyze_nl calls different post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
 
-The following simdesign are currently supported:
+\strong{The following simdesign are currently supported:}
 
 \link[nlrx]{simdesign_ff}
 
@@ -63,7 +63,7 @@ The function calculates morris sensitivity indices from the output results using
 Calls \link[nlrx]{analyze_eFast}.
 The function calculates eFast sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
 
-For the following simdesign no postprocessing analysis function has been implemented yet:
+\strong{For the following simdesign no postprocessing analysis function has been implemented yet:}
 
 \link[nlrx]{simdesign_simple},
 \link[nlrx]{simdesign_distinct},

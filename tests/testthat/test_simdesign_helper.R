@@ -137,13 +137,13 @@ testthat::test_that("Simdesign objects are created properly", {
     nl = nl,
     morristype = "oat",
     morrislevels = 4,
-    morrisr = 3,
+    morrisr = 1,
     morrisgridjump = 2,
     nseeds = 3
   )
 
   testthat::expect_match(getsim(nl, "simmethod"), "morris")
-  testthat::expect_equal(nrow(getsim(nl, "siminput")), 9)
+  testthat::expect_equal(nrow(getsim(nl, "siminput")), 3)
   testthat::expect_equal(length(getsim(nl, "simobject")), 1)
   testthat::expect_match(class(getsim(nl, "simobject")[[1]]), "morris")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 3)

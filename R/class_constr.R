@@ -89,13 +89,86 @@ nl <- function(nlversion = "6.0.2",
 #' @return experiment S4 class object
 #' @details
 #'
-#' The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
-#' variables, constants, measurements, and more.
+#' The experiment class stores all information related to the NetLogo simulation experiment.
+#' The class holds all information that is typically entered into NetLogo Behavior Space experiments.
 #' When setting up an experiment, it is usually attached to an already defined \link[nlrx]{nl} object (see examples).
-#'
 #' After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
 #' The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 #'
+#' \strong{The following class slots are obligatory to run an experiment:}
+#'
+#' \emph{repetition}
+#'
+#' In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
+#' In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with diffferent random seeds.
+#'
+#' \emph{tickmetrics}
+#'
+#' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurments are taken only on the last tick.
+#'
+#' \emph{idsetup, idgo}
+#'
+#' These two class slots accept strings, or vectors of strings, defining NetLogo model procedures that should be executed for model setup (idestup) and model execution (idgo).
+#'
+#' \emph{runtime}
+#'
+#' Defines the maximum number of simulation ticks that are executed.
+#'
+#'
+#'
+#' \strong{Depending on the simdesign, the following slots may be obligatory:}
+#'
+#' \emph{metrics}
+#'
+#' A vector of valid netlogo reporters that defines which measurements are taken.
+#' The optimization simdesigns need at least one defined metrics reporter for fitness calculation of the optimization algorithm.
+#'
+#' \emph{constants, variables}
+#'
+#' These slots accept lists with NetLogo parameters that should be varied within a simdesign (variables) or should be kept constant (constants) for each simulation.
+#' Any NetLogo parameter that is not entered in at least one of these two lists will be set up as constant with the default value from the NetLogo interface.
+#' It is not possible to enter a NetLogo parameter in both lists (a warning message will appear when a simdesign is attached to such an experiment).
+#' All simdesigns except \link[nlrx]{simdesign_simple} need defined variables for setting up a parameter matrix.
+#' Variables can be defined as distinct values, value distributions or range with increment.
+#' The information that is needed, depends on the chosen simdesign (details on variable definition requiements can be found in the helpfiles of each simdesign helper function).
+#'
+#' \strong{All remaining slots are optional:}
+#'
+#' \emph{expname}
+#'
+#' A character string defining the name of the experiment, useful for documentation purposes.
+#'
+#' \emph{outpath}
+#'
+#' A valid path to an existing directory. The directory is used by the \link[nlrx]{write_simoutput} function to store attached simulation results to disk in csv format.
+#'
+#' \emph{idfinal}
+#'
+#' A character string or vector of strings defining NetLogo procedures that are executed at the end of each simulation (e.g. cleanup or self-written output procedures).
+#'
+#' \emph{idrunnum}
+#'
+#' This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
+#' To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
+#' The name of this widget can be entered into the "idrunnum" field of the experiment.
+#' During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
+#' For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
+#'
+#' \emph{evalticks}
+#'
+#' A vector of integers, defining the ticks for which the defined metrics will be measured.
+#'
+#' \emph{stopcond}
+#'
+#' The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
+#' Each simulation will be stopped automatically, once the reporter reports true.
+#'
+#' \emph{metrics.turtles, metrics.patches}
+#'
+#' These two slots can be used to enter turtles-own (metrics.turtles) and patches-own (metrics.patches) variables of the NetLogo model.
+#' These agent variables are measured in addition to the defined metrics.
+#' After attaching the simulation results to the nl object, the measured output from these agent variables needs to be postprocessed by \link[nlrx]{get_nl_spatial}.
+#' Please note that NetLogo models may contain a huge number of patches and turtles and output measurements of agent variables on each tick may need a lot of ressources.
 #'
 #'
 #' @examples
@@ -178,7 +251,7 @@ experiment <- function(expname = "defaultexp",
 
 #' Construct a new simdesign object
 #'
-#' @description Construct a new experiment object
+#' @description Construct a new simdesign object
 #'
 #' @param simmethod character string defining the method of the simulation design
 #' @param siminput tibble providing input parameterisations for the NetLogo model (cols=parameter, rows=runs)
@@ -201,36 +274,44 @@ experiment <- function(expname = "defaultexp",
 #' Currently, following simdesign_helper functions are provided:
 #'
 #' \link[nlrx]{simdesign_simple}
+#'
 #' The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization.
 #' To setup a simple simdesign, no variables have to be defined.
 #'
 #' \link[nlrx]{simdesign_distinct}
+#'
 #' The distinct simdesign can be used to run distinct parameter combinations.
 #' To setup a distinct simdesign, vectors of values need to be defined for each variable.
 #' These vectors must have the same number of elemtents across all variables.
 #' The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
 #'
 #' \link[nlrx]{simdesign_ff}
+#'
 #' The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values.
 #' To setup a full-factorial simdesign, vectors of values need to be defined for each variable.
 #' Alternatively, a sequence can be defined by setting min, max and step.
 #' However, if both (values and min, max, step) are defined, the values vector is prioritized.
 #'
 #' \link[nlrx]{simdesign_lhs}
+#'
 #' The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
 #' The method can be used to generate a near-random sample of parameter values from the defined parameter distributions.
-#' More Details on Latin Hypercube Sampling can be found in McKay 1979 (https://doi.org/10.2307%2F1268522).
+#' More Details on Latin Hypercube Sampling can be found in [McKay 1979](https://doi.org/10.2307\%2F1268522).
+#' nlrx uses the [lhs](https://cran.r-project.org/web/packages/lhs/index.html) package to generate the Latin Hypercube parameter matrix.
 #' To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).
 #'
 #' Sensitivity Analyses: \link[nlrx]{simdesign_sobol}, \link[nlrx]{simdesign_sobol2007}, \link[nlrx]{simdesign_soboljansen}, \link[nlrx]{simdesign_morris}, \link[nlrx]{simdesign_eFast}
+#'
 #' Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.
+#' nlrx uses the [sensitivity](https://cran.r-project.org/web/packages/sensitivity/index.html) package to setup sensitivity analysis parameter matrices.
 #' All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination.
 #' These indices can be calculated by using the \link[nlrx]{analyze_nl} function after attaching the simulation results to the nl object.
 #' To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.
 #'
 #' Optimization techniques: \link[nlrx]{simdesign_GenSA}, \link[nlrx]{simdesign_GenAlg}
+#'
 #' Optimization techniques are a powerful tool to search the parameter space for specific solutions.
-#' Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm) or randomly (simulated annealing) changing the model parameters within the allowed ranges.
+#' Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the [genalg](https://cran.r-project.org/web/packages/genalg/index.html) package) or randomly (simulated annealing, utilizing the [genSA](https://cran.r-project.org/web/packages/GenSA/index.html) package) changing the model parameters within the allowed ranges.
 #' To setup optimization simdesigns, variable ranges (min, max) need to be defined.
 #' Optimization simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 #'

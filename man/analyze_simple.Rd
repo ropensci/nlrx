@@ -16,4 +16,7 @@ analyze_simple(nl, metrics, funs)
 \description{
 Analyze NetLogo simulation output of simdesign simple
 }
+\details{
+The simdesign_simple analysis functions is not yet supported and will only print a warning message.
+}
 \keyword{internal}

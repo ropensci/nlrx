@@ -16,4 +16,7 @@ analyze_ff(nl, metrics, funs)
 \description{
 Analyze NetLogo simulation output of simdesign full-factorial
 }
+\details{
+The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+}
 \keyword{internal}

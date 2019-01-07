@@ -118,13 +118,20 @@ results_spatial_tibble <- get_nl_spatial(nl,
                                   turtle_coords = "px",
                                   format="tibble")
 
+# Split tibble into turtles and patches tibbles and select each 10th step:
+results_spatial_tibble_turtles <- results_spatial_tibble %>% 
+  dplyr::filter(group=="turtles") %>% 
+  dplyr::filter(step %in% seq(0,80,10))
+results_spatial_tibble_patches <- results_spatial_tibble %>% 
+  dplyr::filter(group=="patches") %>% 
+  dplyr::filter(step %in% seq(0,80,10))
 
-results_spatial_tibble %>% dplyr::filter(step %in% seq(0,80,10)) %>% 
-  ggplot() +
+# Create facet plot:
+ggplot() +
   facet_wrap(~step, ncol=4) +
   coord_equal() +
-  geom_tile(aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
-  geom_point(aes(x = pxcor, y = pycor, color = breed), size=2) +
+  geom_tile(data=results_spatial_tibble_patches, aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
+  geom_point(data=results_spatial_tibble_turtles, aes(x = pxcor, y = pycor, color = breed), size=1) +
   scale_fill_manual(breaks=c("35", "55"), values = c("35" = "#D9AF6B", "55" = "#68855C")) +
   scale_color_manual(breaks=c("sheep", "wolves"), values = c("sheep" = "beige", "wolves" = "black")) +
   guides(fill=guide_legend(title="LandCover")) +
@@ -148,10 +155,16 @@ results_spatial_tibble <- get_nl_spatial(nl,
                                   turtle_coords = "px",
                                   format="tibble")
 
+# Split tibble into turtles and patches tibbles:
+results_spatial_tibble_turtles <- results_spatial_tibble %>% 
+  dplyr::filter(group=="turtles")
+results_spatial_tibble_patches <- results_spatial_tibble %>% 
+  dplyr::filter(group=="patches")
+
 # Create an animated plot, using the step column as animation variable
-p1 <- ggplot(results_spatial_tibble) +
-  geom_tile(aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
-  geom_point(aes(x = pxcor, y = pycor, group=who, color = breed), size=2) +
+p1 <- ggplot() +
+  geom_tile(data=results_spatial_tibble_patches, aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
+  geom_point(data=results_spatial_tibble_turtles, aes(x = pxcor, y = pycor, group=who, color = breed), size=2) +
   scale_fill_manual(breaks=c("35", "55"), values = c("35" = "#D9AF6B", "55" = "#68855C")) +
   scale_color_manual(breaks=c("sheep", "wolves"), values = c("sheep" = "beige", "wolves" = "black")) +
   guides(fill=guide_legend(title="LandCover")) +

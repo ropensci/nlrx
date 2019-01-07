@@ -51,7 +51,7 @@ This slot can be used to transfer the current nlrx experiment name, random seed 
 To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model.
 The name of this widget can be entered into the "idrunnum" field of the experiment.
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
-For self-written output In NetLogo, we suggest to include this global vairable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
+For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
 #### Notes on temporary files management
 

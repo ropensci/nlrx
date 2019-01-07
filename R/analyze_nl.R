@@ -75,7 +75,7 @@ setsim(nl, \"simoutput\") <- results")
 #'
 #' analyze_nl calls different post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
 #'
-#' The following simdesign are currently supported:
+#' \strong{The following simdesign are currently supported:}
 #'
 #' \link[nlrx]{simdesign_ff}
 #'
@@ -115,7 +115,7 @@ setsim(nl, \"simoutput\") <- results")
 #'
 #'
 #'
-#' For the following simdesign no postprocessing analysis function has been implemented yet:
+#' \strong{For the following simdesign no postprocessing analysis function has been implemented yet:}
 #'
 #' \link[nlrx]{simdesign_simple},
 #' \link[nlrx]{simdesign_distinct},
@@ -183,6 +183,10 @@ analyze_nl <- function(nl, metrics = getexp(nl, "metrics"),
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The simdesign_simple analysis functions is not yet supported and will only print a warning message.
+#'
 #' @aliases analyze_simple
 #' @rdname analyze_simple
 #' @keywords internal
@@ -197,6 +201,10 @@ analyze_simple <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+#'
 #' @aliases analyze_ff
 #' @rdname analyze_ff
 #' @keywords internal
@@ -224,6 +232,10 @@ analyze_ff <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates aggregated output metrics by dropping random seeds and aggregating values with the provided functions.
+#'
 #' @aliases analyze_lhs
 #' @rdname analyze_lhs
 #' @keywords internal
@@ -251,6 +263,10 @@ analyze_lhs <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
 #' @aliases analyze_sobol
 #' @rdname analyze_sobol
 #' @keywords internal
@@ -300,6 +316,10 @@ analyze_sobol <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
 #' @aliases analyze_sobol2007
 #' @rdname analyze_sobol2007
 #' @keywords internal
@@ -359,6 +379,10 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates sobol sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
 #' @aliases analyze_soboljansen
 #' @rdname analyze_soboljansen
 #' @keywords internal
@@ -418,6 +442,10 @@ analyze_soboljansen <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates morris sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
 #' @aliases analyze_morris
 #' @rdname analyze_morris
 #' @keywords internal
@@ -485,6 +513,10 @@ analyze_morris <- function(nl, metrics, funs) {
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
 #' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @details
+#'
+#' The function calculates eFast sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+#'
 #' @aliases analyze_eFast
 #' @rdname analyze_eFast
 #' @keywords internal

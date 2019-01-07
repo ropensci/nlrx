@@ -25,7 +25,7 @@ simdesign(simmethod = character(), siminput = tibble::tibble(),
 simdesign S4 class object
 }
 \description{
-Construct a new experiment object
+Construct a new simdesign object
 }
 \details{
 The simulation design class holds information on the input parameter design of model simulations.
@@ -40,36 +40,44 @@ NetLogo parameters that are not defined in constants or variables will be set wi
 Currently, following simdesign_helper functions are provided:
 
 \link[nlrx]{simdesign_simple}
+
 The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization.
 To setup a simple simdesign, no variables have to be defined.
 
 \link[nlrx]{simdesign_distinct}
+
 The distinct simdesign can be used to run distinct parameter combinations.
 To setup a distinct simdesign, vectors of values need to be defined for each variable.
 These vectors must have the same number of elemtents across all variables.
 The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
 
 \link[nlrx]{simdesign_ff}
+
 The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values.
 To setup a full-factorial simdesign, vectors of values need to be defined for each variable.
 Alternatively, a sequence can be defined by setting min, max and step.
 However, if both (values and min, max, step) are defined, the values vector is prioritized.
 
 \link[nlrx]{simdesign_lhs}
+
 The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
 The method can be used to generate a near-random sample of parameter values from the defined parameter distributions.
-More Details on Latin Hypercube Sampling can be found in McKay 1979 (https://doi.org/10.2307%2F1268522).
+More Details on Latin Hypercube Sampling can be found in \href{https://doi.org/10.2307\%2F1268522}{McKay 1979}.
+nlrx uses the \href{https://cran.r-project.org/web/packages/lhs/index.html}{lhs} package to generate the Latin Hypercube parameter matrix.
 To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).
 
 Sensitivity Analyses: \link[nlrx]{simdesign_sobol}, \link[nlrx]{simdesign_sobol2007}, \link[nlrx]{simdesign_soboljansen}, \link[nlrx]{simdesign_morris}, \link[nlrx]{simdesign_eFast}
+
 Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.
+nlrx uses the \href{https://cran.r-project.org/web/packages/sensitivity/index.html}{sensitivity} package to setup sensitivity analysis parameter matrices.
 All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination.
 These indices can be calculated by using the \link[nlrx]{analyze_nl} function after attaching the simulation results to the nl object.
 To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.
 
 Optimization techniques: \link[nlrx]{simdesign_GenSA}, \link[nlrx]{simdesign_GenAlg}
+
 Optimization techniques are a powerful tool to search the parameter space for specific solutions.
-Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm) or randomly (simulated annealing) changing the model parameters within the allowed ranges.
+Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the \href{https://cran.r-project.org/web/packages/genalg/index.html}{genalg} package) or randomly (simulated annealing, utilizing the \href{https://cran.r-project.org/web/packages/GenSA/index.html}{genSA} package) changing the model parameters within the allowed ranges.
 To setup optimization simdesigns, variable ranges (min, max) need to be defined.
 Optimization simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 }

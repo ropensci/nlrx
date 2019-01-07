@@ -16,4 +16,7 @@ analyze_morris(nl, metrics, funs)
 \description{
 Analyze NetLogo simulation output of simdesign morris
 }
+\details{
+The function calculates morris sensitivity indices from the output results using the \link[sensitivity]{sensitivity} package.
+}
 \keyword{internal}
