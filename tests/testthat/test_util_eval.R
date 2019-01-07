@@ -26,9 +26,9 @@ testthat::test_that("util_eval", {
 
 
   ## Without proper experiment, this should throw an error:
-  testthat::expect_error(util_eval_variables(nl), "Error")
-  testthat::expect_error(util_eval_constants(nl), "Error")
-  testthat::expect_error(util_eval_experiment(nl), "Error")
+  testthat::expect_error(util_eval_variables(nl))
+  testthat::expect_error(util_eval_constants(nl))
+  testthat::expect_error(util_eval_experiment(nl))
 
   outpath <- tempdir()
 
@@ -80,11 +80,11 @@ testthat::test_that("util_eval", {
                                                "show-energy?" = "false"))
 
 
-  testthat::expect_error(util_eval_variables_distinct(nl), "Error")
-  testthat::expect_error(util_eval_variables_ff(nl), "Error")
-  testthat::expect_error(util_eval_variables_sa(nl), "Error")
-  testthat::expect_error(util_eval_variables_op(nl), "Error")
-  testthat::expect_error(eval_variables_constants(nl), "Warning")
+  testthat::expect_error(util_eval_variables_distinct(nl))
+  testthat::expect_error(util_eval_variables_ff(nl))
+  testthat::expect_error(util_eval_variables_sa(nl))
+  testthat::expect_error(util_eval_variables_op(nl))
+  testthat::expect_error(eval_variables_constants(nl))
 
   ## Add an experiment with different number of values and distinct
   nl@experiment <- experiment(expname = "nlrx_test",
@@ -112,8 +112,8 @@ testthat::test_that("util_eval", {
                                                "wolf-reproduce" = 5,
                                                "show-energy?" = "false"))
 
-  testthat::expect_error(util_eval_variables_distinct(nl), "Error")
-  testthat::expect_error(util_eval_experiment(nl), "Error")
+  testthat::expect_error(util_eval_variables_distinct(nl))
+  testthat::expect_error(util_eval_experiment(nl))
 
 
   ## Step2: Add Experiment
@@ -160,7 +160,7 @@ testthat::test_that("util_eval", {
 
 
   ## Create a simdesign:
-  testthat::expect_error(util_eval_simdesign(nl), "Error")
+  testthat::expect_error(util_eval_simdesign(nl))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
