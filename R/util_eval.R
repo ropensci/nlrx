@@ -233,15 +233,20 @@ util_eval_experiment <- function(nl) {
     purrr::is_empty(getexp(nl, "constants"))) {
     notvalid <- c(notvalid, "variables or constants")
   }
-  if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
-    notvalid <- c(notvalid,
-                  "same netlogo parameter present in variables AND constants")
-  }
 
   if (length(notvalid) > 0) {
-    stop(paste0("Error: To add a sim design to a nl object you need to
+    stop(paste0("To add a sim design to a nl object you need to
     define a proper experiment first. The following elements are missing without
     default: ", paste(notvalid, collapse = " ; ")), call. = FALSE)
+  }
+
+  # Check if a NetLogo parameter has been defined in variables AND constants:
+  if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
+    stop(paste0(
+      "Same netlogo parameter present in variables AND constants: ",
+      paste(names(getexp(nl, "variables"))[names(getexp(nl, "variables")) %in%
+                                             names(getexp(nl, "constants"))],
+            collapse = " ; ")), call. = FALSE)
   }
 }
 
@@ -322,19 +327,17 @@ eval_variables_constants <- function(nl) {
 
   if (length(nonvalid_variables) > 0) {
     stop(paste0(
-      "Warning: Defined variables were not found in NetLogo model: ",
+      "Defined variables were not found in NetLogo model: ",
       nonvalid_variables,
-      ". Check report_model_parameters() function to show valid
-                parameters."
+      ". Check report_model_parameters() function to show valid parameters."
     ), call. = FALSE)
   }
 
   if (length(nonvalid_constants) > 0) {
     stop(paste0(
-      "Warning: Defined constants were not found in NetLogo model: ",
+      "Defined constants were not found in NetLogo model: ",
       nonvalid_constants,
-      ". Check report_model_parameters() function to show valid
-                parameters."
+      ". Check report_model_parameters() function to show valid parameters."
     ), call. = FALSE)
   }
 
@@ -355,6 +358,16 @@ eval_variables_constants <- function(nl) {
     ), call. = FALSE)
   }
 
+  # Check if NetLogo parameters have been defined in variables AND constants:
+  # Check if a NetLogo parameter has been defined in variables AND constants:
+  if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
+    stop(paste0(
+      "Same netlogo parameter present in variables AND constants: ",
+      paste(names(getexp(nl, "variables"))[names(getexp(nl, "variables")) %in%
+                                             names(getexp(nl, "constants"))],
+            collapse = " ; ")), call. = FALSE)
+  }
 
+  # If no error message occured print a message:
   message("All defined variables and constants are valid!")
 }
