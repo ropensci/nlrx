@@ -368,6 +368,6 @@ eval_variables_constants <- function(nl) {
             collapse = " ; ")), call. = FALSE)
   }
 
-  # If no error message occured print a message:
+  # If no error message occurred print a message:
   message("All defined variables and constants are valid!")
 }

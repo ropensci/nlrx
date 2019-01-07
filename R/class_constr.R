@@ -100,11 +100,11 @@ nl <- function(nlversion = "6.0.2",
 #' \emph{repetition}
 #'
 #' In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-#' In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with diffferent random seeds.
+#' In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
 #'
 #' \emph{tickmetrics}
 #'
-#' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurments are taken only on the last tick.
+#' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
 #'
 #' \emph{idsetup, idgo}
 #'
@@ -290,7 +290,7 @@ experiment <- function(expname = "defaultexp",
 #'
 #' The distinct simdesign can be used to run distinct parameter combinations.
 #' To setup a distinct simdesign, vectors of values need to be defined for each variable.
-#' These vectors must have the same number of elemtents across all variables.
+#' These vectors must have the same number of elements across all variables.
 #' The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
 #'
 #' \link[nlrx]{simdesign_ff}

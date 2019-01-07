@@ -4,7 +4,7 @@
 #'
 #' @param to      Path to folder where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
-#' @param extract TRUE/FALSE, if TRUE downloaded archive is etraxted to subfolder of `to` (only unix)
+#' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'
 #' Supported Versions for Download and Usage (parameter `version`):

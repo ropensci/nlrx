@@ -11,7 +11,7 @@ a wide range of different models to show how you can **nlrx** for
 many different applications.
 
 All the following examples show how to create a gif animation from a NetLogo model.
-This always higlights how to setup very different model types.
+This always highlights how to setup very different model types.
 
 First, we need to load a bunch of packages, mainly for the subsetting of the spatial data
 and the plotting:
