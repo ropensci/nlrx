@@ -37,12 +37,17 @@ simdesign_eFast    | min, max, qfun                     | numeric
 simdesign_genSA    | min, max                     | numeric
 simdesign_genAlg    | min, max                     | numeric
 
+
+Additionally, please note the following restrictions in order to define variables and constants correctly:
+
 * Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
 * Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\\"string\\"").
 * Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
 * It is not allowed to list the same variable in the variables and constants list. 
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
 
+A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function load_model_parameters(). This function reads all GUI elements of the NetLogo model that can be set by nlrx.
+After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function eval_constants_variables(). The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
 #### Notes on self-written output
 
