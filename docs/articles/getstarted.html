@@ -120,7 +120,7 @@
       <h1>Get Started</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-01-07</h4>
+            <h4 class="date">2019-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/getstarted.Rmd"><code>vignettes/getstarted.Rmd</code></a></small>
       <div class="hidden name"><code>getstarted.Rmd</code></div>
@@ -226,7 +226,7 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nl.html"
 <div id="step-5-attach-results-to-nl-and-run-analysis" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-5-attach-results-to-nl-and-run-analysis" class="anchor"></a>Step 5: Attach results to nl and run analysis</h4>
-<p>nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze_nl function, the simulation output has to be attached to the nl object first. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
+<p>nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze_nl function, the simulation output has to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="../reference/setsim.html">setsim(nl, "simoutput")</a></code>. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attach results to nl object:</span>
 <span class="kw"><a href="../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
 

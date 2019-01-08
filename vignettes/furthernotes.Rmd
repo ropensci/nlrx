@@ -41,18 +41,18 @@ simdesign_genAlg    | min, max                     | numeric
 Additionally, please note the following restrictions in order to define variables and constants correctly:
 
 * Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
-* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. "\\"string\\"").
-* Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. "false").
+* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. `"\\"string\\""`).
+* Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. `"false"`).
 * It is not allowed to list the same variable in the variables and constants list. 
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
 
-A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `load_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
-After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function eval_constants_variables(). The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
+A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
+After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_constants_variables()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
 #### Capturing progress of model simulations
 
 The `run_nl_all()`, `run_nl_one()` and `run_nl_dyn()` functions provide a "silent" parameter that allows to capture progress of running simulations.
-If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of the simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
+If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of each simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
 
 However, both approaches only work for sequential execution. Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
 
@@ -123,7 +123,7 @@ In your nlrx experiment metrics field you can then enter "green.patches" which i
 
 #### Notes on parallelisation and the future concept
 
-The run_nl_all function uses the map_dfr functions from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). We also suggest to always use a future operator (`%<-%`) when you call this function in parallel:
+The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). We also suggest to always use a future operator (`%<-%`) when you call this function in parallel:
 ```{r eval=FALSE}
 library(future)
 plan(multisession)

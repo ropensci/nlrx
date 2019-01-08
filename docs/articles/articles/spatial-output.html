@@ -120,7 +120,7 @@
       <h1>Spatial Output</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-01-07</h4>
+            <h4 class="date">2019-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/spatial-output.Rmd"><code>vignettes/articles/spatial-output.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-output.Rmd</code></div>
@@ -185,8 +185,8 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 
 <span class="co"># Run simulations and store output in results</span>
 results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</code></pre></div>
-<p>This experiment will run for 100 ticks and collects all metrics, metrics.turtles and metrics.patches on each tick. Thus, running run_nl_all() will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble. This lists already contain all measured agent metrics and can for example be used to analyse distributions of these variables for specific agent groups.</p>
-<p>In case of spatial data containing coordinates (pxcor/pycor for patches or pxcor/pycor and/or xcor/ycor for turtles), nlrx provides a function to transform the measured output into spatial objects. In order to use the function get_nl_spatial() you first have to attach your simulation output results to the nl object:</p>
+<p>This experiment will run for 100 ticks (runtime) and collects all metrics, metrics.turtles and metrics.patches on each tick (evalticks). Thus, executing <code><a href="../../reference/run_nl_all.html">run_nl_all()</a></code> will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble. These lists already contain all measured agent metrics and can for example be used to analyze distributions of these variables for specific agent groups.</p>
+<p>In case of spatial data containing coordinates (pxcor/pycor for patches or pxcor/pycor and/or xcor/ycor for turtles), nlrx provides a function to transform the measured output into spatial objects. In order to use the function <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> the simulation output results tibble needs to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="../../reference/setsim.html">setsim(nl, "simoutput")</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attach results to nl object:</span>
 <span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
 
@@ -196,18 +196,18 @@ results_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../re
                                   <span class="dt">patches =</span> <span class="ot">TRUE</span>,
                                   <span class="dt">turtle_coords =</span> <span class="st">"px"</span>,
                                   <span class="dt">format=</span><span class="st">"spatial"</span>)</code></pre></div>
-<p>The get_nl_spatial() function uses 4 function parameters:</p>
+<p>The <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> function uses 4 function parameters:</p>
 <ul>
 <li>turtles - TRUE/FALSE, if true the function will transform the measured metrics.turtles to spatial sf objects.</li>
 <li>patches - TRUE/FALSE, if true the function will transform the measured metrics.patches to spatial raster objects. In case there are several patches variables besides the coordinates, the result will be a rasterstack containing one raster for each patch variable</li>
 <li>turtle_coords - “px”/“x”, because turtle coordinates can be measured as pxcor/pycor or xcor/ycor this string defines which coordinates are used for creating the turtle sf objects. For instance, you can measure both coordinate pairs by entering them into metrics.turtles, and then decide for one type of coordinates to create spatial objects.</li>
-<li>format - “spatial”/“tibble”, the “spatial” option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format “tibble” report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2.</li>
+<li>format - “spatial”/“tibble”, the “spatial” option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format “tibble” to report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2.</li>
 </ul>
 </div>
 <div id="visualization-examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#visualization-examples" class="anchor"></a>Visualization examples</h2>
-<p>The spatial tibble output from get_nl_spatial() can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
+<p>The spatial tibble output from <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Report spatial data as tibble:</span>
 results_spatial_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,
                                   <span class="dt">turtles =</span> <span class="ot">TRUE</span>,
@@ -235,7 +235,7 @@ results_spatial_tibble_patches &lt;-<span class="st"> </span>results_spatial_tib
 <span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Output maps of each 10th simulation tick"</span>)</code></pre></div>
 <p><img src="wolfsheep_world.png" align="center" width="100%"></p>
-<p>Using the gganimate package(<a href="https://github.com/thomasp85/gganimate" class="uri">https://github.com/thomasp85/gganimate</a>), it is even possible to generate animated plots from this spatial data tibble. Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with get_nl_spatial.</p>
+<p>Using the gganimate package(<a href="https://github.com/thomasp85/gganimate" class="uri">https://github.com/thomasp85/gganimate</a>), it is even possible to generate animated plots from this spatial data tibble. Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># Report spatial data as tibble:</span>
 results_spatial_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,

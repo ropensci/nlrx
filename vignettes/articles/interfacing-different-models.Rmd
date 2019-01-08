@@ -5,13 +5,10 @@ date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 ---
 
-Examples on how to interface a variety of different NetLogo models.
-As they can be quite complex in their interface, we try to capture 
-a wide range of different models to show how you can **nlrx** for 
-many different applications.
+Here, we present examples on how to interface a variety of different NetLogo models.
+NetLogo model interfaces are very diverse across models and might contain spatial elements of different types (patches, different groups of turtles, links). With our interfacing examples, we try to cover a wide range of different models to show how **nlrx** can be utilized for various applications.
 
-All the following examples show how to create a gif animation from a NetLogo model.
-This always highlights how to setup very different model types.
+Our examples show how spatial output from NetLogo models can be used to create animated gif files, displaying patches and turtles properties over time. We explicitly show how to setup, postprocess and plot spatial output for very different model types. Although, the following examples cover a wide range of output types, it is likely that different experiment measurements or postprocessing needs to be done for specific and complex models. If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!
 
 First, we need to load a bunch of packages, mainly for the subsetting of the spatial data
 and the plotting:
@@ -38,73 +35,19 @@ netlogopath <- file.path("/home/NetLogo 6.0.4")
 outpath <- file.path("/home/out")
 ```
 
-... and now are ready to interface some of the models of the NetLogo model library.  If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!
-
-## Ants model
-```{r eval = FALSE}
-## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
-         nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Ants.nlogo"),
-         jvmmem = 1024)
-
-## Step2: Add Experiment
-nl@experiment <- experiment(expname = "ants",
-                            outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
-                            tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
-                            runtime = 1000,
-                            evalticks = seq(1,1000),
-                            metrics.turtles = c("who", "pxcor", "pycor", "breed"),
-                            metrics.patches = c("pxcor", "pycor", "pcolor", "chemical", "food", "food-source-number"),
-                            constants = list("population" = 125,
-                                             'diffusion-rate' = 50,
-                                             'evaporation-rate' = 10))
-
-## Step3: Add a Simulation Design
-nl@simdesign <- simdesign_simple(nl = nl,
-                                 nseeds = 1)
+... and now are ready to interface some of the models of the NetLogo model library. 
 
 
-## Step4: Run simulations:
-results <- run_nl_all(nl = nl)
-
-## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
-setsim(nl, "simoutput") <- results
-nl_spatial <- get_nl_spatial(nl, format = "tibble")
-
-## Step6: Prepare data for plotting
-nmax <- 900
-food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, step)
-chem_dat <- nl_spatial %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, chemical, step)
-chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
-turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
-nest_dat <- data.frame(x=rep(0, nmax), y=rep(0, nmax), step=1:nmax)
-
-p1 <- ggplot(food_dat) +
-  geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
-  geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
-  geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label=emoji("ant")) +
-  geom_point(data=nest_dat, aes(x=x, y=y), color="brown", fill="white", size=30, stroke=2, shape=21) +
-  scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
-  scale_color_gradient_tableau(palette="Orange") +
-  transition_time(step) +
-  guides(fill="none", color="none") +
-  coord_equal() +
-  labs(title = 'Step: {frame_time}') +
-  theme_void()
-
-## Step8: Animate the plot and use 1 frame for each step of the model simulations
-gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=10)
-```
-
-<center>
-<img src="nlrx_ants_gif.gif" align="center" width="100%" />
-</center>
 
 ## Diffusion model
+
+The diffusion model is a simple exmaple of how to plot moving turtles and patches.
+Turtles move over the lattice and generate heat on cells they move over. The accumulated heat also diffuses to neighboring cells.
+
+In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).
+
+After converting the spatial data to tibble format (`get_nl_spatial()`), we split the spatial data into a turtles tibble and a patches tibble using the group column of the returned tibble from `get_nl_spatial()`.
+The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who). 
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
@@ -175,6 +118,12 @@ gganimate::animate(p1, width=800, height=800, duration=6)
 </center>
 
 ## Fire model
+
+Similar to the diffusion example, the fire model displays patches and moving turtles.
+However, the model contains two turtle breeds which need to be displayed differently.
+
+Thus, we also measure the turtle breed (metrics.turtles).
+Before plotting we split up the turtle data into two tibbles, one for each breed. This allows us to create two different geom_point layers with different aesthetics.
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
@@ -249,7 +198,101 @@ g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
 <img src="fire.gif" align="center" width="100%" />
 </center>
 
+
+
+## Ants model
+
+The Ants model is another typical example for displaying patches and moving turtles. 
+Ants move across the lattice in order to gather food from food sources and returning food to their nest in the center.
+Ants carrying food leave a trail of chemicals on cells they move over. These chemicals also diffuse to neighboring cells over time. Displaying the patches output from the model is not straightforward because three different groups of patches exist: food sources, ants nest and all other patches which are coloured depending on the amount of chemicals that the patch contains.
+
+In order to transfer the spatial information from NetLogo to R, we measure the who number, coordinates and breed for all turtles (metrics.turtles) and coordinates, patch color, amount of chemicals, presence of food and the food source number of all patches (metrics.patches).
+
+After converting the spatial data to tibble format (`get_nl_spatial()`), we split the patches information in three objects in order to display the three groups of patches:
+
+* chem_dat: Contains chemical distribution of all patches. The amount of chemicals of each patch is plotted by using a geom_tile layer that acts as base layer of our plot.
+* food_dat: Contains patches coordinates of patches that contain food sources (food > 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.
+* nest_dat: Contains patches coordinates of the nest patch. The nest is plotted by adding a large circle geom_point layer on top.
+
+The turtle data is plotted by adding another geom_text layer, using an Ant emoji that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).
+
+The plot need to be stored in an object before it can be rendered with the `gganimate` function.
+In some cases, it is important to set the number of frames explicitly to the number of steps of your simulation output.
+Otherwise, gganimate may interpolate between measured steps, which may lead to incorrect results.
+
+```{r eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Ants.nlogo"),
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "ants",
+                            outpath = outpath,
+                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            tickmetrics = "true",
+                            idsetup = "setup",   # you can define multiple setup procedures with c()
+                            idgo = "go",         # you can define multiple go procedures with c()
+                            runtime = 1000,
+                            evalticks = seq(1,1000),
+                            metrics.turtles = c("who", "pxcor", "pycor", "breed"),
+                            metrics.patches = c("pxcor", "pycor", "pcolor", "chemical", "food", "food-source-number"),
+                            constants = list("population" = 125,
+                                             'diffusion-rate' = 50,
+                                             'evaporation-rate' = 10))
+
+## Step3: Add a Simulation Design
+nl@simdesign <- simdesign_simple(nl = nl,
+                                 nseeds = 1)
+
+
+## Step4: Run simulations:
+results <- run_nl_all(nl = nl)
+
+## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
+setsim(nl, "simoutput") <- results
+nl_spatial <- get_nl_spatial(nl, format = "tibble")
+
+## Step6: Prepare data for plotting
+nmax <- 900
+food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, step)
+chem_dat <- nl_spatial %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, chemical, step)
+chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
+turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
+nest_dat <- data.frame(x=rep(0, nmax), y=rep(0, nmax), step=1:nmax)
+
+p1 <- ggplot(food_dat) +
+  geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
+  geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
+  geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label=emoji("ant")) +
+  geom_point(data=nest_dat, aes(x=x, y=y), color="brown", fill="white", size=30, stroke=2, shape=21) +
+  scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
+  scale_color_gradient_tableau(palette="Orange") +
+  transition_time(step) +
+  guides(fill="none", color="none") +
+  coord_equal() +
+  labs(title = 'Step: {frame_time}') +
+  theme_void()
+
+## Step8: Animate the plot and use 1 frame for each step of the model simulations
+gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=10)
+```
+
+<center>
+<img src="nlrx_ants_gif.gif" align="center" width="100%" />
+</center>
+
+
+
 ## Waves model
+
+The waves model contains no patch information. Three types of turtle agents are present in the model: waves, edges and a driver. However, these agents are not defined by using breeds but by using turtles-own variables (driver?, edge?).
+
+In addition to these two variables we measure the who number, turtle coordinates and turtle color.
+Again, before plotting we split the spatial data tibble from `get_nl_spatial()` into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.
+
+Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:

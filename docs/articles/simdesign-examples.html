@@ -120,7 +120,7 @@
       <h1>Simdesign examples</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-01-07</h4>
+            <h4 class="date">2019-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/simdesign-examples.Rmd"><code>vignettes/simdesign-examples.Rmd</code></a></small>
       <div class="hidden name"><code>simdesign-examples.Rmd</code></div>
@@ -132,7 +132,7 @@
 <div id="simdesign-examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simdesign-examples" class="anchor"></a>Simdesign examples</h2>
-<p>nlrx provides a bunch of different simdesigns that generate parameter input matrices from valid experiment variable definitions. These simdesigns represent different techniques of parameter space exploration. This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx. Details on the sensitivity analysis methods can be found in the documentation of the <a href="https://cran.r-project.org/web/packages/sensitivity/index.html">sensitivity package</a>. Details on the optimization methods can be found in the documentation of the <a href="https://cran.r-project.org/web/packages/genalg/index.html">genalg package</a> and the <a href="https://cran.r-project.org/web/packages/GenSA/index.html">GenSA package</a>.</p>
+<p>nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions. These simdesigns represent different techniques of parameter space explorations. This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx. Details on the sensitivity analysis methods can be found in the documentation of the <a href="https://cran.r-project.org/web/packages/sensitivity/index.html">sensitivity package</a>. Details on the optimization methods can be found in the documentation of the <a href="https://cran.r-project.org/web/packages/genalg/index.html">genalg package</a> and the <a href="https://cran.r-project.org/web/packages/GenSA/index.html">GenSA package</a>.</p>
 <div id="simdesign-examples-for-the-wolf-sheep-predation-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#simdesign-examples-for-the-wolf-sheep-predation-model" class="anchor"></a>Simdesign examples for the Wolf Sheep Predation model</h3>
@@ -156,6 +156,7 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nl.html"
 <h4 class="hasAnchor">
 <a href="#simple-simulation-using-constants-simdesign_simple" class="anchor"></a>Simple simulation using constants (simdesign_simple)</h4>
 <p>The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization. To setup a simple simdesign, no variables have to be defined. The simple simdesign can be used to test a specific parameterisation of the model. It is also useful to for creating animated output of one specific parameterisation (see “Capturing Spatial NetLogo Output” vignette).</p>
+<p><code>simdesign_simple</code> is most useful, if you want to imitate pressing the <em>go</em> button in your model in NetLogo - just a single run, with a defined parameterisation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,
@@ -184,7 +185,7 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 <div id="distinct-parameter-combinations-simdesign_distinct" class="section level4">
 <h4 class="hasAnchor">
 <a href="#distinct-parameter-combinations-simdesign_distinct" class="anchor"></a>Distinct parameter combinations (simdesign_distinct)</h4>
-<p>The distinct simdesign can be used to run distinct parameter combinations. To setup a distinct simdesign, vectors of values need to be defined for each variable. These vectors must have the same number of elemtents across all variables. The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.</p>
+<p>The distinct simdesign can be used to run distinct parameter combinations. To setup a distinct simdesign, vectors of values need to be defined for each variable. These vectors must have the same number of elements across all variables. The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,
@@ -270,7 +271,7 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 <div id="sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="section level4">
 <h4 class="hasAnchor">
 <a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="anchor"></a>Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</h4>
-<p>Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way. nlrx uses the <a href="https://cran.r-project.org/web/packages/sensitivity/index.html">sensitivity</a> package to setup sensitivity analysis parameter matrices. All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination. These indices can be calculated by using the analyze_nl() function after attaching the simulation results to the nl object. To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.</p>
+<p>Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way. nlrx uses the <a href="https://cran.r-project.org/web/packages/sensitivity/index.html">sensitivity</a> package to setup sensitivity analysis parameter matrices. All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination. These indices can be calculated by using the <code><a href="../reference/analyze_nl.html">analyze_nl()</a></code> function after attaching the simulation results to the nl object. To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,
@@ -335,7 +336,7 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 <div id="optimization-techniques-simdesign_gensa-_genalg" class="section level4">
 <h4 class="hasAnchor">
 <a href="#optimization-techniques-simdesign_gensa-_genalg" class="anchor"></a>Optimization techniques (simdesign_GenSA, _GenAlg)</h4>
-<p>Optimization techniques are a powerful tool to search the parameter space for specific solutions. Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the <a href="https://cran.r-project.org/web/packages/genalg/index.html">genalg</a> package) or randomly (simulated annealing, utilizing the <a href="https://cran.r-project.org/web/packages/GenSA/index.html">genSA</a> package) changing the model parameters within the allowed ranges. To setup optimization simdesigns, variable ranges (min, max) need to be defined. Optimization simdesigns can only be executed using the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function instead of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> or <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>.</p>
+<p>Optimization techniques are a powerful tool to search the parameter space for specific solutions. Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the <a href="https://cran.r-project.org/web/packages/genalg/index.html">genalg</a> package) or randomly (simulated annealing, utilizing the <a href="https://cran.r-project.org/web/packages/GenSA/index.html">genSA</a> package) changing the model parameters within the allowed ranges. To setup optimization simdesigns, variable ranges (min, max) need to be defined. Optimization simdesigns can only be executed using the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function - instead of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> or <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,
                             <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,
                             <span class="dt">repetition=</span><span class="dv">1</span>,

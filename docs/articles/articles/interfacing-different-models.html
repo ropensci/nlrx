@@ -120,7 +120,7 @@
       <h1>Interfacing a variety of different NetLogo models</h1>
                         <h4 class="author">Marco Sciaini</h4>
             
-            <h4 class="date">2019-01-07</h4>
+            <h4 class="date">2019-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/interfacing-different-models.Rmd"><code>vignettes/articles/interfacing-different-models.Rmd</code></a></small>
       <div class="hidden name"><code>interfacing-different-models.Rmd</code></div>
@@ -129,8 +129,8 @@
 
     
     
-<p>Examples on how to interface a variety of different NetLogo models. As they can be quite complex in their interface, we try to capture a wide range of different models to show how you can <strong>nlrx</strong> for many different applications.</p>
-<p>All the following examples show how to create a gif animation from a NetLogo model. This always higlights how to setup very different model types.</p>
+<p>Here, we present examples on how to interface a variety of different NetLogo models. NetLogo model interfaces are very diverse across models and might contain spatial elements of different types (patches, different groups of turtles, links). With our interfacing examples, we try to cover a wide range of different models to show how <strong>nlrx</strong> can be utilized for various applications.</p>
+<p>Our examples show how spatial output from NetLogo models can be used to create animated gif files, displaying patches and turtles properties over time. We explicitly show how to setup, postprocess and plot spatial output for very different model types. Although, the following examples cover a wide range of output types, it is likely that different experiment measurements or postprocessing needs to be done for specific and complex models. If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!</p>
 <p>First, we need to load a bunch of packages, mainly for the subsetting of the spatial data and the plotting:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Load packages
 <span class="kw">library</span>(nlrx)
@@ -146,73 +146,13 @@ outpath &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span cl
 <span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
 netlogopath &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">"/home/NetLogo 6.0.4"</span>)
 outpath &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">"/home/out"</span>)</code></pre></div>
-<p>… and now are ready to interface some of the models of the NetLogo model library. If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!</p>
-<div id="ants-model" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ants-model" class="anchor"></a>Ants model</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
-nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
-         <span class="dt">nlpath =</span> netlogopath,
-         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Ants.nlogo"</span>),
-         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
-
-## Step2: Add Experiment
-nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"ants"</span>,
-                            <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
-                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
-                            <span class="dt">runtime =</span> <span class="dv">1000</span>,
-                            <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">1000</span>),
-                            <span class="dt">metrics.turtles =</span> <span class="kw">c</span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>),
-                            <span class="dt">metrics.patches =</span> <span class="kw">c</span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"chemical"</span>, <span class="st">"food"</span>, <span class="st">"food-source-number"</span>),
-                            <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"population"</span> =<span class="st"> </span><span class="dv">125</span>,
-                                             <span class="st">'diffusion-rate'</span> =<span class="st"> </span><span class="dv">50</span>,
-                                             <span class="st">'evaporation-rate'</span> =<span class="st"> </span><span class="dv">10</span>))
-
-## Step3: Add a Simulation Design
-nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl =</span> nl,
-                                 <span class="dt">nseeds =</span> <span class="dv">1</span>)
-
-
-## Step4: Run simulations:
-results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)
-
-## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
-<span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
-nl_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl, <span class="dt">format =</span> <span class="st">"tibble"</span>)
-
-## Step6: Prepare data for plotting
-nmax &lt;-<span class="st"> </span><span class="dv">900</span>
-food_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(food <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, step)
-chem_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, chemical, step)
-chem_dat<span class="op">$</span>chemical &lt;-<span class="st"> </span><span class="kw">ifelse</span>(chem_dat<span class="op">$</span>chemical <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.2</span>, <span class="ot">NA</span>, chem_dat<span class="op">$</span>chemical)
-turt_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(who)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(pxcor, pycor, who, step)
-nest_dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">y=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">step=</span><span class="dv">1</span><span class="op">:</span>nmax)
-
-p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(food_dat) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>chem_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw">sqrt</span>(chemical))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>food_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y), <span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">shape=</span><span class="dv">15</span>, <span class="dt">size=</span><span class="fl">4.5</span>, <span class="dt">alpha=</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>turt_dat, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">group=</span>who, <span class="dt">color=</span><span class="kw">as.numeric</span>(who)), <span class="dt">size=</span><span class="dv">5</span>, <span class="dt">alpha=</span><span class="dv">1</span>, <span class="dt">label=</span><span class="kw">emoji</span>(<span class="st">"ant"</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nest_dat, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y), <span class="dt">color=</span><span class="st">"brown"</span>, <span class="dt">fill=</span><span class="st">"white"</span>, <span class="dt">size=</span><span class="dv">30</span>, <span class="dt">stroke=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">21</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">direction=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">option=</span><span class="st">"magma"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_color_gradient_tableau</span>(<span class="dt">palette=</span><span class="st">"Orange"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">transition_time</span>(step) <span class="op">+</span>
-<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="st">"none"</span>, <span class="dt">color=</span><span class="st">"none"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">'Step: {frame_time}'</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_void</span>()
-
-## Step8: Animate the plot and use 1 frame for each step of the model simulations
-gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw">max</span>(food_dat<span class="op">$</span>step), <span class="dt">width=</span><span class="dv">800</span>, <span class="dt">height=</span><span class="dv">800</span>, <span class="dt">fps=</span><span class="dv">10</span>)</code></pre></div>
-<center>
-<img src="nlrx_ants_gif.gif" align="center" width="100%">
-</center>
-</div>
+<p>… and now are ready to interface some of the models of the NetLogo model library.</p>
 <div id="diffusion-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#diffusion-model" class="anchor"></a>Diffusion model</h2>
+<p>The diffusion model is a simple exmaple of how to plot moving turtles and patches. Turtles move over the lattice and generate heat on cells they move over. The accumulated heat also diffuses to neighboring cells.</p>
+<p>In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).</p>
+<p>After converting the spatial data to tibble format (<code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code>), we split the spatial data into a turtles tibble and a patches tibble using the group column of the returned tibble from <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code>. The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
          <span class="dt">nlpath =</span> netlogopath,
@@ -281,6 +221,8 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <div id="fire-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fire-model" class="anchor"></a>Fire model</h2>
+<p>Similar to the diffusion example, the fire model displays patches and moving turtles. However, the model contains two turtle breeds which need to be displayed differently.</p>
+<p>Thus, we also measure the turtle breed (metrics.turtles). Before plotting we split up the turtle data into two tibbles, one for each breed. This allows us to create two different geom_point layers with different aesthetics.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
          <span class="dt">nlpath =</span> netlogopath,
@@ -351,9 +293,85 @@ g1 &lt;-<span class="st"> </span>gganimate<span class="op">::</span><span class=
 <img src="fire.gif" align="center" width="100%">
 </center>
 </div>
+<div id="ants-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#ants-model" class="anchor"></a>Ants model</h2>
+<p>The Ants model is another typical example for displaying patches and moving turtles. Ants move across the lattice in order to gather food from food sources and returning food to their nest in the center. Ants carrying food leave a trail of chemicals on cells they move over. These chemicals also diffuse to neighboring cells over time. Displaying the patches output from the model is not straightforward because three different groups of patches exist: food sources, ants nest and all other patches which are coloured depending on the amount of chemicals that the patch contains.</p>
+<p>In order to transfer the spatial information from NetLogo to R, we measure the who number, coordinates and breed for all turtles (metrics.turtles) and coordinates, patch color, amount of chemicals, presence of food and the food source number of all patches (metrics.patches).</p>
+<p>After converting the spatial data to tibble format (<code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code>), we split the patches information in three objects in order to display the three groups of patches:</p>
+<ul>
+<li>chem_dat: Contains chemical distribution of all patches. The amount of chemicals of each patch is plotted by using a geom_tile layer that acts as base layer of our plot.</li>
+<li>food_dat: Contains patches coordinates of patches that contain food sources (food &gt; 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.</li>
+<li>nest_dat: Contains patches coordinates of the nest patch. The nest is plotted by adding a large circle geom_point layer on top.</li>
+</ul>
+<p>The turtle data is plotted by adding another geom_text layer, using an Ant emoji that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).</p>
+<p>The plot need to be stored in an object before it can be rendered with the <code>gganimate</code> function. In some cases, it is important to set the number of frames explicitly to the number of steps of your simulation output. Otherwise, gganimate may interpolate between measured steps, which may lead to incorrect results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
+nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
+         <span class="dt">nlpath =</span> netlogopath,
+         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Ants.nlogo"</span>),
+         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
+
+## Step2: Add Experiment
+nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"ants"</span>,
+                            <span class="dt">outpath =</span> outpath,
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
+                            <span class="dt">runtime =</span> <span class="dv">1000</span>,
+                            <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">1000</span>),
+                            <span class="dt">metrics.turtles =</span> <span class="kw">c</span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>),
+                            <span class="dt">metrics.patches =</span> <span class="kw">c</span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"chemical"</span>, <span class="st">"food"</span>, <span class="st">"food-source-number"</span>),
+                            <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"population"</span> =<span class="st"> </span><span class="dv">125</span>,
+                                             <span class="st">'diffusion-rate'</span> =<span class="st"> </span><span class="dv">50</span>,
+                                             <span class="st">'evaporation-rate'</span> =<span class="st"> </span><span class="dv">10</span>))
+
+## Step3: Add a Simulation Design
+nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl =</span> nl,
+                                 <span class="dt">nseeds =</span> <span class="dv">1</span>)
+
+
+## Step4: Run simulations:
+results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)
+
+## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
+<span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
+nl_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl, <span class="dt">format =</span> <span class="st">"tibble"</span>)
+
+## Step6: Prepare data for plotting
+nmax &lt;-<span class="st"> </span><span class="dv">900</span>
+food_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(food <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, step)
+chem_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, chemical, step)
+chem_dat<span class="op">$</span>chemical &lt;-<span class="st"> </span><span class="kw">ifelse</span>(chem_dat<span class="op">$</span>chemical <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.2</span>, <span class="ot">NA</span>, chem_dat<span class="op">$</span>chemical)
+turt_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(who)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(pxcor, pycor, who, step)
+nest_dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">y=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">step=</span><span class="dv">1</span><span class="op">:</span>nmax)
+
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(food_dat) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>chem_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw">sqrt</span>(chemical))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>food_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y), <span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">shape=</span><span class="dv">15</span>, <span class="dt">size=</span><span class="fl">4.5</span>, <span class="dt">alpha=</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>turt_dat, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">group=</span>who, <span class="dt">color=</span><span class="kw">as.numeric</span>(who)), <span class="dt">size=</span><span class="dv">5</span>, <span class="dt">alpha=</span><span class="dv">1</span>, <span class="dt">label=</span><span class="kw">emoji</span>(<span class="st">"ant"</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nest_dat, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y), <span class="dt">color=</span><span class="st">"brown"</span>, <span class="dt">fill=</span><span class="st">"white"</span>, <span class="dt">size=</span><span class="dv">30</span>, <span class="dt">stroke=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">21</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">direction=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">option=</span><span class="st">"magma"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_gradient_tableau</span>(<span class="dt">palette=</span><span class="st">"Orange"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">transition_time</span>(step) <span class="op">+</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="st">"none"</span>, <span class="dt">color=</span><span class="st">"none"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">'Step: {frame_time}'</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_void</span>()
+
+## Step8: Animate the plot and use 1 frame for each step of the model simulations
+gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw">max</span>(food_dat<span class="op">$</span>step), <span class="dt">width=</span><span class="dv">800</span>, <span class="dt">height=</span><span class="dv">800</span>, <span class="dt">fps=</span><span class="dv">10</span>)</code></pre></div>
+<center>
+<img src="nlrx_ants_gif.gif" align="center" width="100%">
+</center>
+</div>
 <div id="waves-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#waves-model" class="anchor"></a>Waves model</h2>
+<p>The waves model contains no patch information. Three types of turtle agents are present in the model: waves, edges and a driver. However, these agents are not defined by using breeds but by using turtles-own variables (driver?, edge?).</p>
+<p>In addition to these two variables we measure the who number, turtle coordinates and turtle color. Again, before plotting we split the spatial data tibble from <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.</p>
+<p>Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
          <span class="dt">nlpath =</span> netlogopath,
@@ -516,9 +534,9 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#ants-model">Ants model</a></li>
-      <li><a href="#diffusion-model">Diffusion model</a></li>
+<li><a href="#diffusion-model">Diffusion model</a></li>
       <li><a href="#fire-model">Fire model</a></li>
+      <li><a href="#ants-model">Ants model</a></li>
       <li><a href="#waves-model">Waves model</a></li>
       <li><a href="#flocking-model">Flocking Model</a></li>
       </ul>

@@ -120,7 +120,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-01-07</h4>
+            <h4 class="date">2019-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -203,23 +203,23 @@
 <p>Additionally, please note the following restrictions in order to define variables and constants correctly:</p>
 <ul>
 <li>Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.</li>
-<li>Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. “\”string\“”).</li>
-<li>Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. “false”).</li>
+<li>Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. <code>"\\"string\\""</code>).</li>
+<li>Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. <code>"false"</code>).</li>
 <li>It is not allowed to list the same variable in the variables and constants list.</li>
 <li>NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.</li>
 </ul>
-<p>A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function load_model_parameters(). This function reads all GUI elements of the NetLogo model that can be set by nlrx. After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function eval_constants_variables(). The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.</p>
+<p>A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function <code><a href="../reference/report_model_parameters.html">report_model_parameters()</a></code>. This function reads all GUI elements of the NetLogo model that can be set by nlrx. After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function <code>eval_constants_variables()</code>. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.</p>
 </div>
 <div id="capturing-progress-of-model-simulations" class="section level4">
 <h4 class="hasAnchor">
 <a href="#capturing-progress-of-model-simulations" class="anchor"></a>Capturing progress of model simulations</h4>
-<p>The run_nl_all(), run_nl_one() and run_nl_dyn() functions provide a “silent” parameter that allows to capture progress of running simulations. If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of the simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
+<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>, <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> functions provide a “silent” parameter that allows to capture progress of running simulations. If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of each simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
 <p>However, both approaches only work for sequential execution. Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section “Notes on self-written output”). These output files can then be monitored to capture the progress of the parallelized model executions.</p>
 </div>
 <div id="handling-netlogo-runtime-errors" class="section level4">
 <h4 class="hasAnchor">
 <a href="#handling-netlogo-runtime-errors" class="anchor"></a>Handling NetLogo runtime errors</h4>
-<p>Usually, runtime errors of NetLogo model simulations are printed to the R console and the current execution of run_nl_all(), run_nl_one() or run_nl_dyn() breaks. However, it can happen that a model simulation freezes due to Java runtime errors. Unfortunately it is not possible to terminate the Java virtual machine or print an error message to the console after such a runtime error occured. The current R session and the freezed Java Virtual Machine need to be terminated manually. Thus, NetLogo models should be debugged in NetLogo prior to execution of large experiments with nlrx. Capturing progress of model simulations (see section “Capturing progress of model simulations”) might help in debugging runtime errors that freeze the Java Virtual Machine.</p>
+<p>Usually, runtime errors of NetLogo model simulations are printed to the R console and the current execution of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>, <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> or <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> breaks. However, it can happen that a model simulation freezes due to Java runtime errors. Unfortunately it is not possible to terminate the Java virtual machine or print an error message to the console after such a runtime error occurred. The current R session and the freezed Java Virtual Machine need to be terminated manually. Thus, NetLogo models should be debugged in NetLogo prior to execution of large experiments with nlrx. Capturing progress of model simulations (see section “Capturing progress of model simulations”) might help in debugging runtime errors that freeze the Java Virtual Machine.</p>
 </div>
 <div id="notes-on-self-written-output" class="section level4">
 <h4 class="hasAnchor">
@@ -229,7 +229,7 @@
 <div id="notes-on-temporary-files-management" class="section level4">
 <h4 class="hasAnchor">
 <a href="#notes-on-temporary-files-management" class="anchor"></a>Notes on temporary files management</h4>
-<p>nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files. These temporary files are stored in the default temporary files directory of the R session. By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the run_nl functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).</p>
+<p>nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files. These temporary files are stored in the default temporary files directory of the R session. By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the <code>run_nl</code> functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).</p>
 <p>On unix systems, it can happen that system processes delete files in the default temporary files folder. Thus, we recommend to reassign the temporary files folder for the R-session to another folder. The R-package <a href="https://www.rforge.net/unixtools/">unixtools</a> provides a function to reassign the temporary files folder for the current R-session:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">'unixtools'</span>, <span class="dt">repos =</span> <span class="st">'http://www.rforge.net/'</span>)
 unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"&lt;path-to-temp-dir&gt;"</span>)</code></pre></div>
@@ -260,7 +260,7 @@ end</code></pre></div>
 <div id="notes-on-parallelisation-and-the-future-concept" class="section level4">
 <h4 class="hasAnchor">
 <a href="#notes-on-parallelisation-and-the-future-concept" class="anchor"></a>Notes on parallelisation and the future concept</h4>
-<p>The run_nl_all function uses the map_dfr functions from the <a href="https://github.com/DavisVaughan/furrr">furrr package</a>. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the <a href="https://github.com/HenrikBengtsson/future">future package</a>. We also suggest to always use a future operator (%&lt;-%) when you call this function in parallel:</p>
+<p>The run_nl_all function uses the <code>future_map_dfr()</code> function from the <a href="https://github.com/DavisVaughan/furrr">furrr package</a>. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the <a href="https://github.com/HenrikBengtsson/future">future package</a>. We also suggest to always use a future operator (<code>%&lt;-%</code>) when you call this function in parallel:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(future)
 <span class="kw">plan</span>(multisession)
 results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</code></pre></div>

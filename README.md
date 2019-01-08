@@ -112,7 +112,7 @@ results <- run_nl_all(nl)
 
 #### Step 5: Attach results to nl and run analysis
 
-nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze\_nl function, the simulation output has to be attached to the nl object first. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
+nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze\_nl function, the simulation output has to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function `setsim(nl, "simoutput")`. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
 
 ``` r
 # Attach results to nl object:
