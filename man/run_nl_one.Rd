@@ -35,7 +35,7 @@ The siminputrow number defines which row of the input data tibble within the sim
 The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
 cleanup.csv deletes/keeps the temporary generated model output files from each run.
 cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commanline files from each run.
+cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
 
 This function can be used to run single simulations of a NetLogo model.
 }

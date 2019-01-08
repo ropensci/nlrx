@@ -68,11 +68,11 @@ The simdesign helper functions use the variable definitions from the experiment 
 \emph{repetition}
 
 In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with diffferent random seeds.
+In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
 
 \emph{tickmetrics}
 
-If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurments are taken only on the last tick.
+If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
 
 \emph{idsetup, idgo}
 

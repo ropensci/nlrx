@@ -48,7 +48,7 @@ To setup a simple simdesign, no variables have to be defined.
 
 The distinct simdesign can be used to run distinct parameter combinations.
 To setup a distinct simdesign, vectors of values need to be defined for each variable.
-These vectors must have the same number of elemtents across all variables.
+These vectors must have the same number of elements across all variables.
 The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
 
 \link[nlrx]{simdesign_ff}
