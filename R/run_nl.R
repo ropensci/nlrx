@@ -135,7 +135,7 @@ run_nl_all <- function(nl,
 #'
 #' # Run one simulation:
 #' results <- run_nl_one(nl = nl,
-#'                       seed = getsims(nl, "simseeds")[1],
+#'                       seed = getsim(nl, "simseeds")[1],
 #'                       siminputrow = 1)
 #'
 #' }
