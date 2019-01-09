@@ -10,13 +10,11 @@ get_nl_spatial(nl, turtles = TRUE, patches = TRUE, links = FALSE,
 \arguments{
 \item{nl}{nl object}
 
-\item{turtles}{if TRUE, the function generates spatial point objects (sf)
-from metrics.turtles data}
+\item{turtles}{if TRUE (default), the function generates reports the metrics.turtles as spatial columns (either in a tibble or sf object)}
 
-\item{patches}{if TRUE, the function generates raster objects from
-metrics.patches data}
+\item{patches}{if TRUE (default), the function generates raster objects from metrics.patches data (either in a tibble or raster object)}
 
-\item{links}{if TRUE, the function generates xxx}
+\item{links}{if TRUE (default is false), the function collects the the end1 and  end2, as well as link variables (if provided).}
 
 \item{turtle_coords}{either "px" if turtle coordinates were measured as
 "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"}
@@ -39,10 +37,19 @@ For patches this can be easily done by adding "pxcor" and "pycor" to
 metrics.patches.
 For turtles you can either add "pxcor" and "pycor" to metrics.turtles or
 "xcor" and "ycor".
+For turtles you can add "end1" and "end2" to metrics.turtles.
 It is also possible to measure both coordinates, and select the type that is
 used for spatial object creation through the function parameter
 turtle_coords.
 "px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".
+
+Furthermore, every type of agent also supports additional information (turtle, patch or link owns).
+These are also collected and returned. If the output format is supposed to spatial,
+turtle owns become columns in the sf object, and patch owns are returned as rasterstack for each tick.
+
+\emph{NOTE}:
+
+Links are currently only supported in the tibble output format!
 }
 \examples{
 \dontrun{

@@ -150,6 +150,9 @@ globalVariables(c(
   "metrics.patches",
   "metrics.turtles",
   "pxcor",
-  "pycor"
+  "pycor",
+  "end1",
+  "end2",
+  "metrics.links"
 ))
 # nocov end
