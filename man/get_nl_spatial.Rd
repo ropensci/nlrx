@@ -4,7 +4,7 @@
 \alias{get_nl_spatial}
 \title{Get spatial data from metrics.turtles and metrics.patches output}
 \usage{
-get_nl_spatial(nl, turtles = TRUE, patches = TRUE,
+get_nl_spatial(nl, turtles = TRUE, patches = TRUE, links = FALSE,
   turtle_coords = "px", format = "spatial")
 }
 \arguments{
@@ -15,6 +15,8 @@ from metrics.turtles data}
 
 \item{patches}{if TRUE, the function generates raster objects from
 metrics.patches data}
+
+\item{links}{if TRUE, the function generates xxx}
 
 \item{turtle_coords}{either "px" if turtle coordinates were measured as
 "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"}

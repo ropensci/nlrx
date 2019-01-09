@@ -59,12 +59,10 @@ nl <- nl(nlversion = "6.0.4",
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "diffusion",
                             outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            repetition = 1,   
                             tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
-                            idfinal = NA_character_,  # you can define one or more final commands here
-                            idrunnum = NA_character_,
+                            idsetup = "setup",  
+                            idgo = "go",        
                             runtime = 500,
                             evalticks = seq(1,500),
                             constants = list("num-turtles" = 20,
@@ -135,12 +133,10 @@ nl <- nl(nlversion = "6.0.4",
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "diffusion",
                             outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            repetition = 1,    
                             tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
-                            idfinal = NA_character_,  # you can define one or more final commands here
-                            idrunnum = NA_character_,
+                            idsetup = "setup", 
+                            idgo = "go",       
                             runtime = 500,
                             evalticks = seq(1,500),
                             metrics = c("count patches"),
@@ -230,10 +226,10 @@ nl <- nl(nlversion = "6.0.4",
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "ants",
                             outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            repetition = 1,      
                             tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
+                            idsetup = "setup",   
+                            idgo = "go",         
                             runtime = 1000,
                             evalticks = seq(1,1000),
                             metrics.turtles = c("who", "pxcor", "pycor", "breed"),
@@ -304,18 +300,15 @@ nl <- nl(nlversion = "6.0.4",
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "waves",
                             outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            repetition = 1,      
                             tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
-                            idfinal = NA_character_,  # you can define one or more final commands here
-                            idrunnum = NA_character_,
+                            idsetup = "setup",  
+                            idgo = "go",
                             runtime = 100,
                             evalticks = seq(1,100),
                             variables = list('friction' = list(values = c(5,25,50,90))),
                             constants = list("stiffness" = 20),
                             metrics.turtles = c("who", "xcor", "ycor", "driver?", "edge?", "color"))
-
 
 # Evaluate if variables and constants are valid:
 eval_variables_constants(nl)
@@ -387,12 +380,10 @@ nl <- nl(nlversion = "6.0.4",
 ## Step2: Add Experiment
 nl@experiment <- experiment(expname = "flocking",
                             outpath = outpath,
-                            repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
+                            repetition = 1,      
                             tickmetrics = "true",
-                            idsetup = "setup",   # you can define multiple setup procedures with c()
-                            idgo = "go",         # you can define multiple go procedures with c()
-                            idfinal = NA_character_,  # you can define one or more final commands here
-                            idrunnum = NA_character_,
+                            idsetup = "setup",   
+                            idgo = "go",         
                             runtime = 300,
                             evalticks = seq(1,300),
                             constants = list("population" = 100,
@@ -462,4 +453,134 @@ gganimate::animate(p2, nframes=max(nl_spatial$step), width=600, height=600, fps=
 
 <center>
 <img src="flocking_text.gif" align="center" width="75%" />
+</center>
+
+## Preferential Attachment
+
+The preferential attachment model from the NetLogo models library is a simple model of a growing network.
+New nodes spawn each time step and connect to the already existing network.
+The network is realized by connecting turtles with links.
+This example shows how link metrics can be measured, using the metrics.links slot of the experiment.
+Link positions in NetLogo are defined by start and end points (end1, end2) using who numbers of the turtles they connect.
+Thus, on each tick we measure end1 and end2 of each link (metrics.links) and the who number, xcor, ycor and color of each node turtle (metrics.turtles).
+
+#### Visualize network using ggplot
+
+Again, after attaching the simulation results and postprocessing with get_nl_spatial (note: we set links = TRUE, turtles = TRUE, patches = FALSE) we split the tibble into a turtles tibble and a links tibble by subsetting the group column.
+
+Finally, we need to reference the who number start and end points of the links to the actual coordinates of the corresponding turtle on each step. This can be easily achieved with two left_join calls, one for end1 who numbers and one for end2 who numbers.
+
+```{r eval = FALSE}
+## Step1: Create a nl obejct:
+nl <- nl(nlversion = "6.0.4",
+         nlpath = netlogopath,
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Networks/Preferential Attachment.nlogo"),
+         jvmmem = 1024)
+
+## Step2: Add Experiment
+nl@experiment <- experiment(expname = "networks",
+                            outpath = outpath,
+                            repetition = 1,    
+                            tickmetrics = "true",
+                            idsetup = "setup", 
+                            idgo = "go",       
+                            runtime = 200,
+                            evalticks = seq(1,200),
+                            constants = list("layout?" = TRUE),
+                            metrics.turtles=c("who",
+                                              "xcor",
+                                              "ycor",
+                                              "color"),
+                            metrics.links=c("end1","end2"))
+
+## Step3: Add simdesign
+nl@simdesign <- simdesign_simple(nl=nl, nseeds = 1)
+
+## Run simulation:
+results <- run_nl_one(nl = nl,
+                      seed = getsim(nl, "simseeds")[1],
+                      siminputrow = 1)
+
+## Attach results to nl
+setsim(nl, "simoutput") <- results
+
+## Postprocess spatial metrics with get_nl_spatial:
+nl_spatial <- get_nl_spatial(nl, turtle_coords = "x", format = "tibble", patches = FALSE, links = TRUE, turtles = TRUE)
+
+## Subset nl_spatial using the group column:
+nl_links <- nl_spatial %>%
+  dplyr::filter(group == "links") %>% 
+  dplyr::select(-who, -xcor, -ycor, -color)
+
+nl_turtles <- nl_spatial %>%
+  dplyr::filter(group == "turtles") %>% 
+  dplyr::select(step, who, xcor, ycor, color)
+
+## Reference who numbers of link start (end1) and end (end2) points to actual coordinates:
+nl_links <- nl_links %>% 
+  dplyr::left_join(nl_turtles, by=c("step"="step","end1" = "who")) %>% 
+  dplyr::left_join(nl_turtles, by=c("step"="step","end2" = "who"))
+
+## Plot:
+p1 <- ggplot() +
+  geom_point(data=nl_turtles, aes(x = xcor, y = ycor, group=who), color="red", size=2) +
+  geom_segment(data=nl_links, aes(x = xcor.x, y = ycor.x, xend = xcor.y, yend = ycor.y), size=0.5) +
+  transition_time(step) +
+  coord_equal() +
+  theme_void()
+
+gganimate::animate(p1, nframes = max(nl_turtles$step), width=400, height=400, fps=8)
+
+```
+
+<center>
+<img src="networks.gif" align="center" width="75%" />
+</center>
+
+#### Visualize network using igraph package
+
+It is also possible to use the [igraph](https://igraph.org/r/) package to visualize a NetLogo network.
+We use the `graph_from_data_frame()` function from the igraph package to convert our spatial data into an igraph object.
+Here we want to display the network for only one simulation step, thus we filter our spatial data and select only the last simulation step. Again, we split the data into a turtles and a links tibble and rename the columns.
+
+After conversion to an igraph object we can use the power of network analysis functions from the igraph package to do further analyses. In this example we perform a community cluster algorithm to color the nodes based on their community membership within the network.
+
+```{r eval = FALSE}
+
+## Split data from get_nl_spatial into links and turtles
+## Filter to select only last simulation step
+## Rename columns (from, to for links; name for turtles)
+nl_links <- nl_spatial %>% 
+  dplyr::filter(step==max(step)) %>% 
+  dplyr::filter(group == "links") %>% 
+  dplyr::select(end1, end2) %>% 
+  dplyr::rename(from=end1, to=end2)
+
+nl_turtles <- nl_spatial %>%
+  dplyr::filter(step==max(step)) %>% 
+  dplyr::filter(group == "turtles") %>% 
+  dplyr::select(who) %>% 
+  dplyr::rename(name=who)
+
+## Load igraph package and convert spatial tibbles to igraph:
+library(igraph)
+nw <- graph_from_data_frame(nl_links, directed = FALSE, vertices = nl_turtles)
+
+## Perform community cluster algorithm and set community dependend colors:
+com <- walktrap.community(nw)
+V(nw)$community <- com$membership
+rain <- rainbow(14, alpha=.5)
+V(nw)$color <- rain[V(nw)$community]
+
+## Plot:
+plot(nw,
+     vertex.label=NA,
+     vertex.size=4,
+     edge.curved=0,
+     layout=layout_with_fr(nw, niter = 3000))
+
+```
+
+<center>
+<img src="networks_igraph.png" align="center" width="75%" />
 </center>

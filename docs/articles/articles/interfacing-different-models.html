@@ -120,7 +120,7 @@
       <h1>Interfacing a variety of different NetLogo models</h1>
                         <h4 class="author">Marco Sciaini</h4>
             
-            <h4 class="date">2019-01-08</h4>
+            <h4 class="date">2019-01-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/interfacing-different-models.Rmd"><code>vignettes/articles/interfacing-different-models.Rmd</code></a></small>
       <div class="hidden name"><code>interfacing-different-models.Rmd</code></div>
@@ -162,12 +162,10 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
 ## Step2: Add Experiment
 nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"diffusion"</span>,
                             <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,   
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
-                            <span class="dt">idfinal =</span> <span class="ot">NA_character_</span>,  <span class="co"># you can define one or more final commands here</span>
-                            <span class="dt">idrunnum =</span> <span class="ot">NA_character_</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,  
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,        
                             <span class="dt">runtime =</span> <span class="dv">500</span>,
                             <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">500</span>),
                             <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"num-turtles"</span> =<span class="st"> </span><span class="dv">20</span>,
@@ -232,12 +230,10 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
 ## Step2: Add Experiment
 nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"diffusion"</span>,
                             <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,    
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
-                            <span class="dt">idfinal =</span> <span class="ot">NA_character_</span>,  <span class="co"># you can define one or more final commands here</span>
-                            <span class="dt">idrunnum =</span> <span class="ot">NA_character_</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>, 
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,       
                             <span class="dt">runtime =</span> <span class="dv">500</span>,
                             <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">500</span>),
                             <span class="dt">metrics =</span> <span class="kw">c</span>(<span class="st">"count patches"</span>),
@@ -315,10 +311,10 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
 ## Step2: Add Experiment
 nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"ants"</span>,
                             <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,      
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         
                             <span class="dt">runtime =</span> <span class="dv">1000</span>,
                             <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">1000</span>),
                             <span class="dt">metrics.turtles =</span> <span class="kw">c</span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>),
@@ -381,18 +377,15 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
 ## Step2: Add Experiment
 nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"waves"</span>,
                             <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,      
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
-                            <span class="dt">idfinal =</span> <span class="ot">NA_character_</span>,  <span class="co"># you can define one or more final commands here</span>
-                            <span class="dt">idrunnum =</span> <span class="ot">NA_character_</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,  
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,
                             <span class="dt">runtime =</span> <span class="dv">100</span>,
                             <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">100</span>),
                             <span class="dt">variables =</span> <span class="kw">list</span>(<span class="st">'friction'</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">25</span>,<span class="dv">50</span>,<span class="dv">90</span>))),
                             <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"stiffness"</span> =<span class="st"> </span><span class="dv">20</span>),
                             <span class="dt">metrics.turtles =</span> <span class="kw">c</span>(<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"driver?"</span>, <span class="st">"edge?"</span>, <span class="st">"color"</span>))
-
 
 <span class="co"># Evaluate if variables and constants are valid:</span>
 <span class="kw"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span>(nl)
@@ -457,12 +450,10 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
 ## Step2: Add Experiment
 nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"flocking"</span>,
                             <span class="dt">outpath =</span> outpath,
-                            <span class="dt">repetition =</span> <span class="dv">1</span>,      <span class="co"># If repetitions is &gt; 1, a different random seed will be set for each netlogo run</span>
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,      
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
-                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   <span class="co"># you can define multiple setup procedures with c()</span>
-                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         <span class="co"># you can define multiple go procedures with c()</span>
-                            <span class="dt">idfinal =</span> <span class="ot">NA_character_</span>,  <span class="co"># you can define one or more final commands here</span>
-                            <span class="dt">idrunnum =</span> <span class="ot">NA_character_</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         
                             <span class="dt">runtime =</span> <span class="dv">300</span>,
                             <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">300</span>),
                             <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"population"</span> =<span class="st"> </span><span class="dv">100</span>,
@@ -527,6 +518,119 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <img src="flocking_text.gif" align="center" width="75%">
 </center>
 </div>
+<div id="preferential-attachment" class="section level2">
+<h2 class="hasAnchor">
+<a href="#preferential-attachment" class="anchor"></a>Preferential Attachment</h2>
+<p>The preferential attachment model from the NetLogo models library is a simple model of a growing network. New nodes spawn each time step and connect to the already existing network. The network is realized by connecting turtles with links. This example shows how link metrics can be measured, using the metrics.links slot of the experiment. Link positions in NetLogo are defined by start and end points (end1, end2) using who numbers of the turtles they connect. Thus, on each tick we measure end1 and end2 of each link (metrics.links) and the who number, xcor, ycor and color of each node turtle (metrics.turtles).</p>
+<div id="visualize-network-using-ggplot" class="section level4">
+<h4 class="hasAnchor">
+<a href="#visualize-network-using-ggplot" class="anchor"></a>Visualize network using ggplot</h4>
+<p>Again, after attaching the simulation results and postprocessing with get_nl_spatial (note: we set links = TRUE, turtles = TRUE, patches = FALSE) we split the tibble into a turtles tibble and a links tibble by subsetting the group column.</p>
+<p>Finally, we need to reference the who number start and end points of the links to the actual coordinates of the corresponding turtle on each step. This can be easily achieved with two left_join calls, one for end1 who numbers and one for end2 who numbers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
+nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
+         <span class="dt">nlpath =</span> netlogopath,
+         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Preferential Attachment.nlogo"</span>),
+         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
+
+## Step2: Add Experiment
+nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"networks"</span>,
+                            <span class="dt">outpath =</span> outpath,
+                            <span class="dt">repetition =</span> <span class="dv">1</span>,    
+                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
+                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>, 
+                            <span class="dt">idgo =</span> <span class="st">"go"</span>,       
+                            <span class="dt">runtime =</span> <span class="dv">200</span>,
+                            <span class="dt">evalticks =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">200</span>),
+                            <span class="dt">constants =</span> <span class="kw">list</span>(<span class="st">"layout?"</span> =<span class="st"> </span><span class="ot">TRUE</span>),
+                            <span class="dt">metrics.turtles=</span><span class="kw">c</span>(<span class="st">"who"</span>,
+                                              <span class="st">"xcor"</span>,
+                                              <span class="st">"ycor"</span>,
+                                              <span class="st">"color"</span>),
+                            <span class="dt">metrics.links=</span><span class="kw">c</span>(<span class="st">"end1"</span>,<span class="st">"end2"</span>))
+
+## Step3: Add simdesign
+nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl=</span>nl, <span class="dt">nseeds =</span> <span class="dv">1</span>)
+
+## Run simulation:
+results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_one.html">run_nl_one</a></span>(<span class="dt">nl =</span> nl,
+                      <span class="dt">seed =</span> <span class="kw"><a href="../../reference/getsim.html">getsim</a></span>(nl, <span class="st">"simseeds"</span>)[<span class="dv">1</span>],
+                      <span class="dt">siminputrow =</span> <span class="dv">1</span>)
+
+## Attach results to nl
+<span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
+
+## Postprocess spatial metrics with get_nl_spatial:
+nl_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl, <span class="dt">turtle_coords =</span> <span class="st">"x"</span>, <span class="dt">format =</span> <span class="st">"tibble"</span>, <span class="dt">patches =</span> <span class="ot">FALSE</span>, <span class="dt">links =</span> <span class="ot">TRUE</span>, <span class="dt">turtles =</span> <span class="ot">TRUE</span>)
+
+## Subset nl_spatial using the group column:
+nl_links &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group <span class="op">==</span><span class="st"> "links"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span>who, <span class="op">-</span>xcor, <span class="op">-</span>ycor, <span class="op">-</span>color)
+
+nl_turtles &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group <span class="op">==</span><span class="st"> "turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(step, who, xcor, ycor, color)
+
+## Reference who numbers of link start (end1) and end (end2) points to actual coordinates:
+nl_links &lt;-<span class="st"> </span>nl_links <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(nl_turtles, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">"step"</span>=<span class="st">"step"</span>,<span class="st">"end1"</span> =<span class="st"> "who"</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">left_join</a></span>(nl_turtles, <span class="dt">by=</span><span class="kw">c</span>(<span class="st">"step"</span>=<span class="st">"step"</span>,<span class="st">"end2"</span> =<span class="st"> "who"</span>))
+
+## Plot:
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nl_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> xcor, <span class="dt">y =</span> ycor, <span class="dt">group=</span>who), <span class="dt">color=</span><span class="st">"red"</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="dt">data=</span>nl_links, <span class="kw">aes</span>(<span class="dt">x =</span> xcor.x, <span class="dt">y =</span> ycor.x, <span class="dt">xend =</span> xcor.y, <span class="dt">yend =</span> ycor.y), <span class="dt">size=</span><span class="fl">0.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">transition_time</span>(step) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_void</span>()
+
+gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw">max</span>(nl_turtles<span class="op">$</span>step), <span class="dt">width=</span><span class="dv">400</span>, <span class="dt">height=</span><span class="dv">400</span>, <span class="dt">fps=</span><span class="dv">8</span>)</code></pre></div>
+<center>
+<img src="networks.gif" align="center" width="75%">
+</center>
+</div>
+<div id="visualize-network-using-igraph-package" class="section level4">
+<h4 class="hasAnchor">
+<a href="#visualize-network-using-igraph-package" class="anchor"></a>Visualize network using igraph package</h4>
+<p>It is also possible to use the <a href="https://igraph.org/r/">igraph</a> package to visualize a NetLogo network. We use the <code>graph_from_data_frame()</code> function from the igraph package to convert our spatial data into an igraph object. Here we want to display the network for only one simulation step, thus we filter our spatial data and select only the last simulation step. Again, we split the data into a turtles and a links tibble and rename the columns.</p>
+<p>After conversion to an igraph object we can use the power of network analysis functions from the igraph package to do further analyses. In this example we perform a community cluster algorithm to color the nodes based on their community membership within the network.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Split data from get_nl_spatial into links and turtles
+## Filter to select only last simulation step
+## Rename columns (from, to for links; name for turtles)
+nl_links &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step<span class="op">==</span><span class="kw">max</span>(step)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group <span class="op">==</span><span class="st"> "links"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(end1, end2) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">from=</span>end1, <span class="dt">to=</span>end2)
+
+nl_turtles &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step<span class="op">==</span><span class="kw">max</span>(step)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group <span class="op">==</span><span class="st"> "turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(who) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">name=</span>who)
+
+## Load igraph package and convert spatial tibbles to igraph:
+<span class="kw">library</span>(igraph)
+nw &lt;-<span class="st"> </span><span class="kw">graph_from_data_frame</span>(nl_links, <span class="dt">directed =</span> <span class="ot">FALSE</span>, <span class="dt">vertices =</span> nl_turtles)
+
+## Perform community cluster algorithm and set community dependend colors:
+com &lt;-<span class="st"> </span><span class="kw">walktrap.community</span>(nw)
+<span class="kw">V</span>(nw)<span class="op">$</span>community &lt;-<span class="st"> </span>com<span class="op">$</span>membership
+rain &lt;-<span class="st"> </span><span class="kw">rainbow</span>(<span class="dv">14</span>, <span class="dt">alpha=</span>.<span class="dv">5</span>)
+<span class="kw">V</span>(nw)<span class="op">$</span>color &lt;-<span class="st"> </span>rain[<span class="kw">V</span>(nw)<span class="op">$</span>community]
+
+## Plot:
+<span class="kw">plot</span>(nw,
+     <span class="dt">vertex.label=</span><span class="ot">NA</span>,
+     <span class="dt">vertex.size=</span><span class="dv">4</span>,
+     <span class="dt">edge.curved=</span><span class="dv">0</span>,
+     <span class="dt">layout=</span><span class="kw">layout_with_fr</span>(nw, <span class="dt">niter =</span> <span class="dv">3000</span>))</code></pre></div>
+<center>
+<img src="networks_igraph.png" align="center" width="75%">
+</center>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -539,6 +643,7 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
       <li><a href="#ants-model">Ants model</a></li>
       <li><a href="#waves-model">Waves model</a></li>
       <li><a href="#flocking-model">Flocking Model</a></li>
+      <li><a href="#preferential-attachment">Preferential Attachment</a></li>
       </ul>
 </div>
       </div>
