@@ -7,6 +7,7 @@
 #' from metrics.turtles data
 #' @param patches if TRUE, the function generates raster objects from
 #' metrics.patches data
+#' @param links if TRUE, the function generates xxx
 #' @param turtle_coords either "px" if turtle coordinates were measured as
 #' "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
 #' @param format string indication whether to return spatial objects
@@ -48,6 +49,7 @@
 get_nl_spatial <- function(nl,
                            turtles = TRUE,
                            patches = TRUE,
+                           links   = FALSE,
                            turtle_coords = "px",
                            format = "spatial") {
   ## Check if results have been attached:
@@ -92,11 +94,48 @@ get_nl_spatial <- function(nl,
       agentdata <- patches_tib
     }
 
+    if (isTRUE(links)) {
+      if (isTRUE(turtles) && isTRUE(patches))
+      {
+        links_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.turtles, -metrics.patches)
+      } else if (isTRUE(turtles)) {
+        links_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.turtles)
+      } else if (isTRUE(patches)) {
+        links_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.patches)
+      } else {
+        links_tib <- getsim(nl, "simoutput")
+      }
+
+      links_tib <- links_tib %>%
+        tidyr::unnest(metrics.links) %>%
+        dplyr::mutate(end1 = as.numeric(stringr::str_replace_all(end1, "[turtle()]", "")),
+                      end2 = as.numeric(stringr::str_replace_all(end2, "[turtle()]", "")))
+
+      agentdata <- links_tib
+
+    }
+
     if (all(isTRUE(turtles) && isTRUE(patches)))
     {
       turtles_tib$group <- "turtles"
       patches_tib$group <- "patches"
       agentdata <- dplyr::full_join(patches_tib, turtles_tib)
+    } else if (all(isTRUE(turtles) && isTRUE(links))) {
+      turtles_tib$group <- "turtles"
+      links_tib$group <- "links"
+      agentdata <- dplyr::full_join(links_tib, turtles_tib)
+    } else if (all(isTRUE(links) && isTRUE(patches))) {
+      links_tib$group <- "links"
+      patches_tib$group <- "patches"
+      agentdata <- dplyr::full_join(patches_tib, turtles_tib)
+    } else if (all(isTRUE(turtles) && isTRUE(patches) && isTRUE(links))) {
+      turtles_tib$group <- "turtles"
+      patches_tib$group <- "patches"
+      links_tib$group <- "patches"
+      agentdata <- dplyr::full_join(patches_tib, turtles_tib, links_tib)
     }
   }
 
