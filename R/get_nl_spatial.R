@@ -3,11 +3,9 @@
 #' @description Turn results from NetLogo in spatial data objects
 #'
 #' @param nl nl object
-#' @param turtles if TRUE, the function generates spatial point objects (sf)
-#' from metrics.turtles data
-#' @param patches if TRUE, the function generates raster objects from
-#' metrics.patches data
-#' @param links if TRUE, the function generates xxx
+#' @param turtles if TRUE (default), the function generates reports the metrics.turtles as spatial columns (either in a tibble or sf object)
+#' @param patches if TRUE (default), the function generates raster objects from metrics.patches data (either in a tibble or raster object)
+#' @param links if TRUE (default is false), the function collects the the end1 and  end2, as well as link variables (if provided).
 #' @param turtle_coords either "px" if turtle coordinates were measured as
 #' "pxcor" and "pycor" or "x" if coordinates were measured as "xcor" and "ycor"
 #' @param format string indication whether to return spatial objects
@@ -23,10 +21,19 @@
 #' metrics.patches.
 #' For turtles you can either add "pxcor" and "pycor" to metrics.turtles or
 #' "xcor" and "ycor".
+#' For turtles you can add "end1" and "end2" to metrics.turtles.
 #' It is also possible to measure both coordinates, and select the type that is
 #'  used for spatial object creation through the function parameter
 #'  turtle_coords.
 #' "px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".
+#'
+#' Furthermore, every type of agent also supports additional information (turtle, patch or link owns).
+#' These are also collected and returned. If the output format is supposed to spatial,
+#' turtle owns become columns in the sf object, and patch owns are returned as rasterstack for each tick.
+#'
+#' *NOTE*:
+#'
+#' Links are currently only supported in the tibble output format!
 #'
 #' @examples
 #' \dontrun{
@@ -61,17 +68,30 @@ get_nl_spatial <- function(nl,
       )
   }
 
+  ## Check if output is supposed to be spatial and links is TRUE:
+  if (format == "spatial" && isTRUE(links)) {
+    warning("links are only supported if the format of the output is a tibble, a spatial implementation of links is not supported so far.", call. = FALSE)
+  }
 
   if (format == "tibble")
   {
     ## If no turtles shall be returned, create empty tibble
     if (isTRUE(turtles)) {
-      if (isTRUE(patches)) {
+
+      if (isTRUE(patches) && isTRUE(links))
+      {
+        turtles_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.patches, -metrics.links)
+      } else if (isTRUE(patches)) {
         turtles_tib <- getsim(nl, "simoutput") %>%
           dplyr::select(-metrics.patches)
+      } else if (isTRUE(links)) {
+        turtles_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.links)
       } else {
         turtles_tib <- getsim(nl, "simoutput")
       }
+
       turtles_tib <- turtles_tib %>%
         tidyr::unnest(metrics.turtles)
 
@@ -80,12 +100,20 @@ get_nl_spatial <- function(nl,
 
     ## If no patches shall be returned, create empty tibble
     if (isTRUE(patches)) {
-      if (isTRUE(turtles)) {
+      if (isTRUE(turtles) && isTRUE(links))
+      {
+        patches_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.turtles, -metrics.links)
+      } else if (isTRUE(turtles)) {
         patches_tib <- getsim(nl, "simoutput") %>%
           dplyr::select(-metrics.turtles)
+      } else if (isTRUE(links)) {
+        patches_tib <- getsim(nl, "simoutput") %>%
+          dplyr::select(-metrics.links)
       } else {
         patches_tib <- getsim(nl, "simoutput")
       }
+
       patches_tib <- patches_tib %>%
         tidyr::unnest(metrics.patches) %>%
         dplyr::rename(patches_x = pxcor,
