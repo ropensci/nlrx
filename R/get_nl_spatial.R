@@ -146,23 +146,23 @@ get_nl_spatial <- function(nl,
 
     }
 
-    if (all(isTRUE(turtles) && isTRUE(patches)))
+    if (all(isTRUE(turtles) && isTRUE(patches) && !isTRUE(links) ))
     {
       turtles_tib$group <- "turtles"
       patches_tib$group <- "patches"
       agentdata <- dplyr::full_join(patches_tib, turtles_tib)
-    } else if (all(isTRUE(turtles) && isTRUE(links))) {
+    } else if (all(isTRUE(turtles) && isTRUE(links) && !isTRUE(patches) )) {
       turtles_tib$group <- "turtles"
       links_tib$group <- "links"
       agentdata <- dplyr::full_join(links_tib, turtles_tib)
-    } else if (all(isTRUE(links) && isTRUE(patches))) {
+    } else if (all(isTRUE(links) && isTRUE(patches ) && !isTRUE(turtles) )) {
       links_tib$group <- "links"
       patches_tib$group <- "patches"
       agentdata <- dplyr::full_join(patches_tib, turtles_tib)
     } else if (all(isTRUE(turtles) && isTRUE(patches) && isTRUE(links))) {
       turtles_tib$group <- "turtles"
       patches_tib$group <- "patches"
-      links_tib$group <- "patches"
+      links_tib$group <- "links"
       agentdata <- dplyr::full_join(patches_tib, turtles_tib, links_tib)
     }
   }
