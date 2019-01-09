@@ -163,7 +163,8 @@ get_nl_spatial <- function(nl,
       turtles_tib$group <- "turtles"
       patches_tib$group <- "patches"
       links_tib$group <- "links"
-      agentdata <- dplyr::full_join(patches_tib, turtles_tib, links_tib)
+      agentdata <- dplyr::full_join(patches_tib, turtles_tib) %>%
+        dplyr::full_join(links_tib)
     }
   }
 
