@@ -21,6 +21,7 @@ library(ggplot2)
 library(gganimate)
 library(emojifont) 
 library(cartography) 
+library(ggthemes) 
 ```
 
 Second, we need to define the path variables pointing to the NetLogo installation.
@@ -127,7 +128,7 @@ Before plotting we split up the turtle data into two tibbles, one for each breed
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Art/Diffusion Graphics.nlogo"),
+         modelpath = file.path(netlogopath, "app/models/Sample Models/Earth Science/Fire.nlogo"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
