@@ -252,17 +252,23 @@ setsim(nl, "simoutput") <- results
 nl_spatial <- get_nl_spatial(nl, format = "tibble")
 
 ## Step6: Prepare data for plotting
-nmax <- 900
-food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, step)
+# Extract infromation on food sources and select maximum step as simulation length:
+food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::select(patches_x, patches_y, step)
+nmax <- max(food_dat$step)
+food_dat <- food_dat %>% dplyr::filter(step %in% 1:nmax)
+# Extract information on chemicals and apply minimum treshhold for coloring:
 chem_dat <- nl_spatial %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, chemical, step)
 chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
+# Extract information on turtle positions:
 turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
+# Create a new data frame to overlay the nest position (in this case the center of the world 0,0)
 nest_dat <- data.frame(x=rep(0, nmax), y=rep(0, nmax), step=1:nmax)
 
+## Step7: Plotting
 p1 <- ggplot(food_dat) +
   geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
   geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
-  geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label=emoji("ant")) +
+  geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label="￥") +
   geom_point(data=nest_dat, aes(x=x, y=y), color="brown", fill="white", size=30, stroke=2, shape=21) +
   scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
   scale_color_gradient_tableau(palette="Orange") +
@@ -273,7 +279,7 @@ p1 <- ggplot(food_dat) +
   theme_void()
 
 ## Step8: Animate the plot and use 1 frame for each step of the model simulations
-gganimate::animate(p1, nframes = max(food_dat$step), width=800, height=800, fps=10)
+gganimate::animate(p1, nframes = nmax, width=800, height=800, fps=10)
 ```
 
 <center>
@@ -292,10 +298,18 @@ Again, before plotting we split the spatial data tibble from `get_nl_spatial()` 
 Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.
 
 ```{r  eval = FALSE}
+
+## The models library filepath pointing to the waves model contains an ampersand which needs to be escaped on Windows but not on Linux.
+## Choose the filepath according to your OS:
+## Windows:
+modelpath <- "app/models/Sample Models/Chemistry ^& Physics/Waves/Wave Machine.nlogo"
+## Linux:
+modelpath <- "app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo"
+
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo"),
+         modelpath = file.path(netlogopath, modelpath),
          jvmmem = 1024)
 
 ## Step2: Add Experiment

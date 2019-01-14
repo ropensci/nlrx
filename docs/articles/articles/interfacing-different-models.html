@@ -120,7 +120,7 @@
       <h1>Interfacing a variety of different NetLogo models</h1>
                         <h4 class="author">Marco Sciaini</h4>
             
-            <h4 class="date">2019-01-09</h4>
+            <h4 class="date">2019-01-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/interfacing-different-models.Rmd"><code>vignettes/articles/interfacing-different-models.Rmd</code></a></small>
       <div class="hidden name"><code>interfacing-different-models.Rmd</code></div>
@@ -138,7 +138,8 @@
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(gganimate)
 <span class="kw">library</span>(emojifont) 
-<span class="kw">library</span>(cartography) </code></pre></div>
+<span class="kw">library</span>(cartography) 
+<span class="kw">library</span>(ggthemes) </code></pre></div>
 <p>Second, we need to define the path variables pointing to the NetLogo installation. Depending on the operation system, the NetLogo and output paths need to be adjusted.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
 netlogopath &lt;-<span class="st"> </span><span class="kw">file.path</span>(<span class="st">"C:/Program Files/NetLogo 6.0.4"</span>)
@@ -224,7 +225,7 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
          <span class="dt">nlpath =</span> netlogopath,
-         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Art/Diffusion Graphics.nlogo"</span>),
+         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Earth Science/Fire.nlogo"</span>),
          <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
 
 ## Step2: Add Experiment
@@ -336,17 +337,23 @@ results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/
 nl_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl, <span class="dt">format =</span> <span class="st">"tibble"</span>)
 
 ## Step6: Prepare data for plotting
-nmax &lt;-<span class="st"> </span><span class="dv">900</span>
-food_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(food <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, step)
+<span class="co"># Extract infromation on food sources and select maximum step as simulation length:</span>
+food_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(food <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, step)
+nmax &lt;-<span class="st"> </span><span class="kw">max</span>(food_dat<span class="op">$</span>step)
+food_dat &lt;-<span class="st"> </span>food_dat <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax)
+<span class="co"># Extract information on chemicals and apply minimum treshhold for coloring:</span>
 chem_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(patches_x, patches_y, chemical, step)
 chem_dat<span class="op">$</span>chemical &lt;-<span class="st"> </span><span class="kw">ifelse</span>(chem_dat<span class="op">$</span>chemical <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.2</span>, <span class="ot">NA</span>, chem_dat<span class="op">$</span>chemical)
+<span class="co"># Extract information on turtle positions:</span>
 turt_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(who)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(pxcor, pycor, who, step)
+<span class="co"># Create a new data frame to overlay the nest position (in this case the center of the world 0,0)</span>
 nest_dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">y=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">step=</span><span class="dv">1</span><span class="op">:</span>nmax)
 
+## Step7: Plotting
 p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(food_dat) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>chem_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw">sqrt</span>(chemical))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>food_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y), <span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">shape=</span><span class="dv">15</span>, <span class="dt">size=</span><span class="fl">4.5</span>, <span class="dt">alpha=</span><span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>turt_dat, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">group=</span>who, <span class="dt">color=</span><span class="kw">as.numeric</span>(who)), <span class="dt">size=</span><span class="dv">5</span>, <span class="dt">alpha=</span><span class="dv">1</span>, <span class="dt">label=</span><span class="kw">emoji</span>(<span class="st">"ant"</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>turt_dat, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">group=</span>who, <span class="dt">color=</span><span class="kw">as.numeric</span>(who)), <span class="dt">size=</span><span class="dv">5</span>, <span class="dt">alpha=</span><span class="dv">1</span>, <span class="dt">label=</span><span class="st">"￥"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nest_dat, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y), <span class="dt">color=</span><span class="st">"brown"</span>, <span class="dt">fill=</span><span class="st">"white"</span>, <span class="dt">size=</span><span class="dv">30</span>, <span class="dt">stroke=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">21</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">direction=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">option=</span><span class="st">"magma"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_gradient_tableau</span>(<span class="dt">palette=</span><span class="st">"Orange"</span>) <span class="op">+</span>
@@ -357,7 +364,7 @@ p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(food_dat) <span 
 <span class="st">  </span><span class="kw">theme_void</span>()
 
 ## Step8: Animate the plot and use 1 frame for each step of the model simulations
-gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw">max</span>(food_dat<span class="op">$</span>step), <span class="dt">width=</span><span class="dv">800</span>, <span class="dt">height=</span><span class="dv">800</span>, <span class="dt">fps=</span><span class="dv">10</span>)</code></pre></div>
+gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> nmax, <span class="dt">width=</span><span class="dv">800</span>, <span class="dt">height=</span><span class="dv">800</span>, <span class="dt">fps=</span><span class="dv">10</span>)</code></pre></div>
 <center>
 <img src="nlrx_ants_gif.gif" align="center" width="100%">
 </center>
@@ -368,10 +375,17 @@ gganimate<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <p>The waves model contains no patch information. Three types of turtle agents are present in the model: waves, edges and a driver. However, these agents are not defined by using breeds but by using turtles-own variables (driver?, edge?).</p>
 <p>In addition to these two variables we measure the who number, turtle coordinates and turtle color. Again, before plotting we split the spatial data tibble from <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.</p>
 <p>Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## The models library filepath pointing to the waves model contains an ampersand which needs to be escaped on Windows but not on Linux.
+## Choose the filepath according to your OS:
+## Windows:
+modelpath &lt;-<span class="st"> "app/models/Sample Models/Chemistry ^&amp; Physics/Waves/Wave Machine.nlogo"</span>
+## Linux:
+modelpath &lt;-<span class="st"> "app/models/Sample Models/Chemistry &amp; Physics/Waves/Wave Machine.nlogo"</span>
+
+## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
          <span class="dt">nlpath =</span> netlogopath,
-         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Chemistry &amp; Physics/Waves/Wave Machine.nlogo"</span>),
+         <span class="dt">modelpath =</span> <span class="kw">file.path</span>(netlogopath, modelpath),
          <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
 
 ## Step2: Add Experiment

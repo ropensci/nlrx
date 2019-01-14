@@ -174,17 +174,15 @@
     </tr>
     <tr>
       <th>turtles</th>
-      <td><p>if TRUE, the function generates spatial point objects (sf)
-from metrics.turtles data</p></td>
+      <td><p>if TRUE (default), the function generates reports the metrics.turtles as spatial columns (either in a tibble or sf object)</p></td>
     </tr>
     <tr>
       <th>patches</th>
-      <td><p>if TRUE, the function generates raster objects from
-metrics.patches data</p></td>
+      <td><p>if TRUE (default), the function generates raster objects from metrics.patches data (either in a tibble or raster object)</p></td>
     </tr>
     <tr>
       <th>links</th>
-      <td><p>if TRUE, the function generates xxx</p></td>
+      <td><p>if TRUE (default is false), the function collects the the end1 and  end2, as well as link variables (if provided).</p></td>
     </tr>
     <tr>
       <th>turtle_coords</th>
@@ -212,10 +210,16 @@ For patches this can be easily done by adding "pxcor" and "pycor" to
 metrics.patches.
 For turtles you can either add "pxcor" and "pycor" to metrics.turtles or
 "xcor" and "ycor".
+For turtles you can add "end1" and "end2" to metrics.turtles.
 It is also possible to measure both coordinates, and select the type that is
 used for spatial object creation through the function parameter
 turtle_coords.
 "px" uses "pxcor" and "pycor", while "x" uses "xcor" and "ycor".</p>
+<p>Furthermore, every type of agent also supports additional information (turtle, patch or link owns).
+These are also collected and returned. If the output format is supposed to spatial,
+turtle owns become columns in the sf object, and patch owns are returned as rasterstack for each tick.</p>
+<p><em>NOTE</em>:</p>
+<p>Links are currently only supported in the tibble output format!</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
