@@ -262,14 +262,16 @@ chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
 # Extract information on turtle positions:
 turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
 # Create a new data frame to overlay the nest position (in this case the center of the world 0,0)
-nest_dat <- data.frame(x=rep(0, nmax), y=rep(0, nmax), step=1:nmax)
+nest_dat <- food_dat
+nest_dat$patches_x <- 0
+nest_dat$patches_y <- 0
 
 ## Step7: Plotting
 p1 <- ggplot(food_dat) +
   geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
   geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
   geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label="￥") +
-  geom_point(data=nest_dat, aes(x=x, y=y), color="brown", fill="white", size=30, stroke=2, shape=21) +
+  geom_point(data=nest_dat, aes(x=patches_x, y=patches_y), color="brown", fill="white", size=30, stroke=2, shape=21) +
   scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
   scale_color_gradient_tableau(palette="Orange") +
   transition_time(step) +
