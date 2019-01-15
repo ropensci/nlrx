@@ -19,7 +19,6 @@ library(nlrx)
 library(tidyverse)
 library(ggplot2)
 library(gganimate)
-library(emojifont) 
 library(cartography) 
 library(ggthemes) 
 ```
@@ -211,7 +210,7 @@ After converting the spatial data to tibble format (`get_nl_spatial()`), we spli
 * food_dat: Contains patches coordinates of patches that contain food sources (food > 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.
 * nest_dat: Contains patches coordinates of the nest patch. The nest is plotted by adding a large circle geom_point layer on top.
 
-The turtle data is plotted by adding another geom_text layer, using an Ant emoji that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).
+The turtle data is plotted by adding another geom_text layer, using a Yen sign (￥) that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).
 
 The plot need to be stored in an object before it can be rendered with the `gganimate` function.
 In some cases, it is important to set the number of frames explicitly to the number of steps of your simulation output.

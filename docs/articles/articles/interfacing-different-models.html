@@ -120,7 +120,7 @@
       <h1>Interfacing a variety of different NetLogo models</h1>
                         <h4 class="author">Marco Sciaini</h4>
             
-            <h4 class="date">2019-01-14</h4>
+            <h4 class="date">2019-01-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/interfacing-different-models.Rmd"><code>vignettes/articles/interfacing-different-models.Rmd</code></a></small>
       <div class="hidden name"><code>interfacing-different-models.Rmd</code></div>
@@ -137,7 +137,6 @@
 <span class="kw">library</span>(tidyverse)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(gganimate)
-<span class="kw">library</span>(emojifont) 
 <span class="kw">library</span>(cartography) 
 <span class="kw">library</span>(ggthemes) </code></pre></div>
 <p>Second, we need to define the path variables pointing to the NetLogo installation. Depending on the operation system, the NetLogo and output paths need to be adjusted.</p>
@@ -301,7 +300,7 @@ g1 &lt;-<span class="st"> </span>gganimate<span class="op">::</span><span class=
 <li>food_dat: Contains patches coordinates of patches that contain food sources (food &gt; 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.</li>
 <li>nest_dat: Contains patches coordinates of the nest patch. The nest is plotted by adding a large circle geom_point layer on top.</li>
 </ul>
-<p>The turtle data is plotted by adding another geom_text layer, using an Ant emoji that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).</p>
+<p>The turtle data is plotted by adding another geom_text layer, using a Yen sign (￥) that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).</p>
 <p>The plot need to be stored in an object before it can be rendered with the <code>gganimate</code> function. In some cases, it is important to set the number of frames explicitly to the number of steps of your simulation output. Otherwise, gganimate may interpolate between measured steps, which may lead to incorrect results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Step1: Create a nl obejct:
 nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
@@ -347,14 +346,16 @@ chem_dat<span class="op">$</span>chemical &lt;-<span class="st"> </span><span cl
 <span class="co"># Extract information on turtle positions:</span>
 turt_dat &lt;-<span class="st"> </span>nl_spatial <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="op">!</span><span class="kw">is.na</span>(who)) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>nmax) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(pxcor, pycor, who, step)
 <span class="co"># Create a new data frame to overlay the nest position (in this case the center of the world 0,0)</span>
-nest_dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">y=</span><span class="kw">rep</span>(<span class="dv">0</span>, nmax), <span class="dt">step=</span><span class="dv">1</span><span class="op">:</span>nmax)
+nest_dat &lt;-<span class="st"> </span>food_dat
+nest_dat<span class="op">$</span>patches_x &lt;-<span class="st"> </span><span class="dv">0</span>
+nest_dat<span class="op">$</span>patches_y &lt;-<span class="st"> </span><span class="dv">0</span>
 
 ## Step7: Plotting
 p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(food_dat) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>chem_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw">sqrt</span>(chemical))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>food_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y), <span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">shape=</span><span class="dv">15</span>, <span class="dt">size=</span><span class="fl">4.5</span>, <span class="dt">alpha=</span><span class="dv">1</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data=</span>turt_dat, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">group=</span>who, <span class="dt">color=</span><span class="kw">as.numeric</span>(who)), <span class="dt">size=</span><span class="dv">5</span>, <span class="dt">alpha=</span><span class="dv">1</span>, <span class="dt">label=</span><span class="st">"￥"</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nest_dat, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y), <span class="dt">color=</span><span class="st">"brown"</span>, <span class="dt">fill=</span><span class="st">"white"</span>, <span class="dt">size=</span><span class="dv">30</span>, <span class="dt">stroke=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">21</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>nest_dat, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y), <span class="dt">color=</span><span class="st">"brown"</span>, <span class="dt">fill=</span><span class="st">"white"</span>, <span class="dt">size=</span><span class="dv">30</span>, <span class="dt">stroke=</span><span class="dv">2</span>, <span class="dt">shape=</span><span class="dv">21</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">direction=</span><span class="op">-</span><span class="dv">1</span>, <span class="dt">option=</span><span class="st">"magma"</span>, <span class="dt">na.value =</span> <span class="st">"white"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_gradient_tableau</span>(<span class="dt">palette=</span><span class="st">"Orange"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">transition_time</span>(step) <span class="op">+</span>
