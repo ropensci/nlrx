@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 ```
 # nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/ropensci/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/nldoc/nlrx)
-[![Travis build status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)
+[![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
+![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master)
 [![Codecov test coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master)
-[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
 
 The nlrx package provides tools to setup and execute NetLogo simulations from R.
