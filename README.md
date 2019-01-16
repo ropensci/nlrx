@@ -4,11 +4,11 @@
 # nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/ropensci/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/nldoc/nlrx)
+status](https://ci.appveyor.com/api/projects/status/github/ropensci/nlrx?branch=master&svg=true)](https://ci.appveyor.com/project/ropensci/nlrx)
 [![Travis build
 status](https://travis-ci.org/nldoc/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)
 [![Codecov test
-coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master)
+coverage](https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
 
