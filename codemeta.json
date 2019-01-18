@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "nlrx",
   "description": "The purpose of this package is to provide tools to setup, run and analyze NetLogo model simulations in R.\n    nlrx experiments use a similar structure as NetLogos Behavior Space experiments. \n    However, nlrx offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.\n    The user defines all information that is needed in an intuitive framework, using class objects.\n    Experiments are submitted from R to NetLogo via XML files that are dynamically written, based on specifications defined by the user.\n    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.\n    This also enables simulating NetLogo experiments on remote HPC machines.\n    In order to use this package, Java and NetLogo (>= 5.3.1) need to be installed on the executing system.",
@@ -306,8 +309,18 @@
     }
   ],
   "releaseNotes": "https://github.com/nldoc/nlrx/blob/master/NEWS.md",
-  "readme": "https://github.com/nldoc/nlrx/blob/master/README.md",
-  "fileSize": "306.565KB",
-  "contIntegration": ["https://ci.appveyor.com/project/nldoc/nlrx", "https://travis-ci.org/ropensci/nlrx", "https://codecov.io/gh/ropensci/nlrx?branch=master"],
-  "developmentStatus": "https://www.tidyverse.org/lifecycle/#experimental"
+  "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
+  "fileSize": "306.477KB",
+  "contIntegration": [
+    "https://ci.appveyor.com/project/nldoc/nlrx",
+    "https://travis-ci.org/ropensci/nlrx",
+    "https://codecov.io/gh/ropensci/nlrx?branch=master"
+  ],
+  "developmentStatus": "https://www.tidyverse.org/lifecycle/#experimental",
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/onboarding/issues/262",
+    "provider": "http://ropensci.org"
+  },
+  "keywords": ["peer-reviewed", "netlogo", "individual-based-modelling", "agent-based-modeling", "r"]
 }
