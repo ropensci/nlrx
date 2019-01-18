@@ -310,7 +310,7 @@
   ],
   "releaseNotes": "https://github.com/nldoc/nlrx/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
-  "fileSize": "306.477KB",
+  "fileSize": "306.567KB",
   "contIntegration": [
     "https://ci.appveyor.com/project/nldoc/nlrx",
     "https://travis-ci.org/ropensci/nlrx",
@@ -322,5 +322,11 @@
     "url": "https://github.com/ropensci/onboarding/issues/262",
     "provider": "http://ropensci.org"
   },
-  "keywords": ["peer-reviewed", "netlogo", "individual-based-modelling", "agent-based-modeling", "r"]
+  "keywords": [
+    "peer-reviewed",
+    "netlogo",
+    "individual-based-modelling",
+    "agent-based-modeling",
+    "r"
+  ]
 }

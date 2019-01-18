@@ -4,7 +4,9 @@ Title: Setup, Run and Analyze NetLogo Model Simulations from R via XML
 Version: 0.1.0
 Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
                      role = c("aut", "cre"), comment = c(ORCID = '0000-0002-9000-4229')),
-             person("Marco", "Sciaini", email = "sciaini.marco@gmail.com", role = c("aut"), comment = c(ORCID = '0000-0002-3042-5435')))
+             person("Marco", "Sciaini", email = "sciaini.marco@gmail.com", role = c("aut"), comment = c(ORCID = '0000-0002-3042-5435')),
+             person("Marina", "Papadopoulou", role = "rev",
+                    comment = "Marina reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/262>"))
 Maintainer: Jan Salecker <jsaleck@gwdg.de>
 Description: The purpose of this package is to provide tools to setup, run and analyze NetLogo model simulations in R.
     nlrx experiments use a similar structure as NetLogos Behavior Space experiments. 
