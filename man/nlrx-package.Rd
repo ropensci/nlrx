@@ -26,10 +26,7 @@ The "Wolf Sheep Predation" model from the NetLogo models library is used to pres
 Step 1: Create a nl object:
 
 The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
-Depending on the operation system, paths to NetLogo and the model need to be adjusted.
-
-\code{
-library(nlrx)
+Depending on the operation system, paths to NetLogo and the model need to be adjusted.\preformatted{library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
 netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
 modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
@@ -38,7 +35,6 @@ outpath <- file.path("C:/out")
 netlogopath <- file.path("/home/NetLogo 6.0.3")
 modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
 outpath <- file.path("/home/out")
-
 nl <- nl(nlversion = "6.0.3",
          nlpath = netlogopath,
          modelpath = modelpath,
@@ -49,10 +45,7 @@ Step 2: Attach an experiment
 
 The experiment object is organized in a similar fashion as NetLogo Behavior Space experiments.
 It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations.
-Details on the specific slots of the experiment class can be found in the package documentation (\code{?experiment}) and the "Advanced configuration" vignette.
-
-\code{
-nl@experiment <- experiment(expname="wolf-sheep",
+Details on the specific slots of the experiment class can be found in the package documentation (\code{?experiment}) and the "Advanced configuration" vignette.\preformatted{nl@experiment <- experiment(expname="wolf-sheep",
                              outpath=outpath,
                              repetition=1,
                              tickmetrics="true",
@@ -70,7 +63,6 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                               "sheep-reproduce" = 4,
                                               "wolf-reproduce" = 5,
                                               "show-energy?" = "false"))
-
 }
 
 Step 3: Attach a simulation design
@@ -79,10 +71,7 @@ While the experiment defines the variables and specifications of the model, the 
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns).
 All simdesign helper functions need a properly defined nl object with a valid experiment design.
 Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
-A simulation design is attached to a nl object by using one of the simdesign helper functions:
-
-\code{
-nl@simdesign <- simdesign_lhs(nl=nl,
+A simulation design is attached to a nl object by using one of the simdesign helper functions:\preformatted{nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
                                nseeds=3,
                                precision=3)
@@ -93,12 +82,7 @@ Step 4: Run simulations
 All information that is needed to run the simulations is now stored within the nl object.
 The \code{run_nl_one()} function allows to run one specific simulation from the siminput parameter table.
 The \code{run_nl_all()} function runs a loop over all simseeds and rows of the parameter input table siminput.
-The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
-
-\code{
-
-results <- run_nl_all(nl = nl)
-
+The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).\preformatted{results <- run_nl_all(nl = nl)
 }
 
 Step 5: Attach results to nl and run analysis
@@ -106,10 +90,7 @@ Step 5: Attach results to nl and run analysis
 nlrx provides method specific analysis functions for each simulation design.
 Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.
 In order to run the \code{analyze_nl()} function, the simulation output has to be attached to the nl object first.
-After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
-
-\code{
-# Attach results to nl object:
+After attaching the simulation results, these can also be written to the defined outpath of the experiment object.\preformatted{# Attach results to nl object:
 setsim(nl, "simoutput") <- results
 # Write output to outpath of experiment within nl
 write_simoutput(nl)

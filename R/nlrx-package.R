@@ -24,7 +24,7 @@
 #' The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
 #' Depending on the operation system, paths to NetLogo and the model need to be adjusted.
 #'
-#' \code{
+#' ```
 #' library(nlrx)
 #' # Windows default NetLogo installation path (adjust to your needs!):
 #' netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
@@ -34,12 +34,11 @@
 #' netlogopath <- file.path("/home/NetLogo 6.0.3")
 #' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
 #' outpath <- file.path("/home/out")
-#'
 #' nl <- nl(nlversion = "6.0.3",
 #'          nlpath = netlogopath,
 #'          modelpath = modelpath,
 #'          jvmmem = 1024)
-#' }
+#' ```
 #'
 #' Step 2: Attach an experiment
 #'
@@ -47,7 +46,7 @@
 #' It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations.
 #' Details on the specific slots of the experiment class can be found in the package documentation (`?experiment`) and the "Advanced configuration" vignette.
 #'
-#' \code{
+#' ```
 #' nl@@experiment <- experiment(expname="wolf-sheep",
 #'                              outpath=outpath,
 #'                              repetition=1,
@@ -66,8 +65,7 @@
 #'                                               "sheep-reproduce" = 4,
 #'                                               "wolf-reproduce" = 5,
 #'                                               "show-energy?" = "false"))
-#'
-#' }
+#' ```
 #'
 #' Step 3: Attach a simulation design
 #'
@@ -77,12 +75,12 @@
 #' Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
 #' A simulation design is attached to a nl object by using one of the simdesign helper functions:
 #'
-#' \code{
+#' ```
 #' nl@@simdesign <- simdesign_lhs(nl=nl,
 #'                                samples=100,
 #'                                nseeds=3,
 #'                                precision=3)
-#' }
+#' ```
 #'
 #' Step 4: Run simulations
 #'
@@ -91,11 +89,9 @@
 #' The `run_nl_all()` function runs a loop over all simseeds and rows of the parameter input table siminput.
 #' The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
 #'
-#' \code{
-#'
+#' ```
 #' results <- run_nl_all(nl = nl)
-#'
-#' }
+#' ```
 #'
 #' Step 5: Attach results to nl and run analysis
 #'
@@ -104,14 +100,14 @@
 #' In order to run the \code{analyze_nl()} function, the simulation output has to be attached to the nl object first.
 #' After attaching the simulation results, these can also be written to the defined outpath of the experiment object.
 #'
-#' \code{
+#' ```
 #' # Attach results to nl object:
 #' setsim(nl, "simoutput") <- results
 #' # Write output to outpath of experiment within nl
 #' write_simoutput(nl)
 #' # Do further analysis:
 #' analyze_nl(nl)
-#' }
+#' ```
 #'
 #'
 #' @docType package
