@@ -223,9 +223,6 @@ util_eval_experiment <- function(nl) {
   if (is.na(getexp(nl, "outpath"))) {
     notvalid <- c(notvalid, "outpath")
   }
-  if (is.na(getexp(nl, "runtime"))) {
-    notvalid <- c(notvalid, "runtime")
-  }
   if (anyNA(getexp(nl, "metrics"))) {
     notvalid <- c(notvalid, "metrics")
   }

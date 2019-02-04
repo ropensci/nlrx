@@ -77,7 +77,7 @@ nl <- function(nlversion = "6.0.2",
 #' @param idfinal character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick
 #' @param idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
 #' @param runtime number of model ticks that should be run for each simulation
-#' @param evalticks vector of tick numbers defining when measurements are taken
+#' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
 #' @param metrics.turtles vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))
@@ -113,7 +113,9 @@ nl <- function(nlversion = "6.0.2",
 #' \emph{runtime}
 #'
 #' Defines the maximum number of simulation ticks that are executed.
-#'
+#' Use 0 or NA_integer_ to execute simulations without predefined number of ticks.
+#' Warning: This is only recommended in combination with a stop condition (see slot stopcond), or NetLogo models with a built-in stop condition.
+#' Otherwise, simulations might get stuck in endless loops.
 #'
 #'
 #' \strong{Depending on the simdesign, the following slots may be obligatory:}
@@ -156,7 +158,10 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' \emph{evalticks}
 #'
-#' A vector of integers, defining the ticks for which the defined metrics will be measured.
+#' Only applied if tickmetrics = TRUE.
+#' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+#' Set evalticks to NA_integer_ to measure on every tick.
+#'
 #'
 #' \emph{stopcond}
 #'
@@ -221,7 +226,7 @@ experiment <- function(expname = "defaultexp",
                        idfinal = NA_character_,
                        idrunnum = NA_character_,
                        runtime = 1,
-                       evalticks = seq(1,runtime,1),
+                       evalticks = NA_integer_,
                        stopcond= NA_character_,
                        metrics = c("count turtles"),
                        metrics.turtles = NA_character_,

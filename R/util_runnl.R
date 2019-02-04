@@ -54,6 +54,10 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   ## Add timeLimit:
   runtime <- getexp(nl, "runtime")
+  ## If runtime = NA_integer_ (infinite) change to 0 as required by BehaviorSpace
+  if (is.na(runtime)) {
+    runtime <- 0
+  }
   XML::addChildren(experiment, XML::newXMLNode("timeLimit",
     attrs = c(steps = runtime),
     parent = experiment
@@ -235,15 +239,17 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   } else {
 
     # We filter all evalticks lines from the table
-    NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
+    if (all(!is.na(getexp(nl, "evalticks"))))
+    {
+      NLtable <- NLtable %>% dplyr::filter(`[step]` %in% getexp(nl, "evalticks"))
+      # We then chek if there are ticks, that have reported no results:
+      noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in%
+                                                 NLtable$`[step]`)]
 
-    # We then chek if there are ticks, that have reported no results:
-    noeval <- getexp(nl, "evalticks")[!which(getexp(nl, "evalticks") %in%
-                                               NLtable$`[step]`)]
-
-    if (length(noeval) > 0) {
-      message(paste0("No model results reported for siminputrow ",
-                     siminputrow, " on ticks ", noeval))
+      if (length(noeval) > 0) {
+        message(paste0("No model results reported for siminputrow ",
+                       siminputrow, " on ticks ", noeval))
+      }
     }
   }
 
