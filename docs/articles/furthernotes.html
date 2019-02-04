@@ -120,7 +120,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-01-21</h4>
+            <h4 class="date">2019-02-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -241,17 +241,29 @@ unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span cla
 <p>However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stoachsticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices. Thus we suggest to set the experiment repetition to 1 and instead use the nseeds variable of the desired simdesign to run multiple simulations with different random seeds.</p>
 <p>In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds. Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.</p>
 </div>
-<div id="notes-on-measurements" class="section level4">
+<div id="notes-on-runtime-and-measurements" class="section level4">
 <h4 class="hasAnchor">
-<a href="#notes-on-measurements" class="anchor"></a>Notes on measurements</h4>
-<p>Three slots of the experiment class define how measurements are taken:</p>
+<a href="#notes-on-runtime-and-measurements" class="anchor"></a>Notes on runtime and measurements</h4>
+<p>The runtime of NetLogo model simulations can be controlled with two slots of the experiment class:</p>
 <ul>
-<li><p>tickmetrics, defines if measurements are taken at the end of the simulation or on each tick</p></li>
-<li><p>evalticks, if tickmetrics = “true” evalticks can be used to filter the results for defined ticks</p></li>
-<li><p>metrics, definition of valid NetLogo reporters that are used to collect data</p></li>
+<li>runtime - an integer that defines the maximum number of ticks that are simulated</li>
+<li>stopcond - a NetLogo reporter that reports true/false. Simulations are automatically stopped if TRUE is reported. Defaults to NA_character_ which means, no stop condition is applied.</li>
 </ul>
-<p>Due to the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.</p>
-<p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clear results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
+<p>Runtime can be set to 0 or NA_integer_ to allow for simulations without a pre-defined maximum runtime. However, this should only be done in combination with a proper stop condition (stopcond) or with NetLogo models that have a built-in stop condition. Otherwise, simulations might get stuck in endless loops.</p>
+<p>Two slots of the experiment class further define when measurements are taken:</p>
+<ul>
+<li>tickmetrics - defines if measurements are taken at the end of the simulation (final tick) or on each tick</li>
+<li>evalticks - only applied when tickmetrics = “true”; defines a vector of ticks for which output metrics are reported. Set to NA_integer_ to report all collected output.</li>
+</ul>
+<p>Depending on the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.</p>
+<p>Four slots of the experiment class further define which measurements are taken:</p>
+<ul>
+<li>metrics - vector of valid NetLogo reporters that are used to collect data</li>
+<li>metrics.turtles - vector of valid turtles-own variables that are used to collect turtle data</li>
+<li>metrics.patches - vector of valid patches-own variables that are used to collect patches data</li>
+<li>metrics.links - vector of valid links-own variables that are used to collect links data</li>
+</ul>
+<p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clean results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to<span class="op">-</span>report green.patches
   report count patches with [pcolor =<span class="st"> </span>green]
 end</code></pre></div>

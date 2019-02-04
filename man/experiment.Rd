@@ -7,11 +7,10 @@
 experiment(expname = "defaultexp", outpath = NA_character_,
   repetition = 1, tickmetrics = "true", idsetup = "setup",
   idgo = "go", idfinal = NA_character_, idrunnum = NA_character_,
-  runtime = 1, evalticks = seq(1, runtime, 1),
-  stopcond = NA_character_, metrics = c("count turtles"),
-  metrics.turtles = NA_character_, metrics.patches = NA_character_,
-  metrics.links = NA_character_, variables = list(),
-  constants = list(), ...)
+  runtime = 1, evalticks = NA_integer_, stopcond = NA_character_,
+  metrics = c("count turtles"), metrics.turtles = NA_character_,
+  metrics.patches = NA_character_, metrics.links = NA_character_,
+  variables = list(), constants = list(), ...)
 }
 \arguments{
 \item{expname}{A character string defining the name of the experiment}
@@ -32,7 +31,7 @@ experiment(expname = "defaultexp", outpath = NA_character_,
 
 \item{runtime}{number of model ticks that should be run for each simulation}
 
-\item{evalticks}{vector of tick numbers defining when measurements are taken}
+\item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
 
 \item{stopcond}{a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")}
 
@@ -81,6 +80,9 @@ These two class slots accept strings, or vectors of strings, defining NetLogo mo
 \emph{runtime}
 
 Defines the maximum number of simulation ticks that are executed.
+Use 0 or NA_integer_ to execute simulations without predefined number of ticks.
+Warning: This is only recommended in combination with a stop condition (see slot stopcond), or NetLogo models with a built-in stop condition.
+Otherwise, simulations might get stuck in endless loops.
 
 \strong{Depending on the simdesign, the following slots may be obligatory:}
 
@@ -122,7 +124,9 @@ For self-written output In NetLogo, we suggest to include this global variable w
 
 \emph{evalticks}
 
-A vector of integers, defining the ticks for which the defined metrics will be measured.
+Only applied if tickmetrics = TRUE.
+Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+Set evalticks to NA_integer_ to measure on every tick.
 
 \emph{stopcond}
 
