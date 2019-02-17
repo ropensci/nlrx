@@ -77,7 +77,13 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # Add turtle metrics if defined
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)")
+    # Loop trough breed sublists:
+    turtles.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
+      x.breed <- names(nl@experiment@metrics.turtles)[[x]]
+      x.metrics <- nl@experiment@metrics.turtles[[x]]
+      turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      return(turtles.reporter)
+    })
     metrics <- c(metrics, turtles.reporter)
   }
 
