@@ -19,7 +19,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   ### Attach a runnum variable if needed:
   if (!is.na(getexp(nl, "idrunnum"))) {
     runnum <- tibble::tibble(paste0("\"", getexp(nl, "expname"), "_", seed, "_",
-                            siminputrow, "\""))
+                                    siminputrow, "\""))
     names(runnum) <- getexp(nl, "idrunnum")
     simdata_run <- cbind(simdata_run, runnum)
   }
@@ -28,12 +28,12 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   nlXML <- XML::newXMLDoc()
   experiments <- XML::newXMLNode("experiments", doc = nlXML)
   experiment <- XML::newXMLNode("experiment",
-    attrs = c(
-      name = getexp(nl, "expname"),
-      repetitions = getexp(nl, "repetition"),
-      runMetricsEveryStep = getexp(nl, "tickmetrics")
-    ),
-    parent = experiments
+                                attrs = c(
+                                  name = getexp(nl, "expname"),
+                                  repetitions = getexp(nl, "repetition"),
+                                  runMetricsEveryStep = getexp(nl, "tickmetrics")
+                                ),
+                                parent = experiments
   )
 
   ## Add Setup, go
@@ -47,8 +47,8 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   if (!is.na(getexp(nl, "idfinal"))) {
     idfinal <- paste(getexp(nl, "idfinal"), sep = "\n", collapse = "\n")
     XML::addChildren(experiment, XML::newXMLNode("final",
-      idfinal,
-      parent = experiment
+                                                 idfinal,
+                                                 parent = experiment
     ))
   }
 
@@ -59,16 +59,16 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
     runtime <- 0
   }
   XML::addChildren(experiment, XML::newXMLNode("timeLimit",
-    attrs = c(steps = runtime),
-    parent = experiment
+                                               attrs = c(steps = runtime),
+                                               parent = experiment
   ))
 
   ## Add stop condition if provided:
   if (!is.na(getexp(nl, "stopcond"))) {
     stopcond <- paste(getexp(nl, "stopcond"), sep = "\n", collapse = "\n")
     XML::addChildren(experiment, XML::newXMLNode("exitCondition",
-      stopcond,
-      parent = experiment
+                                                 stopcond,
+                                                 parent = experiment
     ))
   }
 
@@ -76,7 +76,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   metrics <- getexp(nl, "metrics")
 
   # Add turtle metrics if defined
-  if (all(!is.na(getexp(nl, "metrics.turtles")))) {
+  if (length(getexp(nl, "metrics.turtles")) > 0) {
     # Loop trough breed sublists:
     turtles.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
@@ -95,47 +95,53 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # add link metrics if defined
   # nocov start
-  if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)")
+  if (length(getexp(nl, "metrics.links")) > 0) {
+    # Loop trough breed sublists:
+    links.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.links), function(x) {
+      x.breed <- names(nl@experiment@metrics.links)[[x]]
+      x.metrics <- c("breed", nl@experiment@metrics.links[[x]])
+      links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      return(links.reporter)
+    })
     metrics <- c(metrics, links.reporter)
   }
   # nocov end
 
   for (i in metrics) {
     XML::addChildren(experiment, XML::newXMLNode("metric",
-      i,
-      parent = experiment
+                                                 i,
+                                                 parent = experiment
     ))
   }
 
   ## Add parameters and values:
   for (i in seq_along(simdata_run)) {
     XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
-      attrs = c(
-        variable =
-          names(
-            simdata_run[i]
-          )
-      ),
-      XML::newXMLNode("value",
-        attrs =
-          c(
-            value =
-              simdata_run[[i]]
-          )
-      )
+                                                 attrs = c(
+                                                   variable =
+                                                     names(
+                                                       simdata_run[i]
+                                                     )
+                                                 ),
+                                                 XML::newXMLNode("value",
+                                                                 attrs =
+                                                                   c(
+                                                                     value =
+                                                                       simdata_run[[i]]
+                                                                   )
+                                                 )
     ))
   }
   ## If repetition > 1 we use a ranodm seed, otherwise the provided seed:
   if (getexp(nl, "repetition") == 1) {
     XML::addChildren(experiment, XML::newXMLNode("enumeratedValueSet",
-      attrs = c(
-        variable =
-          "random-seed"
-      ),
-      XML::newXMLNode("value",
-        attrs = c(value = seed)
-      )
+                                                 attrs = c(
+                                                   variable =
+                                                     "random-seed"
+                                                 ),
+                                                 XML::newXMLNode("value",
+                                                                 attrs = c(value = seed)
+                                                 )
     ))
   }
 
@@ -288,7 +294,6 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       names(NLtable)[names(NLtable) == turtles.reporter] <- col.name
       NLtable[, grepl(col.name, names(NLtable))] <-
         list(.util_clean_metrics_turtles(NLtable, nl, col.name, x.metrics))
-      return(turtles.reporter)
     }
 
   }
@@ -304,6 +309,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   # nocov start
   if (all(!is.na(getexp(nl, "metrics.links")))) {
 
+    ## Rename column and clean link metrics
     for(x in seq_along(nl@experiment@metrics.links)) {
       x.breed <- names(nl@experiment@metrics.links)[[x]]
       x.metrics <- c("breed", nl@experiment@metrics.links[[x]])
@@ -312,10 +318,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       names(NLtable)[names(NLtable) == links.reporter] <- col.name
       NLtable[, grepl(col.name, names(NLtable))] <-
         list(.util_clean_metrics_links(NLtable, nl, col.name, x.metrics))
-      return(links.reporter)
     }
 
-    ## Rename column and clean link metrics
+
     NLtable <- NLtable %>% dplyr::rename(metrics.links =
                                            paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)"))
     NLtable[, grepl(c("metrics.links"), names(NLtable))] <-
@@ -341,6 +346,8 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x))))
+    patches_owns$agent <- "patches"
+    patches_owns$breed <- NA
     })
     return(patches_owns)
   })
@@ -370,18 +377,21 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 }
 
 # nocov start
-.util_clean_metrics_links <- function(NLtable, nl) {
+.util_clean_metrics_links <- function(NLtable, nl, col.name, metrics) {
 
   links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
-  links_string <- stringr::str_split(links_string$metrics.links, " ")
+  links_string <- stringr::str_split(dplyr::pull(links_string, col.name), " ")
   links_string <- purrr::map(links_string, function(x) {
     links_owns <- tibble::as.tibble(x = x)
-    links_owns <- tidyr::separate(links_owns, value,
-                                  getexp(nl, "metrics.links"), sep=",")
+    links_owns <- tidyr::separate(links_owns,
+                                  value,
+                                  metrics,
+                                  sep=",")
     links_owns <- dplyr::mutate_all(links_owns, function(x) {
       suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x))))
+    links_owns$agent <- "links"
     })
     return(links_owns)
   })
@@ -471,7 +481,7 @@ util_read_write_batch <- function(nl) {
       # Extensions Folder:
       extensionspath <- file.path(getnl(nl, "nlpath"), "app/extensions")
       jarpath <- file.path(getnl(nl, "nlpath"), paste0("app/netlogo-",
-                        getnl(nl, "nlversion"), ".jar"))
+                                                       getnl(nl, "nlversion"), ".jar"))
 
       # jvmoptions string:
       jvmoptsline <- paste0("SET \"JVM_OPTS=-Xmx",
