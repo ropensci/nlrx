@@ -16,7 +16,7 @@ network of model procedures (igraph)
 Create NetLogo procedure network
 }
 \details{
-procedure_nw reads model code from the provided model files.
+Reads model code from the provided model files.
 The procedure identifies NetLogo proecdures and searches for procedure calls within the code.
 From this data, an igraph network is created and returned.
 This network can be used to plot the model procedure network and identify model components.
