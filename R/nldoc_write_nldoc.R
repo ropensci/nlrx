@@ -135,7 +135,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   }
 
   ## Add gui elements if wanted:
-  if (!is.na(noxygen_gui))
+  if (!is.na(noxygen_gui[1]))
   {
     noxygencode <- c(noxygencode, "#GUI elements")
     # Table header:
@@ -159,7 +159,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     }
   }
 
-  if (!is.na(noxygen_it))
+  if (!is.na(noxygen_it[1]))
   {
     noxygencode <- c(noxygencode, "#Info Tab")
 
@@ -172,7 +172,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
 
 
   ## Add bs elements if wanted:
-  if (!is.na(noxygen_bs))
+  if (!is.na(noxygen_bs[1]))
   {
     noxygencode <- c(noxygencode, "#Behavior Space Experiments")
 
