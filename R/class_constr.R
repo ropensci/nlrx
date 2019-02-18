@@ -231,7 +231,7 @@ experiment <- function(expname = "defaultexp",
                        metrics = c("count turtles"),
                        metrics.turtles = list(),
                        metrics.patches = NA_character_,
-                       metrics.links = NA_character_,
+                       metrics.links = list(),
                        variables = list(),
                        constants = list(),
                        ...) {

@@ -41,7 +41,7 @@
       metrics = "character",
       metrics.turtles = "list",
       metrics.patches = "character",
-      metrics.links = "character",
+      metrics.links = "list",
       variables = "list",
       constants = "list"
     ),
@@ -61,7 +61,7 @@
       metrics = NA_character_,
       metrics.turtles = list(),
       metrics.patches = NA_character_,
-      metrics.links = NA_character_,
+      metrics.links = list(),
       variables = list(),
       constants = list()
     )

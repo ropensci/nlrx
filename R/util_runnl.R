@@ -76,7 +76,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   metrics <- getexp(nl, "metrics")
 
   # Add turtle metrics if defined
-  if (all(!is.na(getexp(nl, "metrics.turtles")))) {
+  if (length(getexp(nl, "metrics.turtles")) > 0) {
     # Loop trough breed sublists:
     turtles.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
@@ -95,8 +95,14 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # add link metrics if defined
   # nocov start
-  if (all(!is.na(getexp(nl, "metrics.links")))) {
-    links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)")
+  if (length(getexp(nl, "metrics.links")) > 0) {
+    # Loop trough breed sublists:
+    links.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.links), function(x) {
+      x.breed <- names(nl@experiment@metrics.links)[[x]]
+      x.metrics <- c("breed", nl@experiment@metrics.links[[x]])
+      links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      return(links.reporter)
+    })
     metrics <- c(metrics, links.reporter)
   }
   # nocov end
