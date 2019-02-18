@@ -319,12 +319,6 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       NLtable[, grepl(col.name, names(NLtable))] <-
         list(.util_clean_metrics_links(NLtable, nl, col.name, x.metrics))
     }
-
-
-    NLtable <- NLtable %>% dplyr::rename(metrics.links =
-                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.links"), collapse = paste0("\",\"")), ")] of links)"))
-    NLtable[, grepl(c("metrics.links"), names(NLtable))] <-
-      list(.util_clean_metrics_links(NLtable, nl))
   }
   # nocov end
 
@@ -379,7 +373,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 # nocov start
 .util_clean_metrics_links <- function(NLtable, nl, col.name, metrics) {
 
-  links_string <- NLtable[, grepl(c("metrics.links"), names(NLtable))]
+  links_string <- NLtable[, grepl(col.name, names(NLtable))]
   links_string <- stringr::str_split(dplyr::pull(links_string, col.name), " ")
   links_string <- purrr::map(links_string, function(x) {
     links_owns <- tibble::as.tibble(x = x)
@@ -391,8 +385,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x))))
-    links_owns$agent <- "links"
+
     })
+    links_owns$agent <- "links"
     return(links_owns)
   })
   return(links_string)
