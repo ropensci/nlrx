@@ -45,8 +45,8 @@ Finally, the document is rendered in the specified format.
 \dontrun{
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/0_Fire_NetLogoDoc.nlogo",
-                "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/1_Fire_nls_example.nls")
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf\%20Sheep\%20Predation.nlogo",
+"https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf\%20Sheep\%20Predation\%20Extra.nls")
 
 # Create documentation:
 nldoc(modelfiles = modelfiles,
