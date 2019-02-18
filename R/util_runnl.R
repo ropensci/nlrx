@@ -80,7 +80,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
     # Loop trough breed sublists:
     turtles.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
-      x.metrics <- nl@experiment@metrics.turtles[[x]]
+      x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
       turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
       return(turtles.reporter)
     })
@@ -279,11 +279,18 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   }
 
   if (all(!is.na(getexp(nl, "metrics.turtles")))) {
-    ## Rename column and clean turtle metrics
-    NLtable <- NLtable %>% dplyr::rename(metrics.turtles =
-                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.turtles"), collapse = paste0("\",\"")), ")] of turtles)"))
-    NLtable[, grepl(c("metrics.turtles"), names(NLtable))] <-
-      list(.util_clean_metrics_turtles(NLtable, nl))
+
+    for(x in seq_along(nl@experiment@metrics.turtles)) {
+      x.breed <- names(nl@experiment@metrics.turtles)[[x]]
+      x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
+      col.name <- paste0("metrics.", x.breed)
+      turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      names(NLtable)[names(NLtable) == turtles.reporter] <- col.name
+      NLtable[, grepl(col.name, names(NLtable))] <-
+        list(.util_clean_metrics_turtles(NLtable, nl, col.name, x.metrics))
+      return(turtles.reporter)
+    }
+
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
@@ -329,19 +336,22 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 }
 
 
-.util_clean_metrics_turtles <- function(NLtable, nl) {
+.util_clean_metrics_turtles <- function(NLtable, nl, col.name, metrics) {
 
-  turtles_string <- NLtable[, grepl(c("metrics.turtles"), names(NLtable))]
-  turtles_string <- stringr::str_split(turtles_string$metrics.turtles, " ")
+  turtles_string <- NLtable[, grepl(col.name, names(NLtable))]
+  turtles_string <- stringr::str_split(dplyr::pull(turtles_string, col.name), " ")
   turtles_string <- purrr::map(turtles_string, function(x) {
     turtles_owns <- tibble::as.tibble(x = x)
-    turtles_owns <- tidyr::separate(turtles_owns, value,
-                                    getexp(nl, "metrics.turtles"), sep=",")
+    turtles_owns <- tidyr::separate(turtles_owns,
+                                    value,
+                                    metrics,
+                                    sep=",")
     turtles_owns <- dplyr::mutate_all(turtles_owns, function(x) {
       suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x))))
     })
+    turtles_owns$agent <- "turtles"
     return(turtles_owns)
   })
   return(turtles_string)
