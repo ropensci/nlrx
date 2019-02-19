@@ -6,6 +6,7 @@
 #'
 #' @return tibble with spatial data objects
 #' @details
+#' Unnests output from run_nl into long format.
 #'
 #' @examples
 #'
@@ -98,12 +99,12 @@ unnest_simoutput <- function(nl){
     }
 
     not_unique <-
-      turtle.metrics[ave(seq_along(turtle.metrics), turtle.metrics, FUN = length) == 1]
+      turtle.metrics[stats::ave(seq_along(turtle.metrics), turtle.metrics, FUN = length) == 1]
     grps <-
       names(turtles_data[[1]])[!(names(turtles_data[[1]]) %in% not_unique)]
 
     # join turtle data
-    turtles <- turtles_data %>% purrr::reduce(full_join, by = grps)
+    turtles <- turtles_data %>% purrr::reduce(dplyr::full_join, by = grps)
   } else {
     turtles <- getsim(nl, "simoutput")[common_names]
     turtles <- turtles[0,]
@@ -137,19 +138,19 @@ unnest_simoutput <- function(nl){
     }
 
     not_unique <-
-      links.metrics[ave(seq_along(links.metrics), links.metrics, FUN = length) == 1]
+      links.metrics[stats::ave(seq_along(links.metrics), links.metrics, FUN = length) == 1]
     grps <-
       names(links_data[[1]])[!(names(links_data[[1]]) %in% not_unique)]
 
     # join turtle data
-    links <- links_data %>% purrr::reduce(full_join, by = grps)
+    links <- links_data %>% purrr::reduce(dplyr::full_join, by = grps)
   } else {
     links <- getsim(nl, "simoutput")[common_names]
     links <- links[0,]
   }
 
   # join turtles, patches and links
-  agents <- suppressMessages(list(turtles, patches, links) %>% purrr::reduce(full_join))
+  agents <- suppressMessages(list(turtles, patches, links) %>% purrr::reduce(dplyr::full_join))
 
   return(agents)
 }
