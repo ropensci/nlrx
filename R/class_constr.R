@@ -80,9 +80,9 @@ nl <- function(nlversion = "6.0.2",
 #' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
-#' @param metrics.turtles vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))
+#' @param metrics.turtles a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))
 #' @param metrics.patches vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))
-#' @param metrics.links vector of strings defining valid links-own variables that are taken as output measurements (e.g. c("end1", "end2"))
+#' @param metrics.links a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("end1", "end2")))
 #' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))
 #' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
 #' @param ... ...
@@ -168,12 +168,31 @@ nl <- function(nlversion = "6.0.2",
 #' The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
 #' Each simulation will be stopped automatically, once the reporter reports true.
 #'
-#' \emph{metrics.turtles, metrics.patches}
+#' \emph{metrics.patches}
 #'
-#' These two slots can be used to enter turtles-own (metrics.turtles) and patches-own (metrics.patches) variables of the NetLogo model.
-#' These agent variables are measured in addition to the defined metrics.
-#' After attaching the simulation results to the nl object, the measured output from these agent variables needs to be postprocessed by \link[nlrx]{get_nl_spatial}.
-#' Please note that NetLogo models may contain a huge number of patches and turtles and output measurements of agent variables on each tick may need a lot of ressources.
+#' The metrics.patches slot accepts a vector of valid patches-own variables of the NetLogo model.
+#' These patch variables are measured in addition to the defined metrics.
+#' Results of these metrics will be nested inside the output results tibble of the simulations.
+#' Please note that NetLogo models may contain a huge number of patches and output measurements of agent variables on each tick may need a lot of ressources.
+#'
+#' \emph{metrics.turtles}
+#'
+#' The metrics.turtles slot accepts a list with named vectors of valid turtle breed metrics.
+#' Each name of a vector in this list defines a specified breed of the NetLogo model, whereas the vector defines the variables that are measured for this breed.
+#' For example metrics.turtles = list("sheep"=c("color"), "wolves"=c("who")) - would measure the color of each sheep and the who number of each wolf agent.
+#' To measure <turtles-own> variables for all turtles, use "turtles" = c(...).
+#' Be aware, that NetLogo will produce runtime errors if you measure <breed-own> variables for agents that do not belong to this breed.
+#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
+#'
+#' \emph{metrics.links}
+#'
+#' The metrics.links slot accepts a list with named vectors of valid link breed metrics.
+#' Each name of a vector in this list defines a specified link breed of the NetLogo model, whereas the vector defines the variables that are measured for this link breed.
+#' For example metrics.links = list("linktype-a"=c("end1"), "linktype-b"=c("end2")) - would measure the start agent of each linktype-a link and the end agent of each linktype-b link.
+#' To measure <links-own> variables for all links, use "links" = c(...).
+#' Be aware, that NetLogo will produce runtime errors if you measure <link-breed-own> variables for agents that do not belong to this breed.
+#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
+#'
 #'
 #'
 #' @examples
@@ -196,9 +215,9 @@ nl <- function(nlversion = "6.0.2",
 #'                              metrics.turtles=list("turtles" = c("who",
 #'                                                "pxcor",
 #'                                                "pycor",
-#'                                                "color"),
+#'                                                "color")),
 #'                              metrics.patches=c("pxcor", "pycor", "pcolor"),
-#'                              metrics.links=c("end1","end2"),
+#'                              metrics.links=list("links" = c("end1","end2")),
 #'                              variables = list('initial-number-sheep' =
 #'                              list(min=50, max=150, step=10, qfun="qunif"),
 #'                                               'initial-number-wolves' =

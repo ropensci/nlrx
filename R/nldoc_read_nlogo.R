@@ -23,7 +23,7 @@ nldoc_read_nlogo <- function(modelfiles)
   for (i in 1:length(modelfiles))
   {
     # Open the netlogo file and store it in a string vector
-    completecode.i <- readLines(modelfiles[i])
+    completecode.i <- readLines(modelfiles[i], warn=FALSE)
 
     # Find the line in the NetLogoCode where the interface definiton starts (separator: @#$#@#$#@)
     separator <- grep("@#$#@#$#@", completecode.i, fixed=TRUE)
