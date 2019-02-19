@@ -18,13 +18,10 @@
 
 nl_to_points <- function(nl, coords){
 
-  turtles.cols <- c()
   turtles.metrics <- c()
 
   for (x in seq_along(nl@experiment@metrics.turtles)) {
-    x.breed <- names(nl@experiment@metrics.turtles)[[x]]
     x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
-    turtles.cols[x] <- paste0("metrics.", x.breed)
     turtles.metrics <- c(turtles.metrics, x.metrics)
   }
 
