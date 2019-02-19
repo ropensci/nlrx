@@ -19,18 +19,21 @@ unnest_simoutput <- function(nl){
   if (length(nl@experiment@metrics.turtles) > 0) {
     tmet_exist <- TRUE
   } else {
+    tmet_exist <- FALSE
     nl@simdesign@simoutput$metrics.turtles <- NA
   }
 
   if (length(nl@experiment@metrics.patches) > 0) {
     pmet_exist <- TRUE
   } else {
+    pmet_exist <- FALSE
     nl@simdesign@simoutput$metrics.patches <- NA
   }
 
   if (length(nl@experiment@metrics.links) > 0) {
     lmet_exist <- TRUE
   } else {
+    lmet_exist <- FALSE
     nl@simdesign@simoutput$metrics.links <- NA
   }
 
