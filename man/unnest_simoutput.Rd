@@ -15,6 +15,9 @@ tibble with spatial data objects
 \description{
 Turn results from NetLogo in spatial data objects
 }
+\details{
+Unnests output from run_nl into long format.
+}
 \examples{
 
 }
