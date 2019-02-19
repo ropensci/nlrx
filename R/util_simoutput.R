@@ -148,4 +148,5 @@ unnest_simoutput <- function(nl){
   # join turtles, patches and links
   agents <- list(turtles, patches, links) %>% purrr::reduce(full_join)
 
+  return(agents)
 }
