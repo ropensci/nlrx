@@ -58,9 +58,6 @@ unnest_simoutput <- function(nl){
     patch.metrics <- NA
   }
 
-  agents.cols <- c(turtles.cols, patches.cols, links.cols)
-  common_names <- names(getsim(nl, "simoutput"))[!(names(getsim(nl, "simoutput")) %in% agents.cols)]
-
   # get links column names and metrics vector
   if (lmet_exist) {
     links.cols <- c()
@@ -76,6 +73,9 @@ unnest_simoutput <- function(nl){
     links.cols <- "metrics.links"
     links.metrics <- NA
   }
+
+  agents.cols <- c(turtles.cols, patches.cols, links.cols)
+  common_names <- names(getsim(nl, "simoutput"))[!(names(getsim(nl, "simoutput")) %in% agents.cols)]
 
   # select turtle data
   if (tmet_exist) {
