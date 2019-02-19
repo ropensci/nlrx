@@ -24,7 +24,7 @@ unnest_simoutput <- function(nl){
     nl@simdesign@simoutput$metrics.turtles <- NA
   }
 
-  if (length(nl@experiment@metrics.patches) > 0) {
+  if (all(!is.na(getexp(nl, "metrics.patches")))) {
     pmet_exist <- TRUE
   } else {
     pmet_exist <- FALSE
