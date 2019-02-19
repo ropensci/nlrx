@@ -284,7 +284,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     NLtable <- NArow
   }
 
-  if (all(!is.na(getexp(nl, "metrics.turtles")))) {
+  if (length(nl@experiment@metrics.turtles) > 0) {
 
     for(x in seq_along(nl@experiment@metrics.turtles)) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
@@ -298,7 +298,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   }
 
-  if (all(!is.na(getexp(nl, "metrics.patches")))) {
+  if (length(nl@experiment@metrics.patches) > 0) {
     ## Rename column and clean patch metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.patches =
                                            paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
@@ -307,7 +307,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   }
 
   # nocov start
-  if (all(!is.na(getexp(nl, "metrics.links")))) {
+  if (length(nl@experiment@metrics.links) > 0) {
 
     ## Rename column and clean link metrics
     for(x in seq_along(nl@experiment@metrics.links)) {
