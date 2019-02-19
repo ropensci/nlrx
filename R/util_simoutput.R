@@ -134,7 +134,7 @@ unnest_simoutput <- function(nl){
     }
 
     not_unique <-
-      turtle.metrics[ave(seq_along(turtle.metrics), turtle.metrics, FUN = length) == 1]
+      links.metrics[ave(seq_along(links.metrics), links.metrics, FUN = length) == 1]
     grps <-
       names(links_data[[1]])[!(names(links_data[[1]]) %in% not_unique)]
 
