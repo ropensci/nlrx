@@ -128,7 +128,7 @@
       <h1>Spatial Output</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-02-18</h4>
+            <h4 class="date">2019-02-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/articles/spatial-output.Rmd"><code>vignettes/articles/spatial-output.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-output.Rmd</code></div>
@@ -140,9 +140,26 @@
 <div id="gathering-spatial-output-from-netlogo-model-simulations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gathering-spatial-output-from-netlogo-model-simulations" class="anchor"></a>Gathering spatial output from NetLogo model simulations</h2>
-<p>nlrx is able to gather spatial output from your NetLogo simulations. The experiment class object provides two slots for measuring turtles and patches. The metrics.turtles slot accepts any vector of strings containing valid turtles-own variables of your NetLogo model. The metrics.patches slot accepts any vector of strings containing valid patches-own variables of your NetLogo model. The metrics.links slot accepts any vector of strings containing valid links-own variables of your NetLogo model.</p>
+<p>nlrx is able to gather spatial output from your NetLogo simulations. The experiment class object provides slots for measuring turtles, patches and link variables:</p>
+<ul>
+<li>metrics.turtles - a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list(“turtles” = c(“who”, “pxcor”, “pycor”, “color”))</li>
+<li>metrics.patches - vector of valid patches-own variables that are used to collect patches data (e.g. c(“pxcor”, “pycor”, “pcolor”))</li>
+<li>metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list(“links” = c(“[who] of end1”, “[who] of end2”)))</li>
+</ul>
 <p>Basically, you can enter any variable of your model that is listed in turtles-own, patches-own or links-own, however if you add variables that contain strings, these strings must not contain any whitespaces or the output data will not be parsed correctly.</p>
-<p>For instance, we might want to measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We can then define our experiment and run the simulations:</p>
+<p>If your model has agent variables that only exist for one specific breed (<breed-own>), measuring those variables for all turtles would result in a runtime error. Thus, different vectors of metrics can be provided for each specific breed (e.g. metrics.turtles = list(“breed_A” = c(“who”, “pxcor”, “pycor”, “var_of_breed_A”), “breed_B” = c(“who”, “pxcor”, “pycor”, “var_of_breed_B”))). This also works for links breeds.</breed-own></p>
+<p>If an experiment contains any agent metrics, the results of these metrics will be nested inside the output results tibble. In order to utilize these data, they need to be postprocessed. nlrx provides two types of postprocessing functions:</p>
+<ul>
+<li>
+<code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> - This function may be used to unnest the data within the output results tibble. It reports a long tibble containing all parameters, variables and agent metrics. This format is easily subsettable and is suited to produce plots using the ggplot package, or create animations with gganimate.</li>
+<li>
+<code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code>, <code><a href="../../reference/nl_to_raster.html">nl_to_raster()</a></code>, <code><a href="../../reference/nl_to_points.html">nl_to_points()</a></code> - These functions create spatial objects from the nested data within the output results tibble.</li>
+</ul>
+</div>
+<div id="application-example-1-wolf-sheep-predation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#application-example-1-wolf-sheep-predation" class="anchor"></a>Application Example 1: Wolf Sheep Predation</h2>
+<p>We use the Wolf Sheep Model from the NetLogo models library to capture metrics of patches and turtles. We measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We define our experiment accordingly and run the simulations:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(nlrx)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gganimate) <span class="co"># devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency</span>
@@ -169,12 +186,9 @@ nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class=
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
                             <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   
                             <span class="dt">idgo =</span> <span class="st">"go"</span>,         
-                            <span class="dt">idfinal =</span> <span class="ot">NA_character_</span>,  
-                            <span class="dt">idrunnum =</span> <span class="ot">NA_character_</span>,
                             <span class="dt">runtime =</span> <span class="dv">100</span>,
-                            <span class="dt">evalticks =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">1</span>,<span class="dv">100</span>),
                             <span class="dt">metrics =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"count sheep"</span>,<span class="st">"count wolves"</span>),
-                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>),
+                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>)),
                             <span class="dt">metrics.patches =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>),
                             <span class="dt">constants =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"model-version"</span> =<span class="st"> "</span><span class="ch">\"</span><span class="st">sheep-wolves-grass</span><span class="ch">\"</span><span class="st">"</span>,
                                              <span class="st">'initial-number-sheep'</span> =<span class="st"> </span><span class="dv">100</span>,
@@ -194,88 +208,135 @@ nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="
 <span class="co"># Run simulations and store output in results</span>
 results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</code></pre></div>
 <p>This experiment will run for 100 ticks (runtime) and collects all metrics, metrics.turtles and metrics.patches on each tick (evalticks). Thus, executing <code><a href="../../reference/run_nl_all.html">run_nl_all()</a></code> will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble. These lists already contain all measured agent metrics and can for example be used to analyze distributions of these variables for specific agent groups.</p>
-<p>In case of spatial data containing coordinates (pxcor/pycor for patches or pxcor/pycor and/or xcor/ycor for turtles), nlrx provides a function to transform the measured output into spatial objects. In order to use the function <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> the simulation output results tibble needs to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="../../reference/setsim.html">setsim(nl, "simoutput")</a></code>.</p>
+<div id="postprocessing-example-1-unnest_simoutput" class="section level4">
+<h4 class="hasAnchor">
+<a href="#postprocessing-example-1-unnest_simoutput" class="anchor"></a>Postprocessing example 1: <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code>
+</h4>
+<p>We use the <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> function to create a large tibble format which we cna use for plotting. In order to use this function, the simulation output need to be attached to the nl object first (otherwise a warning will appear). The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="../../reference/setsim.html">setsim(nl, "simoutput")</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attach results to nl object:</span>
 <span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
 
 <span class="co"># Report spatial data:</span>
-results_spatial &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,
-                                  <span class="dt">turtles =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">patches =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">turtle_coords =</span> <span class="st">"px"</span>,
-                                  <span class="dt">format=</span><span class="st">"spatial"</span>)</code></pre></div>
-<p>The <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> function uses 4 function parameters:</p>
-<ul>
-<li>turtles - TRUE/FALSE, if true the function will transform the measured metrics.turtles to spatial sf objects.</li>
-<li>patches - TRUE/FALSE, if true the function will transform the measured metrics.patches to spatial raster objects. In case there are several patches variables besides the coordinates, the result will be a rasterstack containing one raster for each patch variable</li>
-<li>turtle_coords - “px”/“x”, because turtle coordinates can be measured as pxcor/pycor or xcor/ycor this string defines which coordinates are used for creating the turtle sf objects. For instance, you can measure both coordinate pairs by entering them into metrics.turtles, and then decide for one type of coordinates to create spatial objects.</li>
-<li>format - “spatial”/“tibble”, the “spatial” option will report the generated output as tibble containing the spatial objects (raster/rasterStack, sf). You can also choose format “tibble” to report the spatial objects as a long format tibble, that can be used for plotting landscapes and turtles with ggplot2.</li>
-</ul>
-</div>
-<div id="visualization-examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#visualization-examples" class="anchor"></a>Visualization examples</h2>
-<p>The spatial tibble output from <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code> can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Report spatial data as tibble:</span>
-results_spatial_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,
-                                  <span class="dt">turtles =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">patches =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">turtle_coords =</span> <span class="st">"px"</span>,
-                                  <span class="dt">format=</span><span class="st">"tibble"</span>)
-
+results_unnest &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(nl)</code></pre></div>
+<p>The spatial tibble output from <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 <span class="co"># Split tibble into turtles and patches tibbles and select each 10th step:</span>
-results_spatial_tibble_turtles &lt;-<span class="st"> </span>results_spatial_tibble <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group<span class="op">==</span><span class="st">"turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">80</span>,<span class="dv">10</span>))
-results_spatial_tibble_patches &lt;-<span class="st"> </span>results_spatial_tibble <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group<span class="op">==</span><span class="st">"patches"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(step <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">80</span>,<span class="dv">10</span>))
+results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">80</span>,<span class="dv">10</span>))
+results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"patches"</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">0</span>,<span class="dv">80</span>,<span class="dv">10</span>))
 
 <span class="co"># Create facet plot:</span>
 <span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>step, <span class="dt">ncol=</span><span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>, <span class="dt">ncol=</span><span class="dv">4</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_spatial_tibble_patches, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(pcolor))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_spatial_tibble_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pxcor, <span class="dt">fill=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(pcolor))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Output maps of each 10th simulation tick"</span>)</code></pre></div>
 <p><img src="wolfsheep_world.png" align="center" width="100%"></p>
-<p>Using the gganimate package(<a href="https://github.com/thomasp85/gganimate" class="uri">https://github.com/thomasp85/gganimate</a>), it is even possible to generate animated plots from this spatial data tibble. Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with <code><a href="../../reference/get_nl_spatial.html">get_nl_spatial()</a></code>.</p>
+<p>Using the gganimate package(<a href="https://github.com/thomasp85/gganimate" class="uri">https://github.com/thomasp85/gganimate</a>), it is even possible to generate animated plots from this spatial data tibble. Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-<span class="co"># Report spatial data as tibble:</span>
-results_spatial_tibble &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/get_nl_spatial.html">get_nl_spatial</a></span>(nl,
-                                  <span class="dt">turtles =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">patches =</span> <span class="ot">TRUE</span>,
-                                  <span class="dt">turtle_coords =</span> <span class="st">"px"</span>,
-                                  <span class="dt">format=</span><span class="st">"tibble"</span>)
-
 <span class="co"># Split tibble into turtles and patches tibbles:</span>
-results_spatial_tibble_turtles &lt;-<span class="st"> </span>results_spatial_tibble <span class="op">%&gt;%</span><span class="st"> </span>
+results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group<span class="op">==</span><span class="st">"turtles"</span>)
-results_spatial_tibble_patches &lt;-<span class="st"> </span>results_spatial_tibble <span class="op">%&gt;%</span><span class="st"> </span>
+results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(group<span class="op">==</span><span class="st">"patches"</span>)
 
 <span class="co"># Create an animated plot, using the step column as animation variable</span>
 p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_spatial_tibble_patches, <span class="kw">aes</span>(<span class="dt">x=</span>patches_x, <span class="dt">y=</span>patches_y, <span class="dt">fill=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(pcolor))) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_spatial_tibble_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">group=</span>who, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">fill=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/factor">factor</a></span>(pcolor))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">group=</span>who, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">transition_time</span>(step) <span class="op">+</span>
+<span class="st">  </span><span class="kw">transition_time</span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">'Step: {frame_time}'</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_void</span>()
 
 <span class="co"># Animate the plot and use 1 frame for each step of the model simulations</span>
-gganimate<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(results_spatial_tibble<span class="op">$</span>step), <span class="dt">width=</span><span class="dv">400</span>, <span class="dt">height=</span><span class="dv">400</span>, <span class="dt">fps=</span><span class="dv">4</span>)
+gganimate<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p1, <span class="dt">nframes =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Extremes">max</a></span>(results_unnest<span class="op">$</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>), <span class="dt">width=</span><span class="dv">400</span>, <span class="dt">height=</span><span class="dv">400</span>, <span class="dt">fps=</span><span class="dv">4</span>)
 <span class="kw">anim_save</span>(<span class="st">"wolfsheep_world.gif"</span>)</code></pre></div>
 <center>
 <img src="wolfsheep_world.gif" align="center" width="50%">
 </center>
+</div>
+<div id="postprocessing-example-2-nl_to_raster-and-nl_to_points" class="section level4">
+<h4 class="hasAnchor">
+<a href="#postprocessing-example-2-nl_to_raster-and-nl_to_points" class="anchor"></a>Postprocessing example 2: <code><a href="../../reference/nl_to_raster.html">nl_to_raster()</a></code> and <code><a href="../../reference/nl_to_points.html">nl_to_points()</a></code>
+</h4>
+</div>
+</div>
+<div id="application-example-2-giant-component" class="section level2">
+<h2 class="hasAnchor">
+<a href="#application-example-2-giant-component" class="anchor"></a>Application example 2: Giant component</h2>
+<p>We use the Giant Component model from the NetLogo models library to capture metrics of turtles and links. The <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code> function generates igraph objects from measured turtles and links data. It produces an igraph object for each row of the simoutput results tibble. Thus, it reports one igraph network for each combination of random-seed, siminputrow and step.</p>
+<p>In order to generate igraph objects some metrics are mandatory: The metrics.turtles slot of the experiment must contain “who” numbers (see example experiment). Additional turtle metrics will be stored as properties of the igraph vertices. The metrics.links slot of the experiment must contain “who” numbers of link end1 and end2 (see example experiment). Additional link metrics will be stored as properties of the igraph edges.</p>
+<p>For our application example, we are mainly interested in the final network structure. We want to measure who numbers and color of turtles, and who numbers of end1 and end2 of links on the final tick. We define our experiment accordingly and run the simulations:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(nlrx)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(igraph)
+
+<span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
+netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.4"</span>)
+modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)
+outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"C:/out"</span>)
+<span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
+netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.4"</span>)
+modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)
+outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"/home/out"</span>)
+
+nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,
+         <span class="dt">nlpath =</span> netlogopath,
+         <span class="dt">modelpath =</span> modelpath,
+         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
+
+nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"networks"</span>,
+                            <span class="dt">outpath=</span>outpath,
+                            <span class="dt">repetition=</span><span class="dv">1</span>,
+                            <span class="dt">tickmetrics=</span><span class="st">"false"</span>,
+                            <span class="dt">idsetup=</span><span class="st">"setup"</span>,
+                            <span class="dt">idgo=</span><span class="st">"go"</span>,
+                            <span class="dt">runtime=</span><span class="dv">50</span>,
+                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"who"</span>, <span class="st">"color"</span>)),
+                            <span class="dt">metrics.links =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"links"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"[who] of end1"</span>, <span class="st">"[who] of end2"</span>)),
+                            <span class="dt">constants =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"num-nodes"</span> =<span class="st"> </span><span class="dv">80</span>,
+                                             <span class="st">"layout?"</span> =<span class="st"> "true"</span>))
+
+nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(nl, <span class="dv">1</span>)
+results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(nl)</code></pre></div>
+<p>In order to execute th <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code> function, the output results need to be attached to the nl object. Afterwards we can create the igraph object with <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Attach results to nl object:</span>
+<span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results
+<span class="co"># Create igraph:</span>
+nl.graph &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_graph.html">nl_to_graph</a></span>(nl)</code></pre></div>
+<p>The igraph objects are attached to the output results tibble in the newly generated column “spatial.links”. In our case, we only have one row of results and thus only one igraph object. We can now extract this object and do some plotting, using the igraph plotting function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Extract graph of tick 1:
+nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]
+## Set vertex colors by measured color variable:
+vcols &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"7"</span> =<span class="st"> "grey"</span>, <span class="st">"15"</span> =<span class="st"> "red"</span>)
+<span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>vcols[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/character">as.character</a></span>(<span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color)]
+## Set edge colors by measured link breed:
+ecols &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"links"</span> =<span class="st"> "black"</span>)
+<span class="kw">E</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>ecols[<span class="kw">E</span>(nl.graph.i)<span class="op">$</span>breed]
+
+## Plot:
+<span class="kw">plot.igraph</span>(nl.graph.i, <span class="dt">vertex.size=</span><span class="dv">8</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">edge.arrow.size=</span><span class="fl">0.2</span>)</code></pre></div>
+<p>We can also calculate network metrics using the igraph package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Extract graph of tick 1:
+nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]
+
+## Vertex and edge betweenness centrality
+<span class="kw">betweenness</span>(nl.graph.i)
+
+## Clusters
+<span class="kw">clusters</span>(nl.graph.i)</code></pre></div>
 </div>
   </div>
 
@@ -285,7 +346,8 @@ gganimate<span class="op">::</span><span class="kw"><a href="https://www.rdocume
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#gathering-spatial-output-from-netlogo-model-simulations">Gathering spatial output from NetLogo model simulations</a></li>
-      <li><a href="#visualization-examples">Visualization examples</a></li>
+      <li><a href="#application-example-1-wolf-sheep-predation">Application Example 1: Wolf Sheep Predation</a></li>
+      <li><a href="#application-example-2-giant-component">Application example 2: Giant component</a></li>
       </ul>
 </div>
       </div>

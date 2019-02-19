@@ -232,7 +232,7 @@
     </tr>
     <tr>
       <th>metrics.turtles</th>
-      <td><p>vector of strings defining valid turtles-own variables that are taken as output measurements (e.g. c("who", "pxcor", "pycor", "color"))</p></td>
+      <td><p>a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))</p></td>
     </tr>
     <tr>
       <th>metrics.patches</th>
@@ -240,7 +240,7 @@
     </tr>
     <tr>
       <th>metrics.links</th>
-      <td><p>vector of strings defining valid links-own variables that are taken as output measurements (e.g. c("end1", "end2"))</p></td>
+      <td><p>a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("end1", "end2")))</p></td>
     </tr>
     <tr>
       <th>variables</th>
@@ -311,51 +311,64 @@ Set evalticks to NA_integer_ to measure on every tick.</p>
 <p><em>stopcond</em></p>
 <p>The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
 Each simulation will be stopped automatically, once the reporter reports true.</p>
-<p><em>metrics.turtles, metrics.patches</em></p>
-<p>These two slots can be used to enter turtles-own (metrics.turtles) and patches-own (metrics.patches) variables of the NetLogo model.
-These agent variables are measured in addition to the defined metrics.
-After attaching the simulation results to the nl object, the measured output from these agent variables needs to be postprocessed by <a href='get_nl_spatial.html'>get_nl_spatial</a>.
-Please note that NetLogo models may contain a huge number of patches and turtles and output measurements of agent variables on each tick may need a lot of ressources.</p>
+<p><em>metrics.patches</em></p>
+<p>The metrics.patches slot accepts a vector of valid patches-own variables of the NetLogo model.
+These patch variables are measured in addition to the defined metrics.
+Results of these metrics will be nested inside the output results tibble of the simulations.
+Please note that NetLogo models may contain a huge number of patches and output measurements of agent variables on each tick may need a lot of ressources.</p>
+<p><em>metrics.turtles</em></p>
+<p>The metrics.turtles slot accepts a list with named vectors of valid turtle breed metrics.
+Each name of a vector in this list defines a specified breed of the NetLogo model, whereas the vector defines the variables that are measured for this breed.
+For example metrics.turtles = list("sheep"=c("color"), "wolves"=c("who")) - would measure the color of each sheep and the who number of each wolf agent.
+To measure &lt;turtles-own&gt; variables for all turtles, use "turtles" = c(...).
+Be aware, that NetLogo will produce runtime errors if you measure &lt;breed-own&gt; variables for agents that do not belong to this breed.
+Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.</p>
+<p><em>metrics.links</em></p>
+<p>The metrics.links slot accepts a list with named vectors of valid link breed metrics.
+Each name of a vector in this list defines a specified link breed of the NetLogo model, whereas the vector defines the variables that are measured for this link breed.
+For example metrics.links = list("linktype-a"=c("end1"), "linktype-b"=c("end2")) - would measure the start agent of each linktype-a link and the end agent of each linktype-b link.
+To measure &lt;links-own&gt; variables for all links, use "links" = c(...).
+Be aware, that NetLogo will produce runtime errors if you measure &lt;link-breed-own&gt; variables for agents that do not belong to this breed.
+Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"># NOT RUN {
-# Example for Wolf Sheep Predation model from NetLogo models library:
-nl@experiment <- experiment(expname="wolf-sheep",
-                             outpath="C:/out/",
-                             repetition=1,
-                             tickmetrics="true",
-                             idsetup="setup",
-                             idgo="go",
-                             idfinal=NA_character_,
-                             idrunnum=NA_character_,
-                             runtime=50,
-                             evalticks=seq(40,50),
-                             stopcond="not any? turtles",
-                             metrics=c("count sheep",
-                                       "count wolves",
-                                     "count patches with [pcolor = green]"),
-                             metrics.turtles=list("turtles" = c("who",
-                                               "pxcor",
-                                               "pycor",
-                                               "color"),
-                             metrics.patches=c("pxcor", "pycor", "pcolor"),
-                             metrics.links=c("end1","end2"),
-                             variables = list('initial-number-sheep' =
-                             list(min=50, max=150, step=10, qfun="qunif"),
-                                              'initial-number-wolves' =
-                             list(min=50, max=150, step=10, qfun="qunif")),
-                             constants = list("model-version" =
-                                              "\"sheep-wolves-grass\"",
-                                              "grass-regrowth-time" = 30,
-                                              "sheep-gain-from-food" = 4,
-                                              "wolf-gain-from-food" = 20,
-                                              "sheep-reproduce" = 4,
-                                              "wolf-reproduce" = 5,
-                                              "show-energy?" = "false"))
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+<span class='no'>nl</span>@<span class='kw'>experiment</span> <span class='kw'>&lt;-</span> <span class='fu'>experiment</span>(<span class='kw'>expname</span><span class='kw'>=</span><span class='st'>"wolf-sheep"</span>,
+                             <span class='kw'>outpath</span><span class='kw'>=</span><span class='st'>"C:/out/"</span>,
+                             <span class='kw'>repetition</span><span class='kw'>=</span><span class='fl'>1</span>,
+                             <span class='kw'>tickmetrics</span><span class='kw'>=</span><span class='st'>"true"</span>,
+                             <span class='kw'>idsetup</span><span class='kw'>=</span><span class='st'>"setup"</span>,
+                             <span class='kw'>idgo</span><span class='kw'>=</span><span class='st'>"go"</span>,
+                             <span class='kw'>idfinal</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
+                             <span class='kw'>idrunnum</span><span class='kw'>=</span><span class='fl'>NA_character_</span>,
+                             <span class='kw'>runtime</span><span class='kw'>=</span><span class='fl'>50</span>,
+                             <span class='kw'>evalticks</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>40</span>,<span class='fl'>50</span>),
+                             <span class='kw'>stopcond</span><span class='kw'>=</span><span class='st'>"not any? turtles"</span>,
+                             <span class='kw'>metrics</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"count sheep"</span>,
+                                       <span class='st'>"count wolves"</span>,
+                                     <span class='st'>"count patches with [pcolor = green]"</span>),
+                             <span class='kw'>metrics.turtles</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"turtles"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"who"</span>,
+                                               <span class='st'>"pxcor"</span>,
+                                               <span class='st'>"pycor"</span>,
+                                               <span class='st'>"color"</span>)),
+                             <span class='kw'>metrics.patches</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pxcor"</span>, <span class='st'>"pycor"</span>, <span class='st'>"pcolor"</span>),
+                             <span class='kw'>metrics.links</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"links"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"end1"</span>,<span class='st'>"end2"</span>)),
+                             <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>'initial-number-sheep'</span> <span class='kw'>=</span>
+                             <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>150</span>, <span class='kw'>step</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qfun</span><span class='kw'>=</span><span class='st'>"qunif"</span>),
+                                              <span class='st'>'initial-number-wolves'</span> <span class='kw'>=</span>
+                             <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>150</span>, <span class='kw'>step</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qfun</span><span class='kw'>=</span><span class='st'>"qunif"</span>)),
+                             <span class='kw'>constants</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"model-version"</span> <span class='kw'>=</span>
+                                              <span class='st'>"\"sheep-wolves-grass\""</span>,
+                                              <span class='st'>"grass-regrowth-time"</span> <span class='kw'>=</span> <span class='fl'>30</span>,
+                                              <span class='st'>"sheep-gain-from-food"</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                                              <span class='st'>"wolf-gain-from-food"</span> <span class='kw'>=</span> <span class='fl'>20</span>,
+                                              <span class='st'>"sheep-reproduce"</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                                              <span class='st'>"wolf-reproduce"</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+                                              <span class='st'>"show-energy?"</span> <span class='kw'>=</span> <span class='st'>"false"</span>))
 
-# }
-<div class='input'>
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
