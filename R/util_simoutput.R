@@ -36,7 +36,7 @@ unnest_simoutput <- function(nl){
 
 
   # get turtles column names and metrics vector
-  if (isTRUE(tmet_exists)) {
+  if (tmet_exist) {
     turtles.cols <- c()
     turtle.metrics <- c()
 
@@ -52,7 +52,7 @@ unnest_simoutput <- function(nl){
   }
   # get patches column names and metrics vector
   patches.cols <- "metrics.patches"
-  if (isTRUE(pmet_exists)) {
+  if (pmet_exist) {
     patch.metrics <- c("breed", nl@experiment@metrics.patches)
   } else{
     patch.metrics <- NA
@@ -62,7 +62,7 @@ unnest_simoutput <- function(nl){
   common_names <- names(getsim(nl, "simoutput"))[!(names(getsim(nl, "simoutput")) %in% agents.cols)]
 
   # get links column names and metrics vector
-  if (isTRUE(lmet_exists)) {
+  if (lmet_exist) {
     links.cols <- c()
     links.metrics <- c()
 
@@ -78,7 +78,7 @@ unnest_simoutput <- function(nl){
   }
 
   # select turtle data
-  if (tmet_exists) {
+  if (tmet_exist) {
     turtles_tib <- getsim(nl, "simoutput") %>%
       dplyr::select(-one_of(patches.cols),-one_of(links.cols))
 
@@ -107,7 +107,7 @@ unnest_simoutput <- function(nl){
   }
 
   # unnest patches data
-  if (pmet_exists) {
+  if (pmet_exist) {
     patches <- getsim(nl, "simoutput") %>%
       dplyr::select(-one_of(turtles.cols),-one_of(links.cols)) %>%
       tidyr::unnest()
@@ -117,7 +117,7 @@ unnest_simoutput <- function(nl){
   }
 
   # select links data
-  if (lmet_exists) {
+  if (lmet_exist) {
     links_tib <- getsim(nl, "simoutput") %>%
       dplyr::select(-one_of(patches.cols),-one_of(turtles.cols))
 
