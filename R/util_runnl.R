@@ -340,9 +340,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
       suppressWarnings(ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x))))
+    })
     patches_owns$agent <- "patches"
     patches_owns$breed <- NA
-    })
     return(patches_owns)
   })
   return(patches_string)
