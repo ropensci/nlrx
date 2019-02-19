@@ -342,7 +342,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
                               as.numeric(as.character(x))))
     })
     patches_owns$agent <- "patches"
-    patches_owns$breed <- NA
+    patches_owns$breed <- NA_character_
     return(patches_owns)
   })
   return(patches_string)
