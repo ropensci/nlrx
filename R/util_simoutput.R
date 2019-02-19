@@ -103,7 +103,7 @@ unnest_simoutput <- function(nl){
       names(turtles_data[[1]])[!(names(turtles_data[[1]]) %in% not_unique)]
 
     # join turtle data
-    turtles <- turtles_data %>% purrr::reduce(left_join, by = grps)
+    turtles <- turtles_data %>% purrr::reduce(full_join, by = grps)
   } else {
     turtles <- getsim(nl, "simoutput")[common_names]
     turtles <- turtles[0,]
@@ -142,7 +142,7 @@ unnest_simoutput <- function(nl){
       names(links_data[[1]])[!(names(links_data[[1]]) %in% not_unique)]
 
     # join turtle data
-    links <- links_data %>% purrr::reduce(left_join, by = grps)
+    links <- links_data %>% purrr::reduce(full_join, by = grps)
   } else {
     links <- getsim(nl, "simoutput")[common_names]
     links <- links[0,]
