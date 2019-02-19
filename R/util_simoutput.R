@@ -83,14 +83,14 @@ unnest_simoutput <- function(nl){
   # select turtle data
   if (tmet_exist) {
     turtles_tib <- getsim(nl, "simoutput") %>%
-      dplyr::select(-one_of(patches.cols),-one_of(links.cols))
+      dplyr::select(-dplyr::one_of(patches.cols),-dplyr::one_of(links.cols))
 
     # unnest turtle data
     turtles_data <- list()
 
     for (x in seq_along(turtles.cols)) {
       turtles <- turtles_tib %>%
-        dplyr::select(-one_of(turtles.cols[-x])) %>%
+        dplyr::select(-dplyr::one_of(turtles.cols[-x])) %>%
         tidyr::unnest()
 
       turtles_data[[x]] <- turtles
@@ -112,7 +112,7 @@ unnest_simoutput <- function(nl){
   # unnest patches data
   if (pmet_exist) {
     patches <- getsim(nl, "simoutput") %>%
-      dplyr::select(-one_of(turtles.cols),-one_of(links.cols)) %>%
+      dplyr::select(-dplyr::one_of(turtles.cols),-dplyr::one_of(links.cols)) %>%
       tidyr::unnest()
   } else {
     patches <- getsim(nl, "simoutput")[common_names]
@@ -122,14 +122,14 @@ unnest_simoutput <- function(nl){
   # select links data
   if (lmet_exist) {
     links_tib <- getsim(nl, "simoutput") %>%
-      dplyr::select(-one_of(patches.cols),-one_of(turtles.cols))
+      dplyr::select(-dplyr::one_of(patches.cols),-dplyr::one_of(turtles.cols))
 
     # unnest turtle data
     links_data <- list()
 
     for (x in seq_along(links.cols)) {
       links <- links_tib %>%
-        dplyr::select(-one_of(links.cols[-x])) %>%
+        dplyr::select(-dplyr::one_of(links.cols[-x])) %>%
         tidyr::unnest()
 
       links_data[[x]] <- links
