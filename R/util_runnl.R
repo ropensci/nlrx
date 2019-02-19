@@ -298,7 +298,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   }
 
-  if (length(nl@experiment@metrics.patches) > 0) {
+  if (all(!is.na(getexp(nl, "metrics.patches")))) {
     ## Rename column and clean patch metrics
     NLtable <- NLtable %>% dplyr::rename(metrics.patches =
                                            paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
