@@ -42,17 +42,17 @@ unnest_simoutput <- function(nl){
   # get turtles column names and metrics vector
   if (tmet_exist) {
     turtles.cols <- c()
-    turtle.metrics <- c()
+    turtles.metrics <- c()
 
     for (x in seq_along(nl@experiment@metrics.turtles)) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
       x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
       turtles.cols[x] <- paste0("metrics.", x.breed)
-      turtle.metrics <- c(turtle.metrics, x.metrics)
+      turtles.metrics <- c(turtles.metrics, x.metrics)
     }
   } else {
     turtles.cols <- "metrics.turtles"
-    turtle.metrics <- NA
+    turtles.metrics <- NA
   }
   # get patches column names and metrics vector
   patches.cols <- "metrics.patches"
@@ -99,7 +99,7 @@ unnest_simoutput <- function(nl){
     }
 
     not_unique <-
-      turtle.metrics[stats::ave(seq_along(turtle.metrics), turtle.metrics, FUN = length) == 1]
+      turtles.metrics[stats::ave(seq_along(turtles.metrics), turtles.metrics, FUN = length) == 1]
     grps <-
       names(turtles_data[[1]])[!(names(turtles_data[[1]]) %in% not_unique)]
 
