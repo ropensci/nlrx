@@ -116,7 +116,7 @@ unnest_simoutput <- function(nl){
       tidyr::unnest()
   } else {
     patches <- getsim(nl, "simoutput")[common_names]
-    patches <- patches[0, ]
+    patches <- patches[0,]
   }
 
   # select links data
@@ -149,7 +149,7 @@ unnest_simoutput <- function(nl){
   }
 
   # join turtles, patches and links
-  agents <- list(turtles, patches, links) %>% purrr::reduce(full_join)
+  agents <- suppressMessages(list(turtles, patches, links) %>% purrr::reduce(full_join))
 
   return(agents)
 }
