@@ -19,18 +19,21 @@ knitr::opts_chunk$set(
 nlrx is able to gather spatial output from your NetLogo simulations.
 The experiment class object provides slots for measuring turtles, patches and link variables:
 
-* metrics.turtles - a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))
-* metrics.patches - vector of valid patches-own variables that are used to collect patches data (e.g. c("pxcor", "pycor", "pcolor"))
-* metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("[who] of end1", "[who] of end2")))
+* metrics.turtles - a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. `list("turtles" = c("who", "pxcor", "pycor", "color")`)
+* metrics.patches - vector of valid patches-own variables that are used to collect patches data (e.g. `c("pxcor", "pycor", "pcolor")`)
+* metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. `list("links" = c("[who] of end1", "[who] of end2"))`)
 
 Basically, you can enter any variable of your model that is listed in turtles-own, patches-own or links-own, however if you add variables that contain strings, these strings must not contain any whitespaces or the output data will not be parsed correctly.
 
-If your model has agent variables that only exist for one specific breed (<breed-own>), measuring those variables for all turtles would result in a runtime error. Thus, different vectors of metrics can be provided for each specific breed (e.g. metrics.turtles = list("breed_A" = c("who", "pxcor", "pycor", "var_of_breed_A"), "breed_B" = c("who", "pxcor", "pycor", "var_of_breed_B"))). This also works for links breeds.
+If your model has agent variables that only exist for one specific breed (breed-own), measuring those variables for all turtles would result in a runtime error. Thus, different vectors of metrics can be provided for each specific breed (e.g. `metrics.turtles = list("breed_A" = c("who", "pxcor", "pycor", "var_of_breed_A"), "breed_B" = c("who", "pxcor", "pycor", "var_of_breed_B"))`). This also works for links breeds.
 
 If an experiment contains any agent metrics, the results of these metrics will be nested inside the output results tibble. In order to utilize these data, they need to be postprocessed. nlrx provides two types of postprocessing functions:
 
 * `unnest_simoutput()` - This function may be used to unnest the data within the output results tibble. It reports a long tibble containing all parameters, variables and agent metrics. This format is easily subsettable and is suited to produce plots using the ggplot package, or create animations with gganimate.
-* `nl_to_graph()`, `nl_to_raster()`, `nl_to_points()` - These functions create spatial objects from the nested data within the output results tibble. 
+* `nl_to_graph()`, `nl_to_raster()`, `nl_to_points()` - These functions create spatial objects from the nested data within the output results tibble. Please note, that these functions have requirements on measured spatial variables:
+    * `nl_to_graph()` - Reports igraph objects and needs at least turtle who numbers and who numbers of link ends (`metrics.turtles = list("turtles" = c("who")), metrics.links = list("links" = c("[who] of end1", "[who] of end2"))`). Additional turtle and link variables will be stored as properties of the igraph nodes and vertices.
+    * `nl_to_raster()` - Reports raster objects and needs patch coordinates and at least one patch variable (`metrics.patches = c("pxcor", "pycor", "pcolor")`). If several patch variables are provided, a raster stack is created with rasters for each patch variable.
+    * `nl_to_points()` - Reports spatial point objects and needs at least turtle coordinates, either pxcor/pycor or xcor/ycor (`metrics.turtles = list("turtles" = c("xcor", "ycor", "who", "color"))`). Additional turtle variables will be stored as properties of the spatial points.
 
 
 ## Application Example 1: Wolf Sheep Predation
@@ -66,7 +69,7 @@ nl@experiment <- experiment(expname = "nlrx_spatial",
                             idgo = "go",         
                             runtime = 100,
                             metrics = c("count sheep","count wolves"),
-                            metrics.turtles = list("turtles" = c("who", "pxcor", "pycor", "breed")),
+                            metrics.turtles = list("turtles" = c("who", "pxcor", "pycor")),
                             metrics.patches = c("pxcor", "pycor", "pcolor"),
                             constants = list("model-version" = "\"sheep-wolves-grass\"",
                                              'initial-number-sheep' = 100,
@@ -94,7 +97,7 @@ These lists already contain all measured agent metrics and can for example be us
 
 #### Postprocessing example 1: `unnest_simoutput()`
 
-We use the `unnest_simoutput()` function to create a large tibble format which we cna use for plotting. In order to use this function, the simulation output need to be attached to the nl object first (otherwise a warning will appear). The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function `setsim(nl, "simoutput")`.
+We use the `unnest_simoutput()` function to create a large tibble format which we can use for plotting. In order to use this function, the simulation output need to be attached to the nl object first (otherwise a warning will appear). The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function `setsim(nl, "simoutput")`.
 
 ```{r eval=FALSE}
 # Attach results to nl object:
@@ -112,16 +115,16 @@ Here is an example to create a facet plot using spatial simulation data of every
 # Split tibble into turtles and patches tibbles and select each 10th step:
 results_unnest_turtles <- results_unnest %>% 
   dplyr::filter(agent=="turtles") %>% 
-  dplyr::filter(`[step]` %in% seq(0,80,10))
+  dplyr::filter(`[step]` %in% seq(10,80,10))
 results_unnest_patches <- results_unnest %>% 
   dplyr::filter(agent=="patches") %>% 
-  dplyr::filter(`[step]` %in% seq(0,80,10))
+  dplyr::filter(`[step]` %in% seq(10,80,10))
 
 # Create facet plot:
 ggplot() +
   facet_wrap(~`[step]`, ncol=4) +
   coord_equal() +
-  geom_tile(data=results_unnest_patches, aes(x=pxcor, y=pxcor, fill=factor(pcolor))) +
+  geom_tile(data=results_unnest_patches, aes(x=pxcor, y=pycor, fill=factor(pcolor))) +
   geom_point(data=results_unnest_turtles, aes(x = pxcor, y = pycor, color = breed), size=1) +
   scale_fill_manual(breaks=c("35", "55"), values = c("35" = "#D9AF6B", "55" = "#68855C")) +
   scale_color_manual(breaks=c("sheep", "wolves"), values = c("sheep" = "beige", "wolves" = "black")) +
@@ -141,9 +144,9 @@ Here is an example for a plot that has been generated by running the above exper
 
 # Split tibble into turtles and patches tibbles:
 results_unnest_turtles <- results_unnest %>% 
-  dplyr::filter(group=="turtles")
+  dplyr::filter(agent == "turtles")
 results_unnest_patches <- results_unnest %>% 
-  dplyr::filter(group=="patches")
+  dplyr::filter(agent == "patches")
 
 # Create an animated plot, using the step column as animation variable
 p1 <- ggplot() +
@@ -158,7 +161,7 @@ p1 <- ggplot() +
   theme_void()
 
 # Animate the plot and use 1 frame for each step of the model simulations
-gganimate::animate(p1, nframes = max(results_unnest$`[step]`), width=400, height=400, fps=4)
+gganimate::animate(p1, nframes = length(unique(results_unnest_patches$`[step]`)), width=400, height=400, fps=4)
 anim_save("wolfsheep_world.gif")
 
 ``` 
@@ -169,9 +172,22 @@ anim_save("wolfsheep_world.gif")
 
 #### Postprocessing example 2: `nl_to_raster()` and `nl_to_points()`
 
+A second option to postprocess spatial data is to convert patches data to raster objects and turtles data to spatial point objects. This can be handy if further spatial analyses are carried out, such as calculating landscape metrics (e.g. with R-package [landscapemetrics](https://github.com/r-spatialecology/landscapemetrics)).
+In this example, we use the nl object with attached simulation output of the previous example to generate raster and spatial point objects.
 
+```{r eval=FALSE}
+## Create raster and point objects from patches and turtles data:
+library(raster)
+library(sf)
+nlraster <- nl_to_raster(nl)
+nlpoints <- nl_to_points(nl, coords = "px")
 
+## Plot raster and turtles of tick n:
+n <- 1
+plot(nlraster$spatial.raster[[n]], col=c("35" = "#D9AF6B", "55" = "#68855C"))
+plot(nlpoints$spatial.turtles[[n]]["breed"], add=TRUE, pch=16, col=c("sheep" = "beige", "wolves" = "black"))
 
+``` 
 
 
 ## Application example 2: Giant component
@@ -224,7 +240,7 @@ results <- run_nl_all(nl)
 
 ```
 
-In order to execute th `nl_to_graph()` function, the output results need to be attached to the nl object.
+In order to execute the `nl_to_graph()` function, the output results need to be attached to the nl object.
 Afterwards we can create the igraph object with `nl_to_graph()`:
 
 ```{r eval=FALSE}

@@ -235,7 +235,7 @@ nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.ht
          <span class="dt">jvmmem =</span> <span class="dv">1024</span>)
 
 ## Step2: Add Experiment
-nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"diffusion"</span>,
+nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"fire"</span>,
                             <span class="dt">outpath =</span> outpath,
                             <span class="dt">repetition =</span> <span class="dv">1</span>,    
                             <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,
@@ -408,9 +408,6 @@ nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class=
                             <span class="dt">constants =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"stiffness"</span> =<span class="st"> </span><span class="dv">20</span>),
                             <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"driver?"</span>, <span class="st">"edge?"</span>, <span class="st">"color"</span>)))
 
-<span class="co"># Evaluate if variables and constants are valid:</span>
-<span class="kw"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span>(nl)
-
 ## Step3: Add a Simulation Design
 nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_distinct.html">simdesign_distinct</a></span>(<span class="dt">nl =</span> nl,
                                    <span class="dt">nseeds =</span> <span class="dv">1</span>)
@@ -565,7 +562,7 @@ nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class=
                                                                  <span class="st">"xcor"</span>,                            
                                                                  <span class="st">"ycor"</span>,
                                                                  <span class="st">"color"</span>)),
-                            <span class="dt">metrics.links =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"links"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"end1"</span>,<span class="st">"end2"</span>)))
+                            <span class="dt">metrics.links =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="st">"links"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"[who] of end1"</span>,<span class="st">"[who] of end2"</span>)))
 
 ## Step3: Add simdesign
 nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl=</span>nl, <span class="dt">nseeds =</span> <span class="dv">1</span>)

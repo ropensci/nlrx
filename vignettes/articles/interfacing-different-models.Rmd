@@ -130,7 +130,7 @@ nl <- nl(nlversion = "6.0.4",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
-nl@experiment <- experiment(expname = "diffusion",
+nl@experiment <- experiment(expname = "fire",
                             outpath = outpath,
                             repetition = 1,    
                             tickmetrics = "true",
@@ -324,9 +324,6 @@ nl@experiment <- experiment(expname = "waves",
                             constants = list("stiffness" = 20),
                             metrics.turtles = list("turtles" = c("who", "xcor", "ycor", "driver?", "edge?", "color")))
 
-# Evaluate if variables and constants are valid:
-eval_variables_constants(nl)
-
 ## Step3: Add a Simulation Design
 nl@simdesign <- simdesign_distinct(nl = nl,
                                    nseeds = 1)
@@ -502,7 +499,7 @@ nl@experiment <- experiment(expname = "networks",
                                                                  "xcor",                            
                                                                  "ycor",
                                                                  "color")),
-                            metrics.links = list("links" = c("end1","end2")))
+                            metrics.links = list("links" = c("[who] of end1","[who] of end2")))
 
 ## Step3: Add simdesign
 nl@simdesign <- simdesign_simple(nl=nl, nseeds = 1)

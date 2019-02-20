@@ -80,7 +80,10 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
     # Loop trough breed sublists:
     turtles.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
-      x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
+      x.metrics <- nl@experiment@metrics.turtles[[x]]
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
       turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
       return(turtles.reporter)
     })
@@ -99,7 +102,10 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
     # Loop trough breed sublists:
     links.reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.links), function(x) {
       x.breed <- names(nl@experiment@metrics.links)[[x]]
-      x.metrics <- c("breed", nl@experiment@metrics.links[[x]])
+      x.metrics <- nl@experiment@metrics.links[[x]]
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
       links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
       return(links.reporter)
     })
@@ -288,7 +294,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
     for(x in seq_along(nl@experiment@metrics.turtles)) {
       x.breed <- names(nl@experiment@metrics.turtles)[[x]]
-      x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
+      x.metrics <- nl@experiment@metrics.turtles[[x]]
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
       col.name <- paste0("metrics.", x.breed)
       turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
       names(NLtable)[names(NLtable) == turtles.reporter] <- col.name
@@ -312,7 +321,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     ## Rename column and clean link metrics
     for(x in seq_along(nl@experiment@metrics.links)) {
       x.breed <- names(nl@experiment@metrics.links)[[x]]
-      x.metrics <- c("breed", nl@experiment@metrics.links[[x]])
+      x.metrics <- nl@experiment@metrics.links[[x]]
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
       col.name <- paste0("metrics.", x.breed)
       links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
       names(NLtable)[names(NLtable) == links.reporter] <- col.name

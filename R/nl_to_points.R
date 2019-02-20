@@ -21,7 +21,10 @@ nl_to_points <- function(nl, coords){
   turtles.metrics <- c()
 
   for (x in seq_along(nl@experiment@metrics.turtles)) {
-    x.metrics <- c("breed", nl@experiment@metrics.turtles[[x]])
+    x.metrics <- nl@experiment@metrics.turtles[[x]]
+    if (!"breed" %in% x.metrics) {
+      x.metrics <- c("breed", x.metrics)
+    }
     turtles.metrics <- c(turtles.metrics, x.metrics)
   }
 
@@ -54,5 +57,5 @@ nl_to_points <- function(nl, coords){
   turtles_ret <- getsim(nl, "simoutput")
   turtles_ret$spatial.turtles <- turtles_dat
 
-
+  return(turtles_ret)
 }
