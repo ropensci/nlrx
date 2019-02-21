@@ -17,6 +17,14 @@
 
 unnest_simoutput <- function(nl){
 
+  ## Check if results have been attached:
+  if (purrr::is_empty(getsim(nl, "simoutput"))) {
+    stop("Simoutput tibble is empty.
+         In order to unnest simoutput, output results have to be attached
+         to the simdesign of the nl object first:
+         setsim(nl, \"simoutput\") <- results")
+  }
+
   if (length(nl@experiment@metrics.turtles) > 0) {
     tmet_exist <- TRUE
   } else {

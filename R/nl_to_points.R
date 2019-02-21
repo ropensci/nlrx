@@ -18,6 +18,15 @@
 
 nl_to_points <- function(nl, coords){
 
+  ## Check if results have been attached:
+  if (purrr::is_empty(getsim(nl, "simoutput"))) {
+    stop("Simoutput tibble is empty.
+            In order to generate spatial points from turtles metrics,
+            output results have to be attached to the simdesign of the nl
+            object first: setsim(nl, \"simoutput\") <- results")
+  }
+
+
   turtles.metrics <- c()
 
   for (x in seq_along(nl@experiment@metrics.turtles)) {

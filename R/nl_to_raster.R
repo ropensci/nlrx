@@ -18,6 +18,14 @@
 
 nl_to_raster <- function(nl){
 
+  ## Check if results have been attached:
+  if (purrr::is_empty(getsim(nl, "simoutput"))) {
+    stop("Simoutput tibble is empty.
+            In order to generate raster objects from patch metrics,
+            output results have to be attached to the simdesign of the nl
+            object first: setsim(nl, \"simoutput\") <- results")
+  }
+
   patch.metrics <- c(nl@experiment@metrics.patches,"siminputrow", "[step]", "random-seed")
   patch.owns    <- nl@experiment@metrics.patches[!(nl@experiment@metrics.patches %in% c("pxcor", "pycor"))]
   nl_output <- unnest_simoutput(nl)
