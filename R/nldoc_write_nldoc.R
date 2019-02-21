@@ -45,27 +45,27 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   }
 
   # write preambel for the markdown file (define format, style, ...)
-  preambel <- paste("---\r",
-                    "title: \"", noxygen$header$model, "\"\r",
-                    "author: \"", noxygen$header$author, "\"\r",
-                    "date: \"", date, "\"\r",
-                    "output: \r",
-                    "  ", output_format, ":\r",
-                    "    toc: ", toc, "\r", sep = '')
+  preambel <- paste("---\r\n",
+                    "title: \"", noxygen$header$model, "\"\r\n",
+                    "author: \"", noxygen$header$author, "\"\r\n",
+                    "date: \"", date, "\"\r\n",
+                    "output: \r\n",
+                    "  ", output_format, ":\r\n",
+                    "    toc: ", toc, "\r\n", sep = '')
 
   # if PDF is chosen, add section numbering definition to the preambel
   if (output_format == "pdf")
   {
     preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r", sep = '')
+                      "    number_sections: ", number_sections, "\r\n", sep = '')
   }
 
   # if HTML is chosen add section numbering and theme definition to the preambel
   if (output_format == "html_document")
   {
     preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r",
-                      "    theme: ", theme, "\r", sep = '')
+                      "    number_sections: ", number_sections, "\r\n",
+                      "    theme: ", theme, "\r\n", sep = '')
   }
 
   # Add end of preambel!
@@ -109,14 +109,14 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     if (length(noxygen.proc.i$param[[1]]) > 0)
     {
       noxygencode.i <- c(noxygencode.i, "#### Parameters {-}")
-      noxygencode.i <- c(noxygencode.i, paste(noxygen.proc.i$param[[1]], collapse="</br>"))
-      noxygencode.i <- c(noxygencode.i, "\n")
+      noxygencode.i <- c(noxygencode.i, paste(noxygen.proc.i$param[[1]], collapse="\r\n")) #collapse="</br>"
+      noxygencode.i <- c(noxygencode.i, "\r\n")
     }
     if (length(noxygen.proc.i$return[[1]]) > 0)
     {
       noxygencode.i <- c(noxygencode.i, "#### Return {-}")
-      noxygencode.i <- c(noxygencode.i, paste(noxygen.proc.i$return[[1]], collapse="</br>"))
-      noxygencode.i <- c(noxygencode.i, "\n")
+      noxygencode.i <- c(noxygencode.i, paste(noxygen.proc.i$return[[1]], collapse="\r\n")) #collapse="</br>"
+      noxygencode.i <- c(noxygencode.i, "\r\n")
     }
 
     noxygencode.i <- c(noxygencode.i, "#### Description {-}")
@@ -129,7 +129,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
       noxygencode.i <- c(noxygencode.i, paste0(noxygen.proc.i$code[[1]]))
       noxygencode.i <- c(noxygencode.i, "```")
     }
-    noxygencode.i <- c(noxygencode.i, "\n")
+    noxygencode.i <- c(noxygencode.i, "\r\n")
 
     noxygencode <- c(noxygencode, noxygencode.i)
   }
@@ -257,7 +257,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
       }
 
       # Attach current experiment to noxygencode:
-      noxygencode.i <- c(noxygencode.i, "\n")
+      noxygencode.i <- c(noxygencode.i, "\r\n")
       noxygencode <- c(noxygencode, noxygencode.i)
     }
   }
