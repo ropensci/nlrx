@@ -45,7 +45,7 @@ nldoc_find_procedure_calls <- function(nlogocode)
       if (!(j %in% procs$start))
       {
         ## Find the context:
-        context <- procs %>% dplyr::filter(start < j) %>% dplyr::filter(dplyr::row_number()==n())
+        context <- procs %>% dplyr::filter(start < j) %>% dplyr::filter(dplyr::row_number()==dplyr::n())
 
         ## Store result:
         nw.i <- tibble::tibble(from=context$procname, to=i)
