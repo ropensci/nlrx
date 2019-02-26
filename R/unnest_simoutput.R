@@ -9,6 +9,9 @@
 #' Unnests output from run_nl into long format.
 #'
 #' @examples
+#' \dontrun{
+#' unnest_simoutput(nl)
+#' }
 #'
 #' @aliases unnest_simoutput
 #' @rdname unnest_simoutput

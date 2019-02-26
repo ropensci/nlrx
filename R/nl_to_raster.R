@@ -17,12 +17,12 @@
 #' the nl object first.
 #'
 #' @examples
-#'
+#' \dontrun{
 #' # Attach simulation results:
 #' setsim(nl, "simoutput") <- results
 #' # Convert patch metrics to spatial raster objects:
 #' results.raster <- nl_to_raster(nl)
-#'
+#' }
 #'
 #' @aliases nl_to_raster
 #' @rdname nl_to_raster

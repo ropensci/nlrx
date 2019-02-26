@@ -19,5 +19,8 @@ Turn results from NetLogo in spatial data objects
 Unnests output from run_nl into long format.
 }
 \examples{
+\dontrun{
+unnest_simoutput(nl)
+}
 
 }

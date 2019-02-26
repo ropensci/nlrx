@@ -19,12 +19,12 @@
 #' the nl object first.
 #'
 #' @examples
-#'
+#' \dontrun{
 #' # Attach simulation results:
 #' setsim(nl, "simoutput") <- results
 #' # Convert turtle metrics (pxcor/pycor) to spatial point objects:
 #' results.sf <- nl_to_points(nl, coords="px")
-#'
+#' }
 #'
 #' @aliases nl_to_points
 #' @rdname nl_to_points

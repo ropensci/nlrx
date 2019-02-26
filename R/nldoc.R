@@ -27,8 +27,7 @@
 #' \dontrun{
 #'
 #' # List model files (.nls subfiles are also supported)
-#' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation.nlogo",
-#' "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation%20Extra.nls")
+#' modelfiles <- c("https://goo.gl/x4CEuC", "https://goo.gl/NWNyRt")
 #'
 #' # Create documentation:
 #' nldoc(modelfiles = modelfiles,
