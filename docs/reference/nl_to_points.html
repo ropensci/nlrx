@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get spatial data from metrics.turtles and metrics.patches output — nl_to_points • nlrx | NetLogo from R</title>
+<title>Get spatial data from metrics.turtles output — nl_to_points • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get spatial data from metrics.turtles and metrics.patches output — nl_to_points" />
+<meta property="og:title" content="Get spatial data from metrics.turtles output — nl_to_points" />
 
-<meta property="og:description" content="Turn results from NetLogo in spatial data objects" />
+<meta property="og:description" content="Turn turtle metrics from NetLogo in spatial data objects" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -160,14 +160,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get spatial data from metrics.turtles and metrics.patches output</h1>
+    <h1>Get spatial data from metrics.turtles output</h1>
     <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/nl_to_points.R'><code>R/nl_to_points.R</code></a></small>
     <div class="hidden name"><code>nl_to_points.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Turn results from NetLogo in spatial data objects</p>
+    <p>Turn turtle metrics from NetLogo in spatial data objects</p>
     
     </div>
 
@@ -192,11 +192,24 @@
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Unnests output from run_nl into long format.</p>
+    <p>Converts measured metrics.turtles into spatial sf point objects.
+In order to so, a pair of turtle coordinates needs to be measured.
+Any additional metrics will be stored as properties of the spatial points.
+Because turtle coordinates in NetLogo can be measured in two formats,
+pxcor/pycor or xcor/ycor coordinates, the type of coordinate used for
+transformation to spatial objects need to be defined, using the parameter
+coords: "px" for pxcor/pycor coordinates, "x" for xcor/ycor coordinates.</p>
+<p>In order to use this function, simulation results need to be attached to
+the nl object first.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Attach simulation results:</span>
+<span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>
+<span class='co'># Convert turtle metrics (pxcor/pycor) to spatial point objects:</span>
+<span class='no'>results.sf</span> <span class='kw'>&lt;-</span> <span class='fu'>nl_to_points</span>(<span class='no'>nl</span>, <span class='kw'>coords</span><span class='kw'>=</span><span class='st'>"px"</span>)
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
