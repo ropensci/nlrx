@@ -149,6 +149,10 @@ globalVariables(c(
   "pycor",
   "end1",
   "end2",
-  "metrics.links"
+  "metrics.links",
+  "agent",
+  "today",
+  "browseURL",
+  "start"
 ))
 # nocov end
