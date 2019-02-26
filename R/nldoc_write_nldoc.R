@@ -77,12 +77,12 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   noxygencode <- ""
 
   # Process the information from global
-  noxygencode <- c(noxygencode, "#Global")
+  noxygencode <- c(noxygencode, "# Global")
 
   for (i in 1:nrow(noxygen$global))
   {
     noxygen.global.i <- noxygen$global[i,]
-    noxygencode.i <- paste0("##", noxygen.global.i$global)
+    noxygencode.i <- paste0("## ", noxygen.global.i$global)
     noxygencode.i <- c(noxygencode.i, "#### Description {-}")
     noxygencode.i <- c(noxygencode.i, noxygen.global.i$description)
 
@@ -99,12 +99,12 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   }
 
   # Process the information from procedures
-  noxygencode <- c(noxygencode, "#Procedures")
+  noxygencode <- c(noxygencode, "# Procedures")
 
   for (i in 1:nrow(noxygen$proc))
   {
     noxygen.proc.i <- noxygen$proc[i,]
-    noxygencode.i <- paste0("##", noxygen.proc.i$procedure)
+    noxygencode.i <- paste0("## ", noxygen.proc.i$procedure)
 
     if (length(noxygen.proc.i$param[[1]]) > 0)
     {
@@ -137,7 +137,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   ## Add gui elements if wanted:
   if (!is.na(noxygen_gui[1]))
   {
-    noxygencode <- c(noxygencode, "#GUI elements")
+    noxygencode <- c(noxygencode, "# GUI elements")
     # Table header:
     noxygencode <- c(noxygencode, "| Name | Type | Value | Properties |")
     noxygencode <- c(noxygencode, "| ---- | ---- | ----- | ---------- |")
@@ -161,7 +161,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
 
   if (!is.na(noxygen_it[1]))
   {
-    noxygencode <- c(noxygencode, "#Info Tab")
+    noxygencode <- c(noxygencode, "# Info Tab")
 
 
     for(i in 1:length(noxygen_it))
@@ -174,14 +174,14 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   ## Add bs elements if wanted:
   if (!is.na(noxygen_bs[1]))
   {
-    noxygencode <- c(noxygencode, "#Behavior Space Experiments")
+    noxygencode <- c(noxygencode, "# Behavior Space Experiments")
 
     ## The function generates a table for each experiment:
 
     for(i in 1:length(noxygen_bs))
     {
       noxygen.bs.i <- noxygen_bs[[i]]
-      noxygencode.i <- paste0("##", noxygen.bs.i$.attrs[["name"]])
+      noxygencode.i <- paste0("## ", noxygen.bs.i$.attrs[["name"]])
 
       # Main Table:
       noxygencode.i <- c(noxygencode.i, "#### Definitions {-}")
