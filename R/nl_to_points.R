@@ -1,15 +1,30 @@
-#' Get spatial data from metrics.turtles and metrics.patches output
+#' Get spatial data from metrics.turtles output
 #'
-#' @description Turn results from NetLogo in spatial data objects
+#' @description Turn turtle metrics from NetLogo in spatial data objects
 #'
 #' @param nl nl object
 #' @param coords nl object
 #'
 #' @return tibble with spatial data objects
 #' @details
-#' Unnests output from run_nl into long format.
+#' Converts measured metrics.turtles into spatial sf point objects.
+#' In order to so, a pair of turtle coordinates needs to be measured.
+#' Any additional metrics will be stored as properties of the spatial points.
+#' Because turtle coordinates in NetLogo can be measured in two formats,
+#' pxcor/pycor or xcor/ycor coordinates, the type of coordinate used for
+#' transformation to spatial objects need to be defined, using the parameter
+#' coords: "px" for pxcor/pycor coordinates, "x" for xcor/ycor coordinates.
+#'
+#' In order to use this function, simulation results need to be attached to
+#' the nl object first.
 #'
 #' @examples
+#'
+#' # Attach simulation results:
+#' setsim(nl, "simoutput") <- results
+#' # Convert turtle metrics (pxcor/pycor) to spatial point objects:
+#' results.sf <- nl_to_points(nl, coords="px")
+#'
 #'
 #' @aliases nl_to_points
 #' @rdname nl_to_points

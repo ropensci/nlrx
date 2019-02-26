@@ -2,24 +2,36 @@
 % Please edit documentation in R/nl_to_raster.R
 \name{nl_to_raster}
 \alias{nl_to_raster}
-\title{Get spatial data from metrics.turtles and metrics.patches output}
+\title{Get spatial data from metrics.patches output}
 \usage{
 nl_to_raster(nl)
 }
 \arguments{
 \item{nl}{nl object}
-
-\item{coords}{nl object}
 }
 \value{
 tibble with spatial data objects
 }
 \description{
-Turn results from NetLogo in spatial data objects
+Turn patch metrics from NetLogo in spatial data objects
 }
 \details{
-Unnests output from run_nl into long format.
+Converts measured metrics.patches into spatial raster objects.
+In order to so, a patch coordinates needs to be measured (pxcor/pycor).
+For each additional patch metric, a raster will be created using the
+measured coordinates as x and y and the additional metric as z dimension.
+In case of multiple measured metrics, a ratser stack with one raster
+for each metric will be reported.
+
+In order to use this function, simulation results need to be attached to
+the nl object first.
 }
 \examples{
+
+# Attach simulation results:
+setsim(nl, "simoutput") <- results
+# Convert patch metrics to spatial raster objects:
+results.raster <- nl_to_raster(nl)
+
 
 }
