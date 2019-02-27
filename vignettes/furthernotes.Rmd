@@ -4,7 +4,7 @@ author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Advanced configuration}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -118,10 +118,10 @@ In such cases, output is still reported but all metrics that could not be collec
 
 Four slots of the experiment class further define which measurements are taken:
 
-* metrics - vector of valid NetLogo reporters that are used to collect data
-* metrics.turtles - vector of valid turtles-own variables that are used to collect turtle data
-* metrics.patches - vector of valid patches-own variables that are used to collect patches data
-* metrics.links - vector of valid links-own variables that are used to collect links data
+* metrics - vector of valid NetLogo reporters that are used to collect data (e.g. c("count turtles"))
+* metrics.turtles - a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))
+* metrics.patches - vector of valid patches-own variables that are used to collect patches data (e.g. c("pxcor", "pycor", "pcolor"))
+* metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("[who] of end1", "[who] of end2")))
 
 Although the metrics slot accepts any valid NetLogo reporter, such as "count patches", reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clean results data frame.
 For example, the NetLogo reporter "count patches with [pcolor = green]" could be written as a NetLogo reporter function:

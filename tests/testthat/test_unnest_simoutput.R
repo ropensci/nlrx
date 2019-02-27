@@ -36,9 +36,9 @@ testthat::test_that("Get nl spatial", {
                               runtime = 2,
                               evalticks = c(1,2),
                               metrics = c("count sheep","count wolves"),
-                              metrics.turtles = c("who", "breed",
+                              metrics.turtles = list("turtles" = c("who", "breed",
                                                   "pxcor", "pycor",
-                                                  "xcor", "ycor"),
+                                                  "xcor", "ycor")),
                               metrics.patches = c("pxcor", "pycor", "pcolor"),
                               variables = list('initial-number-sheep' =
                                                  list(min=50, max=150,
@@ -64,68 +64,72 @@ testthat::test_that("Get nl spatial", {
 
   testthat::context("Simoutput attached")
   testthat::expect_error(
-    get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                   turtle_coords = "px", format = "spatial"))
+    unnest_simoutput(nl))
+  testthat::expect_error(
+    nl_to_raster(nl))
+  testthat::expect_error(
+    nl_to_points(nl))
 
   ## Attach results to nl:
   setsim(nl, "simoutput") <- results
 
-  testthat::context("Get spatial data with turtles px: raster/sf")
-  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                                    turtle_coords = "px", format = "spatial")
-  testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
-  testthat::expect_match(class(results.spatial$metrics.turtles[[1]])[1], "sf")
+  testthat::context("Unnest simoutput:")
+  results.spatial <- unnest_simoutput(nl)
 
-  testthat::context("Get spatial data with turtles px: tibble")
-  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                                    turtle_coords = "px", format = "tibble")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_false(is.null(results.spatial$patches_x))
-  testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(is.null(results.spatial$pxcor))
-  testthat::expect_false(is.null(results.spatial$pycor))
+  testthat::expect_match(class(results.spatial$agent), "character")
+  testthat::expect_match(class(results.spatial$breed), "character")
 
-  testthat::context("Get spatial data with turtles x: raster/sf")
-  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                                    turtle_coords = "x", format = "spatial")
+  testthat::context("nl_to_raster")
+  results.spatial <- nl_to_raster(nl)
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
-  testthat::expect_match(class(results.spatial$metrics.turtles[[1]])[1], "sf")
+  testthat::expect_match(class(results.spatial$spatial.raster[[1]])[1], "RasterLayer")
 
-  testthat::context("Get spatial data with turtles x: tibble")
-  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=TRUE,
-                                    turtle_coords = "x", format = "tibble")
+  testthat::context("nl_to_points pxcor")
+  results.spatial <- nl_to_points(nl, coords = "px")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_false(is.null(results.spatial$patches_x))
-  testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(is.null(results.spatial$xcor))
-  testthat::expect_false(is.null(results.spatial$ycor))
+  testthat::expect_match(class(results.spatial$spatial.turtles[[1]])[1], "sf")
 
-  testthat::context("Get spatial data without turtles: raster")
-  results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
-                                    format = "spatial")
+  testthat::context("nl_to_points xcor")
+  results.spatial <- nl_to_points(nl, coords = "x")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_match(class(results.spatial$metrics.patches[[1]])[1], "RasterLayer")
-  testthat::expect_false(exists("results.spatial$turtles"))
+  testthat::expect_match(class(results.spatial$spatial.turtles[[1]])[1], "sf")
 
-  testthat::context("Get spatial data without turtles: tibble")
-  results.spatial <- get_nl_spatial(nl, turtles = FALSE, patches=TRUE,
-                                    format = "tibble")
-  testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_false(is.null(results.spatial$patches_x))
-  testthat::expect_false(is.null(results.spatial$patches_y))
-  testthat::expect_false(exists("results.spatial$pxcor"))
-  testthat::expect_false(exists("results.spatial$pycor"))
 
-  testthat::context("Get spatial data without patches: tibble")
-  results.spatial <- get_nl_spatial(nl, turtles = TRUE, patches=FALSE,
-                                    format = "tibble")
+  testthat::context("nl_to_graph")
+  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
+                         "Networks", "Giant Component.nlogo")
+  nl <- nl(nlversion = "6.0.3",
+           nlpath = nlpath,
+           modelpath = modelpath,
+           jvmmem = 1024)
+
+
+  nl@experiment <- experiment(expname="networks",
+                              outpath=outpath,
+                              repetition=1,
+                              tickmetrics="false",
+                              idsetup="setup",
+                              idgo="go",
+                              runtime=50,
+                              metrics.turtles = list("turtles" = c("who", "color")),
+                              metrics.links = list("links" = c("[who] of end1", "[who] of end2")),
+                              constants = list("num-nodes" = 80,
+                                               "layout?" = "true"))
+
+  nl@simdesign <- simdesign_simple(nl, 1)
+
+  testthat::context("Simoutput attached")
+  testthat::expect_error(
+    nl_to_graph(nl))
+
+  nl@simdesign@simoutput <- run_nl_all(nl)
+  results.spatial <- nl_to_graph(nl)
+
+  testthat::context("nl_to_graph")
   testthat::expect_match(class(results.spatial)[1], "tbl_df")
-  testthat::expect_false(exists("results.spatial$patches_x"))
-  testthat::expect_false(exists("results.spatial$patches_y"))
-  testthat::expect_false(is.null(results.spatial$pxcor))
-  testthat::expect_false(is.null(results.spatial$pycor))
+  testthat::expect_match(class(results.spatial$spatial.links[[1]])[1], "igraph")
+
 
 })
 

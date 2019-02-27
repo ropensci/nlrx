@@ -39,9 +39,9 @@
       evalticks = "numeric",
       stopcond = "character",
       metrics = "character",
-      metrics.turtles = "character",
+      metrics.turtles = "list",
       metrics.patches = "character",
-      metrics.links = "character",
+      metrics.links = "list",
       variables = "list",
       constants = "list"
     ),
@@ -59,9 +59,9 @@
       evalticks = NA_integer_,
       stopcond = NA_character_,
       metrics = NA_character_,
-      metrics.turtles = NA_character_,
+      metrics.turtles = list(),
       metrics.patches = NA_character_,
-      metrics.links = NA_character_,
+      metrics.links = list(),
       variables = list(),
       constants = list()
     )

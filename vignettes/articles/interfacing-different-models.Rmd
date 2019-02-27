@@ -20,6 +20,7 @@ library(tidyverse)
 library(ggplot2)
 library(gganimate)
 library(cartography) 
+library(rcartocolor)
 library(ggthemes) 
 ```
 
@@ -46,7 +47,7 @@ Turtles move over the lattice and generate heat on cells they move over. The acc
 
 In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).
 
-After converting the spatial data to tibble format (`get_nl_spatial()`), we split the spatial data into a turtles tibble and a patches tibble using the group column of the returned tibble from `get_nl_spatial()`.
+After converting the spatial data to tibble format (`unnest_simoutput()`), we split the spatial data into a turtles tibble and a patches tibble using the agent column of the returned tibble from `unnest_simoutput()`.
 The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who). 
 
 ```{r  eval = FALSE}
@@ -70,7 +71,7 @@ nl@experiment <- experiment(expname = "diffusion",
                                              "turtle-heat" = 139,
                                              "turtle-speed" = 1.0,
                                              "wander?" = "TRUE"),
-                            metrics.turtles = c("who", "xcor", "ycor"),
+                            metrics.turtles = list("turtles" = c("who", "xcor", "ycor")),
                             metrics.patches = c("pxcor", "pycor", "pcolor", "heat"))
 
 # Evaluate if variables and constants are valid:
@@ -90,25 +91,23 @@ setsim(nl, "simoutput") <- results
 
 
 # Prepare data for plotting
-nl_spatial <- get_nl_spatial(nl, format = "tibble")
+nl_spatial <- unnest_simoutput(nl)
+n <- nl@experiment@runtime
 
-n <- 500
-
-turtles <- nl_spatial %>% dplyr::filter(group == "turtles" & step < n) %>% dplyr::select(xcor, ycor, step, who)
-patches <- nl_spatial %>% dplyr::filter(group == "patches"& step < n) %>% dplyr::select(patches_x, patches_y, pcolor, step)
+turtles <- nl_spatial %>% dplyr::filter(agent == "turtles" & `[step]` < n) %>% dplyr::select(xcor, ycor, `[step]`, who)
+patches <- nl_spatial %>% dplyr::filter(agent == "patches"& `[step]` < n) %>% dplyr::select(pxcor, pycor, pcolor, `[step]`)
 
 ## Plot animation:
 p1 <- ggplot() +
-  geom_tile(data = patches, aes(x=patches_x, y = patches_y, fill=pcolor)) +
+  geom_tile(data = patches, aes(x=pxcor, y = pycor, fill=pcolor)) +
   geom_point(data = turtles, aes(x = xcor, y = ycor, group = who), size=2) +
-  rcartocolor::scale_fill_carto_c(palette = "Prism") +
-  transition_time(step) +
+  scale_fill_carto_c(palette = "Prism") +
+  transition_time(`[step]`) +
   guides(fill="none", color="none") +
   coord_equal() +
-  # labs(title = 'Step: {frame_time}') +
   theme_void() 
 
-gganimate::animate(p1, width=800, height=800, duration=6)
+gganimate::animate(p1, nframes = n, width=800, height=800, duration=6)
 ```
 
 <center>
@@ -131,7 +130,7 @@ nl <- nl(nlversion = "6.0.4",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
-nl@experiment <- experiment(expname = "diffusion",
+nl@experiment <- experiment(expname = "fire",
                             outpath = outpath,
                             repetition = 1,    
                             tickmetrics = "true",
@@ -140,7 +139,7 @@ nl@experiment <- experiment(expname = "diffusion",
                             runtime = 500,
                             evalticks = seq(1,500),
                             metrics = c("count patches"),
-                            metrics.turtles = c("who", "pxcor", "pycor", "breed", "color"),
+                            metrics.turtles = list("turtles" = c("who", "pxcor", "pycor", "breed", "color")),
                             metrics.patches = c("pxcor", "pycor", "pcolor"),
                             constants = list('density' = 62)
 )
@@ -160,13 +159,12 @@ results <- run_nl_all(nl = nl)
 ## Step1: Attach results to nl:
 setsim(nl, "simoutput") <- results
 
-nl_spatial <- get_nl_spatial(nl, format = "tibble")
-
-n <- 461
-
-embers <- nl_spatial %>% dplyr::filter(breed == "embers" & group == "turtles" & step < n) %>% dplyr::select(pxcor, pycor, step, color, who)
-fires <- nl_spatial %>% dplyr::filter(breed == "fires" & group == "turtles" & step < n) %>% dplyr::select(pxcor, pycor, step, color, who)
-patches <- nl_spatial %>% dplyr::filter(group == "patches" & step < n) %>% dplyr::select(patches_x, patches_y, pcolor, step)
+nl_spatial <- unnest_simoutput(nl)
+n <- max(nl_spatial$`[step]`)
+         
+embers <- nl_spatial %>% dplyr::filter(breed == "embers" & agent == "turtles" & `[step]` < n) %>% dplyr::select(pxcor, pycor, `[step]`, color, who)
+fires <- nl_spatial %>% dplyr::filter(breed == "fires" & agent == "turtles" & `[step]` < n) %>% dplyr::select(pxcor, pycor, `[step]`, color, who)
+patches <- nl_spatial %>% dplyr::filter(agent == "patches" & `[step]` < n) %>% dplyr::select(pxcor, pycor, pcolor, `[step]`)
 
 # make same space in the memory
 rm(nl)
@@ -177,17 +175,17 @@ gc()
 #----------------------------------
 ## Plot animation:
 p1 <- ggplot(embers) +
-  geom_tile(data = patches, aes(x=patches_x, y=patches_y, fill=factor(pcolor))) +
+  geom_tile(data = patches, aes(x=pxcor, y=pycor, fill=factor(pcolor))) +
   geom_point(data = embers, aes(x = pxcor, y = pycor, color = color, group = who), size=2) +
   scale_color_gradientn(colors = rev(cartography::carto.pal("orange.pal", n1 = 8))) +
   geom_point(data = fires, aes(x = pxcor, y = pycor, color = color, group = who), size=3) +
   scale_fill_manual(values = c("0" = "gray24", "55" = "#83B37D", "11.4" = "#B59A89")) +
-  transition_time(step) +
+  transition_time(`[step]`) +
   guides(fill="none", color="none") +
   coord_equal() +
   theme_void() 
   
-g1 <- gganimate::animate(p1, width=800, height=800, duration = 6)
+g1 <- gganimate::animate(p1, nframes = n, width=800, height=800, duration = 6)
 ```
 
 <center>
@@ -204,7 +202,7 @@ Ants carrying food leave a trail of chemicals on cells they move over. These che
 
 In order to transfer the spatial information from NetLogo to R, we measure the who number, coordinates and breed for all turtles (metrics.turtles) and coordinates, patch color, amount of chemicals, presence of food and the food source number of all patches (metrics.patches).
 
-After converting the spatial data to tibble format (`get_nl_spatial()`), we split the patches information in three objects in order to display the three groups of patches:
+After converting the spatial data to tibble format (`unnest_simoutput()`), we split the patches information in three objects in order to display the three groups of patches:
 
 * chem_dat: Contains chemical distribution of all patches. The amount of chemicals of each patch is plotted by using a geom_tile layer that acts as base layer of our plot.
 * food_dat: Contains patches coordinates of patches that contain food sources (food > 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.
@@ -232,7 +230,7 @@ nl@experiment <- experiment(expname = "ants",
                             idgo = "go",         
                             runtime = 1000,
                             evalticks = seq(1,1000),
-                            metrics.turtles = c("who", "pxcor", "pycor", "breed"),
+                            metrics.turtles = list("turtles" = c("who", "pxcor", "pycor", "breed")),
                             metrics.patches = c("pxcor", "pycor", "pcolor", "chemical", "food", "food-source-number"),
                             constants = list("population" = 125,
                                              'diffusion-rate' = 50,
@@ -248,32 +246,32 @@ results <- run_nl_all(nl = nl)
 
 ## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()
 setsim(nl, "simoutput") <- results
-nl_spatial <- get_nl_spatial(nl, format = "tibble")
+nl_spatial <- unnest_simoutput(nl)
 
 ## Step6: Prepare data for plotting
 # Extract infromation on food sources and select maximum step as simulation length:
-food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::select(patches_x, patches_y, step)
-nmax <- max(food_dat$step)
-food_dat <- food_dat %>% dplyr::filter(step %in% 1:nmax)
+food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::select(pxcor, pycor, `[step]`)
+nmax <- max(food_dat$`[step]`)
+food_dat <- food_dat %>% dplyr::filter(`[step]` %in% 1:nmax)
 # Extract information on chemicals and apply minimum treshhold for coloring:
-chem_dat <- nl_spatial %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(patches_x, patches_y, chemical, step)
+chem_dat <- nl_spatial %>% dplyr::filter(`[step]` %in% 1:nmax) %>% dplyr::select(pxcor, pycor, chemical, `[step]`)
 chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
 # Extract information on turtle positions:
-turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(step %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, step)
+turt_dat <- nl_spatial %>% dplyr::filter(!is.na(who)) %>% dplyr::filter(`[step]` %in% 1:nmax) %>% dplyr::select(pxcor, pycor, who, `[step]`)
 # Create a new data frame to overlay the nest position (in this case the center of the world 0,0)
 nest_dat <- food_dat
-nest_dat$patches_x <- 0
-nest_dat$patches_y <- 0
+nest_dat$pxcor <- 0
+nest_dat$pycor <- 0
 
 ## Step7: Plotting
 p1 <- ggplot(food_dat) +
-  geom_tile(data=chem_dat, aes(x=patches_x, y=patches_y, fill=sqrt(chemical))) +
-  geom_point(data=food_dat, aes(x=patches_x, y=patches_y), color="black", shape=15, size=4.5, alpha=1) +
+  geom_tile(data=chem_dat, aes(x=pxcor, y=pycor, fill=sqrt(chemical))) +
+  geom_point(data=food_dat, aes(x=pxcor, y=pycor), color="black", shape=15, size=4.5, alpha=1) +
   geom_text(data=turt_dat, aes(x=pxcor, y=pycor, group=who, color=as.numeric(who)), size=5, alpha=1, label="￥") +
-  geom_point(data=nest_dat, aes(x=patches_x, y=patches_y), color="brown", fill="white", size=30, stroke=2, shape=21) +
+  geom_point(data=nest_dat, aes(x=pxcor, y=pycor), color="brown", fill="white", size=30, stroke=2, shape=21) +
   scale_fill_viridis_c(direction=-1, option="magma", na.value = "white") +
   scale_color_gradient_tableau(palette="Orange") +
-  transition_time(step) +
+  transition_time(`[step]`) +
   guides(fill="none", color="none") +
   coord_equal() +
   labs(title = 'Step: {frame_time}') +
@@ -294,7 +292,7 @@ gganimate::animate(p1, nframes = nmax, width=800, height=800, fps=10)
 The waves model contains no patch information. Three types of turtle agents are present in the model: waves, edges and a driver. However, these agents are not defined by using breeds but by using turtles-own variables (driver?, edge?).
 
 In addition to these two variables we measure the who number, turtle coordinates and turtle color.
-Again, before plotting we split the spatial data tibble from `get_nl_spatial()` into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.
+Again, before plotting we split the spatial data tibble from `unnest_simoutput()` into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.
 
 Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.
 
@@ -324,10 +322,7 @@ nl@experiment <- experiment(expname = "waves",
                             evalticks = seq(1,100),
                             variables = list('friction' = list(values = c(5,25,50,90))),
                             constants = list("stiffness" = 20),
-                            metrics.turtles = c("who", "xcor", "ycor", "driver?", "edge?", "color"))
-
-# Evaluate if variables and constants are valid:
-eval_variables_constants(nl)
+                            metrics.turtles = list("turtles" = c("who", "xcor", "ycor", "driver?", "edge?", "color")))
 
 ## Step3: Add a Simulation Design
 nl@simdesign <- simdesign_distinct(nl = nl,
@@ -343,7 +338,7 @@ setsim(nl, "simoutput") <- results
 
 
 # Prepare data for plotting
-nl_spatial <- get_nl_spatial(nl, format = "tibble", patches = FALSE)
+nl_spatial <- unnest_simoutput(nl)
 
 nl_spatial$friction <- factor(nl_spatial$friction)
 levels(nl_spatial$friction) <- c("Friction = 5",
@@ -351,18 +346,18 @@ levels(nl_spatial$friction) <- c("Friction = 5",
                                  "Friction = 50",
                                  "Friction = 90")
 
-n <- 100
+n <- nl@experiment@runtime
 
-waves  <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "false" & step < n) %>% dplyr::select(xcor, ycor, step, who, color, friction)
-egde   <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "true" & step < n) %>% dplyr::select(xcor, ycor, step, who, friction)
-driver <- nl_spatial %>% dplyr::filter(`driver?` == "true" & `edge?` == "false" & step < n) %>% dplyr::select(xcor, ycor, step, who, friction)
+waves  <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "false" & `[step]` < n) %>% dplyr::select(xcor, ycor, `[step]`, who, color, friction)
+egde   <- nl_spatial %>% dplyr::filter(`driver?` == "false" & `edge?` == "true" & `[step]` < n) %>% dplyr::select(xcor, ycor, `[step]`, who, friction)
+driver <- nl_spatial %>% dplyr::filter(`driver?` == "true" & `edge?` == "false" & `[step]` < n) %>% dplyr::select(xcor, ycor, `[step]`, who, friction)
 
 p1 <- ggplot(waves) +
   geom_point(data = waves, aes(x = xcor, y = ycor, group = who, color = color), size=2) +
   geom_point(data = driver, aes(x = xcor, y = ycor, group = who), size=2, color = "grey") +
   geom_point(data = egde, aes(x = xcor, y = ycor, group = who), size=2, color = "black") +
   facet_wrap(~friction) +
-  transition_time(step) +
+  transition_time(`[step]`) +
   guides(color="none") +
   coord_equal() +
   theme_void() 
@@ -408,7 +403,7 @@ nl@experiment <- experiment(expname = "flocking",
                                              "max-align-turn" = 4,
                                              "max-cohere-turn" = 4,
                                              "max-separate-turn" = 4),
-                            metrics.turtles = c("who", "xcor", "ycor", "heading", "color"))
+                            metrics.turtles = list("turtles" = c("who", "xcor", "ycor", "heading", "color")))
 
 # Evaluate if variables and constants are valid:
 eval_variables_constants(nl)
@@ -423,16 +418,13 @@ results <- run_nl_all(nl = nl)
 
 setsim(nl, "simoutput") <- results
 
-nl_spatial <- get_nl_spatial(nl,
-                             patches = FALSE,
-                             turtle_coords = "x",
-                             format = "tibble")
+nl_spatial <- unnest_simoutput(nl)
 
 ## Calculate angles for plotting:
 # (a) convert NetLogo degree headings (clockwise with 0 = top) to geom_text degree angle (counter-clockwise with 0 = right)
 # (b) convert geom_text degree angle to geom_spoke radians angle
 nl_spatial <- nl_spatial %>% 
-  dplyr::select(step, who, xcor, ycor, heading, color) %>% 
+  dplyr::select(`[step]`, who, xcor, ycor, heading, color) %>% 
   mutate(heading_text = ((heading * -1) + 90)) %>% 
   mutate(heading_radians = ((heading_text * pi) / 180))
 
@@ -442,11 +434,11 @@ p1 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
   geom_spoke(aes(color=color, group=who, angle=heading_radians), arrow=arrow(length=unit(0.2, "inches")), radius=1) +
   scale_color_viridis_c() +
   guides(color=FALSE) +
-  transition_time(step) +
+  transition_time(`[step]`) +
   coord_equal() +
   theme_void() 
 
-gganimate::animate(p1, nframes=max(nl_spatial$step), width=600, height=600, fps=20)
+gganimate::animate(p1, nframes=max(nl_spatial$`[step]`), width=600, height=600, fps=20)
 ```
 
 <center>
@@ -459,11 +451,11 @@ p2 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
   geom_text(aes(color=color, group=who, angle=heading_text), label="→", size=5) +
   scale_color_viridis_c() +
   guides(color=FALSE) +
-  transition_time(step) +
+  transition_time(`[step]`) +
   coord_equal() +
   theme_void() 
 
-gganimate::animate(p2, nframes=max(nl_spatial$step), width=600, height=600, fps=20)
+gganimate::animate(p2, nframes=max(nl_spatial$`[step]`), width=600, height=600, fps=20)
 
 ```
 
@@ -482,7 +474,7 @@ Thus, on each tick we measure end1 and end2 of each link (metrics.links) and the
 
 #### Visualize network using ggplot
 
-Again, after attaching the simulation results and postprocessing with get_nl_spatial (note: we set links = TRUE, turtles = TRUE, patches = FALSE) we split the tibble into a turtles tibble and a links tibble by subsetting the group column.
+Again, after attaching the simulation results and postprocessing with `unnest_simoutput()` we split the tibble into a turtles tibble and a links tibble by subsetting the group column.
 
 Finally, we need to reference the who number start and end points of the links to the actual coordinates of the corresponding turtle on each step. This can be easily achieved with two left_join calls, one for end1 who numbers and one for end2 who numbers.
 
@@ -503,11 +495,11 @@ nl@experiment <- experiment(expname = "networks",
                             runtime = 200,
                             evalticks = seq(1,200),
                             constants = list("layout?" = TRUE),
-                            metrics.turtles=c("who",
-                                              "xcor",
-                                              "ycor",
-                                              "color"),
-                            metrics.links=c("end1","end2"))
+                            metrics.turtles = list("turtles" = c("who", 
+                                                                 "xcor",                            
+                                                                 "ycor",
+                                                                 "color")),
+                            metrics.links = list("links" = c("[who] of end1","[who] of end2")))
 
 ## Step3: Add simdesign
 nl@simdesign <- simdesign_simple(nl=nl, nseeds = 1)
@@ -521,31 +513,31 @@ results <- run_nl_one(nl = nl,
 setsim(nl, "simoutput") <- results
 
 ## Postprocess spatial metrics with get_nl_spatial:
-nl_spatial <- get_nl_spatial(nl, turtle_coords = "x", format = "tibble", patches = FALSE, links = TRUE, turtles = TRUE)
+nl_spatial <- unnest_simoutput(nl)
 
 ## Subset nl_spatial using the group column:
 nl_links <- nl_spatial %>%
-  dplyr::filter(group == "links") %>% 
+  dplyr::filter(agent == "links") %>% 
   dplyr::select(-who, -xcor, -ycor, -color)
 
 nl_turtles <- nl_spatial %>%
-  dplyr::filter(group == "turtles") %>% 
-  dplyr::select(step, who, xcor, ycor, color)
+  dplyr::filter(agent == "turtles") %>% 
+  dplyr::select(`[step]`, who, xcor, ycor, color)
 
 ## Reference who numbers of link start (end1) and end (end2) points to actual coordinates:
 nl_links <- nl_links %>% 
-  dplyr::left_join(nl_turtles, by=c("step"="step","end1" = "who")) %>% 
-  dplyr::left_join(nl_turtles, by=c("step"="step","end2" = "who"))
+  dplyr::left_join(nl_turtles, by=c("[step]"="[step]","end1" = "who")) %>% 
+  dplyr::left_join(nl_turtles, by=c("[step]"="[step]","end2" = "who"))
 
 ## Plot:
 p1 <- ggplot() +
   geom_point(data=nl_turtles, aes(x = xcor, y = ycor, group=who), color="red", size=2) +
   geom_segment(data=nl_links, aes(x = xcor.x, y = ycor.x, xend = xcor.y, yend = ycor.y), size=0.5) +
-  transition_time(step) +
+  transition_time(`[step]`) +
   coord_equal() +
   theme_void()
 
-gganimate::animate(p1, nframes = max(nl_turtles$step), width=400, height=400, fps=8)
+gganimate::animate(p1, nframes = max(nl_turtles$`[step]`), width=400, height=400, fps=8)
 
 ```
 
@@ -556,31 +548,20 @@ gganimate::animate(p1, nframes = max(nl_turtles$step), width=400, height=400, fp
 #### Visualize network using igraph package
 
 It is also possible to use the [igraph](https://igraph.org/r/) package to visualize a NetLogo network.
-We use the `graph_from_data_frame()` function from the igraph package to convert our spatial data into an igraph object.
+We use the `nl_to_graph()` function from the nlrx package to convert our spatial data into an igraph object.
 Here we want to display the network for only one simulation step, thus we filter our spatial data and select only the last simulation step. Again, we split the data into a turtles and a links tibble and rename the columns.
 
 After conversion to an igraph object we can use the power of network analysis functions from the igraph package to do further analyses. In this example we perform a community cluster algorithm to color the nodes based on their community membership within the network.
 
 ```{r eval = FALSE}
 
-## Split data from get_nl_spatial into links and turtles
-## Filter to select only last simulation step
-## Rename columns (from, to for links; name for turtles)
-nl_links <- nl_spatial %>% 
-  dplyr::filter(step==max(step)) %>% 
-  dplyr::filter(group == "links") %>% 
-  dplyr::select(end1, end2) %>% 
-  dplyr::rename(from=end1, to=end2)
-
-nl_turtles <- nl_spatial %>%
-  dplyr::filter(step==max(step)) %>% 
-  dplyr::filter(group == "turtles") %>% 
-  dplyr::select(who) %>% 
-  dplyr::rename(name=who)
-
 ## Load igraph package and convert spatial tibbles to igraph:
 library(igraph)
-nw <- graph_from_data_frame(nl_links, directed = FALSE, vertices = nl_turtles)
+nw.all <- nl_to_graph(nl)
+
+## Select the last step and extract list element to get igraph object
+nw <- nw.all %>% dplyr::filter(`[step]` == max(`[step]`))
+nw <- nw$spatial.links[[1]]
 
 ## Perform community cluster algorithm and set community dependend colors:
 com <- walktrap.community(nw)
