@@ -274,10 +274,8 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   # Render the file
   rmarkdown::render(mdfile)
 
-  print("File successfully compiled!")
-
   # Open the file:
   outfile <- file.path(outpath, paste0("nldoc.", output_format))
-  browseURL(outfile)
-
+  # Print success
+  print("File successfully compiled!")
 }
