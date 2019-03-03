@@ -86,7 +86,7 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("nldoc/nlrx")
+devtools::install_github("ropensci/nlrx")
 ```
 
 ## Get started
