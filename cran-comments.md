@@ -1,6 +1,8 @@
-# New submission
+# Resubmission
 
-This is a new release.
+We've put every software or package name in single quotes and linked Netlogo in the 
+Description.
+Every test that is executable on CRAN is without a \dontrun{}.
 
 ## Test environments
 * Windows 10, R 3.5.2
