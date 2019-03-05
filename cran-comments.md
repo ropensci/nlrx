@@ -1,8 +1,8 @@
 # Resubmission
 
-We've put every software or package name in single quotes and linked Netlogo in the 
-Description.
-Every test that is executable on CRAN is without a \dontrun{}.
+We created test data to allow more examples to be executable.
+We added code snippets to load nl objects from test data for all function examples that need a nl object.
+We added NetLogo and Java to the System requirements of the DESCRIPTION.
 
 ## Test environments
 * Windows 10, R 3.5.2
