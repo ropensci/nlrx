@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Construct a new experiment object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/class_constr.R'><code>R/class_constr.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/class_constr.R'><code>R/class_constr.R</code></a></small>
     <div class="hidden name"><code>experiment.Rd</code></div>
     </div>
 
@@ -333,8 +333,12 @@ Please note that NetLogo models may contain a huge number of turtles and output 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># To attach an experiment, a nl object needs to be created first (see ?nl).</span>
+<span class='co'># For this example, we load a nl object from test data.</span>
+
 <span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_simple</span>
 <span class='no'>nl</span>@<span class='kw'>experiment</span> <span class='kw'>&lt;-</span> <span class='fu'>experiment</span>(<span class='kw'>expname</span><span class='kw'>=</span><span class='st'>"wolf-sheep"</span>,
                              <span class='kw'>outpath</span><span class='kw'>=</span><span class='st'>"C:/out/"</span>,
                              <span class='kw'>repetition</span><span class='kw'>=</span><span class='fl'>1</span>,
@@ -354,7 +358,6 @@ Please note that NetLogo models may contain a huge number of turtles and output 
                                                <span class='st'>"pycor"</span>,
                                                <span class='st'>"color"</span>)),
                              <span class='kw'>metrics.patches</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pxcor"</span>, <span class='st'>"pycor"</span>, <span class='st'>"pcolor"</span>),
-                             <span class='kw'>metrics.links</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"links"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"end1"</span>,<span class='st'>"end2"</span>)),
                              <span class='kw'>variables</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>'initial-number-sheep'</span> <span class='kw'>=</span>
                              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='kw'>min</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='fl'>150</span>, <span class='kw'>step</span><span class='kw'>=</span><span class='fl'>10</span>, <span class='kw'>qfun</span><span class='kw'>=</span><span class='st'>"qunif"</span>),
                                               <span class='st'>'initial-number-wolves'</span> <span class='kw'>=</span>
@@ -366,10 +369,7 @@ Please note that NetLogo models may contain a huge number of turtles and output 
                                               <span class='st'>"wolf-gain-from-food"</span> <span class='kw'>=</span> <span class='fl'>20</span>,
                                               <span class='st'>"sheep-reproduce"</span> <span class='kw'>=</span> <span class='fl'>4</span>,
                                               <span class='st'>"wolf-reproduce"</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-                                              <span class='st'>"show-energy?"</span> <span class='kw'>=</span> <span class='st'>"false"</span>))
-
-<span class='co'># }</span><div class='input'>
-</div></pre>
+                                              <span class='st'>"show-energy?"</span> <span class='kw'>=</span> <span class='st'>"false"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

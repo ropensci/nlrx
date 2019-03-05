@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute all NetLogo simulations from a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
     <div class="hidden name"><code>run_nl_all.Rd</code></div>
     </div>
 
@@ -227,6 +227,9 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Load nl object from test data:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
+
 <span class='co'># Execute all simulations from an nl object with properly attached simdesign.</span>
 <span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>)
 

@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute one NetLogo simulation from a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
     <div class="hidden name"><code>run_nl_one.Rd</code></div>
     </div>
 
@@ -225,6 +225,9 @@ cleanup.bat deletes/keeps the temporary generated batch/sh commandline files fro
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='co'># Load nl object from test data:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
+
 <span class='co'># Run one simulation:</span>
 <span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_one</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                       <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],

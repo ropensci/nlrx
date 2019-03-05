@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add an eFast simdesign to a nl object — simdesign_eFast • nlrx | NetLogo from R</title>
+<title>Wolf Sheep model sample data: spatial — nl_spatial • nlrx | NetLogo from R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,14 @@
 
 
 
-<meta property="og:title" content="Add an eFast simdesign to a nl object — simdesign_eFast" />
+<meta property="og:title" content="Wolf Sheep model sample data: spatial — nl_spatial" />
 
-<meta property="og:description" content="Add an eFast simdesign to a nl object" />
+<meta property="og:description" content="The dataset contains a complete nl object.
+The nl object has been used to setup and run a simple simulation design.
+For these simulations, spatial agent output has been collected.
+metrics.turtles was set up to measure turtle coordinates.
+metrics.patches was set up to measure colors of cells.
+It also contains the model outputs within the simdesign object." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -160,72 +165,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add an eFast simdesign to a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_eFast.Rd</code></div>
+    <h1>Wolf Sheep model sample data: spatial</h1>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/sample_data.R'><code>R/sample_data.R</code></a></small>
+    <div class="hidden name"><code>nl_spatial.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Add an eFast simdesign to a nl object</p>
+    <p>The dataset contains a complete nl object.
+The nl object has been used to setup and run a simple simulation design.
+For these simulations, spatial agent output has been collected.
+metrics.turtles was set up to measure turtle coordinates.
+metrics.patches was set up to measure colors of cells.
+It also contains the model outputs within the simdesign object.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>simdesign_eFast</span>(<span class='no'>nl</span>, <span class='no'>samples</span>, <span class='no'>nseeds</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>nl</th>
-      <td><p>nl object with a defined experiment</p></td>
-    </tr>
-    <tr>
-      <th>samples</th>
-      <td><p>number of samples for the eFast sensitivity analysis</p></td>
-    </tr>
-    <tr>
-      <th>nseeds</th>
-      <td><p>number of seeds for this simulation design</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='no'>nl_spatial</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>simdesign S4 class object</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
-<p>Variables in the experiment variable list need to provide a numeric distribution with min, max and qfun (e.g. list(min=1, max=4, qfun="qunif")).</p>
-<p>The eFast simdesign uses the sensitivity package to set up a fast99 elementary effects sensitivity analysis, including a simobject of class fast99 and a input tibble for simulations.
-For details on method specific sensitivity analysis function parameters see ?fast99
-Finally, the function reports a simdesign object.</p>
+    <p>nl object with defined experiment, simdesign and model output</p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># To attach a simdesign, a nl object needs to be created first (see ?nl).</span>
-<span class='co'># For this example, we load a nl object from test data.</span>
-
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_eFast</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_eFast</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-                                 <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>100</span>,
-                                 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating eFast simulation design</span></div><div class='input'>
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#format">Format</a></li>
+          </ul>
 
   </div>
 </div>

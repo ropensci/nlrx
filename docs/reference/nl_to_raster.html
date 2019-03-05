@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get spatial data from metrics.patches output</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/nl_to_raster.R'><code>R/nl_to_raster.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/nl_to_raster.R'><code>R/nl_to_raster.R</code></a></small>
     <div class="hidden name"><code>nl_to_raster.Rd</code></div>
     </div>
 
@@ -199,13 +199,12 @@ the nl object first.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Attach simulation results:</span>
-<span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># Load nl object (with spatial output data already attached) from test data:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_spatial</span>
+
 <span class='co'># Convert patch metrics to spatial raster objects:</span>
-<span class='no'>results.raster</span> <span class='kw'>&lt;-</span> <span class='fu'>nl_to_raster</span>(<span class='no'>nl</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+<span class='no'>results.raster</span> <span class='kw'>&lt;-</span> <span class='fu'>nl_to_raster</span>(<span class='no'>nl</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

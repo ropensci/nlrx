@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Write attached NetLogo simulation output to file</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/analyze_nl.R'><code>R/analyze_nl.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/analyze_nl.R'><code>R/analyze_nl.R</code></a></small>
     <div class="hidden name"><code>write_simoutput.Rd</code></div>
     </div>
 
@@ -191,16 +191,12 @@ The outpath argument can be optionally used to write output to a different direc
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_nl_all.html'>run_nl_all</a></span>(<span class='no'>nl</span>)
-
-<span class='co'># Attach output to simdesign:</span>
-<span class='fu'><a href='setsim.html'>setsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simoutput"</span>) <span class='kw'>&lt;-</span> <span class='no'>results</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># Load nl object including output data from testdata</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
 
 <span class='co'># Write output to outpath directory</span>
-<span class='fu'>write_simoutput</span>(<span class='no'>nl</span>)
-<span class='co'># }</span></pre>
+<span class='fu'>write_simoutput</span>(<span class='no'>nl</span>, <span class='kw'>outpath</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>())</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

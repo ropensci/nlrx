@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add a soboljansen simdesign to a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
     <div class="hidden name"><code>simdesign_soboljansen.Rd</code></div>
     </div>
 
@@ -217,15 +217,18 @@ Finally, the function reports a simdesign object.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Example for Wolf Sheep Predation model from NetLogo models library:</span>
+    <pre class="examples"><div class='input'>
+<span class='co'># To attach a simdesign, a nl object needs to be created first (see ?nl).</span>
+<span class='co'># For this example, we load a nl object from test data.</span>
+
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_soboljansen</span>
 <span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_soboljansen</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
 <span class='kw'>samples</span><span class='kw'>=</span><span class='fl'>1000</span>,
 <span class='kw'>sobolnboot</span><span class='kw'>=</span><span class='fl'>100</span>,
 <span class='kw'>sobolconf</span><span class='kw'>=</span><span class='fl'>0.95</span>,
 <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>3</span>,
-<span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)
-<span class='co'># }</span><div class='input'>
+<span class='kw'>precision</span><span class='kw'>=</span><span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='message'>Creating soboljansen simulation design</span></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

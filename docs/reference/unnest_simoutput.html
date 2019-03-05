@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get spatial data from metrics.turtles and metrics.patches output</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/unnest_simoutput.R'><code>R/unnest_simoutput.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/unnest_simoutput.R'><code>R/unnest_simoutput.R</code></a></small>
     <div class="hidden name"><code>unnest_simoutput.Rd</code></div>
     </div>
 
@@ -192,10 +192,33 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>unnest_simoutput</span>(<span class='no'>nl</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'>
+<span class='co'># To unnest data a nl object containing spatial output data is needed.</span>
+<span class='co'># For this example, we load a nl object from test data.</span>
+
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_spatial</span>
+<span class='fu'>unnest_simoutput</span>(<span class='no'>nl</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 30,370 x 21</span><span>
+#&gt;    `[run number]` `model-version` `initial-number~ `initial-number~
+#&gt;             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'> 1</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 2</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 3</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 4</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 5</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 6</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 7</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 8</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'> 9</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'>10</span><span>              1 sheep-wolves-g~              100               50
+#&gt; </span><span style='color: #555555;'># ... with 30,360 more rows, and 17 more variables:
+#&gt; #   `grass-regrowth-time` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `sheep-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   `wolf-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `sheep-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   `wolf-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `show-energy?` </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span style='color: #555555;'>, `random-seed` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   `[step]` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count sheep` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count wolves` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   siminputrow </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, breed </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, who </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pxcor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pycor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,
+#&gt; #   agent </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, pcolor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

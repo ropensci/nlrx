@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Execute NetLogo simulation without pregenerated parametersets</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
     <div class="hidden name"><code>run_nl_dyn.Rd</code></div>
     </div>
 
@@ -219,7 +219,17 @@ cleanup.bat deletes/keeps the temporary generated batch/sh commandline files fro
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='co'># Run one simulation:</span>
+<span class='co'># Load nl object form test data:</span>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
+
+<span class='co'># Add genalg simdesign:</span>
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='simdesign_GenAlg.html'>simdesign_GenAlg</a></span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                  <span class='kw'>popSize</span> <span class='kw'>=</span> <span class='fl'>200</span>,
+                                  <span class='kw'>iters</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+                                  <span class='kw'>evalcrit</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                                  <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='co'># Run simulations:</span>
 <span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_dyn</span>(<span class='no'>nl</span>)
 
 <span class='co'># }</span></pre>
