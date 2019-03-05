@@ -36,21 +36,27 @@ unnest_simoutput <- function(nl){
     tmet_exist <- TRUE
   } else {
     tmet_exist <- FALSE
-    nl@simdesign@simoutput$metrics.turtles <- NA
+    simout <- getsim(nl, "simoutput")
+    simout$metrics.turtles <- NA
+    setsim(nl, "simoutput") <- simout
   }
 
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
     pmet_exist <- TRUE
   } else {
     pmet_exist <- FALSE
-    nl@simdesign@simoutput$metrics.patches <- NA
+    simout <- getsim(nl, "simoutput")
+    simout$metrics.patches <- NA
+    setsim(nl, "simoutput") <- simout
   }
 
   if (length(nl@experiment@metrics.links) > 0) {
     lmet_exist <- TRUE
   } else {
     lmet_exist <- FALSE
-    nl@simdesign@simoutput$metrics.links <- NA
+    simout <- getsim(nl, "simoutput")
+    simout$metrics.links <- NA
+    setsim(nl, "simoutput") <- simout
   }
 
 
