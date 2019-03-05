@@ -42,6 +42,9 @@ This function can be used to run single simulations of a NetLogo model.
 \examples{
 \dontrun{
 
+# Load nl object from test data:
+nl <- nl_lhs
+
 # Run one simulation:
 results <- run_nl_one(nl = nl,
                       seed = getsim(nl, "simseeds")[1],

@@ -16,10 +16,13 @@
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_simple
 #' nl@@simdesign <- simdesign_simple(nl = nl, nseeds = 3)
-#' }
+#'
 #'
 #' @aliases simdesign_simple
 #' @rdname simdesign_simple
@@ -67,10 +70,13 @@ simdesign_simple <- function(nl, nseeds) {
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_distinct
 #' nl@@simdesign <- simdesign_distinct(nl = nl, nseeds = 3)
-#' }
+#'
 #'
 #' @aliases simdesign_distinct
 #' @rdname simdesign_distinct
@@ -136,10 +142,13 @@ simdesign_distinct <- function(nl, nseeds) {
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_ff
 #' nl@@simdesign <- simdesign_ff(nl = nl, nseeds = 3)
-#' }
+#'
 #'
 #' @aliases simdesign_ff
 #' @rdname simdesign_ff
@@ -205,13 +214,15 @@ simdesign_ff <- function(nl, nseeds) {
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_lhs
 #' nl@@simdesign <- simdesign_lhs(nl=nl,
-#' samples=100,
-#' nseeds=3,
-#' precision=3)
-#' }
+#'                                samples=100,
+#'                                nseeds=3,
+#'                                precision=3)
 #'
 #' @aliases simdesign_lhs
 #' @rdname simdesign_lhs
@@ -273,8 +284,11 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_sobol
 #' nl@@simdesign <- simdesign_sobol(nl=nl,
 #' samples=1000,
 #' sobolorder=2,
@@ -282,7 +296,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)
-#' }
+#'
 #'
 #' @aliases simdesign_sobol
 #' @rdname simdesign_sobol
@@ -363,15 +377,18 @@ simdesign_sobol <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_sobol2007
 #' nl@@simdesign <- simdesign_sobol2007(nl=nl,
 #' samples=1000,
 #' sobolnboot=100,
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)
-#' }
+#'
 #'
 #' @aliases simdesign_sobol2007
 #' @rdname simdesign_sobol2007
@@ -452,15 +469,18 @@ simdesign_sobol2007 <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_soboljansen
 #' nl@@simdesign <- simdesign_soboljansen(nl=nl,
 #' samples=1000,
 #' sobolnboot=100,
 #' sobolconf=0.95,
 #' nseeds=3,
 #' precision=3)
-#' }
+#'
 #'
 #' @aliases simdesign_soboljansen
 #' @rdname simdesign_soboljansen
@@ -543,15 +563,18 @@ simdesign_soboljansen <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_morris
 #' nl@@simdesign <- simdesign_morris(nl=nl,
 #'                                   morristype="oat",
 #'                                   morrislevels=4,
 #'                                   morrisr=20,
 #'                                   morrisgridjump=2,
 #'                                   nseeds=3)
-#' }
+#'
 #'
 #' @aliases simdesign_morris
 #' @rdname simdesign_morris
@@ -635,12 +658,15 @@ simdesign_morris <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_eFast
 #' nl@@simdesign <- simdesign_eFast(nl=nl,
 #'                                  samples=100,
 #'                                  nseeds=1)
-#' }
+#'
 #'
 #' @aliases simdesign_eFast
 #' @rdname simdesign_eFast
@@ -730,14 +756,17 @@ simdesign_eFast <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_lhs
 #' nl@@simdesign <- simdesign_GenSA(nl=nl,
 #'                                  par=NULL,
 #'                                  evalcrit=1,
 #'                                  control=list(max.time = 600),
 #'                                  nseeds=1)
-#' }
+#'
 #'
 #' @aliases simdesign_GenSA
 #' @rdname simdesign_GenSA
@@ -823,11 +852,15 @@ simdesign_GenSA <- function(nl,
 #'
 #'
 #' @examples
-#' \dontrun{
-#' # Example for Wolf Sheep Predation model from NetLogo models library:
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_lhs
+#' nl@@simdesign <- simdesign_GenAlg(nl=nl,
+#'                                   nseeds=1)
 #'
 #'
-#' }
 #'
 #' @aliases simdesign_GenAlg
 #' @rdname simdesign_GenAlg

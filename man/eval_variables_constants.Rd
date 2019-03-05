@@ -26,6 +26,7 @@ cluster execution.
 }
 \examples{
 \dontrun{
+nl <- nl_lhs
 eval_variables_constants(nl)
 }
 

@@ -23,6 +23,7 @@ entered into the variables or constants vector of an experiment object.
 }
 \examples{
 \dontrun{
+nl <- nl_lhs
 report_model_parameters(nl)
 }
 

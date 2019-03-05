@@ -36,14 +36,17 @@ For details on method specific sensitivity analysis function parameters see ?mor
 Finally, the function reports a simdesign object.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_morris
 nl@simdesign <- simdesign_morris(nl=nl,
                                   morristype="oat",
                                   morrislevels=4,
                                   morrisr=20,
                                   morrisgridjump=2,
                                   nseeds=3)
-}
+
 
 }

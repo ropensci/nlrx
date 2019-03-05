@@ -45,10 +45,14 @@ Finally, the function reports a simdesign object.
 Genetic Algorithm simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_lhs
+nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  nseeds=1)
 
 
-}
 
 }

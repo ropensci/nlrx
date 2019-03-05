@@ -17,6 +17,8 @@
 #' @examples
 #' \dontrun{
 #'
+#' # Load nl object from testdata:
+#' nl <- nl_lhs
 #' path <- "/home/user/test"
 #' outfile <- "/home/user/test.zip"
 #' export_nl(nl, path = path, tarfile = outfile)

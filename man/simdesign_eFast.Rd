@@ -29,11 +29,14 @@ For details on method specific sensitivity analysis function parameters see ?fas
 Finally, the function reports a simdesign object.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_eFast
 nl@simdesign <- simdesign_eFast(nl=nl,
                                  samples=100,
                                  nseeds=1)
-}
+
 
 }

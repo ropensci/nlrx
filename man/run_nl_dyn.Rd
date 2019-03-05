@@ -37,7 +37,17 @@ cleanup.bat deletes/keeps the temporary generated batch/sh commandline files fro
 \examples{
 \dontrun{
 
-# Run one simulation:
+# Load nl object form test data:
+nl <- nl_lhs
+
+# Add genalg simdesign:
+nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  popSize = 200,
+                                  iters = 100,
+                                  evalcrit = 1,
+                                  nseeds = 1)
+
+# Run simulations:
 results <- run_nl_dyn(nl)
 
 }

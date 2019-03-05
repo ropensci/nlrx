@@ -4,8 +4,8 @@ create_sample_data <- function() {
   set.seed(593472)
 
   ## Set nl path, model path and output path
-  nlpath <- "C:/Program Files/NetLogo 6.0.3/"
-  modelpath <- "C:/Program Files/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"
+  nlpath <- "C:/Program Files/NetLogo 6.0.4/"
+  modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"
   outpath <- "C:/out"
 
   # Create nl
@@ -97,12 +97,30 @@ create_sample_data <- function() {
   # Store data
   nl_eFast <- run_sample_data(nl)
   devtools::use_data(nl_eFast, compress = "gzip", overwrite = TRUE)
+
+  ## Spatial testdata:
+  nl <- setup_sample_data_nl_spatial(nlpath, modelpath, outpath)
+  nl@simdesign <- simdesign_simple(nl, nseeds=1)
+
+  # Store data:
+  nl_spatial <- run_sample_data(nl)
+  devtools::use_data(nl_spatial, compress = "gzip", overwrite = TRUE)
+
+  ## Nl distinct:
+  nl <- setup_sample_data_nl_distinct(nlpath, modelpath, outpath)
+  nl@simdesign <- simdesign_distinct(nl, nseeds=1)
+
+  # Store data:
+  nl_distinct <- run_sample_data(nl)
+  devtools::use_data(nl_distinct, compress = "gzip", overwrite = TRUE)
+
+
 }
 
 setup_sample_data_nl <- function(nlpath, modelpath, outpath) {
 
   ## Step1: Create a nl obejct:
-  nl <- nl(nlversion = "6.0.3",
+  nl <- nl(nlversion = "6.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1000)
@@ -131,6 +149,73 @@ setup_sample_data_nl <- function(nlpath, modelpath, outpath) {
   return(nl)
 
 }
+
+setup_sample_data_nl_spatial <- function(nlpath, modelpath, outpath) {
+
+  ## Step1: Create a nl obejct:
+  nl <- nl(nlversion = "6.0.4",
+           nlpath = nlpath,
+           modelpath = modelpath,
+           jvmmem = 1000)
+
+  ## Step2: Add Experiment
+  nl@experiment <- experiment(expname = "nlrx",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "true",
+                              idsetup = "setup",
+                              idgo = "go",
+                              runtime = 10,
+                              metrics = c("count sheep","count wolves"),
+                              metrics.turtles = list("turtles" = c("who", "pxcor", "pycor")),
+                              metrics.patches = c("pxcor", "pycor", "pcolor"),
+                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                               'initial-number-sheep' = 100,
+                                               'initial-number-wolves' = 50,
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  return(nl)
+
+}
+
+setup_sample_data_nl_distinct <- function(nlpath, modelpath, outpath) {
+
+  ## Step1: Create a nl obejct:
+  nl <- nl(nlversion = "6.0.4",
+           nlpath = nlpath,
+           modelpath = modelpath,
+           jvmmem = 1000)
+
+  ## Step2: Add Experiment
+  nl@experiment <- experiment(expname = "nlrx",
+                              outpath = outpath,
+                              repetition = 1,
+                              tickmetrics = "false",
+                              idsetup = "setup",
+                              idgo = "go",
+                              idfinal = NA_character_,
+                              runtime = 10,
+                              evalticks = 10,
+                              metrics = c("count sheep","count wolves"),
+                              variables = list('initial-number-sheep' = list(values=c(10, 20, 30)),
+                                               'initial-number-wolves' = list(values=c(10, 20, 30))),
+                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                               "grass-regrowth-time" = 30,
+                                               "sheep-gain-from-food" = 4,
+                                               "wolf-gain-from-food" = 20,
+                                               "sheep-reproduce" = 4,
+                                               "wolf-reproduce" = 5,
+                                               "show-energy?" = "false"))
+
+  return(nl)
+
+}
+
 
 run_sample_data <- function (nl) {
 

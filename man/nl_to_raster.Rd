@@ -27,11 +27,11 @@ In order to use this function, simulation results need to be attached to
 the nl object first.
 }
 \examples{
-\dontrun{
-# Attach simulation results:
-setsim(nl, "simoutput") <- results
+
+# Load nl object (with spatial output data already attached) from test data:
+nl <- nl_spatial
+
 # Convert patch metrics to spatial raster objects:
 results.raster <- nl_to_raster(nl)
-}
 
 }

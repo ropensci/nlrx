@@ -30,9 +30,12 @@ With this function, multiple distinct simulations can be run at once.
 Finally, the function reports a simdesign object.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_distinct
 nl@simdesign <- simdesign_distinct(nl = nl, nseeds = 3)
-}
+
 
 }

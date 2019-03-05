@@ -30,11 +30,12 @@ In order to use this function, simulation results need to be attached to
 the nl object first.
 }
 \examples{
-\dontrun{
-# Attach simulation results:
-setsim(nl, "simoutput") <- results
+
+# Load nl object (with spatial output data already attached) from test data:
+nl <- nl_spatial
+
 # Convert turtle metrics (pxcor/pycor) to spatial point objects:
 results.sf <- nl_to_points(nl, coords="px")
-}
+
 
 }

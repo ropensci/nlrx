@@ -46,6 +46,9 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 \examples{
 \dontrun{
 
+# Load nl object from test data:
+nl <- nl_lhs
+
 # Execute all simulations from an nl object with properly attached simdesign.
 results <- run_nl_all(nl)
 

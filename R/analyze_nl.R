@@ -10,17 +10,13 @@
 #' The outpath argument can be optionally used to write output to a different directory than the defined outpath of the nl object.
 #'
 #' @examples
-#' \dontrun{
 #'
-#' # Run one simulation:
-#' results <- run_nl_all(nl)
-#'
-#' # Attach output to simdesign:
-#' setsim(nl, "simoutput") <- results
+#' # Load nl object including output data from testdata
+#' nl <- nl_lhs
 #'
 #' # Write output to outpath directory
-#' write_simoutput(nl)
-#' }
+#' write_simoutput(nl, outpath=tempdir())
+#'
 #' @aliases write_simoutput
 #' @rdname write_simoutput
 #'
@@ -123,18 +119,16 @@ setsim(nl, \"simoutput\") <- results")
 #' \link[nlrx]{simdesign_GenAlg}
 #'
 #' @examples
-#' \dontrun{
 #'
-#' # Run one simulation:
-#' results <- run_nl_all(nl)
+#' # Load nl object including output data from testdata
+#' nl <- nl_sobol
 #'
-#' # Attach output to simdesign:
-#' setsim(nl, "simoutput") <- results
-#'
-#' # Perform analysis:
+#' # Define aggregation measurements:
 #' myfuns <- dplyr::funs(mean, sd, min, max)
-#' analyze_nl(nl, myfuns)
-#' }
+#'
+#' # Calculate sensitivity indices:
+#' analyze_nl(nl, funs = myfuns)
+#'
 #' @aliases analyze_nl
 #' @rdname analyze_nl
 #'

@@ -296,6 +296,7 @@ util_eval_simdesign <- function(nl) {
 #'
 #' @examples
 #' \dontrun{
+#' nl <- nl_lhs
 #' eval_variables_constants(nl)
 #' }
 #'

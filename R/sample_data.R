@@ -10,6 +10,17 @@
 # > [1] "nl_simple"
 
 
+#' Wolf Sheep model sample data: simdesign distinct
+#'
+#' The dataset contains a complete nl object.
+#' The nl object has been used to setup and run a distinct simulation design.
+#' It also contains the model outputs within the simdesign object.
+#'
+#' @format nl object with defined experiment, simdesign and model output
+"nl_distinct"
+# > [1] "nl_distinct"
+
+
 #' Wolf Sheep model sample data: simdesign ff
 #'
 #' The dataset contains a complete nl object.
@@ -105,3 +116,17 @@
 #' @format nl object with defined experiment, simdesign and model output
 "nl_eFast"
 # > [1] "nl_eFast"
+
+#' Wolf Sheep model sample data: spatial
+#'
+#' The dataset contains a complete nl object.
+#' The nl object has been used to setup and run a simple simulation design.
+#' For these simulations, spatial agent output has been collected.
+#' metrics.turtles was set up to measure turtle coordinates.
+#' metrics.patches was set up to measure colors of cells.
+#' It also contains the model outputs within the simdesign object.
+#'
+#'
+#' @format nl object with defined experiment, simdesign and model output
+"nl_spatial"
+# > [1] "nl_spatial"

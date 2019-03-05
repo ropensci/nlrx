@@ -19,15 +19,11 @@ The outpath argument can be optionally used to write output to a different direc
 Write attached NetLogo simulation output to file
 }
 \examples{
-\dontrun{
 
-# Run one simulation:
-results <- run_nl_all(nl)
-
-# Attach output to simdesign:
-setsim(nl, "simoutput") <- results
+# Load nl object including output data from testdata
+nl <- nl_lhs
 
 # Write output to outpath directory
-write_simoutput(nl)
-}
+write_simoutput(nl, outpath=tempdir())
+
 }

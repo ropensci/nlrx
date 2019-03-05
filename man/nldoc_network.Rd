@@ -24,6 +24,9 @@ This network can be used to plot the model procedure network and identify model 
 \examples{
 \dontrun{
 
+# List model files (.nls subfiles are also supported)
+modelfiles <- c("https://goo.gl/x4CEuC", "https://goo.gl/NWNyRt")
+
 # Determine the function network:
 nw <- nldoc_network(modelfiles)
 

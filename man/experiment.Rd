@@ -159,8 +159,12 @@ Be aware, that NetLogo will produce runtime errors if you measure <link-breed-ow
 Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
 }
 \examples{
-\dontrun{
+
+# To attach an experiment, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
 # Example for Wolf Sheep Predation model from NetLogo models library:
+nl <- nl_simple
 nl@experiment <- experiment(expname="wolf-sheep",
                              outpath="C:/out/",
                              repetition=1,
@@ -180,7 +184,6 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                                "pycor",
                                                "color")),
                              metrics.patches=c("pxcor", "pycor", "pcolor"),
-                             metrics.links=list("links" = c("end1","end2")),
                              variables = list('initial-number-sheep' =
                              list(min=50, max=150, step=10, qfun="qunif"),
                                               'initial-number-wolves' =
@@ -194,6 +197,5 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                               "wolf-reproduce" = 5,
                                               "show-energy?" = "false"))
 
-}
 
 }

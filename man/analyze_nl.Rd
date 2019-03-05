@@ -71,16 +71,14 @@ The function calculates eFast sensitivity indices from the output results using 
 \link[nlrx]{simdesign_GenAlg}
 }
 \examples{
-\dontrun{
 
-# Run one simulation:
-results <- run_nl_all(nl)
+# Load nl object including output data from testdata
+nl <- nl_sobol
 
-# Attach output to simdesign:
-setsim(nl, "simoutput") <- results
-
-# Perform analysis:
+# Define aggregation measurements:
 myfuns <- dplyr::funs(mean, sd, min, max)
-analyze_nl(nl, myfuns)
-}
+
+# Calculate sensitivity indices:
+analyze_nl(nl, funs = myfuns)
+
 }

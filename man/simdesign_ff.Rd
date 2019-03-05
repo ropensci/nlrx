@@ -29,9 +29,12 @@ A full-factorial matrix of all parameter combinations is created as input tibble
 Finally, the function reports a simdesign object.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_ff
 nl@simdesign <- simdesign_ff(nl = nl, nseeds = 3)
-}
+
 
 }

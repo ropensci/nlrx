@@ -82,6 +82,7 @@ util_generate_seeds <- function(nseeds) {
 #'
 #' @examples
 #' \dontrun{
+#' nl <- nl_lhs
 #' report_model_parameters(nl)
 #' }
 #'

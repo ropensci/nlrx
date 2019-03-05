@@ -30,12 +30,14 @@ The latin hypercube simdesign creates a parameter matrix based on these defined 
 Finally, the function reports a simdesign object.
 }
 \examples{
-\dontrun{
-# Example for Wolf Sheep Predation model from NetLogo models library:
+
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_lhs
 nl@simdesign <- simdesign_lhs(nl=nl,
-samples=100,
-nseeds=3,
-precision=3)
-}
+                               samples=100,
+                               nseeds=3,
+                               precision=3)
 
 }
