@@ -1,8 +1,6 @@
 # Resubmission
 
-We created test data to allow more examples to be executable.
-We added code snippets to load nl objects from test data for all function examples that need a nl object.
-We added NetLogo and Java to the System requirements of the DESCRIPTION.
+We replaced \dontrun with \donttest for examples that are executable but run longer then 5 sec per Rd-file.
 
 ## Test environments
 * Windows 10, R 3.5.2

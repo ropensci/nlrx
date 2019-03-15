@@ -29,7 +29,7 @@ relative paths enhance the reproducability of your analysis),
 \dontrun{
 
 infile <- "/home/user/test.zip"
-outfile <- "/home/user/test"
-import_nl(infile, outfile)
+targetdirectory <- "/home/user/test"
+import_nl(infile, targetdirectory)
 }
 }

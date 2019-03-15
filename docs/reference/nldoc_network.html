@@ -116,7 +116,7 @@
       </a>
     </li>
     <li>
-      <a href="../articles/articles/nldoc.html">
+      <a href="../articles/articles/nlrx_nldoc.html">
         <span class="fa fa-file-text-o"></span>
          
         NetLogo documentation with nlrx
@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create NetLogo procedure network</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/nldoc_network.R'><code>R/nldoc_network.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/nldoc_network.R'><code>R/nldoc_network.R</code></a></small>
     <div class="hidden name"><code>nldoc_network.Rd</code></div>
     </div>
 
@@ -195,16 +195,23 @@ This network can be used to plot the model procedure network and identify model 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
+    <pre class="examples"><div class='input'>
 <span class='co'># List model files (.nls subfiles are also supported)</span>
-<span class='no'>modelfiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"https://goo.gl/x4CEuC"</span>, <span class='st'>"https://goo.gl/NWNyRt"</span>)
+<span class='no'>modelfiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo"</span>,
+                <span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls"</span>)
 
 <span class='co'># Determine the function network:</span>
 <span class='no'>nw</span> <span class='kw'>&lt;-</span> <span class='fu'>nldoc_network</span>(<span class='no'>modelfiles</span>)
 
 <span class='co'># Determine communities within the network and plot using Igraph package:</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>igraph</span>)
-<span class='no'>com</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/cluster_walktrap'>walktrap.community</a></span>(<span class='no'>nw</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>igraph</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attache Paket: 'igraph'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:testthat':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    compare</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:stats':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    decompose, spectrum</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:base':</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    union</span></div><div class='input'><span class='no'>com</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/cluster_walktrap'>walktrap.community</a></span>(<span class='no'>nw</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/V'>V</a></span>(<span class='no'>nw</span>)$<span class='no'>community</span> <span class='kw'>&lt;-</span> <span class='no'>com</span>$<span class='no'>membership</span>
 <span class='no'>rain</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/grDevices/topics/palettes'>rainbow</a></span>(<span class='fl'>14</span>, <span class='kw'>alpha</span><span class='kw'>=</span><span class='fl'>.5</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/V'>V</a></span>(<span class='no'>nw</span>)$<span class='no'>color</span> <span class='kw'>&lt;-</span> <span class='no'>rain</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/V'>V</a></span>(<span class='no'>nw</span>)$<span class='no'>community</span>]
@@ -216,11 +223,9 @@ This network can be used to plot the model procedure network and identify model 
      <span class='kw'>vertex.size</span><span class='kw'>=</span><span class='fl'>5</span>,
      <span class='kw'>edge.curved</span><span class='kw'>=</span><span class='fl'>0</span>,
      <span class='kw'>vertex.label.cex</span><span class='kw'>=</span><span class='fl'>.5</span>,
-     <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/layout_with_fr'>layout_with_fr</a></span>(<span class='no'>nw</span>, <span class='kw'>niter</span> <span class='kw'>=</span> <span class='fl'>2000</span>))
-
+     <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/layout_with_fr'>layout_with_fr</a></span>(<span class='no'>nw</span>, <span class='kw'>niter</span> <span class='kw'>=</span> <span class='fl'>2000</span>))</div><div class='img'><img src='nldoc_network-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Interactive plot using igraph::tkplot</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/tkplot'>tkplot</a></span>(<span class='no'>nw</span>, <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/layout_with_fr'>layout_with_fr</a></span>(<span class='no'>nw</span>, <span class='kw'>niter</span> <span class='kw'>=</span> <span class='fl'>2000</span>))
-<span class='co'># }</span></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/tkplot'>tkplot</a></span>(<span class='no'>nw</span>, <span class='kw'>layout</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/igraph/topics/layout_with_fr'>layout_with_fr</a></span>(<span class='no'>nw</span>, <span class='kw'>niter</span> <span class='kw'>=</span> <span class='fl'>2000</span>))</div><div class='output co'>#&gt; [1] 1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

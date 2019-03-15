@@ -116,7 +116,7 @@
       </a>
     </li>
     <li>
-      <a href="../articles/articles/nldoc.html">
+      <a href="../articles/articles/nlrx_nldoc.html">
         <span class="fa fa-file-text-o"></span>
          
         NetLogo documentation with nlrx
@@ -161,7 +161,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Download NetLogo</h1>
-    <small class="dont-index">Source: <a href='https://github.com/nldoc/'nlrx'/blob/master/R/download_netlogo.R'><code>R/download_netlogo.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/nldoc/nlrx/blob/master/R/download_netlogo.R'><code>R/download_netlogo.R</code></a></small>
     <div class="hidden name"><code>download_netlogo.Rd</code></div>
     </div>
 
@@ -203,9 +203,8 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>download_netlogo</span>(<span class='st'>"/home/user/experiment/"</span>, <span class='st'>"6.0.3"</span>)
-<span class='co'># }</span><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>dlpath</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span>()  <span class='co'># adjust path to your needs</span>
+<span class='fu'>download_netlogo</span>(<span class='no'>dlpath</span>, <span class='st'>"6.0.3"</span>)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

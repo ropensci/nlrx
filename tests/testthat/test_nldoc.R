@@ -3,8 +3,8 @@ testthat::test_that("nldoc", {
 
   testthat::context("nldoc")
 
-  modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation.nlogo",
-                  "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation%20Extra.nls")
+  modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+                  "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
   # Create html documentation:
   nldoc_dir <- tempdir()

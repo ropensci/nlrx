@@ -24,23 +24,26 @@
 #' Finally, the document is rendered in the specified format.
 #'
 #' @examples
-#' \dontrun{
 #'
 #' # List model files (.nls subfiles are also supported)
-#' modelfiles <- c("https://goo.gl/x4CEuC", "https://goo.gl/NWNyRt")
+#' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+#'                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
+#'
+#' # Define output directory:
+#' outdir <- tempdir()  # adjust path to your needs
 #'
 #' # Create documentation:
 #' nldoc(modelfiles = modelfiles,
 #'       infotab=TRUE,
 #'       gui=TRUE,
 #'       bs=TRUE,
-#'       outpath = "C:/out",
+#'       outpath = outdir,
 #'       output_format = "html",
 #'       number_sections = TRUE,
 #'       theme = "cosmo",
 #'       date = date(),
 #'       toc = TRUE)
-#' }
+#'
 #' @aliases nldoc
 #' @rdname nldoc
 #'

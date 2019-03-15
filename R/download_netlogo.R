@@ -19,8 +19,9 @@
 #'
 #'
 #' @examples
-#' \dontrun{
-#' download_netlogo("/home/user/experiment/", "6.0.3")
+#' \donttest{
+#' dlpath <- tempdir()  # adjust path to your needs
+#' download_netlogo(dlpath, "6.0.3")
 #' }
 #'
 #' @aliases download_netlogo

@@ -25,12 +25,12 @@ as a zip file. Furthermore, \code{export_nl} takes your nl object and saves it i
 zipped folder. This enables other person to run the same experiment as you.
 }
 \examples{
-\dontrun{
+\donttest{
 
 # Load nl object from testdata:
 nl <- nl_lhs
-path <- "/home/user/test"
-outfile <- "/home/user/test.zip"
+path <- getwd() # adjust path to your needs, path should point to a directory with model data
+outfile <- tempfile(fileext = ".zip") # adjust file path to your needs
 export_nl(nl, path = path, tarfile = outfile)
 }
 }

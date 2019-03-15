@@ -3,7 +3,7 @@ pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
   interfacing-different-models: articles/interfacing-different-models.html
-  nldoc: articles/nldoc.html
+  nlrx_nldoc: articles/nlrx_nldoc.html
   spatial-output: articles/spatial-output.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html

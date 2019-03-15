@@ -22,10 +22,11 @@ From this data, an igraph network is created and returned.
 This network can be used to plot the model procedure network and identify model components.
 }
 \examples{
-\dontrun{
+\donttest{
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://goo.gl/x4CEuC", "https://goo.gl/NWNyRt")
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+                "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 # Determine the function network:
 nw <- nldoc_network(modelfiles)

@@ -85,8 +85,9 @@ library(nlrx)
 outpath <- tempdir()
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation.nlogo",
-                  "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation%20Extra.nls")
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+                "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
+
 
 
 ## Create documentation:
@@ -114,8 +115,8 @@ This function can be used for any NetLogo model, even if the code does not conta
 library(nlrx)
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation.nlogo",
-                  "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation%20Extra.nls")
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+                "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 
 ## Determine the function network with nldoc:

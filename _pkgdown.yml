@@ -27,7 +27,7 @@ navbar:
          href: articles/articles/interfacing-different-models.html
        - text: "NetLogo documentation with nlrx"
          icon: fa-file-text-o
-         href: articles/articles/nldoc.html
+         href: articles/articles/nlrx_nldoc.html
   right:
     - icon: fa-newspaper-o
       text: "news"
