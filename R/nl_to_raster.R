@@ -51,7 +51,7 @@ nl_to_raster <- function(nl){
 
   patches_dat <- patches %>%
     dplyr::select(patch.metrics) %>%
-    split(.,  patches[,c("siminputrow", "[step]", "random-seed")]) %>%
+    split(.,  patches[,c("siminputrow", "[step]", "random-seed")], lex.order=TRUE) %>%
     purrr::map(., function(x){
       raster::rasterFromXYZ(x[, c("pxcor",
                                             "pycor",

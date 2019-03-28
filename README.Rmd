@@ -49,9 +49,11 @@ While the nlrx package might work without setting the Java system path explicitl
 
 ## Installation
 
-~~You can install the released version of nlrx from~~
-~~[CRAN](https://CRAN.R-project.org) with:~~
-~~install.packages("nlrx")~~
+You can install the released version of nlrx from
+[CRAN](https://CRAN.R-project.org) with:
+``` r
+install.packages("nlrx")
+```
 
 And the development version from [GitHub](https://github.com/) with:
 

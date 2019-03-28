@@ -1,6 +1,7 @@
 # Resubmission
 
-We replaced \dontrun with \donttest for examples that are executable but run longer then 5 sec per Rd-file.
+Hotfix for nl_to_raster() function.
+In the previous package version, under some circumstances the raster column was reported in wrong order.
 
 ## Test environments
 * Windows 10, R 3.5.2
