@@ -233,10 +233,17 @@ The function calculates eFast sensitivity indices from the output results using 
 <span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_sobol</span>
 
 <span class='co'># Define aggregation measurements:</span>
-<span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>min</span>, <span class='no'>max</span>)
-
+<span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>min</span>, <span class='no'>max</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: funs() is soft deprecated as of dplyr 0.8.0</span>
+#&gt; <span class='warning'>please use list() instead</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'># Before:</span>
+#&gt; <span class='warning'>funs(name = f(.)</span>
+#&gt; <span class='warning'></span>
+#&gt; <span class='warning'># After: </span>
+#&gt; <span class='warning'>list(name = ~f(.))</span>
+#&gt; <span class='warning'>This warning is displayed once per session.</span></div><div class='input'>
 <span class='co'># Calculate sensitivity indices:</span>
-<span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: package 'bindrcpp' was built under R version 3.5.1</span></div><div class='output co'>#&gt; # A tibble: 18 x 8
+<span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; # A tibble: 18 x 8
 #&gt;    original     bias `std. error` `min. c.i.` `max. c.i.` parameter metric  seed
 #&gt;       &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;dbl&gt;
 #&gt;  1    0.114 0              0.191       0            0.523 initial-~ count~  8515
