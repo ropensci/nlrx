@@ -11,7 +11,7 @@ coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](http://cran.rstudio.com/web/packages/nlrx/index.html)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.rstudio.com/package=nlrx)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
 
 The nlrx package provides tools to setup and execute NetLogo simulations
