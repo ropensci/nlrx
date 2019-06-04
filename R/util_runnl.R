@@ -469,8 +469,7 @@ util_read_write_batch <- function(nl) {
       jarpathline <- paste0("SET \"ABSOLUTE_CLASSPATH=", jarpath, "\"")
 
       # Block 3 of the batch file:
-      block3 <- c("\"%JAVA%\" %JVM_OPTS% -classpath \"%ABSOLUTE_CLASSPATH%\"
-                  org.nlogo.headless.Main %ARGS%")
+      block3 <- c("\"%JAVA%\" %JVM_OPTS% -classpath \"%ABSOLUTE_CLASSPATH%\" org.nlogo.headless.Main %ARGS%")
 
       # Put all blocks together:
       allblocks <- c(block1, jvmoptsline, block2, jarpathline, block3)
