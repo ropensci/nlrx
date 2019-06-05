@@ -351,6 +351,9 @@ simdesign_sobol <- function(nl,
                              simobject=list(so),
                              simseeds=seeds)
 
+  ## Check if the simdesign contains NAs
+  .util_check_siminput_tibble(nl, new_simdesign)
+
   return(new_simdesign)
 }
 
@@ -441,6 +444,9 @@ simdesign_sobol2007 <- function(nl,
                              siminput=soX,
                              simobject=list(so),
                              simseeds=seeds)
+
+  ## Check if the simdesign contains NAs
+  .util_check_siminput_tibble(nl, new_simdesign)
 
   return(new_simdesign)
 }
@@ -533,6 +539,9 @@ simdesign_soboljansen <- function(nl,
                              siminput=soX,
                              simobject=list(so),
                              simseeds=seeds)
+
+  ## Check if the simdesign contains NAs
+  .util_check_siminput_tibble(nl, new_simdesign)
 
   return(new_simdesign)
 }
@@ -631,6 +640,9 @@ simdesign_morris <- function(nl,
                              simobject=list(mo),
                              simseeds=seeds)
 
+  ## Check if the simdesign contains NAs
+  .util_check_siminput_tibble(nl, new_simdesign)
+
   return(new_simdesign)
 
 }
@@ -717,6 +729,9 @@ simdesign_eFast <- function(nl,
                              siminput=f99X,
                              simobject=list(f99),
                              simseeds=seeds)
+
+  ## Check if the simdesign contains NAs
+  .util_check_siminput_tibble(nl, new_simdesign)
 
   return(new_simdesign)
 

@@ -369,3 +369,16 @@ eval_variables_constants <- function(nl) {
   # If no error message occurred print a message:
   message("All defined variables and constants are valid!")
 }
+
+
+.util_check_siminput_tibble <- function(nl, new_simdesign) {
+
+  ## Check if there are any NAs in the variables columns:
+
+  if (isTRUE(anyNA(new_simdesign@siminput[names(nl@experiment@variables)]))) {
+    warning("The generated siminput tibble of the simdesign contains NA values. You may need to increase the number of samples!",
+            call. = FALSE)
+  }
+
+
+}
