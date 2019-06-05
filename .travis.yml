@@ -1,8 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: r
-sudo: true
-dist: trusty
 cache: packages
 latex: false
 warnings_are_errors: false
@@ -11,14 +9,21 @@ matrix:
   include:
     - os: linux
 
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:ubuntugis/ppa'
+    packages:
+      - libudunits2-dev
+      - libproj-dev
+      - libgeos-dev
+      - libgdal-dev
+      - oracle-java8-set-default
+
 before_install:
   - sudo apt-get update
   - mkdir "/home/travis/netlogo"
   - wget -qO- "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz --directory "/home/travis/netlogo"
-  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
-  - sudo apt-get --yes --force-yes update -qq
-  - sudo apt-get install --yes libudunits2-dev libproj-dev libgeos-dev libgdal-dev oracle-java8-set-default
-  - Rscript -e 'update.packages(ask = FALSE)'
 
 after_success:
   - Rscript -e 'covr::codecov(token = "3651cae6-2263-4130-a651-75eb7fc02149")'
