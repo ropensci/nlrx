@@ -1,0 +1,16 @@
+citHeader("To cite nlrx in publications use:")
+
+citEntry(entry = "Article",
+         title        = "The nlrx r package: A next-generation framework for reproducible NetLogo model analyses",
+         author       = personList(as.person("Jan Salecker"),
+                                   as.person("Marco Sciaini"),
+                                   as.person("Katrin M. Meyer"),
+                                   as.person("Kerstin Wiegand")),
+         journal = "Methods in Ecololgy and Evolution",
+         volume = "00",
+         pages = "2041--210X",
+         year         = "2019",
+         url          = "https://doi.org/10.1111/2041-210X.13286",
+
+         textVersion  =
+             paste("Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041–210X. doi:10.1111/2041-210X.13286"))
