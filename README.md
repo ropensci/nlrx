@@ -3,7 +3,7 @@
 nlrx <img src="man/figures/logo.png" align="right" width="150" />
 =================================================================
 
-[![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) [![Codecov test coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![CRAN status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx) [![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](http://cran.rstudio.com/web/packages/nlrx/index.html) [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
+[![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) [![Codecov test coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master) [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![CRAN status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx) [![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](http://cran.rstudio.com/web/packages/nlrx/index.html) [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262) [![DOI:10.1111/2041-210X.13286](https://zenodo.org/badge/DOI/10.1111/2041-210X.13286.svg)](https://doi.org/10.1111/2041-210X.13286)
 
 The nlrx package provides tools to setup and execute NetLogo simulations from R. NetLogo is a free, open-source and cross-platform modelling environment for simulating natural and social phenomena. NetLogo focusses on implementation of agent-based and spatially explicit simulation models, although system dynamics models are supported as well. NetLogo is developed and maintained at the Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL. More details on NetLogo itself are available online: [NetLogo online documentation](https://ccl.northwestern.edu/netlogo/docs/)
 
@@ -16,7 +16,7 @@ In summary, the nlrx package uses a similar structure as NetLogos Behavior Space
 Publication
 -----------
 
-Further information on the package functionality and detailed code examples can be found in our accompanying publication: Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041â€“210X. <https://doi.org/10.1111/2041-210X.13286>.
+Further information on the package functionality and detailed code examples can be found in our accompanying publication: Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041-210X. <https://doi.org/10.1111/2041-210X.13286>.
 
 Prerequirements
 ---------------
