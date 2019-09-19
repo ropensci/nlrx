@@ -14,7 +14,7 @@ simdesign_GenAlg(nl, popSize = 200, iters = 100, evalcrit = 1,
 
 \item{iters}{number of iterations for genetic algorithm function}
 
-\item{evalcrit}{position of evaluation criterion within defined NetLogo metrics of nl experiment}
+\item{evalcrit}{position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value}
 
 \item{elitism}{elitism rate of genetic algorithm function}
 
@@ -35,9 +35,18 @@ Variables in the experiment variable list need to provide a numeric distribution
 
 The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
 that are defined in the variables field of the experiment object within the nl object.
-The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
-The reporter is defined within the experiment metrics vector.
-For the Genetic Algorithm function we only refer to the position of the reporter that we want to use for evaluation.
+
+The evalcrit reporter defines the evaluation criterion for the Genetic algorithm procedure.
+There are two options to evaluate the fitness value of each iteration of the algorithm:
+\enumerate{
+\item Use a reporter that is defined within the experiment metrics vector.
+You can just enter the position of that metric within the experiment metrics vector (e.g. 1 would use the first defined metric of the experiment to evaluate each iteration).
+The algorithm automatically calculates the mean value of this reporter if evalticks is defined to measure multiple ticks during each simulation.
+\item Use a self-defined evaluation function
+You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must return one single numeric value.
+You can pass this function to evalcrit. It is then applied to the output of each iteration.
+}
+
 The function uses the genalg package to set up a Genetic Algorithm function.
 For details on the genalg function parameters see ?genalg::rbga
 Finally, the function reports a simdesign object.
@@ -50,9 +59,22 @@ Genetic Algorithm simdesigns can only be executed using the \link[nlrx]{run_nl_d
 # For this example, we load a nl object from test data.
 
 nl <- nl_lhs
+
+# Example 1: Using a metric from the experiment metrics vector for evaluation:
 nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  evalcrit=1,
                                   nseeds=1)
 
+# Example 2: Using a self-defined evaluation function
+# For demonstration we define a simple function that calculates the maximum value of count sheep output.
+critfun <- function(results) {
+crit <- as.integer(max(results$`count sheep`))
+return(crit)
+}
+
+nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  evalcrit=critfun,
+                                  nseeds=1)
 
 
 }

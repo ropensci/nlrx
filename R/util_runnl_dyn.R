@@ -100,10 +100,16 @@ util_run_nl_dyn_GenSA_fn <- function(param,
   )
 
   # Select metric for gensa:
-  results <- results[[evalcrit]]
-  # Calc mean and convert to numeric:
-  if (length(results) > 1) {
-    results <- mean(results)
+  if(is.function(evalcrit)) {
+    # Apply evalcrit function
+    results <- evalcrit(results)
+  } else {
+    # Select evalcrit metric and calculate mean value over ticks:
+    results <- results[[evalcrit]]
+    # Calc mean and convert to numeric:
+    if (length(results) > 1) {
+      results <- mean(results)
+    }
   }
   results <- as.numeric(results)
 
@@ -214,10 +220,16 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
   )
 
   # Select metric for gensa:
-  results <- results[[evalcrit]]
-  # Calc mean and convert to numeric:
-  if (length(results) > 1) {
-    results <- mean(results)
+  if(is.function(evalcrit)) {
+    # Apply evalcrit function
+    results <- evalcrit(results)
+  } else {
+    # Select evalcrit metric and calculate mean value over ticks:
+    results <- results[[evalcrit]]
+    # Calc mean and convert to numeric:
+    if (length(results) > 1) {
+      results <- mean(results)
+    }
   }
   results <- as.numeric(results)
 

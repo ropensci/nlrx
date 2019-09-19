@@ -12,7 +12,7 @@ simdesign_GenSA(nl, par = NULL, evalcrit = 1, control = list(),
 
 \item{par}{optional vector of start values for each parameter defined in variables of experiment}
 
-\item{evalcrit}{position of evaluation criterion within defined NetLogo metrics of nl experiment}
+\item{evalcrit}{position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value}
 
 \item{control}{list with further arguments passed to the GenSA function (see ?GenSA for details)}
 
@@ -31,9 +31,18 @@ Variables in the experiment variable list need to provide a numeric distribution
 
 The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
 that are defined in the variables field of the experiment object within the nl object.
+
 The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
-The reporter is defined within the experiment metrics vector.
-For the simulated annealing function we only refer to the position of the reporter that we want to use for evaluation.
+There are two options to evaluate the fitness value of each iteration of the algorithm:
+\enumerate{
+\item Use a reporter that is defined within the experiment metrics vector.
+You can just enter the position of that metric within the experiment metrics vector (e.g. 1 would use the first defined metric of the experiment to evaluate each iteration).
+The algorithm automatically calculates the mean value of this reporter if evalticks is defined to measure multiple ticks during each simulation.
+\item Use a self-defined evaluation function
+You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must return one single numeric value.
+You can pass this function to evalcrit. It is then applied to the output of each iteration.
+}
+
 The function uses the GenSA package to set up a Simulated Annealing function.
 For details on the GenSA function parameters see ?GenSA
 Finally, the function reports a simdesign object.
@@ -46,9 +55,25 @@ Simulated Annealing simdesigns can only be executed using the \link[nlrx]{run_nl
 # For this example, we load a nl object from test data.
 
 nl <- nl_lhs
+
+# Example 1: Using a metric from the experiment metrics vector for evaluation:
 nl@simdesign <- simdesign_GenSA(nl=nl,
                                  par=NULL,
                                  evalcrit=1,
+                                 control=list(max.time = 600),
+                                 nseeds=1)
+
+
+# Example 2: Using a self-defined evaluation function
+# For demonstration we define a simple function that calculates the maximum value of count sheep output.
+critfun <- function(results) {
+crit <- as.integer(max(results$`count sheep`))
+return(crit)
+}
+
+nl@simdesign <- simdesign_GenSA(nl=nl,
+                                 par=NULL,
+                                 evalcrit=critfun,
                                  control=list(max.time = 600),
                                  nseeds=1)
 
