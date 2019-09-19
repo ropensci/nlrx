@@ -189,7 +189,7 @@
     </tr>
     <tr>
       <th>evalcrit</th>
-      <td><p>position of evaluation criterion within defined NetLogo metrics of nl experiment</p></td>
+      <td><p>position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value</p></td>
     </tr>
     <tr>
       <th>elitism</th>
@@ -214,11 +214,17 @@
     <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
 <p>Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).</p>
 <p>The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
-that are defined in the variables field of the experiment object within the nl object.
-The evalcrit reporter defines the evaluation criterion for the simulated annealing procedure.
-The reporter is defined within the experiment metrics vector.
-For the Genetic Algorithm function we only refer to the position of the reporter that we want to use for evaluation.
-The function uses the genalg package to set up a Genetic Algorithm function.
+that are defined in the variables field of the experiment object within the nl object.</p>
+<p>The evalcrit reporter defines the evaluation criterion for the Genetic algorithm procedure.
+There are two options to evaluate the fitness value of each iteration of the algorithm:</p><ol>
+<li><p>Use a reporter that is defined within the experiment metrics vector.
+You can just enter the position of that metric within the experiment metrics vector (e.g. 1 would use the first defined metric of the experiment to evaluate each iteration).
+The algorithm automatically calculates the mean value of this reporter if evalticks is defined to measure multiple ticks during each simulation.</p></li>
+<li><p>Use a self-defined evaluation function
+You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must return one single numeric value.
+You can pass this function to evalcrit. It is then applied to the output of each iteration.</p></li>
+</ol>
+    <p>The function uses the genalg package to set up a Genetic Algorithm function.
 For details on the genalg function parameters see ?genalg::rbga
 Finally, the function reports a simdesign object.</p>
 <p>Genetic Algorithm simdesigns can only be executed using the <a href='run_nl_dyn.html'>run_nl_dyn</a> function instead of <a href='run_nl_all.html'>run_nl_all</a> or <a href='run_nl_one.html'>run_nl_one</a>.</p>
@@ -230,9 +236,21 @@ Finally, the function reports a simdesign object.</p>
 <span class='co'># For this example, we load a nl object from test data.</span>
 
 <span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_GenAlg</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
-                                  <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating GenAlg simulation design</span></div><div class='input'>
 
+<span class='co'># Example 1: Using a metric from the experiment metrics vector for evaluation:</span>
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_GenAlg</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                  <span class='kw'>evalcrit</span><span class='kw'>=</span><span class='fl'>1</span>,
+                                  <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating GenAlg simulation design</span></div><div class='input'>
+<span class='co'># Example 2: Using a self-defined evaluation function</span>
+<span class='co'># For demonstration we define a simple function that calculates the maximum value of count sheep output.</span>
+<span class='no'>critfun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>results</span>) {
+<span class='no'>crit</span> <span class='kw'>&lt;-</span> <span class='fu'>as.integer</span>(<span class='fu'>max</span>(<span class='no'>results</span>$<span class='no'>`count sheep`</span>))
+<span class='fu'>return</span>(<span class='no'>crit</span>)
+}
+
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_GenAlg</span>(<span class='kw'>nl</span><span class='kw'>=</span><span class='no'>nl</span>,
+                                  <span class='kw'>evalcrit</span><span class='kw'>=</span><span class='no'>critfun</span>,
+                                  <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating GenAlg simulation design</span></div><div class='input'>
 
 </div></pre>
   </div>
