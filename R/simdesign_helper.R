@@ -32,7 +32,6 @@
 simdesign_simple <- function(nl, nseeds) {
 
   util_eval_experiment(nl)
-  util_eval_constants(nl)
   message("Creating simple simulation design")
   # This doesnt use variables but only constants to create a simdesign:
   simple <- tibble::as.tibble(getexp(nl, "constants"))
@@ -86,7 +85,6 @@ simdesign_simple <- function(nl, nseeds) {
 simdesign_distinct <- function(nl, nseeds) {
 
   util_eval_experiment(nl)
-  util_eval_constants(nl)
   util_eval_variables_distinct(nl)
   message("Creating distinct simulation design")
 

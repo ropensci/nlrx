@@ -226,10 +226,6 @@ util_eval_experiment <- function(nl) {
   if (anyNA(getexp(nl, "metrics"))) {
     notvalid <- c(notvalid, "metrics")
   }
-  if (purrr::is_empty(getexp(nl, "variables")) &
-    purrr::is_empty(getexp(nl, "constants"))) {
-    notvalid <- c(notvalid, "variables or constants")
-  }
 
   if (length(notvalid) > 0) {
     stop(paste0("To add a sim design to a nl object you need to
