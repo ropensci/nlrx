@@ -40,6 +40,10 @@ These class objects hold all the information that is needed to run these experim
 
 In summary, the nlrx package uses a similar structure as NetLogos Behavior Space but offers more flexibility and additional tools for running reproducible complex model analyses directly from R.
 
+## Publication
+Further information on the package functionality and detailed code examples can be found in our accompanying publication:
+Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041–210X. [https://doi.org/10.1111/2041-210X.13286](https://doi.org/10.1111/2041-210X.13286).
+
 ## Prerequirements
 
 ### NetLogo

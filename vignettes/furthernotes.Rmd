@@ -132,6 +132,12 @@ end
 ```
 In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with [pcolor = green]".
 
+#### Notes on NetLogo extensions
+Usually, all NetLogo extensions that are shipped with NetLogo should also work with nlrx.
+However, depending on the system it can happen that NetLogo extensions are not found properly. To solve such problems we advise to put your `.nlogo model` file in the `app/models` subdirectory of the NetLogo installation path.
+A special case is the NetLogo r-extension because it needs to be stopped manually in between model runs.
+To achieve that, simply put the `r:stop` command in the `idfinal` slot of your experiment: `idfinal = "r:stop"`.
+
 
 #### Notes on parallelisation and the future concept
 
