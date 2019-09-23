@@ -18,7 +18,7 @@ addons:
       - libproj-dev
       - libgeos-dev
       - libgdal-dev
-      - oracle-java8-set-default
+      - oracle-java8-installer
 
 before_install:
   - sudo apt-get update
