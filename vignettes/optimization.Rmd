@@ -82,7 +82,7 @@ nl@experiment <- experiment(expname="wolf-sheep-GenSA1",
 #### Step 3: Attach a simulation design
 
 We use the `simdesgin_GenSA()` function to attach a Simulated Annealing simdesign.
-We select the evaluation criterion (`evalcrit`) by assigning the position of the reporter that we want to avaluate within the metrics vector of the experiment.
+We select the evaluation criterion (`evalcrit`) by assigning the position of the reporter that we want to evaluate within the metrics vector of the experiment.
 In our case, there is only one reporter in the metrics vector thus we set evalcrit to use the first reporter (`evalcrit = 1`).
 The control parameter allows us to provide additional parameters for the GenSA function (see ?GenSA for details). For demonstration purposes, we set the maximum number of iterations to 20.
 

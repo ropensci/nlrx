@@ -75,7 +75,7 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
 We use the `simdesgin_morris()` function to attach a Morris Sensitivity Analysis design.
 The `morrislevels` parameter sets the number of different values for each parameter (sampling density).
 The `morrisr` paramater sets the number of repeated samplings (sampling size).
-The `morrisgridjump` parameter sets the number of levels that are increased/decreased for computing the elemntary effects. Morris recommendation is to set this value to `levels / 2`.
+The `morrisgridjump` parameter sets the number of levels that are increased/decreased for computing the elementary effects. Morris recommendation is to set this value to `levels / 2`.
 We can increase the `nseeds` parameter in order to perform multiple runs of the same parameter matrix with different random seeds.
 The variation between those repetitions is an indicator of the stochasticity effects within the model.
 More information on the Morris specific parameters can be found in the description of the morris function in the sensitivity package (`?morris`).

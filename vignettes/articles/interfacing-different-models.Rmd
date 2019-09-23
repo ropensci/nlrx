@@ -42,7 +42,7 @@ outpath <- file.path("/home/out")
 
 ## Diffusion model
 
-The diffusion model is a simple exmaple of how to plot moving turtles and patches.
+The diffusion model is a simple example of how to plot moving turtles and patches.
 Turtles move over the lattice and generate heat on cells they move over. The accumulated heat also diffuses to neighboring cells.
 
 In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).
@@ -205,7 +205,7 @@ In order to transfer the spatial information from NetLogo to R, we measure the w
 After converting the spatial data to tibble format (`unnest_simoutput()`), we split the patches information in three objects in order to display the three groups of patches:
 
 * chem_dat: Contains chemical distribution of all patches. The amount of chemicals of each patch is plotted by using a geom_tile layer that acts as base layer of our plot.
-* food_dat: Contains patches coordinates of patches that contain food sources (food > 0). The food sources are plotted by adding a suqare shaped geom_point layer on top of the chemicals distribution layer.
+* food_dat: Contains patches coordinates of patches that contain food sources (food > 0). The food sources are plotted by adding a square shaped geom_point layer on top of the chemicals distribution layer.
 * nest_dat: Contains patches coordinates of the nest patch. The nest is plotted by adding a large circle geom_point layer on top.
 
 The turtle data is plotted by adding another geom_text layer, using a Yen sign (￥) that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).

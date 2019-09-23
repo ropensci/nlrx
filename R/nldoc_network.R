@@ -9,7 +9,7 @@
 #' @details
 #'
 #' Reads model code from the provided model files.
-#' The procedure identifies NetLogo proecdures and searches for procedure calls within the code.
+#' The procedure identifies NetLogo procedures and searches for procedure calls within the code.
 #' From this data, an igraph network is created and returned.
 #' This network can be used to plot the model procedure network and identify model components.
 #'

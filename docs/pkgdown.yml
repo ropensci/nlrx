@@ -1,6 +1,6 @@
-pandoc: 1.19.2.1
-pkgdown: 1.1.0.9000
-pkgdown_sha: 982bd327f97b623554b4cca90b86b4fb084aa634
+pandoc: 2.7.2
+pkgdown: 1.4.1
+pkgdown_sha: ~
 articles:
   interfacing-different-models: articles/interfacing-different-models.html
   nlrx_nldoc: articles/nlrx_nldoc.html

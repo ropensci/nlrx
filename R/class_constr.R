@@ -108,7 +108,7 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' \emph{idsetup, idgo}
 #'
-#' These two class slots accept strings, or vectors of strings, defining NetLogo model procedures that should be executed for model setup (idestup) and model execution (idgo).
+#' These two class slots accept strings, or vectors of strings, defining NetLogo model procedures that should be executed for model setup (idsetup) and model execution (idgo).
 #'
 #' \emph{runtime}
 #'
@@ -132,7 +132,7 @@ nl <- function(nlversion = "6.0.2",
 #' It is not possible to enter a NetLogo parameter in both lists (a warning message will appear when a simdesign is attached to such an experiment).
 #' All simdesigns except \link[nlrx]{simdesign_simple} need defined variables for setting up a parameter matrix.
 #' Variables can be defined as distinct values, value distributions or range with increment.
-#' The information that is needed, depends on the chosen simdesign (details on variable definition requiements can be found in the helpfiles of each simdesign helper function).
+#' The information that is needed, depends on the chosen simdesign (details on variable definition requirements can be found in the helpfiles of each simdesign helper function).
 #'
 #' \strong{All remaining slots are optional:}
 #'

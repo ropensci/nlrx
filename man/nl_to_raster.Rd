@@ -20,7 +20,7 @@ Converts measured metrics.patches into spatial raster objects.
 In order to so, a patch coordinates needs to be measured (pxcor/pycor).
 For each additional patch metric, a raster will be created using the
 measured coordinates as x and y and the additional metric as z dimension.
-In case of multiple measured metrics, a ratser stack with one raster
+In case of multiple measured metrics, a raster stack with one raster
 for each metric will be reported.
 
 In order to use this function, simulation results need to be attached to
