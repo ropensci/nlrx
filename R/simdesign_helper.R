@@ -791,7 +791,8 @@ simdesign_eFast <- function(nl,
 #'
 #'
 #' # Example 2: Using a self-defined evaluation function
-#' # For demonstration we define a simple function that calculates the maximum value of count sheep output.
+#' # For demonstration we define a simple function that calculates
+#' # the maximum value of count sheep output.
 #' critfun <- function(nl) {
 #' results <- nl@@simdesign@@simoutput
 #' crit <- as.integer(max(results$`count sheep`))
@@ -914,7 +915,8 @@ simdesign_GenSA <- function(nl,
 #'                                   nseeds=1)
 #'
 #' # Example 2: Using a self-defined evaluation function
-#' # For demonstration we define a simple function that calculates the maximum value of count sheep output.
+#' # For demonstration we define a simple function that calculates
+#' # the maximum value of count sheep output.
 #' critfun <- function(nl) {
 #' results <- nl@@simdesign@@simoutput
 #' crit <- as.integer(max(results$`count sheep`))

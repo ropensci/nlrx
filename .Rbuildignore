@@ -9,6 +9,7 @@
 ^\.travis\.yml$
 ^LICENSE\.md$
 ^_pkgdown\.yml$
+^pkgdown$
 ^docs$
 vignettes/articles
 ^vignettes/articles$
