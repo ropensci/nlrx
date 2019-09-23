@@ -100,6 +100,20 @@
       </a>
     </li>
     <li>
+      <a href="../articles/sensitivity.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Sensitivity Analysis with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/optimization.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Optimization with nlrx
+      </a>
+    </li>
+    <li>
       <a href="../articles/articles/spatial-output.html">
         <span class="fa fa-calculator"></span>
          
@@ -221,7 +235,8 @@ There are two options to evaluate the fitness value of each iteration of the alg
 You can just enter the position of that metric within the experiment metrics vector (e.g. 1 would use the first defined metric of the experiment to evaluate each iteration).
 The algorithm automatically calculates the mean value of this reporter if evalticks is defined to measure multiple ticks during each simulation.</p></li>
 <li><p>Use a self-defined evaluation function
-You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must return one single numeric value.
+You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must accept the nl object as input and return one single numeric value.
+The nl object that is then provided to the evaluation function will have results of the current iteration attached. The results can be accessed via the simoutput slot of the simdesign.
 You can pass this function to evalcrit. It is then applied to the output of each iteration.</p></li>
 </ol>
     <p>The function uses the genalg package to set up a Genetic Algorithm function.
@@ -243,7 +258,8 @@ Finally, the function reports a simdesign object.</p>
                                   <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating GenAlg simulation design</span></div><div class='input'>
 <span class='co'># Example 2: Using a self-defined evaluation function</span>
 <span class='co'># For demonstration we define a simple function that calculates the maximum value of count sheep output.</span>
-<span class='no'>critfun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>results</span>) {
+<span class='no'>critfun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>nl</span>) {
+<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='no'>nl</span>@<span class='kw'>simdesign</span>@<span class='kw'>simoutput</span>
 <span class='no'>crit</span> <span class='kw'>&lt;-</span> <span class='fu'>as.integer</span>(<span class='fu'>max</span>(<span class='no'>results</span>$<span class='no'>`count sheep`</span>))
 <span class='fu'>return</span>(<span class='no'>crit</span>)
 }

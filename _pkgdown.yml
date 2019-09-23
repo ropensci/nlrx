@@ -19,6 +19,12 @@ navbar:
        - text: "Advanced configuration"
          icon: fa-sticky-note
          href: articles/furthernotes.html
+       - text: "Sensitivity Analysis with nlrx"
+         icon: fa-sticky-note
+         href: articles/sensitivity.html
+       - text: "Optimization with nlrx"
+         icon: fa-sticky-note
+         href: articles/optimization.html
        - text: "Capturing spatial NetLogo output"
          icon: fa-calculator
          href: articles/articles/spatial-output.html

@@ -43,7 +43,8 @@ There are two options to evaluate the fitness value of each iteration of the alg
 You can just enter the position of that metric within the experiment metrics vector (e.g. 1 would use the first defined metric of the experiment to evaluate each iteration).
 The algorithm automatically calculates the mean value of this reporter if evalticks is defined to measure multiple ticks during each simulation.
 \item Use a self-defined evaluation function
-You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must return one single numeric value.
+You can define a function that post-processes NetLogo output to calculate an evaluation value. This function must accept the nl object as input and return one single numeric value.
+The nl object that is then provided to the evaluation function will have results of the current iteration attached. The results can be accessed via the simoutput slot of the simdesign.
 You can pass this function to evalcrit. It is then applied to the output of each iteration.
 }
 
@@ -67,7 +68,8 @@ nl@simdesign <- simdesign_GenAlg(nl=nl,
 
 # Example 2: Using a self-defined evaluation function
 # For demonstration we define a simple function that calculates the maximum value of count sheep output.
-critfun <- function(results) {
+critfun <- function(nl) {
+results <- nl@simdesign@simoutput
 crit <- as.integer(max(results$`count sheep`))
 return(crit)
 }

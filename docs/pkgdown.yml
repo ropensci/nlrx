@@ -7,5 +7,7 @@ articles:
   spatial-output: articles/spatial-output.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html
+  optimization: optimization.html
+  sensitivity: sensitivity.html
   simdesign-examples: simdesign-examples.html
 

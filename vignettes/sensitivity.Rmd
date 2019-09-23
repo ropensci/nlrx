@@ -1,0 +1,116 @@
+---
+title: "Sensitivity Analysis"
+author: "Jan Salecker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Sensitivity Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Sensitivity Analysis with nlrx
+
+Here we present a simple example for running a Morris Sensitivity Analysis with nlrx.
+We use the Wolf Sheep Predation model from the models library for this example.
+
+#### Step 1: Create a nl object:
+
+```{r eval=FALSE}
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+#### Step 2: Attach an experiment
+
+In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches).
+We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics.
+Thus, we define parameter ranges and distribution functions for all our numeric model parameters.
+We set the runtime of the model to 500 ticks and measure our metrics on each tick (`evalticks = "true"`).
+However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to `seq(300,500)`.
+
+```{r eval=FALSE}
+nl@experiment <- experiment(expname = "wolf-sheep-morris",
+                            outpath = outpath,
+                            repetition = 1,   
+                            tickmetrics = "true",
+                            idsetup = "setup",  
+                            idgo = "go",        
+                            runtime = 500,
+                            evalticks = seq(300,500),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list("initial-number-sheep" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "initial-number-wolves" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "grass-regrowth-time" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-gain-from-food" = list(min=0, max=50, step=10, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
+                                             "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+```
+
+#### Step 3: Attach a simulation design
+
+We use the `simdesgin_morris()` function to attach a Morris Sensitivity Analysis design.
+The `morrislevels` parameter sets the number of different values for each parameter (sampling density).
+The `morrisr` paramater sets the number of repeated samplings (sampling size).
+The `morrisgridjump` parameter sets the number of levels that are increased/decreased for computing the elemntary effects. Morris recommendation is to set this value to `levels / 2`.
+We can increase the `nseeds` parameter in order to perform multiple runs of the same parameter matrix with different random seeds.
+The variation between those repetitions is an indicator of the stochasticity effects within the model.
+More information on the Morris specific parameters can be found in the description of the morris function in the sensitivity package (`?morris`).
+
+```{r eval=FALSE}
+nl@simdesign <- simdesign_morris(nl=nl,
+                                 morristype="oat",
+                                 morrislevels=4,
+                                 morrisr=1000,
+                                 morrisgridjump=2,
+                                 nseeds=5)
+```
+
+#### Step 4: Run simulations
+
+To execute the simulations, we can use the function `run_nl_all()`.
+Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the "Advanced configuration" vignette).
+
+```{r eval=FALSE}
+library(future)
+plan(multisession)
+results <- run_nl_all(nl)
+```
+
+#### Step 5: Investigate output
+
+First, we need to attach the results to the nl object.
+
+```{r eval=FALSE}
+nl@simdesign@simoutput <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "morris.rds"))
+```
+
+After results have been attached, we can use the `analyze_nl()` function to calculate morris sensetivity indices.
+
+```{r eval=FALSE}
+morris <- analyze_nl(nl)
+```
