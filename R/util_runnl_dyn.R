@@ -102,7 +102,8 @@ util_run_nl_dyn_GenSA_fn <- function(param,
   # Select metric for gensa:
   if(is.function(evalcrit)) {
     # Apply evalcrit function
-    results <- evalcrit(results)
+    nl@simdesign@simoutput <- results
+    results <- evalcrit(nl)
   } else {
     # Select evalcrit metric and calculate mean value over ticks:
     results <- results[[evalcrit]]
@@ -222,7 +223,8 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
   # Select metric for gensa:
   if(is.function(evalcrit)) {
     # Apply evalcrit function
-    results <- evalcrit(results)
+    nl@simdesign@simoutput <- results
+    results <- evalcrit(nl)
   } else {
     # Select evalcrit metric and calculate mean value over ticks:
     results <- results[[evalcrit]]
