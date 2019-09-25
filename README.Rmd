@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/nldoc/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](http://cran.rstudio.com/web/packages/nlrx/index.html)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.rstudio.com/package=nlrx)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
 [![DOI:10.1111/2041-210X.13286](https://zenodo.org/badge/DOI/10.1111/2041-210X.13286.svg)](https://doi.org/10.1111/2041-210X.13286)
 
@@ -44,6 +44,8 @@ In summary, the nlrx package uses a similar structure as NetLogos Behavior Space
 ## Publication
 Further information on the package functionality and detailed code examples can be found in our accompanying publication:
 Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041-210X. [https://doi.org/10.1111/2041-210X.13286](https://doi.org/10.1111/2041-210X.13286).
+
+Get citation information for `nlrx` in R doing `citation(package = 'nlrx')`.
 
 ## Prerequirements
 
@@ -175,7 +177,7 @@ analyze_nl(nl)
 * Please [report any issues or bugs](https://github.com/nldoc/nlrx/issues/new/).
 * License: GPL3
 * Get citation information for `nlrx` in R doing `citation(package = 'nlrx')`
-* We are very open to contributions - if you are interested check [Contributing](CONTRIBUTING.md).
-    * Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+* We are very open to contributions - if you are interested check [Contributing](https://github.com/ropensci/nlrx/blob/master/CONTRIBUTING.md).
+    * Please note that this project is released with a [Contributor Code of Conduct](https://github.com/ropensci/nlrx/blob/master/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 [![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)

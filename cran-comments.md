@@ -1,5 +1,11 @@
 # Resubmission
 
+This is a resubmission of nlrx version 0.3.0.
+In the previous submission (possibly) invalid URLs were found in README.Rmd.
+We have fixed these issues and updated the URLs to the correct format.
+
+# Changes in version 0.3.0
+
 * Added support for self-defined evaluation functions to optimization functions simdesign_GenAlg and simdesign_GenSA.
 * Added support to simdesign_simple() for models without any GUI parameters
 * Added support to download_netLogo() for NetLogo version 6.1.0
