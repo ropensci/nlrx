@@ -233,6 +233,11 @@ util_eval_experiment <- function(nl) {
     default: ", paste(notvalid, collapse = " ; ")), call. = FALSE)
   }
 
+  # Check if experiment name contains white spaces:
+  if (grepl("\\s", getexp(nl, "expname"))) {
+    stop(paste0("Experiment names are not allowed to contain whitespaces!"))
+  }
+
   # Check if a NetLogo parameter has been defined in variables AND constants:
   if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
     stop(paste0(

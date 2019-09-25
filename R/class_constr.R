@@ -68,7 +68,7 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' @description Construct a new experiment object
 #'
-#' @param expname A character string defining the name of the experiment
+#' @param expname A character string defining the name of the experiment, no whitespaces allowed
 #' @param outpath Path to a directory where experiment output will be stored
 #' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
@@ -138,7 +138,7 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' \emph{expname}
 #'
-#' A character string defining the name of the experiment, useful for documentation purposes.
+#' A character string defining the name of the experiment, useful for documentation purposes. The string must not contain any whitespaces.
 #'
 #' \emph{outpath}
 #'

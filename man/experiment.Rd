@@ -13,7 +13,7 @@ experiment(expname = "defaultexp", outpath = NA_character_,
   variables = list(), constants = list(), ...)
 }
 \arguments{
-\item{expname}{A character string defining the name of the experiment}
+\item{expname}{A character string defining the name of the experiment, no whitespaces allowed}
 
 \item{outpath}{Path to a directory where experiment output will be stored}
 
@@ -104,7 +104,7 @@ The information that is needed, depends on the chosen simdesign (details on vari
 
 \emph{expname}
 
-A character string defining the name of the experiment, useful for documentation purposes.
+A character string defining the name of the experiment, useful for documentation purposes. The string must not contain any whitespaces.
 
 \emph{outpath}
 
