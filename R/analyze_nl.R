@@ -62,7 +62,7 @@ setsim(nl, \"simoutput\") <- results")
 #'
 #' @param nl nl object
 #' @param metrics vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object
-#' @param funs dplyr::funs list with the summary metrics one wants to have for the sensitivity results
+#' @param funs list with the summary metrics for the sensitivity results
 #' @return analysis summary tibble
 #'
 #' @details
@@ -70,6 +70,7 @@ setsim(nl, \"simoutput\") <- results")
 #' In order to execute this function, simulation output needs to be attached to the simdesign first with \code{setsim(nl, "output") <- results}.
 #'
 #' analyze_nl calls different post-processing analysis functions, depending on the specified method in the simdesign object of the nl object.
+#'
 #'
 #' \strong{The following simdesign are currently supported:}
 #'
@@ -124,7 +125,7 @@ setsim(nl, \"simoutput\") <- results")
 #' nl <- nl_sobol
 #'
 #' # Define aggregation measurements:
-#' myfuns <- dplyr::funs(mean, sd, min, max)
+#' myfuns <- list(mean=mean, sd=sd, min=min, max=max)
 #'
 #' # Calculate sensitivity indices:
 #' analyze_nl(nl, funs = myfuns)
@@ -135,7 +136,7 @@ setsim(nl, \"simoutput\") <- results")
 #' @export
 
 analyze_nl <- function(nl, metrics = getexp(nl, "metrics"),
-                       funs = dplyr::funs(mean)) {
+                       funs = list(mean = mean)) {
 
   ## Check if results have been attached:
   if (purrr::is_empty(getsim(nl, "simoutput"))) {
@@ -213,7 +214,7 @@ analyze_ff <- function(nl, metrics, funs) {
     dplyr::summarise_at(metrics, funs) %>%
     dplyr::ungroup()
 
-  ffagg <- tibble::as.tibble(ffagg)
+  ffagg <- tibble::as_tibble(ffagg)
 
   return(ffagg)
 }
@@ -244,7 +245,7 @@ analyze_lhs <- function(nl, metrics, funs) {
     dplyr::summarise_at(getexp(nl, "metrics"), funs) %>%
     dplyr::ungroup()
 
-  lhsagg <- tibble::as.tibble(lhsagg)
+  lhsagg <- tibble::as_tibble(lhsagg)
 
   return(lhsagg)
 }
@@ -297,7 +298,7 @@ analyze_sobol <- function(nl, metrics, funs) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
-  sensindex <- tibble::as.tibble(sensindex)
+  sensindex <- tibble::as_tibble(sensindex)
 
   return(sensindex)
 }
@@ -360,7 +361,7 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
-  sensindex <- tibble::as.tibble(sensindex)
+  sensindex <- tibble::as_tibble(sensindex)
 
   return(sensindex)
 }
@@ -422,7 +423,7 @@ analyze_soboljansen <- function(nl, metrics, funs) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
-  sensindex <- tibble::as.tibble(sensindex)
+  sensindex <- tibble::as_tibble(sensindex)
 
   return(sensindex)
 }
@@ -494,7 +495,7 @@ analyze_morris <- function(nl, metrics, funs) {
 
   # Remove rownames
   rownames(sensindex) <- NULL
-  sensindex <- tibble::as.tibble(sensindex)
+  sensindex <- tibble::as_tibble(sensindex)
 
   return(sensindex)
 }
@@ -557,7 +558,7 @@ analyze_eFast <- function(nl, metrics, funs) {
   }
   # Remove rownames
   rownames(sensindex) <- NULL
-  sensindex <- tibble::as.tibble(sensindex)
+  sensindex <- tibble::as_tibble(sensindex)
 
   return(sensindex)
 }

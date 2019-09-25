@@ -42,7 +42,7 @@ util_create_lhs <- function(input, samples, precision) {
     match.fun(input[[i]]$qfun)(lhs.design[, i], input[[i]]$min, input[[i]]$max)
   })
   names(lhs.design) <- names(input)
-  lhs.final <- tibble::as.tibble(lhs.design)
+  lhs.final <- tibble::as_tibble(lhs.design)
   ## Precision:
   lhs.final <- round(lhs.final, digits = precision)
 

@@ -345,7 +345,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
   patches_string <- stringr::str_split(patches_string$metrics.patches, " ")
   patches_string <- purrr::map(patches_string, function(x) {
-    patches_owns <- tibble::as.tibble(x = x)
+    patches_owns <- tibble::as_tibble(x = x)
     patches_owns <- tidyr::separate(patches_owns, value,
                                     getexp(nl, "metrics.patches"), sep=",")
     patches_owns <- dplyr::mutate_all(patches_owns, function(x) {
@@ -366,7 +366,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   turtles_string <- NLtable[, grepl(col.name, names(NLtable))]
   turtles_string <- stringr::str_split(dplyr::pull(turtles_string, col.name), " ")
   turtles_string <- purrr::map(turtles_string, function(x) {
-    turtles_owns <- tibble::as.tibble(x = x)
+    turtles_owns <- tibble::as_tibble(x = x)
     turtles_owns <- tidyr::separate(turtles_owns,
                                     value,
                                     metrics,
@@ -388,7 +388,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   links_string <- NLtable[, grepl(col.name, names(NLtable))]
   links_string <- stringr::str_split(dplyr::pull(links_string, col.name), " ")
   links_string <- purrr::map(links_string, function(x) {
-    links_owns <- tibble::as.tibble(x = x)
+    links_owns <- tibble::as_tibble(x = x)
     links_owns <- tidyr::separate(links_owns,
                                   value,
                                   metrics,

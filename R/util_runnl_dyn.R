@@ -75,12 +75,12 @@ util_run_nl_dyn_GenSA_fn <- function(param,
   names(param) <- names(getexp(nl, "variables"))
 
   ## Generate parameterset
-  gensa_param <- tibble::as.tibble(t(param))
+  gensa_param <- tibble::as_tibble(t(param))
 
   ## Add constants if any:
   if(length(getexp(nl, "constants")) > 0)
   {
-    gensa_param <- tibble::as.tibble(cbind(gensa_param,
+    gensa_param <- tibble::as_tibble(cbind(gensa_param,
                                            getexp(nl, "constants"),
                                            stringsAsFactors = FALSE))
 
@@ -196,12 +196,12 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
   names(param) <- names(getexp(nl, "variables"))
 
   ## Generate parameterset
-  gensa_param <- tibble::as.tibble(t(param))
+  gensa_param <- tibble::as_tibble(t(param))
 
   ## Add constants if any:
   if(length(getexp(nl, "constants")) > 0)
   {
-    gensa_param <- tibble::as.tibble(cbind(gensa_param,
+    gensa_param <- tibble::as_tibble(cbind(gensa_param,
                                            getexp(nl, "constants"),
                                            stringsAsFactors = FALSE))
 

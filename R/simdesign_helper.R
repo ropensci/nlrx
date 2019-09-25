@@ -34,7 +34,7 @@ simdesign_simple <- function(nl, nseeds) {
   util_eval_experiment(nl)
   message("Creating simple simulation design")
   # This doesnt use variables but only constants to create a simdesign:
-  simple <- tibble::as.tibble(getexp(nl, "constants"))
+  simple <- tibble::as_tibble(getexp(nl, "constants"))
   seeds <- util_generate_seeds(nseeds = nseeds)
 
   new_simdesign <- simdesign(simmethod="simple",
@@ -97,12 +97,12 @@ simdesign_distinct <- function(nl, nseeds) {
 
   })
 
-  ff <- tibble::as.tibble(ff)
+  ff <- tibble::as_tibble(ff)
 
   ## Bind constants if any:
   if(length(getexp(nl, "constants")) > 0)
   {
-    ff <- tibble::as.tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
+    ff <- tibble::as_tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
   }
 
   ## Generate seeds
@@ -174,12 +174,12 @@ simdesign_ff <- function(nl, nseeds) {
     }
   })
 
-  ff <- tibble::as.tibble(expand.grid(ff, stringsAsFactors = FALSE))
+  ff <- tibble::as_tibble(expand.grid(ff, stringsAsFactors = FALSE))
 
   ## Bind constants if any:
   if(length(getexp(nl, "constants")) > 0)
   {
-    ff <- tibble::as.tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
+    ff <- tibble::as_tibble(cbind(ff, getexp(nl, "constants"), stringsAsFactors=FALSE))
   }
 
   ## Generate seeds
@@ -245,7 +245,7 @@ simdesign_lhs <- function(nl, samples, nseeds, precision) {
   }
 
   ## Convert to tibble:
-  lhs <- tibble::as.tibble(lhs)
+  lhs <- tibble::as_tibble(lhs)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds = nseeds)
@@ -338,7 +338,7 @@ simdesign_sobol <- function(nl,
     soX <- cbind(soX, getexp(nl, "constants"), stringsAsFactors=FALSE)
   }
   ## Convert to tibble
-  soX <- tibble::as.tibble(soX)
+  soX <- tibble::as_tibble(soX)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
@@ -432,7 +432,7 @@ simdesign_sobol2007 <- function(nl,
   }
 
   ## Convert to tibble
-  soX <- tibble::as.tibble(soX)
+  soX <- tibble::as_tibble(soX)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
@@ -527,7 +527,7 @@ simdesign_soboljansen <- function(nl,
   }
 
   ## Convert to tibble
-  soX <- tibble::as.tibble(soX)
+  soX <- tibble::as_tibble(soX)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds=nseeds)
@@ -618,7 +618,7 @@ simdesign_morris <- function(nl,
                             scale=TRUE)
 
   # Export parameter matrix:
-  moX <- tibble::as.tibble(mo$X)
+  moX <- tibble::as_tibble(mo$X)
 
   ## Bind constants if any:
   if(length(getexp(nl, "constants")) > 0)
@@ -627,7 +627,7 @@ simdesign_morris <- function(nl,
   }
 
   ## Convert to tibble
-  moX <- tibble::as.tibble(moX)
+  moX <- tibble::as_tibble(moX)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds)
@@ -708,7 +708,7 @@ simdesign_eFast <- function(nl,
                              q.arg = q.args)
 
   # Export parameter matrix:
-  f99X <- tibble::as.tibble(f99$X)
+  f99X <- tibble::as_tibble(f99$X)
 
   ## Bind constants if any:
   if(length(getexp(nl, "constants")) > 0)
@@ -717,7 +717,7 @@ simdesign_eFast <- function(nl,
   }
 
   ## Convert to tibble
-  f99X <- tibble::as.tibble(f99X)
+  f99X <- tibble::as_tibble(f99X)
 
   ## Generate seeds
   seeds <- util_generate_seeds(nseeds)

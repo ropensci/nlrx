@@ -1,6 +1,6 @@
 testthat::context("Analyze nl with sample data")
 testthat::test_that("Analysis of sample data", {
-  myfuns <- dplyr::funs(mean, stats::sd, min, max)
+  myfuns <- list(mean=mean, sd=stats::sd, min=min, max=max)
   testthat::context("Load sample data ff")
   data("nl_ff", package = "nlrx")
 
