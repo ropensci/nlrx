@@ -208,7 +208,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>expname</th>
-      <td><p>A character string defining the name of the experiment</p></td>
+      <td><p>A character string defining the name of the experiment, no whitespaces allowed</p></td>
     </tr>
     <tr>
       <th>outpath</th>
@@ -316,7 +316,7 @@ Variables can be defined as distinct values, value distributions or range with i
 The information that is needed, depends on the chosen simdesign (details on variable definition requirements can be found in the helpfiles of each simdesign helper function).</p>
 <p><strong>All remaining slots are optional:</strong></p>
 <p><em>expname</em></p>
-<p>A character string defining the name of the experiment, useful for documentation purposes.</p>
+<p>A character string defining the name of the experiment, useful for documentation purposes. The string must not contain any whitespaces.</p>
 <p><em>outpath</em></p>
 <p>A valid path to an existing directory. The directory is used by the <a href='write_simoutput.html'>write_simoutput</a> function to store attached simulation results to disk in csv format.</p>
 <p><em>idfinal</em></p>
