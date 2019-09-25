@@ -16,9 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Advanced configuration notes
-
-#### Notes on variables and constants definitions
+## Notes on variables and constants definitions
 
 Correctly defining variables within the experiment class object is crucial for creating simdesigns.
 The implemented simdesigns have different requirements for variable definitions:
@@ -49,14 +47,14 @@ Additionally, please note the following restrictions in order to define variable
 A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
 After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_constants_variables()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
-#### Capturing progress of model simulations
+## Capturing progress of model simulations
 
 The `run_nl_all()`, `run_nl_one()` and `run_nl_dyn()` functions provide a "silent" parameter that allows to capture progress of running simulations.
 If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of each simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
 
 However, both approaches only work for sequential execution. Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
 
-#### Handling NetLogo runtime errors
+## Handling NetLogo runtime errors
 
 Usually, runtime errors of NetLogo model simulations are printed to the R console and the current execution of `run_nl_all()`, `run_nl_one()` or `run_nl_dyn()` breaks. However, it can happen that a model simulation freezes due to Java runtime errors. Unfortunately it is not possible to terminate the Java virtual machine or print an error message to the console after such a runtime error occurred.
 The current R session and the freezed Java Virtual Machine need to be terminated manually.
@@ -64,7 +62,7 @@ Thus, NetLogo models should be debugged in NetLogo prior to execution of large e
 Capturing progress of model simulations (see section "Capturing progress of model simulations") might help in debugging runtime errors that freeze the Java Virtual Machine.
 
 
-#### Notes on self-written output
+## Notes on self-written output
 
 The experiment provides a slot called "idrunnum".
 This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
@@ -73,7 +71,7 @@ The name of this widget can be entered into the "idrunnum" field of the experime
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
-#### Notes on temporary files management
+## Notes on temporary files management
 
 nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files.
 These temporary files are stored in the default temporary files directory of the R session.
@@ -86,7 +84,7 @@ unixtools::set.tempdir("<path-to-temp-dir>")
 ```
 
 
-#### Notes on random-seed and repetitions management
+## Notes on random-seed and repetitions management
 
 The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization.
 This is only useful if you manually generate a new random-seed during the setup of your model.
@@ -98,7 +96,7 @@ However, the concept of nlrx is based on sensitivity analyses. Here, you may wan
 In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds.
 Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
 
-#### Notes on runtime and measurements
+## Notes on runtime and measurements
 
 The runtime of NetLogo model simulations can be controlled with two slots of the experiment class:
 
@@ -132,14 +130,14 @@ end
 ```
 In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with [pcolor = green]".
 
-#### Notes on NetLogo extensions
+## Notes on NetLogo extensions
 Usually, all NetLogo extensions that are shipped with NetLogo should also work with nlrx.
 However, depending on the system it can happen that NetLogo extensions are not found properly. To solve such problems we advise to put your `.nlogo model` file in the `app/models` subdirectory of the NetLogo installation path.
 A special case is the NetLogo r-extension because it needs to be stopped manually in between model runs.
 To achieve that, simply put the `r:stop` command in the `idfinal` slot of your experiment: `idfinal = "r:stop"`.
 
 
-#### Notes on parallelisation and the future concept
+## Notes on parallelisation and the future concept
 
 The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). We also suggest to always use a future operator (`%<-%`) when you call this function in parallel:
 ```{r eval=FALSE}

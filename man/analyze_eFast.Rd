@@ -11,7 +11,7 @@ analyze_eFast(nl, metrics, funs)
 
 \item{metrics}{vector of strings defining metric columns for evaluation. Defaults to metrics of the experiment within the nl object}
 
-\item{funs}{dplyr::funs list with the summary metrics one wants to have for the sensitivity results}
+\item{funs}{list with the summary metrics for the sensitivity results}
 }
 \description{
 Analyze NetLogo simulation output of simdesign eFast

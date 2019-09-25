@@ -268,7 +268,8 @@ Finally, the function reports a simdesign object.</p>
                                   <span class='kw'>evalcrit</span><span class='kw'>=</span><span class='fl'>1</span>,
                                   <span class='kw'>nseeds</span><span class='kw'>=</span><span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating GenAlg simulation design</span></div><div class='input'>
 <span class='co'># Example 2: Using a self-defined evaluation function</span>
-<span class='co'># For demonstration we define a simple function that calculates the maximum value of count sheep output.</span>
+<span class='co'># For demonstration we define a simple function that calculates</span>
+<span class='co'># the maximum value of count sheep output.</span>
 <span class='no'>critfun</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>nl</span>) {
 <span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='no'>nl</span>@<span class='kw'>simdesign</span>@<span class='kw'>simoutput</span>
 <span class='no'>crit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='no'>results</span>$<span class='no'>`count sheep`</span>))

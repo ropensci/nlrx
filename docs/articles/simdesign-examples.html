@@ -150,7 +150,7 @@
       <h1>Simdesign examples</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-09-23</h4>
+            <h4 class="date">2019-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/simdesign-examples.Rmd"><code>vignettes/simdesign-examples.Rmd</code></a></small>
       <div class="hidden name"><code>simdesign-examples.Rmd</code></div>
@@ -159,13 +159,10 @@
 
     
     
-<div id="simdesign-examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simdesign-examples" class="anchor"></a>Simdesign examples</h2>
 <p>nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions. These simdesigns represent different techniques of parameter space explorations. This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx. Details on the sensitivity analysis methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=sensitivity/index.html">sensitivity package</a>. Details on the optimization methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=genalg/index.html">genalg package</a> and the <a href="https://CRAN.R-project.org/package=GenSA/index.html">GenSA package</a>.</p>
-<div id="simdesign-examples-for-the-wolf-sheep-predation-model" class="section level3">
-<h3 class="hasAnchor">
-<a href="#simdesign-examples-for-the-wolf-sheep-predation-model" class="anchor"></a>Simdesign examples for the Wolf Sheep Predation model</h3>
+<div id="simdesign-examples-for-the-wolf-sheep-predation-model" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simdesign-examples-for-the-wolf-sheep-predation-model" class="anchor"></a>Simdesign examples for the Wolf Sheep Predation model</h2>
 <p>The following section provides valid experiment setups for all supported simdesigns using the Wolf Sheep Model from the NetLogo models library.</p>
 <p>First we set up a nl object. We use this nl object for all simdesigns:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</a>
@@ -182,9 +179,10 @@
 <a class="sourceLine" id="cb1-12" title="12">         <span class="dt">nlpath =</span> netlogopath,</a>
 <a class="sourceLine" id="cb1-13" title="13">         <span class="dt">modelpath =</span> modelpath,</a>
 <a class="sourceLine" id="cb1-14" title="14">         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</a></code></pre></div>
-<div id="simple-simulation-using-constants-simdesign_simple" class="section level4">
-<h4 class="hasAnchor">
-<a href="#simple-simulation-using-constants-simdesign_simple" class="anchor"></a>Simple simulation using constants (simdesign_simple)</h4>
+</div>
+<div id="simple-simulation-using-constants-simdesign_simple" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simple-simulation-using-constants-simdesign_simple" class="anchor"></a>Simple simulation using constants (simdesign_simple)</h2>
 <p>The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization. To setup a simple simdesign, no variables have to be defined. The simple simdesign can be used to test a specific parameterisation of the model. It is also useful to for creating animated output of one specific parameterisation (see “Capturing Spatial NetLogo Output” vignette).</p>
 <p><code>simdesign_simple</code> is most useful, if you want to imitate pressing the <em>go</em> button in your model in NetLogo - just a single run, with a defined parameterisation.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
@@ -212,9 +210,9 @@
 <a class="sourceLine" id="cb2-23" title="23">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl=</span>nl,</a>
 <a class="sourceLine" id="cb2-24" title="24">                                 <span class="dt">nseeds=</span><span class="dv">3</span>)</a></code></pre></div>
 </div>
-<div id="distinct-parameter-combinations-simdesign_distinct" class="section level4">
-<h4 class="hasAnchor">
-<a href="#distinct-parameter-combinations-simdesign_distinct" class="anchor"></a>Distinct parameter combinations (simdesign_distinct)</h4>
+<div id="distinct-parameter-combinations-simdesign_distinct" class="section level2">
+<h2 class="hasAnchor">
+<a href="#distinct-parameter-combinations-simdesign_distinct" class="anchor"></a>Distinct parameter combinations (simdesign_distinct)</h2>
 <p>The distinct simdesign can be used to run distinct parameter combinations. To setup a distinct simdesign, vectors of values need to be defined for each variable. These vectors must have the same number of elements across all variables. The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
 <a class="sourceLine" id="cb3-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
@@ -240,9 +238,9 @@
 <a class="sourceLine" id="cb3-22" title="22">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_distinct.html">simdesign_distinct</a></span>(<span class="dt">nl=</span>nl,</a>
 <a class="sourceLine" id="cb3-23" title="23">                                   <span class="dt">nseeds=</span><span class="dv">3</span>)</a></code></pre></div>
 </div>
-<div id="full-factorial-simulation-simdesign_ff" class="section level4">
-<h4 class="hasAnchor">
-<a href="#full-factorial-simulation-simdesign_ff" class="anchor"></a>Full-factorial simulation (simdesign_ff)</h4>
+<div id="full-factorial-simulation-simdesign_ff" class="section level2">
+<h2 class="hasAnchor">
+<a href="#full-factorial-simulation-simdesign_ff" class="anchor"></a>Full-factorial simulation (simdesign_ff)</h2>
 <p>The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values. To setup a full-factorial simdesign, vectors of values need to be defined for each variable. Alternatively, a sequence can be defined by setting min, max and step. However, if both (values and min, max, step) are defined, the values vector is prioritized.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
 <a class="sourceLine" id="cb4-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
@@ -268,9 +266,9 @@
 <a class="sourceLine" id="cb4-22" title="22">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_ff.html">simdesign_ff</a></span>(<span class="dt">nl=</span>nl,</a>
 <a class="sourceLine" id="cb4-23" title="23">                             <span class="dt">nseeds=</span><span class="dv">3</span>)</a></code></pre></div>
 </div>
-<div id="latin-hypercube-sampling-simdesign_lhs" class="section level4">
-<h4 class="hasAnchor">
-<a href="#latin-hypercube-sampling-simdesign_lhs" class="anchor"></a>Latin Hypercube Sampling (simdesign_lhs)</h4>
+<div id="latin-hypercube-sampling-simdesign_lhs" class="section level2">
+<h2 class="hasAnchor">
+<a href="#latin-hypercube-sampling-simdesign_lhs" class="anchor"></a>Latin Hypercube Sampling (simdesign_lhs)</h2>
 <p>The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix. The method can be used to generate a near-random sample of parameter values from the defined parameter distributions. More Details on Latin Hypercube Sampling can be found in <a href="https://www.tandfonline.com/doi/abs/10.1080/00401706.1979.10489755">McKay 1979</a>. nlrx uses the <a href="https://CRAN.R-project.org/package=lhs/index.html">lhs</a> package to generate the Latin Hypercube parameter matrix. To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
 <a class="sourceLine" id="cb5-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
@@ -298,9 +296,9 @@
 <a class="sourceLine" id="cb5-24" title="24">                               <span class="dt">nseeds=</span><span class="dv">3</span>,</a>
 <a class="sourceLine" id="cb5-25" title="25">                               <span class="dt">precision=</span><span class="dv">3</span>)</a></code></pre></div>
 </div>
-<div id="sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="section level4">
-<h4 class="hasAnchor">
-<a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="anchor"></a>Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</h4>
+<div id="sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="section level2">
+<h2 class="hasAnchor">
+<a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="anchor"></a>Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</h2>
 <p>Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way. nlrx uses the <a href="https://CRAN.R-project.org/package=sensitivity/index.html">sensitivity</a> package to setup sensitivity analysis parameter matrices. All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination. These indices can be calculated by using the <code><a href="../reference/analyze_nl.html">analyze_nl()</a></code> function after attaching the simulation results to the nl object. To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
 <a class="sourceLine" id="cb6-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
@@ -363,9 +361,9 @@
 <a class="sourceLine" id="cb6-59" title="59">                                 <span class="dt">samples=</span><span class="dv">100</span>,</a>
 <a class="sourceLine" id="cb6-60" title="60">                                 <span class="dt">nseeds=</span><span class="dv">3</span>)</a></code></pre></div>
 </div>
-<div id="optimization-techniques-simdesign_gensa-_genalg" class="section level4">
-<h4 class="hasAnchor">
-<a href="#optimization-techniques-simdesign_gensa-_genalg" class="anchor"></a>Optimization techniques (simdesign_GenSA, _GenAlg)</h4>
+<div id="optimization-techniques-simdesign_gensa-_genalg" class="section level2">
+<h2 class="hasAnchor">
+<a href="#optimization-techniques-simdesign_gensa-_genalg" class="anchor"></a>Optimization techniques (simdesign_GenSA, _GenAlg)</h2>
 <p>Optimization techniques are a powerful tool to search the parameter space for specific solutions. Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the <a href="https://CRAN.R-project.org/package=genalg/index.html">genalg</a> package) or randomly (simulated annealing, utilizing the <a href="https://CRAN.R-project.org/package=GenSA/index.html">genSA</a> package) changing the model parameters within the allowed ranges. To setup optimization simdesigns, variable ranges (min, max) need to be defined. Optimization simdesigns can only be executed using the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function - instead of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> or <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
 <a class="sourceLine" id="cb7-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
@@ -402,8 +400,6 @@
 <a class="sourceLine" id="cb7-33" title="33">                                <span class="dt">control=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">max.time =</span> <span class="dv">600</span>),</a>
 <a class="sourceLine" id="cb7-34" title="34">                                <span class="dt">nseeds=</span><span class="dv">1</span>)</a></code></pre></div>
 </div>
-</div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -412,7 +408,13 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#simdesign-examples">Simdesign examples</a></li>
+<li><a href="#simdesign-examples-for-the-wolf-sheep-predation-model">Simdesign examples for the Wolf Sheep Predation model</a></li>
+      <li><a href="#simple-simulation-using-constants-simdesign_simple">Simple simulation using constants (simdesign_simple)</a></li>
+      <li><a href="#distinct-parameter-combinations-simdesign_distinct">Distinct parameter combinations (simdesign_distinct)</a></li>
+      <li><a href="#full-factorial-simulation-simdesign_ff">Full-factorial simulation (simdesign_ff)</a></li>
+      <li><a href="#latin-hypercube-sampling-simdesign_lhs">Latin Hypercube Sampling (simdesign_lhs)</a></li>
+      <li><a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast">Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</a></li>
+      <li><a href="#optimization-techniques-simdesign_gensa-_genalg">Optimization techniques (simdesign_GenSA, _GenAlg)</a></li>
       </ul>
 </div>
       </div>

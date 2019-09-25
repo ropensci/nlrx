@@ -150,7 +150,7 @@
       <h1>Optimization</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-09-23</h4>
+            <h4 class="date">2019-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
@@ -164,9 +164,10 @@
 <a href="#optimization-with-nlrx" class="anchor"></a>Optimization with nlrx</h2>
 <p>Here we present two simple examples for running an optimization algorithm on a NetLogo model with nlrx. In our example, we use the Simulated Annealing simdesign (<code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code>). However, except for the parameter definitions in the simdesign function and hte output of the function, the genetic algorithm optimization (<code><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg()</a></code>) works in the same way.</p>
 <p>We use the Wolf Sheep Predation model from the models library to show a basic example of the optimization workflow. Example 1 shows, how a NetLogo reporter can be used as a fitness criterion for optimization. Example 2 uses a self-defined evaluation function that calculates landscape metrics that are then used as fitness criterion.</p>
-<div id="example-1-netlogo-reporter-as-fitness-criterion" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-1-netlogo-reporter-as-fitness-criterion" class="anchor"></a>Example 1: NetLogo reporter as fitness criterion</h3>
+</div>
+<div id="example-1-netlogo-reporter-as-fitness-criterion" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-1-netlogo-reporter-as-fitness-criterion" class="anchor"></a>Example 1: NetLogo reporter as fitness criterion</h2>
 <div id="step-1-create-a-nl-object" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-1-create-a-nl-object" class="anchor"></a>Step 1: Create a nl object:</h4>
@@ -233,9 +234,9 @@
 <a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(nl, <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="st">"genSA_1.rds"</span>))</a></code></pre></div>
 </div>
 </div>
-<div id="example-2-evaluation-function-as-fitness-criterion" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-2-evaluation-function-as-fitness-criterion" class="anchor"></a>Example 2: Evaluation function as fitness criterion</h3>
+<div id="example-2-evaluation-function-as-fitness-criterion" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-2-evaluation-function-as-fitness-criterion" class="anchor"></a>Example 2: Evaluation function as fitness criterion</h2>
 <div id="step-1-create-a-nl-object-1" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-1-create-a-nl-object-1" class="anchor"></a>Step 1: Create a nl object:</h4>
@@ -310,7 +311,6 @@
 <a class="sourceLine" id="cb13-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(nl, <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="st">"genSA_2.rds"</span>))</a></code></pre></div>
 </div>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -320,6 +320,8 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#optimization-with-nlrx">Optimization with nlrx</a></li>
+      <li><a href="#example-1-netlogo-reporter-as-fitness-criterion">Example 1: NetLogo reporter as fitness criterion</a></li>
+      <li><a href="#example-2-evaluation-function-as-fitness-criterion">Example 2: Evaluation function as fitness criterion</a></li>
       </ul>
 </div>
       </div>

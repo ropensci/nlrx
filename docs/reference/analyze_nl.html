@@ -195,8 +195,8 @@
     <p>Analyze NetLogo simulation output</p>
     </div>
 
-    <pre class="usage"><span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='getexp.html'>getexp</a></span>(<span class='no'>nl</span>, <span class='st'>"metrics"</span>),
-  <span class='kw'>funs</span> <span class='kw'>=</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='no'>mean</span>))</pre>
+    <pre class="usage"><span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='getexp.html'>getexp</a></span>(<span class='no'>nl</span>, <span class='st'>"metrics"</span>), <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span>
+  <span class='no'>mean</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -211,7 +211,7 @@
     </tr>
     <tr>
       <th>funs</th>
-      <td><p>dplyr::funs list with the summary metrics one wants to have for the sensitivity results</p></td>
+      <td><p>list with the summary metrics for the sensitivity results</p></td>
     </tr>
     </table>
 
@@ -257,22 +257,12 @@ The function calculates eFast sensitivity indices from the output results using 
 <span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_sobol</span>
 
 <span class='co'># Define aggregation measurements:</span>
-<span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/funs.html'>funs</a></span>(<span class='no'>mean</span>, <span class='no'>sd</span>, <span class='no'>min</span>, <span class='no'>max</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: funs() is soft deprecated as of dplyr 0.8.0</span>
-#&gt; <span class='warning'>Please use a list of either functions or lambdas: </span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>  # Simple named list: </span>
-#&gt; <span class='warning'>  list(mean = mean, median = median)</span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>  # Auto named with `tibble::lst()`: </span>
-#&gt; <span class='warning'>  tibble::lst(mean, median)</span>
-#&gt; <span class='warning'></span>
-#&gt; <span class='warning'>  # Using lambdas</span>
-#&gt; <span class='warning'>  list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))</span>
-#&gt; <span class='warning'><span style='color: #555555;'>This warning is displayed once per session.</span><span></span></div><div class='input'>
+<span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span><span class='kw'>=</span><span class='no'>mean</span>, <span class='kw'>sd</span><span class='kw'>=</span><span class='no'>sd</span>, <span class='kw'>min</span><span class='kw'>=</span><span class='no'>min</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='no'>max</span>)
+
 <span class='co'># Calculate sensitivity indices:</span>
 <span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'sensitivity':</span>
 #&gt; <span class='message'>  method    from </span>
-#&gt; <span class='message'>  print.src dplyr</span></div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 18 x 8</span><span>
+#&gt; <span class='message'>  print.src dplyr</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 18 x 8</span><span>
 #&gt;    original     bias `std. error` `min. c.i.` `max. c.i.` parameter metric  seed
 #&gt;       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'> 1</span><span>    0.114  4.47</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.176       0            0.490 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515

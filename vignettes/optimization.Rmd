@@ -26,7 +26,7 @@ However, except for the parameter definitions in the simdesign function and hte 
 We use the Wolf Sheep Predation model from the models library to show a basic example of the optimization workflow.
 Example 1 shows, how a NetLogo reporter can be used as a fitness criterion for optimization. Example 2 uses a self-defined evaluation function that calculates landscape metrics that are then used as fitness criterion.
 
-### Example 1: NetLogo reporter as fitness criterion
+## Example 1: NetLogo reporter as fitness criterion
 
 #### Step 1: Create a nl object:
 
@@ -129,7 +129,7 @@ saveRDS(nl, file.path(nl@experiment@outpath, "genSA_1.rds"))
 
 
 
-### Example 2: Evaluation function as fitness criterion
+## Example 2: Evaluation function as fitness criterion
 
 #### Step 1: Create a nl object:
 

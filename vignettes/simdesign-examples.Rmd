@@ -16,16 +16,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-
-## Simdesign examples
-
 nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions.
 These simdesigns represent different techniques of parameter space explorations.
 This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx.
 Details on the sensitivity analysis methods can be found in the documentation of the [sensitivity package](https://CRAN.R-project.org/package=sensitivity/index.html).
 Details on the optimization methods can be found in the documentation of the [genalg package](https://CRAN.R-project.org/package=genalg/index.html) and the [GenSA package](https://CRAN.R-project.org/package=GenSA/index.html).
 
-### Simdesign examples for the Wolf Sheep Predation model
+## Simdesign examples for the Wolf Sheep Predation model
 
 The following section provides valid experiment setups for all supported simdesigns using the Wolf Sheep Model from the NetLogo models library.
 
@@ -48,7 +45,7 @@ nl <- nl(nlversion = "6.0.3",
          jvmmem = 1024)
 ```
 
-#### Simple simulation using constants (simdesign_simple)
+## Simple simulation using constants (simdesign_simple)
 
 The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization.
 To setup a simple simdesign, no variables have to be defined. The simple simdesign can be used to test a specific parameterisation of the model.
@@ -84,7 +81,7 @@ nl@simdesign <- simdesign_simple(nl=nl,
                                  nseeds=3)
 ```
 
-#### Distinct parameter combinations (simdesign_distinct)
+## Distinct parameter combinations (simdesign_distinct)
 
 The distinct simdesign can be used to run distinct parameter combinations. To setup a distinct simdesign, vectors of values need to be defined for each variable. These vectors must have the same number of elements across all variables. The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.
 
@@ -114,7 +111,7 @@ nl@simdesign <- simdesign_distinct(nl=nl,
                                    nseeds=3)
 ```
 
-#### Full-factorial simulation (simdesign_ff)
+## Full-factorial simulation (simdesign_ff)
 
 The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values.
 To setup a full-factorial simdesign, vectors of values need to be defined for each variable. Alternatively, a sequence can be defined by setting min, max and step. However, if both (values and min, max, step) are defined, the values vector is prioritized.
@@ -145,7 +142,7 @@ nl@simdesign <- simdesign_ff(nl=nl,
                              nseeds=3)
 ```
 
-#### Latin Hypercube Sampling (simdesign_lhs)
+## Latin Hypercube Sampling (simdesign_lhs)
 
 The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
 The method can be used to generate a near-random sample of parameter values from the defined parameter distributions.
@@ -185,7 +182,7 @@ nl@simdesign <- simdesign_lhs(nl=nl,
 
 
 
-#### Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)
+## Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)
 
 Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way.
 nlrx uses the [sensitivity](https://CRAN.R-project.org/package=sensitivity/index.html) package to setup sensitivity analysis parameter matrices.
@@ -255,7 +252,7 @@ nl@simdesign <- simdesign_eFast(nl=nl,
                                  nseeds=3)
 ```
 
-#### Optimization techniques (simdesign_GenSA, _GenAlg)
+## Optimization techniques (simdesign_GenSA, _GenAlg)
 
 Optimization techniques are a powerful tool to search the parameter space for specific solutions.
 Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the [genalg](https://CRAN.R-project.org/package=genalg/index.html) package) or randomly (simulated annealing, utilizing the [genSA](https://CRAN.R-project.org/package=GenSA/index.html) package) changing the model parameters within the allowed ranges.
