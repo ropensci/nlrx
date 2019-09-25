@@ -10,6 +10,11 @@
 * Hotfix for unnest_simoutput(). In the previous package version, under some circumstances an error occured due to NA data.
 * Corrected spelling errors in some vignettes and documentation files.
 
+We also fixed problems with automated tests for the nldoc() function.
+These were shown on the CRAN Package check page.
+Errors were thrown because of missing pandoc installations.
+Thus, we added a check and only run the tests if there is a proper pandoc installation on the system.
+
 ## Test environments
 * Windows 10, R 3.5.2
 * ubuntu 18.10, R 3.5.2
