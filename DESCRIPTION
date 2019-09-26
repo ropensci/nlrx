@@ -8,7 +8,7 @@ Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
              person("Marina", "Papadopoulou", role = "rev",
                     comment = "Marina reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/262>"))
 Maintainer: Jan Salecker <jsaleck@gwdg.de>
-Description: The purpose of this package is to provide tools to setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/netlogo/>) model simulations in 'R'.
+Description: Setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/netlogo/>) model simulations in 'R'.
     'nlrx' experiments use a similar structure as 'NetLogos' Behavior Space experiments. 
     However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.
     The user defines all information that is needed in an intuitive framework, using class objects.
