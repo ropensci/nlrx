@@ -598,6 +598,11 @@ simdesign_morris <- function(nl,
   util_eval_experiment(nl)
   util_eval_variables(nl)
   util_eval_variables_sa(nl)
+
+  if (morrisgridjump > morrislevels)
+  {
+    warning("morrisgridjump should be lower than morrislevels. Morris recommendation is to use (morrislevels / 2) for the gridjump value. The parameter matrix might be invalid. Please adjust and attach the simdesign again.")
+  }
   message("Creating morris simulation design")
 
   morrisdesign <- list(type = morristype,

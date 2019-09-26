@@ -150,7 +150,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-09-25</h4>
+            <h4 class="date">2019-09-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/nldoc/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -304,14 +304,14 @@
 <div id="notes-on-parallelisation-and-the-future-concept" class="section level2">
 <h2 class="hasAnchor">
 <a href="#notes-on-parallelisation-and-the-future-concept" class="anchor"></a>Notes on parallelisation and the future concept</h2>
-<p>The run_nl_all function uses the <code>future_map_dfr()</code> function from the <a href="https://github.com/DavisVaughan/furrr">furrr package</a>. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the <a href="https://github.com/HenrikBengtsson/future">future package</a>. We also suggest to always use a future operator (<code>%&lt;-%</code>) when you call this function in parallel:</p>
+<p>The run_nl_all function uses the <code>future_map_dfr()</code> function from the <a href="https://github.com/DavisVaughan/furrr">furrr package</a>. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the <a href="https://github.com/HenrikBengtsson/future">future package</a>. <del>We also suggest to always use a future operator (<code>%&lt;-%</code>) when you call this function in parallel:</del> Currently, we do not suggest to use implicit futures (<code>%&lt;-%</code>) because parallelisation might fail.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="kw">plan</span>(multisession)</a>
-<a class="sourceLine" id="cb3-3" title="3">results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
+<a class="sourceLine" id="cb3-3" title="3">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
 <p>In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="kw">plan</span>(multisession)</a>
-<a class="sourceLine" id="cb4-3" title="3">results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">split =</span> <span class="dv">4</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb4-3" title="3">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">split =</span> <span class="dv">4</span>)</a></code></pre></div>
 </div>
   </div>
 

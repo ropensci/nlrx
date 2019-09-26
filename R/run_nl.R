@@ -41,7 +41,7 @@
 #' # Run in parallel on local machine:
 #' library(future)
 #' plan(multisession)
-#' results %<-% run_nl_all(nl)
+#' results <- run_nl_all(nl)
 #'
 #' }
 #' @aliases run_nl_all
