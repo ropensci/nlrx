@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Notes on variables and constants definitions
+## Variables and constants definitions
 
 Correctly defining variables within the experiment class object is crucial for creating simdesigns.
 The implemented simdesigns have different requirements for variable definitions:
@@ -62,7 +62,7 @@ Thus, NetLogo models should be debugged in NetLogo prior to execution of large e
 Capturing progress of model simulations (see section "Capturing progress of model simulations") might help in debugging runtime errors that freeze the Java Virtual Machine.
 
 
-## Notes on self-written output
+## Self-written NetLogo output
 
 The experiment provides a slot called "idrunnum".
 This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo.
@@ -71,7 +71,7 @@ The name of this widget can be entered into the "idrunnum" field of the experime
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
-## Notes on temporary files management
+## Temporary files management
 
 nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files.
 These temporary files are stored in the default temporary files directory of the R session.
@@ -84,7 +84,7 @@ unixtools::set.tempdir("<path-to-temp-dir>")
 ```
 
 
-## Notes on random-seed and repetitions management
+## random-seed and repetitions management
 
 The experiment provides a slot called "repetition" which allows to run multiple simulations of one parameterization.
 This is only useful if you manually generate a new random-seed during the setup of your model.
@@ -96,7 +96,7 @@ However, the concept of nlrx is based on sensitivity analyses. Here, you may wan
 In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds.
 Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.
 
-## Notes on runtime and measurements
+## Runtime and measurements
 
 The runtime of NetLogo model simulations can be controlled with two slots of the experiment class:
 
@@ -130,21 +130,35 @@ end
 ```
 In your nlrx experiment metrics field you can then enter "green.patches" which is way more intuitive then "count patches with [pcolor = green]".
 
-## Notes on NetLogo extensions
+## NetLogo extensions
+
 Usually, all NetLogo extensions that are shipped with NetLogo should also work with nlrx.
 However, depending on the system it can happen that NetLogo extensions are not found properly. To solve such problems we advise to put your `.nlogo model` file in the `app/models` subdirectory of the NetLogo installation path.
 A special case is the NetLogo r-extension because it needs to be stopped manually in between model runs.
 To achieve that, simply put the `r:stop` command in the `idfinal` slot of your experiment: `idfinal = "r:stop"`.
 
 
-## Notes on parallelisation and the future concept
+## Parallelisation and the future concept
 
-The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). ~~We also suggest to always use a future operator (`%<-%`) when you call this function in parallel:~~
-Currently, we do not suggest to use implicit futures (`%<-%`) because parallelisation might fail.
+The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). See examples below for more details on parallelisation on local machines and remote HPC clusters.
+
+### Parallelisation on local machine
+
+Model simulations can be distributed to each logical processor on the local machine in parallel. The future package provides two options for parallelization, explicit futures and implicit futures which are executed in the background and do not block the console while running. 
+
+Running parallel simulations with an explicit future command:
 ```{r eval=FALSE}
 library(future)
-plan(multisession)
+plan(multiprocess)
 results <- run_nl_all(nl = nl)
+```
+
+For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested `furrr::future_map_dfr()` function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level.
+Note, that we use the assignment operator for implicit futures (`%<-%`):
+```{r eval=FALSE}
+library(future)
+plan(list(sequential, multiprocess))
+results %<-% run_nl_all(nl = nl)
 ```
 
 In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the `run_nl_all()` function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.
@@ -152,4 +166,116 @@ In cases, where the number of random seeds is lower than the available processor
 library(future)
 plan(multisession)
 results <- run_nl_all(nl = nl, split = 4)
+```
+
+
+
+### Parallelisation on remote HPC cluster
+
+This option requires access to a remote HPC cluster.
+This example gives you some guidance and examples for sending jobs from an R session on your local machine to an HPC running slurm. Details might be different depending on the HPC setup.
+
+Some settings, such as ssh access and slurm templates need to be defined to access remote HPC clusters from your local R session. Please check out this [detailed HPC setup manual](https://r-spatialecology.github.io/gwdg_hpc_guide/) for examples on required settings for an HPC running slurm.
+
+In order to run NetLogo models on remote HPCs, required software needs to be installed on the remote system as well: java, Netlogo, R, nlrx and further required R-packages (future/clusterMQ, ...). Of course the NetLogo model files need to be available on the remote machine as well.
+
+#### Using the future framework
+
+For sending jobs to the remote HPC under the future framework, we need to install and load additional R packages and adjust the future plan before executing `run_nl_all()`.
+You need to define a path to your ssh key, a server adress for the HPC, a user name for the HPC and a path to the slurm template file on the HPC.
+Please also make sure that the `nlpath`, `modelpath` and `outpath` variables within your nl object point to locations on the filesystem of the HPC and not your local filesystem.
+
+```{r eval=FALSE}
+# Load required packages
+library(future)
+library(future.batchtools)
+library(debugme)
+Sys.setenv(DEBUGME='batchtools')
+library(batchtools)
+
+# Define the path to the ssh key for your machine:
+options(future.makeNodePSOCK.rshopts = c("-i", "/patch/to/id_rsa"))
+# Define server and your login credentials for the remote HPC:
+login <- tweak(remote, workers="server.HPC.de", user="username")
+
+# Define plan for future environment:
+bsub <- tweak(batchtools_slurm, template = "slurm.tmpl", # define name of slurm tmeplate on HPC filesystem
+              resources = list(job.name = "jobname", # define jobname
+                               log.file = "jobname.log", # define logfile name
+                               queue = "medium",  # define HPC queue
+                               service = "normal", # define HPC service
+                               walltime = "00:30", # define walltime
+                               n_jobs = "1",   # define number of processes per job
+                               mem_cpu = "4000") # define memory per cpu   
+
+# Load HPC plan:
+plan(list(login,
+          bsub,
+          multisession))
+
+# Execute simulations
+results <- run_nl_all(nl = nl)
+```
+
+#### Using the clusterMQ framework
+
+The clusterMQ framework is somewhat different from the future framework. However, in our experience it worked more reliable in combination with a slurm HPC.
+For installation of clustermq and .Rprofile settings see also the [detailed HPC setup manual](https://r-spatialecology.github.io/gwdg_hpc_guide/).
+
+clusterMQ does not directly support parallelisation of the nested `furrr::future_map_dfr()` loops of the `run_nl_all()` function. We need to define our own parallel simulation function, using the `run_nl_one()` function of the nlrx package:
+
+```{r eval=FALSE}
+library(clustermq)
+
+# First, we set the total number of jobs for the HPC
+# In this example we run each simulation as an individual job (recommended).
+# Thus to calculate the number of jobs we just multiply the number of parameterizations of the simdesign with the number of random seeds.
+# If you want to group several runs into the same job you can adjust this line and choose a lower number.
+# However, the number must be chosen that nrow(nl@simdesign@siminput)/njobs results in an integer value
+njobs <- nrow(nl@simdesign@siminput) * length(nl@simdesign@simseeds)
+
+# Second, we generate vectors for looping trough model runs.
+# We generate a vector for simpinputrows by repeating the sequence of parameterisations for each seed.
+# Then, we generate a vector of random-seeds by repeating each seed for n times, where n is the number of siminputrows.
+siminputrows <- rep(seq(1:nrow(nl@simdesign@siminput)), length(nl@simdesign@simseeds))
+rndseeds <- rep(nl@simdesign@simseeds, each=nrow(nl@simdesign@siminput))
+
+# Third, we define our simulation function
+# Please adjust the path to the temporary file directory
+simfun <- function(nl, siminputrow, rndseed, writeRDS=FALSE)
+{
+  unixtools::set.tempdir("/hpath/to/temp/dir")
+  library(nlrx)
+  res <- run_nl_one(nl = nl, siminputrow = siminputrow, seed = rndseed)
+  if (isTRUE(writeRDS))
+  {
+    saveRDS(res, file=file.path(nl@experiment@outpath, paste0("nlrx_sim_", siminputrow, "_seed_", rndseed, ".rds")))
+  }
+  return(res)
+}
+
+# Fourth, use the Q function from the clustermq package to run the jobs on the HPC:
+# The q function loops through our siminputrows and rndseeds vectors.
+# The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.
+# As constants we provide our nl object and the function parameter writeRDS. 
+# If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.
+# This can be useful to gain results from completed runs after a crash has occured.
+results <- clustermq::Q(fun = simfun, 
+                        siminputrow = siminputrows,
+                        rndseed = rndseeds,
+                        const = list(nl = nl,
+                                     writeRDS = TRUE),
+                        export = list(), 
+                        seed = 42, 
+                        n_jobs = njobs, 
+                        template = list(job_name = "jobname", # define jobname
+                                        log.file = "jobname.log", # define logfile name
+                                        queue = "medium",  # define HPC queue
+                                        service = "normal", # define HPC service
+                                        walltime = "00:30:00", # define walltime
+                                        mem_cpu = "4000")) # define memory per cpu   
+
+# The Q function reports the individual results of each job as a list
+# Thus, we convert the list results to tibble format:
+results <- dplyr::bind_rows(results)
 ```
