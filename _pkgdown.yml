@@ -43,4 +43,4 @@ navbar:
       href: reference/index.html
     - icon: fa-github fa-lg
       text: "github"
-      href: https://github.com/nldoc/nlrx
+      href: https://github.com/ropensci/nlrx
