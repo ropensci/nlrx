@@ -196,7 +196,9 @@ util_eval_variables_op <- function(nl) {
 util_eval_constants <- function(nl) {
   if (length(getexp(nl, "constants")) == 0) {
     stop("Error: Experiment constants list is empty.
-         You need to define a constants list with at least one element!",
+         You need to define a constants list with at least one element!
+         If your model does not have any globals, please create a dummy global, either on the GUI or in the model code (globals[])
+         and add the dummy global to the constants list with an appropriate dummy value!",
       call. = FALSE
     )
   }

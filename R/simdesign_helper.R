@@ -32,6 +32,7 @@
 simdesign_simple <- function(nl, nseeds) {
 
   util_eval_experiment(nl)
+  util_eval_constants(nl)
   message("Creating simple simulation design")
   # This doesnt use variables but only constants to create a simdesign:
   simple <- tibble::as_tibble(getexp(nl, "constants"))

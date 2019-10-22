@@ -43,6 +43,7 @@ Additionally, please note the following restrictions in order to define variable
 * Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. `"false"`).
 * It is not allowed to list the same variable in the variables and constants list. 
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
+* simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.
 
 A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
 After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_variables_constants()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
