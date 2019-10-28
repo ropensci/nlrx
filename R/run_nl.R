@@ -272,6 +272,17 @@ run_nl_dyn <- function(nl,
     )
   }
 
+  if (getsim(nl, "simmethod") == "ABCmcmc") {
+    nl_results <- util_run_nl_dyn_ABCmcmc(
+      nl = nl,
+      seed = seed,
+      cleanup.csv = cleanup.csv,
+      cleanup.xml = cleanup.xml,
+      cleanup.bat = cleanup.bat,
+      silent = silent
+    )
+  }
+
 
   return(nl_results)
 }

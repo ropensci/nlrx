@@ -162,4 +162,22 @@ testthat::test_that("Simdesign objects are created properly", {
   testthat::expect_match(class(getsim(nl, "simobject")[[1]]), "fast99")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 3)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
+
+  # Testing validity of simdesign ABCmcmc_Marjoram
+  nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
+                                             summary_stat_target = c(100, 80),
+                                             n_rec = 100,
+                                             n_calibration=500,
+                                             use_seed = TRUE,
+                                             progress_bar = TRUE,
+                                             nseeds = 1)
+
+
+  testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
+  testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
+  testthat::expect_equal(length(getsim(nl, "simobject")), 15)
+  testthat::expect_match(class(getsim(nl, "simobject")), "list")
+  testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
+  testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
+
 })

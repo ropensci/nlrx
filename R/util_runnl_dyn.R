@@ -237,3 +237,132 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
 
   return(results)
 }
+
+#' ABCmcmc call simulations function
+#'
+#' @description ABCmcmc call simulations function
+#'
+#' @param nl nl object
+#' @param seed current model seed
+#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
+#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
+#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
+#' @aliases util_run_nl_dyn_ABCmcmc
+#' @rdname util_run_nl_dyn_ABCmcmc
+#' @keywords internal
+util_run_nl_dyn_ABCmcmc <- function(nl, seed, cleanup.csv=TRUE, cleanup.xml=TRUE, cleanup.bat=TRUE, silent=FALSE)
+{
+  abcmcmc <- getsim(nl, "simobject")
+
+  globals <- list(nl=nl,
+                  postpro_function=abcmcmc$postpro_function,
+                  seed=seed,
+                  cleanup.csv=cleanup.csv,
+                  cleanup.xml=cleanup.xml,
+                  cleanup.bat=cleanup.bat,
+                  silent=silent,
+                  use_seed=abcmcmc$use_seed)
+
+  # The ABC_mcmc function does not allow to pass additional arguments for the simulation function
+  # Instead, we write globals to tempfile and store the filename as a global option
+  globals.file <- tempfile(pattern="nlrxglobals", fileext = ".rds")
+  saveRDS(globals, globals.file)
+  options(nlrx.globals = globals.file)
+
+  ## Add model function to abcmcmc and remove postpro_function:
+  abcmcmc$model <- util_run_nl_dyn_ABCmcmc_fn
+  abcmcmc$postpro_function <- NULL
+
+  # perform simulations:
+  results <- do.call(EasyABC::ABC_mcmc, abcmcmc)
+
+  # Convert result in nested tibble format:
+  param <- results$param
+  colnames(param) <- names(getexp(nl, "variables"))
+
+  stats <- results$stats
+  colnames(stats) <- getexp(nl, "metrics")
+
+  results <- tibble::tibble(param=list(tibble::as_tibble(param)),
+                       stats=list(tibble::as_tibble(stats)),
+                       dist=list(results$dist),
+                       stats_normalization=list(results$stats_normalization),
+                       epsilon=list(results$epsilon),
+                       nsim=list(results$nsim),
+                       n_between_sampling=list(results$n_between_sampling),
+                       computime=list(results$computime))
+
+  return(results)
+}
+
+#' Genetic Algorithm run simulation function
+#'
+#' @description Genetic Algorithm run simulation function
+#'
+#' @param param vector of model parameters passed from ABC_mcmc function. If use_seeds = TRUE, the first element of this vector is a random seed
+#' @aliases util_run_nl_dyn_GenAlg_fn
+#' @rdname util_run_nl_dyn_GenAlg_fn
+#' @keywords internal
+util_run_nl_dyn_ABCmcmc_fn <- function(param)
+{
+  # Get globals path from global option and read variables:
+  globals.file <- getOption("nlrx.globals")
+  globals <- readRDS(globals.file)
+  # Restore variables from the globals file
+  nl <- globals$nl
+  postpro_function <- globals$postpro_function
+  seed <- globals$seed
+  cleanup.csv <- globals$cleanup.csv
+  cleanup.xml <- globals$cleanup.xml
+  cleanup.bat <- globals$cleanup.bat
+  silent <- globals$silent
+  use_seed <- globals$use_seed
+
+  # Check if use_seed was used and overwrite the global random seed
+  if(use_seed == TRUE)
+  {
+    seed <- param[1]
+    param <- param[-1]
+  }
+
+  # Generate a parameterset:
+  names(param) <- names(getexp(nl, "variables"))
+  abcmcmc_param <- tibble::as_tibble(t(param))
+
+  ## Add constants if any:
+  if(length(getexp(nl, "constants")) > 0)
+  {
+    abcmcmc_param <- tibble::as_tibble(cbind(abcmcmc_param,
+                                             getexp(nl, "constants"),
+                                             stringsAsFactors = FALSE))
+  }
+
+  # Attach current parameterisation to nl object:
+  setsim(nl, "siminput") <- abcmcmc_param
+  # Call netlogo:
+  results <- run_nl_one(
+    nl = nl,
+    siminputrow = 1,
+    seed = seed,
+    cleanup.csv = cleanup.csv,
+    cleanup.xml = cleanup.xml,
+    cleanup.bat = cleanup.bat,
+    silent = silent
+  )
+
+  # Check if a postpro function is provided
+  if(is.function(postpro_function)) {
+    # Apply evalcrit function
+    nl@simdesign@simoutput <- results
+    results <- postpro_function(nl)
+  } else {
+    # If no function is provided, the defined metrics columns are selected
+    results <- results %>%
+      dplyr::select(getexp(nl, "metrics"))
+    # If there is more than one value per metric, we automatically calculated colMeans:
+    results <- colMeans(results)
+  }
+  return(results)
+}
+

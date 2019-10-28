@@ -43,7 +43,8 @@ Imports:
     methods,
     tibble,
     igraph,
-    stringr
+    stringr,
+    EasyABC
 Depends:
     R (>= 3.3)
 Suggests: 
