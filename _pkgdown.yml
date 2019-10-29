@@ -17,7 +17,7 @@ navbar:
          icon: fa-book
          href: articles/simdesign-examples.html
        - text: "Advanced configuration"
-         icon: fa-sticky-note
+         icon: fa-book
          href: articles/furthernotes.html
        - text: "Sensitivity Analysis with nlrx"
          icon: fa-sticky-note
@@ -25,14 +25,17 @@ navbar:
        - text: "Optimization with nlrx"
          icon: fa-sticky-note
          href: articles/optimization.html
+       - text: "Calibration with nlrx"
+         icon: fa-sticky-note
+         href: articles/calibration.html
        - text: "Capturing spatial NetLogo output"
-         icon: fa-calculator
+         icon: fa-book
          href: articles/articles/spatial-output.html
        - text: "Interfacing a variety of different NetLogo models"
-         icon: fa-file-text-o
+         icon: fa-book
          href: articles/articles/interfacing-different-models.html
        - text: "NetLogo documentation with nlrx"
-         icon: fa-file-text-o
+         icon: fa-book
          href: articles/articles/nlrx_nldoc.html
   right:
     - icon: fa-newspaper-o

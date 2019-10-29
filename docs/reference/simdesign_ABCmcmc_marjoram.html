@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add a simple simdesign to a nl object — simdesign_simple • nlrx | NetLogo from R</title>
+<title>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Add a simple simdesign to a nl object — simdesign_simple" />
-<meta property="og:description" content="Add a simple simdesign to a nl object" />
+<meta property="og:title" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram" />
+<meta property="og:description" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -193,16 +193,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add a simple simdesign to a nl object</h1>
+    <h1>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</h1>
     <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_simple.Rd</code></div>
+    <div class="hidden name"><code>simdesign_ABCmcmc_marjoram.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add a simple simdesign to a nl object</p>
+    <p>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simdesign_simple</span>(<span class='no'>nl</span>, <span class='no'>nseeds</span>)</pre>
+    <pre class="usage"><span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='no'>nl</span>, <span class='kw'>postpro_function</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>summary_stat_target</span>, <span class='kw'>prior_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>n_rec</span>,
+  <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>n_cluster</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>use_seed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>dist_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_calibration</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
+  <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed_count</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>nseeds</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,6 +215,58 @@
     <tr>
       <th>nl</th>
       <td><p>nl object with a defined experiment</p></td>
+    </tr>
+    <tr>
+      <th>postpro_function</th>
+      <td><p>default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.</p></td>
+    </tr>
+    <tr>
+      <th>summary_stat_target</th>
+      <td><p>a vector of target values in the same order as the defined metrics of the experiment</p></td>
+    </tr>
+    <tr>
+      <th>prior_test</th>
+      <td><p>a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "&lt;", "&gt;", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.</p></td>
+    </tr>
+    <tr>
+      <th>n_rec</th>
+      <td><p>Number of samples along the MCMC</p></td>
+    </tr>
+    <tr>
+      <th>n_between_sampling</th>
+      <td><p>a positive integer equal to the desired spacing between sampled points along the MCMC.</p></td>
+    </tr>
+    <tr>
+      <th>n_cluster</th>
+      <td><p>number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores &gt; 1.</p></td>
+    </tr>
+    <tr>
+      <th>use_seed</th>
+      <td><p>if TRUE, seeds will be automatically created for each new model run</p></td>
+    </tr>
+    <tr>
+      <th>dist_weights</th>
+      <td><p>a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.</p></td>
+    </tr>
+    <tr>
+      <th>n_calibration</th>
+      <td><p>a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.</p></td>
+    </tr>
+    <tr>
+      <th>tolerance_quantile</th>
+      <td><p>a positive number between 0 and 1 (strictly). This is the percentage of simulations retained during the calibration step to determine the tolerance threshold to be used during the MCMC. Default value is 0.01.</p></td>
+    </tr>
+    <tr>
+      <th>proposal_phi</th>
+      <td><p>a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.</p></td>
+    </tr>
+    <tr>
+      <th>seed_count</th>
+      <td><p>a positive integer, the initial seed value provided to the function model (if use_seed=TRUE). This value is incremented by 1 at each call of the function model.</p></td>
+    </tr>
+    <tr>
+      <th>progress_bar</th>
+      <td><p>logical, FALSE by default. If TRUE, ABC_mcmc will output a bar of progression with the estimated remaining computing time. Option not available with multiple cores.</p></td>
     </tr>
     <tr>
       <th>nseeds</th>
@@ -222,20 +279,32 @@
     <p>simdesign S4 class object</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function creates a simdesign S4 class which can be added to a nl object.
-The simple simdesign only uses model parameters that are defined in the constants field of the experiment object within the nl object.
-Thus, the resulting input tibble of the simdesign has only one run with constant parameterisations.
-This can be useful to run one simulation with a specific parameterset.
+    <p>This function creates a simdesign S4 class which can be added to a nl object.</p>
+<p>Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).</p>
+<p>The function uses the EasyABC package to set up the ABC_mcmc function.
+For details on the ABC_mcmc function parameters see ?EasyABC::ABC_mcmc
 Finally, the function reports a simdesign object.</p>
+<p>Approximate Bayesian Computation simdesigns can only be executed using the <a href='run_nl_dyn.html'>run_nl_dyn</a> function instead of <a href='run_nl_all.html'>run_nl_all</a> or <a href='run_nl_one.html'>run_nl_one</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># To attach a simdesign, a nl object needs to be created first (see ?nl).</span>
 <span class='co'># For this example, we load a nl object from test data.</span>
 
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_simple</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_simple</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>, <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='message'>Creating simple simulation design</span></div><div class='input'>
+<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
 
+<span class='co'># Attach the simdesign to the nl object</span>
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+                                            <span class='kw'>summary_stat_target</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>80</span>),
+                                            <span class='kw'>n_rec</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+                                            <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+                                            <span class='kw'>n_cluster</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                                            <span class='kw'>use_seed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                                            <span class='kw'>n_calibration</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
+                                            <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>,
+                                            <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+                                            <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                                            <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating ABC Monte-Carlo Markov-Chain simulation design</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

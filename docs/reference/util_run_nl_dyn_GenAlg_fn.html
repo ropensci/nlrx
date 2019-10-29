@@ -43,7 +43,8 @@
 
 
 <meta property="og:title" content="Genetic Algorithm run simulation function — util_run_nl_dyn_GenAlg_fn" />
-<meta property="og:description" content="Genetic Algorithm run simulation function" />
+<meta property="og:description" content="Genetic Algorithm run simulation function
+Genetic Algorithm run simulation function" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -108,7 +109,7 @@
     </li>
     <li>
       <a href="../articles/furthernotes.html">
-        <span class="fa fa-sticky-note"></span>
+        <span class="fa fa-book"></span>
          
         Advanced configuration
       </a>
@@ -128,22 +129,29 @@
       </a>
     </li>
     <li>
+      <a href="../articles/calibration.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Calibration with nlrx
+      </a>
+    </li>
+    <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-calculator"></span>
+        <span class="fa fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-file-text-o"></span>
+        <span class="fa fa-book"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-file-text-o"></span>
+        <span class="fa fa-book"></span>
          
         NetLogo documentation with nlrx
       </a>
@@ -193,10 +201,13 @@
 
     <div class="ref-description">
     <p>Genetic Algorithm run simulation function</p>
+<p>Genetic Algorithm run simulation function</p>
     </div>
 
     <pre class="usage"><span class='fu'>util_run_nl_dyn_GenAlg_fn</span>(<span class='no'>param</span>, <span class='no'>nl</span>, <span class='no'>evalcrit</span>, <span class='no'>seed</span>, <span class='no'>cleanup.csv</span>,
-  <span class='no'>cleanup.xml</span>, <span class='no'>cleanup.bat</span>, <span class='no'>silent</span>)</pre>
+  <span class='no'>cleanup.xml</span>, <span class='no'>cleanup.bat</span>, <span class='no'>silent</span>)
+
+<span class='fu'>util_run_nl_dyn_ABCmcmc_fn</span>(<span class='no'>param</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -232,6 +243,10 @@
     <tr>
       <th>silent</th>
       <td><p>TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).</p></td>
+    </tr>
+    <tr>
+      <th>param</th>
+      <td><p>vector of model parameters passed from ABC_mcmc function. If use_seeds = TRUE, the first element of this vector is a random seed</p></td>
     </tr>
     </table>
 

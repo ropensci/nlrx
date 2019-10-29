@@ -25,7 +25,7 @@ simdesign_ABCmcmc_Marjoram(nl, postpro_function = NULL,
 
 \item{n_between_sampling}{a positive integer equal to the desired spacing between sampled points along the MCMC.}
 
-\item{n_cluster}{number of cores to parallelize simulations}
+\item{n_cluster}{number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.}
 
 \item{use_seed}{if TRUE, seeds will be automatically created for each new model run}
 

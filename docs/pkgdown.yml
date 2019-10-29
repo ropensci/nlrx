@@ -5,6 +5,7 @@ articles:
   interfacing-different-models: articles/interfacing-different-models.html
   nlrx_nldoc: articles/nlrx_nldoc.html
   spatial-output: articles/spatial-output.html
+  calibration: calibration.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html
   optimization: optimization.html

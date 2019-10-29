@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Execute one NetLogo simulation from a nl object — run_nl_one • nlrx | NetLogo from R</title>
+<title>ABCmcmc call simulations function — util_run_nl_dyn_ABCmcmc • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Execute one NetLogo simulation from a nl object — run_nl_one" />
-<meta property="og:description" content="Execute one NetLogo simulation from a nl object with a defined experiment and simdesign" />
+<meta property="og:title" content="ABCmcmc call simulations function — util_run_nl_dyn_ABCmcmc" />
+<meta property="og:description" content="ABCmcmc call simulations function" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -193,17 +193,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Execute one NetLogo simulation from a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
-    <div class="hidden name"><code>run_nl_one.Rd</code></div>
+    <h1>ABCmcmc call simulations function</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/util_runnl_dyn.R'><code>R/util_runnl_dyn.R</code></a></small>
+    <div class="hidden name"><code>util_run_nl_dyn_ABCmcmc.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Execute one NetLogo simulation from a nl object with a defined experiment and simdesign</p>
+    <p>ABCmcmc call simulations function</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_one</span>(<span class='no'>nl</span>, <span class='no'>seed</span>, <span class='no'>siminputrow</span>, <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>util_run_nl_dyn_ABCmcmc</span>(<span class='no'>nl</span>, <span class='no'>seed</span>, <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,11 +214,7 @@
     </tr>
     <tr>
       <th>seed</th>
-      <td><p>a random seed for the NetLogo simulation</p></td>
-    </tr>
-    <tr>
-      <th>siminputrow</th>
-      <td><p>rownumber of the input tibble within the attached simdesign object that should be executed</p></td>
+      <td><p>current model seed</p></td>
     </tr>
     <tr>
       <th>cleanup.csv</th>
@@ -238,40 +234,12 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>tibble with simulation output results</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
-The random seed is set within the NetLogo model to control stochasticity.
-The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.</p>
-<p>This function can be used to run single simulations of a NetLogo model.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-
-<span class='co'># Load nl object from test data:</span>
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
-
-<span class='co'># Run one simulation:</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_one</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
-                      <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fu'><a href='getsim.html'>getsim</a></span>(<span class='no'>nl</span>, <span class='st'>"simseeds"</span>)[<span class='fl'>1</span>],
-                      <span class='kw'>siminputrow</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -1003,7 +1003,7 @@ simdesign_GenAlg <- function(nl,
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
-#' @param n_cluster number of cores to parallelize simulations
+#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
 #' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
@@ -1067,9 +1067,9 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
                                        nseeds)
 {
   # Evaluate experiment and variables:
-  nlrx:::util_eval_experiment(nl)
-  nlrx:::util_eval_variables(nl)
-  nlrx:::util_eval_variables_op(nl)
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
+  util_eval_variables_op(nl)
   message("Creating ABC Monte-Carlo Markov-Chain simulation design")
 
   ## Generating prior data from variables definitions
@@ -1086,6 +1086,12 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
     return(prior.x)
   })
 
+  # Check n_cluster:
+  if(n_cluster > 1)
+  {
+    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
+    n_cluster <- 1
+  }
 
   # Create an abcmcmc object:
   abcmcmc <- list(method="Marjoram",

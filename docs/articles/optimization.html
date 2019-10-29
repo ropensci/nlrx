@@ -69,7 +69,7 @@
     </li>
     <li>
       <a href="../articles/furthernotes.html">
-        <span class="fa fa-sticky-note"></span>
+        <span class="fa fa-book"></span>
          
         Advanced configuration
       </a>
@@ -89,22 +89,29 @@
       </a>
     </li>
     <li>
+      <a href="../articles/calibration.html">
+        <span class="fa fa-sticky-note"></span>
+         
+        Calibration with nlrx
+      </a>
+    </li>
+    <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-calculator"></span>
+        <span class="fa fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-file-text-o"></span>
+        <span class="fa fa-book"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-file-text-o"></span>
+        <span class="fa fa-book"></span>
          
         NetLogo documentation with nlrx
       </a>
@@ -150,7 +157,7 @@
       <h1>Optimization</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-10-22</h4>
+            <h4 class="date">2019-10-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
@@ -162,7 +169,7 @@
 <div id="optimization-with-nlrx" class="section level2">
 <h2 class="hasAnchor">
 <a href="#optimization-with-nlrx" class="anchor"></a>Optimization with nlrx</h2>
-<p>Here we present two simple examples for running an optimization algorithm on a NetLogo model with nlrx. In our example, we use the Simulated Annealing simdesign (<code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code>). However, except for the parameter definitions in the simdesign function and hte output of the function, the genetic algorithm optimization (<code><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg()</a></code>) works in the same way.</p>
+<p>Here we present two simple examples for running an optimization algorithm on a NetLogo model with nlrx. In our example, we use the Simulated Annealing simdesign (<code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code>). However, except for the parameter definitions in the simdesign function and the output of the function, the genetic algorithm optimization (<code><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg()</a></code>) works in the same way.</p>
 <p>We use the Wolf Sheep Predation model from the models library to show a basic example of the optimization workflow. Example 1 shows, how a NetLogo reporter can be used as a fitness criterion for optimization. Example 2 uses a self-defined evaluation function that calculates landscape metrics that are then used as fitness criterion.</p>
 </div>
 <div id="example-1-netlogo-reporter-as-fitness-criterion" class="section level2">

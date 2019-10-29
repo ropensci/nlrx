@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 Here we present two simple examples for running an optimization algorithm on a NetLogo model with nlrx.
 In our example, we use the Simulated Annealing simdesign (`simdesign_GenSA()`).
-However, except for the parameter definitions in the simdesign function and hte output of the function, the genetic algorithm optimization (`simdesign_GenAlg()`) works in the same way.
+However, except for the parameter definitions in the simdesign function and the output of the function, the genetic algorithm optimization (`simdesign_GenAlg()`) works in the same way.
 
 We use the Wolf Sheep Predation model from the models library to show a basic example of the optimization workflow.
 Example 1 shows, how a NetLogo reporter can be used as a fitness criterion for optimization. Example 2 uses a self-defined evaluation function that calculates landscape metrics that are then used as fitness criterion.
