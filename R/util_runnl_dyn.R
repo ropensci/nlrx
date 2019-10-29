@@ -284,14 +284,35 @@ util_run_nl_dyn_ABCmcmc <- function(nl, seed, cleanup.csv=TRUE, cleanup.xml=TRUE
   stats <- results$stats
   colnames(stats) <- getexp(nl, "metrics")
 
-  results <- tibble::tibble(param=list(tibble::as_tibble(param)),
-                       stats=list(tibble::as_tibble(stats)),
-                       dist=list(results$dist),
-                       stats_normalization=list(results$stats_normalization),
-                       epsilon=list(results$epsilon),
-                       nsim=list(results$nsim),
-                       n_between_sampling=list(results$n_between_sampling),
-                       computime=list(results$computime))
+  ## Preapre output, depending on method:
+  if(abcmcmc$method == "Wegmann")
+  {
+    results <- tibble::tibble(param=list(tibble::as_tibble(param)),
+                              stats=list(tibble::as_tibble(stats)),
+                              dist=list(results$dist),
+                              epsilon=list(results$epsilon),
+                              nsim=list(results$nsim),
+                              n_between_sampling=list(results$n_between_sampling),
+                              computime=list(results$computime),
+                              min_stats=list(results$min_stats),
+                              max_stats=list(results$max_stats),
+                              lambda=list(results$lambda),
+                              geometric_mean=list(results$geometric_mean),
+                              boxcox_mean=list(results$boxcox_mean),
+                              boxcox_sd=list(results$boxcox_sd),
+                              pls_transform=list(results$pls_transform),
+                              numcomp=list(results$numcomp))
+  } else
+  {
+    results <- tibble::tibble(param=list(tibble::as_tibble(param)),
+                              stats=list(tibble::as_tibble(stats)),
+                              dist=list(results$dist),
+                              stats_normalization=list(results$stats_normalization),
+                              epsilon=list(results$epsilon),
+                              nsim=list(results$nsim),
+                              n_between_sampling=list(results$n_between_sampling),
+                              computime=list(results$computime))
+  }
 
   return(results)
 }

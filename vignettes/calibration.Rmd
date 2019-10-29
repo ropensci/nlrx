@@ -20,8 +20,8 @@ knitr::opts_chunk$set(
 ## Model calibration with nlrx
 
 Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models.
-The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/web/packages/EasyABC/index.html).
-These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_MarjoramO()`, `simdesign_ABCmcmc_Wegmann()`). 
+The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/package=EasyABC).
+These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`). 
 
 Here we present one example for the widely used Marjoram algorithm which combines ABC with a Markov-Chain Monte-Carlo parameter sampling scheme.
 However, other ABC simdesigns work in a very similar way except for the parameter definitions within the simdesigns (see respective documentation pages for help).
@@ -88,7 +88,7 @@ The `summary_stat_target` represents the vector of our target values that we wan
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            summary_stat_target = c(100, 80),
                                            n_rec = 100, 
-                                           n_calibration=500,
+                                           n_calibration=200,
                                            use_seed = TRUE,
                                            progress_bar = TRUE,
                                            nseeds = 1)
@@ -108,7 +108,7 @@ post <- function(nl){
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            postpro_function = post,
                                            summary_stat_target = c(100, 80),
-                                           n_rec = 50, 
+                                           n_rec = 100, 
                                            n_calibration=200,
                                            use_seed = TRUE,
                                            progress_bar = TRUE,

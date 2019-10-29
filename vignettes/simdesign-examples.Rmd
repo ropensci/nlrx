@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
 nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions.
 These simdesigns represent different techniques of parameter space explorations.
 This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx.
-Details on the sensitivity analysis methods can be found in the documentation of the [sensitivity package](https://CRAN.R-project.org/package=sensitivity/index.html).
-Details on the optimization methods can be found in the documentation of the [genalg package](https://CRAN.R-project.org/package=genalg/index.html) and the [GenSA package](https://CRAN.R-project.org/package=GenSA/index.html).
+Details on the sensitivity analysis methods can be found in the documentation of the [sensitivity package](https://CRAN.R-project.org/package=sensitivity).
+Details on the optimization methods can be found in the documentation of the [genalg package](https://CRAN.R-project.org/package=genalg) and the [GenSA package](https://CRAN.R-project.org/package=GenSA). Details on the approximate bayesian computation (ABC) methods can be found in the documentation of the [EasyABC package](https://cran.r-project.org/package=EasyABC)
 
 ## Simdesign examples for the Wolf Sheep Predation model
 
@@ -294,5 +294,58 @@ nl@simdesign <- simdesign_GenSA(nl=nl,
                                 evalcrit=1,
                                 control=list(max.time = 600),
                                 nseeds=1)
+
+```
+
+## Calibration simdesigns (Approximate Bayesian Computation (ABC))
+
+Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models.
+The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/web/packages/EasyABC/index.html).
+These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`). 
+
+```{r eval=FALSE}
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(min=50, max=150),
+                                             'initial-number-wolves' = list(min=50, max=150)),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 100, 
+                                           n_calibration=200,
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+
+nl@simdesign <- simdesign_ABCmcmc_Marjoram_original(nl=nl,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 10, 
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+
+nl@simdesign <- simdesign_ABCmcmc_Wegmann(nl=nl,
+                                          summary_stat_target = c(100, 80),
+                                          n_rec = 10, 
+                                          n_calibration=200,
+                                          use_seed = TRUE,
+                                          progress_bar = TRUE,
+                                          nseeds = 1)
 
 ```

@@ -1046,8 +1046,8 @@ simdesign_GenAlg <- function(nl,
 #'                                             progress_bar = FALSE,
 #'                                             nseeds = 1)
 #'
-#' @aliases simdesign_ABCmcmc_marjoram
-#' @rdname simdesign_ABCmcmc_marjoram
+#' @aliases simdesign_ABCmcmc_Marjoram
+#' @rdname simdesign_ABCmcmc_Marjoram
 #'
 #' @export
 simdesign_ABCmcmc_Marjoram <- function(nl,
@@ -1122,3 +1122,263 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
   return(new_simdesign)
 
 }
+
+
+#' Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object
+#'
+#' @description Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object
+#'
+#' @param nl nl object with a defined experiment
+#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.
+#' @param summary_stat_target a vector of target values in the same order as the defined metrics of the experiment
+#' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
+#' @param n_rec Number of samples along the MCMC
+#' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
+#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
+#' @param use_seed if TRUE, seeds will be automatically created for each new model run
+#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
+#' @param dist_max a positive number. This is the tolerance threshold used during the MCMC. If not provided by the user, it is automatically computed as half the distance between the first simulation and the target summary statistics and a warning is printed.
+#' @param tab_normalization a vector of the same length as summary_stat_target. Each element contains a positive number by which each summary statistics must be divided before the computation of the Euclidean distance between simulations and data. If not provided by the user, the simulated summary statistics are divided by the target summary statistics and a warning is printed.
+#' @param proposal_range a vector of the same length as the number of model parameters, used when method is "Marjoram_original". Each element contains a positive number defining the range of MCMC jumps for each model parameter. If not provided by the user, a default value is used for each parameter and a warning is printed. The default value is 1/50 of the prior range for uniform distributions, 1/20 of the standard deviation of the prior distribution for normal distributions, 1/20 * exp ( sigma * sigma
+#' @param seed_count a positive integer, the initial seed value provided to the function model (if use_seed=TRUE). This value is incremented by 1 at each call of the function model.
+#' @param progress_bar logical, FALSE by default. If TRUE, ABC_mcmc will output a bar of progression with the estimated remaining computing time. Option not available with multiple cores.
+#' @param nseeds number of seeds for this simulation design
+#' @return simdesign S4 class object
+#' @details
+#'
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The function uses the EasyABC package to set up the ABC_mcmc function.
+#' For details on the ABC_mcmc function parameters see ?EasyABC::ABC_mcmc
+#' Finally, the function reports a simdesign object.
+#'
+#' Approximate Bayesian Computation simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
+#'
+#'
+#' @examples
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_lhs
+#'
+#' # Attach the simdesign to the nl object
+#' nl@@simdesign <- simdesign_ABCmcmc_Marjoram_original(nl = nl,
+#'                                                      summary_stat_target = c(100, 80),
+#'                                                      n_rec = 100,
+#'                                                      n_between_sampling = 10,
+#'                                                      nseeds = 1)
+#'
+#' @aliases simdesign_ABCmcmc_Marjoram_original
+#' @rdname simdesign_ABCmcmc_Marjoram_original
+#'
+#' @export
+simdesign_ABCmcmc_Marjoram_original <- function(nl,
+                                                postpro_function = NULL,
+                                                summary_stat_target,
+                                                prior_test = NULL,
+                                                n_rec,
+                                                n_between_sampling = 10,
+                                                n_cluster = 1,
+                                                use_seed = FALSE,
+                                                dist_weights = NULL,
+                                                dist_max = 0,
+                                                tab_normalization = summary_stat_target,
+                                                proposal_range = vector(mode = "numeric", length = length(getexp(nl, "metrics"))),
+                                                seed_count = 0,
+                                                progress_bar = FALSE,
+                                                nseeds)
+{
+  # Evaluate experiment and variables:
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
+  util_eval_variables_op(nl)
+  message("Creating ABC Monte-Carlo Markov-Chain simulation design")
+
+  ## Generating prior data from variables definitions
+  prior <- purrr::map(nl@experiment@variables, function(x) {
+    qfun <- x$qfun
+    if(!qfun %in% c("qunif", "qnorm", "qlnorm", "qexp"))
+    {
+      stop("Defined qfun not supported. Qfun must be one-of qunif, qnorm, qlnorm, qexp")
+    }
+    qfun <- ifelse(qfun == "qunif", "unif",
+                   ifelse(qfun == "qnorm", "normal",
+                          ifelse(qfun == "qlnorm", "lognormal", "exponential")))
+    prior.x <- c(qfun, x$min, x$max)
+    return(prior.x)
+  })
+
+  # Check n_cluster:
+  if(n_cluster > 1)
+  {
+    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
+    n_cluster <- 1
+  }
+
+  # Create an abcmcmc object:
+  abcmcmc <- list(method="Marjoram_original",
+                  postpro_function=postpro_function,
+                  prior=prior,
+                  summary_stat_target=summary_stat_target,
+                  prior_test=prior_test,
+                  n_rec=n_rec,
+                  n_between_sampling=n_between_sampling,
+                  n_cluster=n_cluster,
+                  use_seed=use_seed,
+                  dist_weights=dist_weights,
+                  dist_max=dist_max,
+                  tab_normalization=tab_normalization,
+                  proposal_range=proposal_range,
+                  seed_count=seed_count,
+                  progress_bar=progress_bar)
+
+  # generate random seeds
+  seeds <- util_generate_seeds(nseeds)
+
+  # Add simdesign to nl
+  new_simdesign <- simdesign(simmethod="ABCmcmc",
+                             siminput=tibble::tibble(),
+                             simobject=abcmcmc,
+                             simseeds=seeds)
+
+  return(new_simdesign)
+
+}
+
+
+#' Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object
+#'
+#' @description Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object
+#'
+#' @param nl nl object with a defined experiment
+#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.
+#' @param summary_stat_target a vector of target values in the same order as the defined metrics of the experiment
+#' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
+#' @param n_rec Number of samples along the MCMC
+#' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
+#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
+#' @param use_seed if TRUE, seeds will be automatically created for each new model run
+#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
+#' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
+#' @param tolerance_quantile a positive number between 0 and 1 (strictly). This is the percentage of simulations retained during the calibration step to determine the tolerance threshold to be used during the MCMC. Default value is 0.01.
+#' @param proposal_phi a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.
+#' @param numcomp a positive integer. This is the number of components to be used for PLS transformations. Default value is 0 which encodes that this number is equal to the number of summary statistics.
+#' @param seed_count a positive integer, the initial seed value provided to the function model (if use_seed=TRUE). This value is incremented by 1 at each call of the function model.
+#' @param progress_bar logical, FALSE by default. If TRUE, ABC_mcmc will output a bar of progression with the estimated remaining computing time. Option not available with multiple cores.
+#' @param nseeds number of seeds for this simulation design
+#' @return simdesign S4 class object
+#' @details
+#'
+#' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
+#'
+#' The function uses the EasyABC package to set up the ABC_mcmc function.
+#' For details on the ABC_mcmc function parameters see ?EasyABC::ABC_mcmc
+#' Finally, the function reports a simdesign object.
+#'
+#' Approximate Bayesian Computation simdesigns can only be executed using the \link[nlrx]{run_nl_dyn} function instead of \link[nlrx]{run_nl_all} or \link[nlrx]{run_nl_one}.
+#'
+#'
+#' @examples
+#'
+#' # To attach a simdesign, a nl object needs to be created first (see ?nl).
+#' # For this example, we load a nl object from test data.
+#'
+#' nl <- nl_lhs
+#'
+#' # Attach the simdesign to the nl object
+#' nl@@simdesign <- simdesign_ABCmcmc_Wegmann(nl = nl,
+#'                                             summary_stat_target = c(100, 80),
+#'                                             n_rec = 100,
+#'                                             n_between_sampling = 10,
+#'                                             n_cluster = 1,
+#'                                             use_seed = FALSE,
+#'                                             n_calibration = 10000,
+#'                                             tolerance_quantile = 0.01,
+#'                                             proposal_phi = 1,
+#'                                             progress_bar = FALSE,
+#'                                             nseeds = 1)
+#'
+#' @aliases simdesign_ABCmcmc_Wegmann
+#' @rdname simdesign_ABCmcmc_Wegmann
+#'
+#' @export
+simdesign_ABCmcmc_Wegmann <- function(nl,
+                                      postpro_function = NULL,
+                                      summary_stat_target,
+                                      prior_test = NULL,
+                                      n_rec,
+                                      n_between_sampling = 10,
+                                      n_cluster = 1,
+                                      use_seed = FALSE,
+                                      dist_weights = NULL,
+                                      n_calibration = 10000,
+                                      tolerance_quantile = 0.01,
+                                      proposal_phi = 1,
+                                      numcomp = 0,
+                                      seed_count = 0,
+                                      progress_bar = FALSE,
+                                      nseeds)
+{
+  # Evaluate experiment and variables:
+  util_eval_experiment(nl)
+  util_eval_variables(nl)
+  util_eval_variables_op(nl)
+  message("Creating ABC Monte-Carlo Markov-Chain simulation design")
+
+  ## Generating prior data from variables definitions
+  prior <- purrr::map(nl@experiment@variables, function(x) {
+    qfun <- x$qfun
+    if(!qfun %in% c("qunif", "qnorm", "qlnorm", "qexp"))
+    {
+      stop("Defined qfun not supported. Qfun must be one-of qunif, qnorm, qlnorm, qexp")
+    }
+    qfun <- ifelse(qfun == "qunif", "unif",
+                   ifelse(qfun == "qnorm", "normal",
+                          ifelse(qfun == "qlnorm", "lognormal", "exponential")))
+    prior.x <- c(qfun, x$min, x$max)
+    return(prior.x)
+  })
+
+  # Check n_cluster:
+  if(n_cluster > 1)
+  {
+    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
+    n_cluster <- 1
+  }
+
+  # Create an abcmcmc object:
+  abcmcmc <- list(method="Wegmann",
+                  postpro_function=postpro_function,
+                  prior=prior,
+                  summary_stat_target=summary_stat_target,
+                  prior_test=prior_test,
+                  n_rec=n_rec,
+                  n_between_sampling=n_between_sampling,
+                  n_cluster=n_cluster,
+                  use_seed=use_seed,
+                  dist_weights=dist_weights,
+                  n_calibration=n_calibration,
+                  tolerance_quantile=tolerance_quantile,
+                  proposal_phi=proposal_phi,
+                  numcomp=numcomp,
+                  seed_count=seed_count,
+                  progress_bar=progress_bar)
+
+  # generate random seeds
+  seeds <- util_generate_seeds(nseeds)
+
+  # Add simdesign to nl
+  new_simdesign <- simdesign(simmethod="ABCmcmc",
+                             siminput=tibble::tibble(),
+                             simobject=abcmcmc,
+                             simseeds=seeds)
+
+  return(new_simdesign)
+
+}
+

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram • nlrx | NetLogo from R</title>
+<title>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object — simdesign_ABCmcmc_Marjoram_original • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram" />
-<meta property="og:description" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object" />
+<meta property="og:title" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object — simdesign_ABCmcmc_Marjoram_original" />
+<meta property="og:description" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -193,20 +193,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</h1>
+    <h1>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object</h1>
     <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_ABCmcmc_Marjoram.Rd</code></div>
+    <div class="hidden name"><code>simdesign_ABCmcmc_Marjoram_original.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</p>
+    <p>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='no'>nl</span>, <span class='kw'>postpro_function</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>simdesign_ABCmcmc_Marjoram_original</span>(<span class='no'>nl</span>, <span class='kw'>postpro_function</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>summary_stat_target</span>, <span class='kw'>prior_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>n_rec</span>,
   <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>n_cluster</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>use_seed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>dist_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_calibration</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed_count</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>dist_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dist_max</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>tab_normalization</span> <span class='kw'>=</span> <span class='no'>summary_stat_target</span>, <span class='kw'>proposal_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span>(<span class='kw'>mode</span>
+  <span class='kw'>=</span> <span class='st'>"numeric"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='fu'><a href='getexp.html'>getexp</a></span>(<span class='no'>nl</span>, <span class='st'>"metrics"</span>))), <span class='kw'>seed_count</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>nseeds</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -249,16 +250,16 @@
       <td><p>a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.</p></td>
     </tr>
     <tr>
-      <th>n_calibration</th>
-      <td><p>a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.</p></td>
+      <th>dist_max</th>
+      <td><p>a positive number. This is the tolerance threshold used during the MCMC. If not provided by the user, it is automatically computed as half the distance between the first simulation and the target summary statistics and a warning is printed.</p></td>
     </tr>
     <tr>
-      <th>tolerance_quantile</th>
-      <td><p>a positive number between 0 and 1 (strictly). This is the percentage of simulations retained during the calibration step to determine the tolerance threshold to be used during the MCMC. Default value is 0.01.</p></td>
+      <th>tab_normalization</th>
+      <td><p>a vector of the same length as summary_stat_target. Each element contains a positive number by which each summary statistics must be divided before the computation of the Euclidean distance between simulations and data. If not provided by the user, the simulated summary statistics are divided by the target summary statistics and a warning is printed.</p></td>
     </tr>
     <tr>
-      <th>proposal_phi</th>
-      <td><p>a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.</p></td>
+      <th>proposal_range</th>
+      <td><p>a vector of the same length as the number of model parameters, used when method is "Marjoram_original". Each element contains a positive number defining the range of MCMC jumps for each model parameter. If not provided by the user, a default value is used for each parameter and a warning is printed. The default value is 1/50 of the prior range for uniform distributions, 1/20 of the standard deviation of the prior distribution for normal distributions, 1/20 * exp ( sigma * sigma</p></td>
     </tr>
     <tr>
       <th>seed_count</th>
@@ -294,17 +295,11 @@ Finally, the function reports a simdesign object.</p>
 <span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
 
 <span class='co'># Attach the simdesign to the nl object</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
-                                            <span class='kw'>summary_stat_target</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>80</span>),
-                                            <span class='kw'>n_rec</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-                                            <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-                                            <span class='kw'>n_cluster</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                                            <span class='kw'>use_seed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-                                            <span class='kw'>n_calibration</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-                                            <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>,
-                                            <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                                            <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-                                            <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating ABC Monte-Carlo Markov-Chain simulation design</span></div><div class='input'>
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ABCmcmc_Marjoram_original</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+                                                     <span class='kw'>summary_stat_target</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>80</span>),
+                                                     <span class='kw'>n_rec</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+                                                     <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+                                                     <span class='kw'>nseeds</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>Creating ABC Monte-Carlo Markov-Chain simulation design</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

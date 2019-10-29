@@ -32,8 +32,11 @@ simdesign_sobol2007 | min, max, qfun                     | numeric
 simdesign_soboljansen | min, max, qfun                     | numeric
 simdesign_morris   | min, max, qfun                     | numeric
 simdesign_eFast    | min, max, qfun                     | numeric
-simdesign_genSA    | min, max                     | numeric
-simdesign_genAlg    | min, max                     | numeric
+simdesign_genSA    | min, max                          | numeric
+simdesign_genAlg    | min, max                         | numeric
+simdesign_ABCmcmc_Marjoram | min, max, qfun            | numeric
+simdesign_ABCmcmc_Marjoram_original | min, max, qfun   | numeric
+simdesign_ABCmcmc_Wegmann | min, max, qfun             | numeric
 
 
 Additionally, please note the following restrictions in order to define variables and constants correctly:

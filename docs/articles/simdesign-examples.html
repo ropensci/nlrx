@@ -166,7 +166,7 @@
 
     
     
-<p>nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions. These simdesigns represent different techniques of parameter space explorations. This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx. Details on the sensitivity analysis methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=sensitivity/index.html">sensitivity package</a>. Details on the optimization methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=genalg/index.html">genalg package</a> and the <a href="https://CRAN.R-project.org/package=GenSA/index.html">GenSA package</a>.</p>
+<p>nlrx provides a variety of different simdesigns that generate parameter input matrices from valid experiment variable definitions. These simdesigns represent different techniques of parameter space explorations. This is not a technical guide on parameter space exploration but rather a collection of code examples on how to setup these different approaches with nlrx. Details on the sensitivity analysis methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=sensitivity">sensitivity package</a>. Details on the optimization methods can be found in the documentation of the <a href="https://CRAN.R-project.org/package=genalg">genalg package</a> and the <a href="https://CRAN.R-project.org/package=GenSA">GenSA package</a>. Details on the approximate bayesian computation (ABC) methods can be found in the documentation of the <a href="https://cran.r-project.org/package=EasyABC">EasyABC package</a></p>
 <div id="simdesign-examples-for-the-wolf-sheep-predation-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simdesign-examples-for-the-wolf-sheep-predation-model" class="anchor"></a>Simdesign examples for the Wolf Sheep Predation model</h2>
@@ -407,6 +407,54 @@
 <a class="sourceLine" id="cb7-33" title="33">                                <span class="dt">control=</span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">max.time =</span> <span class="dv">600</span>),</a>
 <a class="sourceLine" id="cb7-34" title="34">                                <span class="dt">nseeds=</span><span class="dv">1</span>)</a></code></pre></div>
 </div>
+<div id="calibration-simdesigns-approximate-bayesian-computation-abc" class="section level2">
+<h2 class="hasAnchor">
+<a href="#calibration-simdesigns-approximate-bayesian-computation-abc" class="anchor"></a>Calibration simdesigns (Approximate Bayesian Computation (ABC))</h2>
+<p>Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models. The nlrx package provides different algorithms from the <a href="https://cran.r-project.org/web/packages/EasyABC/index.html">EasyABC package</a>. These algorithms can be used by attaching the corresponding simdesigns (<code><a href="../reference/simdesign_ABCmcmc_Marjoram.html">simdesign_ABCmcmc_Marjoram()</a></code>, <code><a href="../reference/simdesign_ABCmcmc_Marjoram_original.html">simdesign_ABCmcmc_Marjoram_original()</a></code>, <code><a href="../reference/simdesign_ABCmcmc_Wegmann.html">simdesign_ABCmcmc_Wegmann()</a></code>).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"wolf-sheep"</span>,</a>
+<a class="sourceLine" id="cb8-2" title="2">                            <span class="dt">outpath=</span><span class="st">"C:/out/"</span>,</a>
+<a class="sourceLine" id="cb8-3" title="3">                            <span class="dt">repetition=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb8-4" title="4">                            <span class="dt">tickmetrics=</span><span class="st">"true"</span>,</a>
+<a class="sourceLine" id="cb8-5" title="5">                            <span class="dt">idsetup=</span><span class="st">"setup"</span>,</a>
+<a class="sourceLine" id="cb8-6" title="6">                            <span class="dt">idgo=</span><span class="st">"go"</span>,</a>
+<a class="sourceLine" id="cb8-7" title="7">                            <span class="dt">idfinal=</span><span class="ot">NA_character_</span>,</a>
+<a class="sourceLine" id="cb8-8" title="8">                            <span class="dt">idrunnum=</span><span class="ot">NA_character_</span>,</a>
+<a class="sourceLine" id="cb8-9" title="9">                            <span class="dt">runtime=</span><span class="dv">50</span>,</a>
+<a class="sourceLine" id="cb8-10" title="10">                            <span class="dt">evalticks=</span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">40</span>,<span class="dv">50</span>),</a>
+<a class="sourceLine" id="cb8-11" title="11">                            <span class="dt">metrics=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),</a>
+<a class="sourceLine" id="cb8-12" title="12">                            <span class="dt">variables =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">50</span>, <span class="dt">max=</span><span class="dv">150</span>),</a>
+<a class="sourceLine" id="cb8-13" title="13">                                             <span class="st">'initial-number-wolves'</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">50</span>, <span class="dt">max=</span><span class="dv">150</span>)),</a>
+<a class="sourceLine" id="cb8-14" title="14">                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> =<span class="st"> "</span><span class="ch">\"</span><span class="st">sheep-wolves-grass</span><span class="ch">\"</span><span class="st">"</span>,</a>
+<a class="sourceLine" id="cb8-15" title="15">                                             <span class="st">"grass-regrowth-time"</span> =<span class="st"> </span><span class="dv">30</span>,</a>
+<a class="sourceLine" id="cb8-16" title="16">                                             <span class="st">"sheep-gain-from-food"</span> =<span class="st"> </span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb8-17" title="17">                                             <span class="st">"wolf-gain-from-food"</span> =<span class="st"> </span><span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb8-18" title="18">                                             <span class="st">"sheep-reproduce"</span> =<span class="st"> </span><span class="dv">4</span>,</a>
+<a class="sourceLine" id="cb8-19" title="19">                                             <span class="st">"wolf-reproduce"</span> =<span class="st"> </span><span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb8-20" title="20">                                             <span class="st">"show-energy?"</span> =<span class="st"> "false"</span>))</a>
+<a class="sourceLine" id="cb8-21" title="21"></a>
+<a class="sourceLine" id="cb8-22" title="22">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_ABCmcmc_Marjoram.html">simdesign_ABCmcmc_Marjoram</a></span>(<span class="dt">nl=</span>nl,</a>
+<a class="sourceLine" id="cb8-23" title="23">                                           <span class="dt">summary_stat_target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">100</span>, <span class="dv">80</span>),</a>
+<a class="sourceLine" id="cb8-24" title="24">                                           <span class="dt">n_rec =</span> <span class="dv">100</span>, </a>
+<a class="sourceLine" id="cb8-25" title="25">                                           <span class="dt">n_calibration=</span><span class="dv">200</span>,</a>
+<a class="sourceLine" id="cb8-26" title="26">                                           <span class="dt">use_seed =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-27" title="27">                                           <span class="dt">progress_bar =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-28" title="28">                                           <span class="dt">nseeds =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb8-29" title="29"></a>
+<a class="sourceLine" id="cb8-30" title="30">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_ABCmcmc_Marjoram_original.html">simdesign_ABCmcmc_Marjoram_original</a></span>(<span class="dt">nl=</span>nl,</a>
+<a class="sourceLine" id="cb8-31" title="31">                                           <span class="dt">summary_stat_target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">100</span>, <span class="dv">80</span>),</a>
+<a class="sourceLine" id="cb8-32" title="32">                                           <span class="dt">n_rec =</span> <span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb8-33" title="33">                                           <span class="dt">use_seed =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-34" title="34">                                           <span class="dt">progress_bar =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-35" title="35">                                           <span class="dt">nseeds =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb8-36" title="36"></a>
+<a class="sourceLine" id="cb8-37" title="37">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_ABCmcmc_Wegmann.html">simdesign_ABCmcmc_Wegmann</a></span>(<span class="dt">nl=</span>nl,</a>
+<a class="sourceLine" id="cb8-38" title="38">                                          <span class="dt">summary_stat_target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">100</span>, <span class="dv">80</span>),</a>
+<a class="sourceLine" id="cb8-39" title="39">                                          <span class="dt">n_rec =</span> <span class="dv">10</span>, </a>
+<a class="sourceLine" id="cb8-40" title="40">                                          <span class="dt">n_calibration=</span><span class="dv">200</span>,</a>
+<a class="sourceLine" id="cb8-41" title="41">                                          <span class="dt">use_seed =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-42" title="42">                                          <span class="dt">progress_bar =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-43" title="43">                                          <span class="dt">nseeds =</span> <span class="dv">1</span>)</a></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -422,6 +470,7 @@
       <li><a href="#latin-hypercube-sampling-simdesign_lhs">Latin Hypercube Sampling (simdesign_lhs)</a></li>
       <li><a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast">Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</a></li>
       <li><a href="#optimization-techniques-simdesign_gensa-_genalg">Optimization techniques (simdesign_GenSA, _GenAlg)</a></li>
+      <li><a href="#calibration-simdesigns-approximate-bayesian-computation-abc">Calibration simdesigns (Approximate Bayesian Computation (ABC))</a></li>
       </ul>
 </div>
       </div>

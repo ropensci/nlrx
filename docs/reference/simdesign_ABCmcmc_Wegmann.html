@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram • nlrx | NetLogo from R</title>
+<title>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object — simdesign_ABCmcmc_Wegmann • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object — simdesign_ABCmcmc_Marjoram" />
-<meta property="og:description" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object" />
+<meta property="og:title" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object — simdesign_ABCmcmc_Wegmann" />
+<meta property="og:description" content="Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -193,21 +193,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</h1>
+    <h1>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object</h1>
     <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/simdesign_helper.R'><code>R/simdesign_helper.R</code></a></small>
-    <div class="hidden name"><code>simdesign_ABCmcmc_Marjoram.Rd</code></div>
+    <div class="hidden name"><code>simdesign_ABCmcmc_Wegmann.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object</p>
+    <p>Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='no'>nl</span>, <span class='kw'>postpro_function</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>simdesign_ABCmcmc_Wegmann</span>(<span class='no'>nl</span>, <span class='kw'>postpro_function</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>summary_stat_target</span>, <span class='kw'>prior_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>n_rec</span>,
   <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>n_cluster</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>use_seed</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>dist_weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>n_calibration</span> <span class='kw'>=</span> <span class='fl'>10000</span>,
-  <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>seed_count</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>nseeds</span>)</pre>
+  <span class='kw'>tolerance_quantile</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>proposal_phi</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>numcomp</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>seed_count</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>progress_bar</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>nseeds</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -261,6 +261,10 @@
       <td><p>a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.</p></td>
     </tr>
     <tr>
+      <th>numcomp</th>
+      <td><p>a positive integer. This is the number of components to be used for PLS transformations. Default value is 0 which encodes that this number is equal to the number of summary statistics.</p></td>
+    </tr>
+    <tr>
       <th>seed_count</th>
       <td><p>a positive integer, the initial seed value provided to the function model (if use_seed=TRUE). This value is incremented by 1 at each call of the function model.</p></td>
     </tr>
@@ -294,7 +298,7 @@ Finally, the function reports a simdesign object.</p>
 <span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
 
 <span class='co'># Attach the simdesign to the nl object</span>
-<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ABCmcmc_Marjoram</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
+<span class='no'>nl</span>@<span class='kw'>simdesign</span> <span class='kw'>&lt;-</span> <span class='fu'>simdesign_ABCmcmc_Wegmann</span>(<span class='kw'>nl</span> <span class='kw'>=</span> <span class='no'>nl</span>,
                                             <span class='kw'>summary_stat_target</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>, <span class='fl'>80</span>),
                                             <span class='kw'>n_rec</span> <span class='kw'>=</span> <span class='fl'>100</span>,
                                             <span class='kw'>n_between_sampling</span> <span class='kw'>=</span> <span class='fl'>10</span>,
