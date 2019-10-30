@@ -62,8 +62,8 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  testthat::context("Run one simulation with run_nl_one()")
-  results <- run_nl_one(nl, seed, siminputrow)
+  testthat::context("Run one simulation with run_nl_one() and silten=FALSE")
+  results <- run_nl_one(nl, seed, siminputrow, silent = FALSE)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
@@ -72,6 +72,8 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
+  testthat::context("Run all simulations with run_nl_all() and wrong split parameter")
+  testthat::expect_error(run_nl_all(nl, split=4))
 
   testthat::context("Run optimization with run_nl_dyn() GenSA")
   nl@simdesign <- simdesign_GenSA(nl,
@@ -92,6 +94,20 @@ testthat::test_that("Run nl", {
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
   testthat::expect_match(class(results.dyn), "rbga")
   testthat::expect_equal(length(results.dyn), 12)
+
+  testthat::context("Run optimization with run_nl_dyn() abcmcmc")
+  nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
+                                             summary_stat_target = c(100, 80),
+                                             n_rec = 10,
+                                             n_cluster = 1,
+                                             use_seed = FALSE,
+                                             n_calibration = 150,
+                                             nseeds = 1)
+
+  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(length(results.dyn), 8)
+
 
   ## Step3: Test tickmetrics = false
   nl@experiment <- experiment(expname = "nlrx_test",

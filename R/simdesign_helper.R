@@ -704,6 +704,7 @@ simdesign_eFast <- function(nl,
   # generate a list of arguments for the quantile functions
   q.args <- lapply(getexp(nl, "variables"), function(i) {
     i$qfun <- NULL
+    i$values <- NULL
     i$step <- NULL; return(i)})
 
   # create instance of fast99 class
