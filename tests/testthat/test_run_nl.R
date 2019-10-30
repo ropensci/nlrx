@@ -104,7 +104,7 @@ testthat::test_that("Run nl", {
                                              n_calibration = 150,
                                              nseeds = 1)
 
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1], silent = FALSE)
   testthat::expect_match(class(results.dyn)[1], "tbl_df")
   testthat::expect_equal(length(results.dyn), 8)
 
