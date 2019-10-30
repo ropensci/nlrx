@@ -166,9 +166,14 @@
 
     
     
-<div id="sensitivity-analysis-with-nlrx" class="section level2">
+<div id="sensitivity-analysis-with-nlrx" class="section level1">
+<h1 class="hasAnchor">
+<a href="#sensitivity-analysis-with-nlrx" class="anchor"></a>Sensitivity Analysis with nlrx</h1>
+<p>Different types of sensitivity analyses can be conducted using the nlrx package. To perform a local sensitivity analysis, we recommend using the <code><a href="../reference/simdesign_distinct.html">simdesign_distinct()</a></code> to specify local changes of parameters. Afterwards the proportion of output change can be easily calculated from the simulation results. The nlrx package also provides simdesign helper functions to conduct more sophisticated methods such as Morris Elementary Effects Screening (<code><a href="../reference/simdesign_morris.html">simdesign_morris()</a></code>), Sobol variance decomposition (<code><a href="../reference/simdesign_sobol.html">simdesign_sobol()</a></code>, <code><a href="../reference/simdesign_sobol2007.html">simdesign_sobol2007()</a></code>, <code><a href="../reference/simdesign_soboljansen.html">simdesign_soboljansen()</a></code>) and Extended Fourier amplitude sensitivity test (<code>simdesign_eFAST</code>). Additionally, output of Latin Hypercube Sampling designs (<code><a href="../reference/simdesign_lhs.html">simdesign_lhs()</a></code>) can be used to calculate parameter effects based on Partial (rank) correlation coefficients or Standardised (rank) regression coefficients.</p>
+<p>In this vignette, we present an example of the Morris Elementary Effects screening. Other sensitivity analyses simdesigns work in a quite similar way. Details on the specific methods can be found in the corresponding simdesign help pages and the documentation of the <a href="https://cran.r-project.org/package=sensitivity">sensitivity package</a>. The second example shows how Latin Hypercube Sampling can be used to calculate Partial (rank) correlation coefficients and Standardised (rank) regression coefficients.</p>
+<div id="example-1-morris-elementary-effects-screening" class="section level2">
 <h2 class="hasAnchor">
-<a href="#sensitivity-analysis-with-nlrx" class="anchor"></a>Sensitivity Analysis with nlrx</h2>
+<a href="#example-1-morris-elementary-effects-screening" class="anchor"></a>Example 1: Morris elementary effects screening</h2>
 <p>Here we present a simple example for running a Morris Sensitivity Analysis with nlrx. We use the Wolf Sheep Predation model from the models library for this example.</p>
 <div id="step-1-create-a-nl-object" class="section level4">
 <h4 class="hasAnchor">
@@ -240,6 +245,118 @@
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">morris &lt;-<span class="st"> </span><span class="kw"><a href="../reference/analyze_nl.html">analyze_nl</a></span>(nl)</a></code></pre></div>
 </div>
 </div>
+<div id="example-2-latin-hypercube-sampling" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-2-latin-hypercube-sampling" class="anchor"></a>Example 2: Latin Hypercube Sampling</h2>
+<p>Here we perform a Latin Hypercube Sampling to calculate Partial (rank) correlation coefficients and Standardised (rank) regression coefficients.</p>
+<div id="step-1-create-a-nl-object-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#step-1-create-a-nl-object-1" class="anchor"></a>Step 1: Create a nl object:</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></a>
+<a class="sourceLine" id="cb7-3" title="3">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)</a>
+<a class="sourceLine" id="cb7-4" title="4">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</a>
+<a class="sourceLine" id="cb7-5" title="5">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)</a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></a>
+<a class="sourceLine" id="cb7-7" title="7">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)</a>
+<a class="sourceLine" id="cb7-8" title="8">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</a>
+<a class="sourceLine" id="cb7-9" title="9">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</a>
+<a class="sourceLine" id="cb7-10" title="10"></a>
+<a class="sourceLine" id="cb7-11" title="11">nl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.3"</span>,</a>
+<a class="sourceLine" id="cb7-12" title="12">         <span class="dt">nlpath =</span> netlogopath,</a>
+<a class="sourceLine" id="cb7-13" title="13">         <span class="dt">modelpath =</span> modelpath,</a>
+<a class="sourceLine" id="cb7-14" title="14">         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</a></code></pre></div>
+</div>
+<div id="step-2-attach-an-experiment-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#step-2-attach-an-experiment-1" class="anchor"></a>Step 2: Attach an experiment</h4>
+<p>In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches). We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics. Thus, we define parameter ranges and distribution functions for all our numeric model parameters. We set the runtime of the model to 500 ticks and measure our metrics on each tick (<code>evalticks = "true"</code>).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"wolf-sheep-morris"</span>,</a>
+<a class="sourceLine" id="cb8-2" title="2">                            <span class="dt">outpath =</span> outpath,</a>
+<a class="sourceLine" id="cb8-3" title="3">                            <span class="dt">repetition =</span> <span class="dv">1</span>,   </a>
+<a class="sourceLine" id="cb8-4" title="4">                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,</a>
+<a class="sourceLine" id="cb8-5" title="5">                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,  </a>
+<a class="sourceLine" id="cb8-6" title="6">                            <span class="dt">idgo =</span> <span class="st">"go"</span>,        </a>
+<a class="sourceLine" id="cb8-7" title="7">                            <span class="dt">runtime =</span> <span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb8-8" title="8">                            <span class="dt">metrics=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),</a>
+<a class="sourceLine" id="cb8-9" title="9">                            <span class="dt">variables =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"initial-number-sheep"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">50</span>, <span class="dt">max=</span><span class="dv">150</span>, <span class="dt">step=</span><span class="dv">10</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-10" title="10">                                             <span class="st">"initial-number-wolves"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">50</span>, <span class="dt">max=</span><span class="dv">150</span>, <span class="dt">step=</span><span class="dv">10</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-11" title="11">                                             <span class="st">"grass-regrowth-time"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">100</span>, <span class="dt">step=</span><span class="dv">10</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-12" title="12">                                             <span class="st">"sheep-gain-from-food"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">50</span>, <span class="dt">step=</span><span class="dv">10</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-13" title="13">                                             <span class="st">"wolf-gain-from-food"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">100</span>, <span class="dt">step=</span><span class="dv">10</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-14" title="14">                                             <span class="st">"sheep-reproduce"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">20</span>, <span class="dt">step=</span><span class="dv">5</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>),</a>
+<a class="sourceLine" id="cb8-15" title="15">                                             <span class="st">"wolf-reproduce"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">min=</span><span class="dv">0</span>, <span class="dt">max=</span><span class="dv">20</span>, <span class="dt">step=</span><span class="dv">5</span>, <span class="dt">qfun=</span><span class="st">"qunif"</span>)),</a>
+<a class="sourceLine" id="cb8-16" title="16">                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> =<span class="st"> "</span><span class="ch">\"</span><span class="st">sheep-wolves-grass</span><span class="ch">\"</span><span class="st">"</span>,</a>
+<a class="sourceLine" id="cb8-17" title="17">                                             <span class="st">"show-energy?"</span> =<span class="st"> "false"</span>))</a></code></pre></div>
+</div>
+<div id="step-3-attach-a-simulation-design-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#step-3-attach-a-simulation-design-1" class="anchor"></a>Step 3: Attach a simulation design</h4>
+<p>Here we want to run a Latin Hypercube Sampling, thus we use the <code><a href="../reference/simdesign_lhs.html">simdesign_lhs()</a></code> function.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span>(nl, <span class="dt">samples=</span><span class="dv">500</span>, <span class="dt">nseeds=</span><span class="dv">1</span>, <span class="dt">precision=</span><span class="dv">3</span>)</a></code></pre></div>
+</div>
+<div id="step-4-run-simulations-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#step-4-run-simulations-1" class="anchor"></a>Step 4: Run simulations</h4>
+<p>To execute the simulations, we can use the function <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the “Advanced configuration” vignette).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">plan</span>(multisession)</a>
+<a class="sourceLine" id="cb10-3" title="3">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(nl, <span class="dt">split=</span><span class="dv">10</span>)</a></code></pre></div>
+</div>
+<div id="step-5-investigate-output-1" class="section level4">
+<h4 class="hasAnchor">
+<a href="#step-5-investigate-output-1" class="anchor"></a>Step 5: Investigate output</h4>
+<p>First, we need to attach the results to the nl object.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">nl<span class="op">@</span>simdesign<span class="op">@</span>simoutput &lt;-<span class="st"> </span>results</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(nl, <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="st">"lhs.rds"</span>))</a></code></pre></div>
+<p>After results have been attached, we need to post-process our data to run the <code>pcc</code> and <code>src</code> function of the sensitivity package. We first take our parameter matrix (<code>siminput</code>) and select only columns with variable parameters and drop all other columns. We also need to rename the columns because <code>pcc</code> and <code>src</code> do not support special characters (-) in column names.</p>
+<p>Our simulation results are measured for each tick, thus we first need to aggregate our output. Here we just calculate the mean and standard deviation of outputs for each random-seed and siminputrow combination. Afterwards, we drop the random seed and siminputrow columns and rename the columns to remove special characters.</p>
+<p>Finally, we use both datasets to run the <code>pcc</code> and <code>src</code> functions. These functions can only compute coefficients for one output at a time. Thus, we nested the function call inside a <code><a href="https://purrr.tidyverse.org/reference/map.html">purrr::map()</a></code> function that iterates over the column names of our output tibble.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyverse)</a>
+<a class="sourceLine" id="cb12-2" title="2">input &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getsim.html">getsim</a></span>(nl, <span class="st">"siminput"</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># Take input parameter matrix</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="../reference/getexp.html">getexp</a></span>(nl, <span class="st">"variables"</span>))) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># Select variable parameters only</span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span>(<span class="op">~</span><span class="kw">str_replace_all</span>(., <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"-"</span> =<span class="st"> "_"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">s+"</span> =<span class="st"> "_"</span>))) <span class="co"># Remove - and space characters.</span></a>
+<a class="sourceLine" id="cb12-5" title="5"></a>
+<a class="sourceLine" id="cb12-6" title="6">output &lt;-<span class="st"> </span><span class="kw"><a href="../reference/getsim.html">getsim</a></span>(nl, <span class="st">"simoutput"</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># Take simulation output</span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="st">`</span><span class="dt">random-seed</span><span class="st">`</span>, siminputrow) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Group by random seed and siminputrow</span></a>
+<a class="sourceLine" id="cb12-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/summarise_all.html">summarise_at</a></span>(<span class="kw"><a href="../reference/getexp.html">getexp</a></span>(nl, <span class="st">"metrics"</span>), <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">mean=</span>mean, <span class="dt">sd=</span>sd)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Aggregate output</span></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span>() <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># Ungroup</span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="op">-</span><span class="st">`</span><span class="dt">random-seed</span><span class="st">`</span>, <span class="op">-</span>siminputrow) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># Only select metrics</span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span>(<span class="op">~</span><span class="kw">str_replace_all</span>(., <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"-"</span> =<span class="st"> "_"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">s+"</span> =<span class="st"> "_"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">["</span> =<span class="st"> "_"</span>, <span class="st">"</span><span class="ch">\\</span><span class="st">]"</span> =<span class="st"> "_"</span>, <span class="st">"="</span> =<span class="st"> ""</span>))) <span class="co"># Remove - and space characters.</span></a>
+<a class="sourceLine" id="cb12-12" title="12"></a>
+<a class="sourceLine" id="cb12-13" title="13"><span class="co"># Perform pcc and src for each output separately (map)</span></a>
+<a class="sourceLine" id="cb12-14" title="14">pcc.result &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(output), <span class="cf">function</span>(x) sensitivity<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sensitivity/man/pcc.html">pcc</a></span>(<span class="dt">X=</span>input, <span class="dt">y=</span>output[,x], <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">rank =</span> <span class="ot">FALSE</span>)) </a>
+<a class="sourceLine" id="cb12-15" title="15">src.result &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(output), <span class="cf">function</span>(x) sensitivity<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sensitivity/man/src.html">src</a></span>(<span class="dt">X=</span>input, <span class="dt">y=</span>output[,x], <span class="dt">nboot =</span> <span class="dv">100</span>, <span class="dt">rank =</span> <span class="ot">FALSE</span>)) </a></code></pre></div>
+<p>The results are reported as a nested list, where each outer element represents one of the calculated model outputs. The inner list items represent the different outputs from the <code>pcc</code> and <code>src</code> functions.</p>
+<p>We can for example look at the <code>pcc</code> results of one specific output by using the basic <code>plot</code> function:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(pcc.result[[<span class="dv">1</span>]])</a></code></pre></div>
+<p>We can also extract all the data to a tidy data format and create nice plots with the ggplot package:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">pcc.result.tidy &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dfr</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(pcc.result), <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb14-2" title="2">  pcc.result[[x]]<span class="op">$</span>PCC <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="st">    </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span>(<span class="dt">var=</span><span class="st">"parameter"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">metric =</span> <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(output)[x])</a>
+<a class="sourceLine" id="cb14-5" title="5">})</a>
+<a class="sourceLine" id="cb14-6" title="6"></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="kw">ggplot</span>(pcc.result.tidy) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>metric) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>parameter, <span class="dt">y=</span>original, <span class="dt">color=</span>metric)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>parameter, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">min. c.i.</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">max. c.i.</span><span class="st">`</span>, <span class="dt">color=</span>metric), <span class="dt">width=</span><span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb14-12" title="12"></a>
+<a class="sourceLine" id="cb14-13" title="13">src.result.tidy &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw"><a href="https://purrr.tidyverse.org/reference/map.html">map_dfr</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(src.result), <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb14-14" title="14">  src.result[[x]]<span class="op">$</span>SRC <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-15" title="15"><span class="st">    </span>tibble<span class="op">::</span><span class="kw"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span>(<span class="dt">var=</span><span class="st">"parameter"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="st">    </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">metric =</span> <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(output)[x])</a>
+<a class="sourceLine" id="cb14-17" title="17">})</a>
+<a class="sourceLine" id="cb14-18" title="18"></a>
+<a class="sourceLine" id="cb14-19" title="19"><span class="kw">ggplot</span>(src.result.tidy) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-20" title="20"><span class="st">  </span><span class="kw">coord_flip</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-21" title="21"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>metric) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-22" title="22"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x=</span>parameter, <span class="dt">y=</span>original, <span class="dt">color=</span>metric)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb14-23" title="23"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">x=</span>parameter, <span class="dt">ymin=</span><span class="st">`</span><span class="dt">min. c.i.</span><span class="st">`</span>, <span class="dt">ymax=</span><span class="st">`</span><span class="dt">max. c.i.</span><span class="st">`</span>, <span class="dt">color=</span>metric), <span class="dt">width=</span><span class="fl">0.1</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -248,7 +365,12 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#sensitivity-analysis-with-nlrx">Sensitivity Analysis with nlrx</a></li>
+<li>
+<a href="#sensitivity-analysis-with-nlrx">Sensitivity Analysis with nlrx</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#example-1-morris-elementary-effects-screening">Example 1: Morris elementary effects screening</a></li>
+      <li><a href="#example-2-latin-hypercube-sampling">Example 2: Latin Hypercube Sampling</a></li>
+      </ul>
+</li>
       </ul>
 </div>
       </div>
