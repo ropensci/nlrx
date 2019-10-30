@@ -1,10 +1,10 @@
 ---
-title: "Calibration"
+title: "Approximate Bayesian Computation (ABC)"
 author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{calibration}
+  %\VignetteIndexEntry{abc}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,14 +17,18 @@ knitr::opts_chunk$set(
 ```
 
 
-## Model calibration with nlrx
+# Approximate bayesian computation (ABC) with nlrx
 
 Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models.
 The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/package=EasyABC).
-These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`). 
+These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`). Example 1 shows the process of how to use ABC with nlrx.
+Additionally, Latin Hypercube Sampling output can be used to calculate parameter distributions based on rejection sampling and local linear regression.
+Example 2 shows, how the `simdesign_lhs()` can be used in combination with the [abc package](https://cran.r-project.org/package=abc).
+
+## Example 1: Approximate bayesian computation with Monte-Carlo Markov-Chain
 
 Here we present one example for the widely used Marjoram algorithm which combines ABC with a Markov-Chain Monte-Carlo parameter sampling scheme.
-However, other ABC simdesigns work in a very similar way except for the parameter definitions within the simdesigns (see respective documentation pages for help).
+However, the other two ABCmcmc simdesigns work in a very similar way except for the parameter definitions within the simdesigns (see respective documentation pages for help).
 
 We use the Wolf Sheep Predation model from the models library to show a basic example of the calibration workflow.
 
@@ -190,3 +194,131 @@ plot(coda::as.mcmc(getsim(nl, "simoutput") %>%
                         tidyr::unnest(cols=param)))
 
 ```
+
+## Example 2: Using Latin Hypercube Sampling for Approximate bayesian computation
+
+
+#### Step 1: Create a nl object:
+
+```{r eval=FALSE}
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+#### Step 2: Attach an experiment
+
+We want to run a Latin Hypercube sampling, thus we need to define proper variable ranges.
+We also need to define our output metrics. These metrics are also used for the rejection sampling later on.
+
+```{r eval=FALSE}
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath=outpath,
+                            repetition=1,
+                            tickmetrics="false",
+                            idsetup="setup",
+                            idgo="go",
+                            runtime=100,
+                            metrics=c("count sheep", "count wolves"),
+                            variables = list("sheep-gain-from-food" = list(min=2, max=6, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=10, max=30, qfun="qunif")),
+                            constants = list('initial-number-sheep' = 100,
+                                             'initial-number-wolves' = 50,
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+
+```
+
+#### Step 3: Attach a simulation design
+
+We use the `simdesign_lhs()` helper function to generate a Latin Hypercube Sampling with 500 samples
+
+```{r eval=FALSE}
+nl@simdesign <- simdesign_lhs(nl, 
+                              samples=500, 
+                              nseeds=1, 
+                              precision=3)
+```
+
+#### Step 4: Run simulations
+
+We can simply use `run_nl_all()` to execute our simulations.
+
+```{r eval=FALSE}
+results <- run_nl_all(nl)
+```
+
+#### Step 5: Investigate output
+
+We first attach the output results to our nl object and store a copy of the nl object on disk.
+
+```{r eval=FALSE}
+nl@simdesign@simoutput <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "ABClhs.rds"))
+```
+
+For post-processing, we need a tibble with input parameter distributions. This can be easily extracted from the `siminput` slot of the `simdesign` by selecting only the columns with variable (non-constant) parameters. Next, we need corresponding outputs for these parameters. In this example we just take the measured output tibble (`simoutput`) and only select the columns with our metrics. Of course, you can also perform additional post-processing of these outputs if desired.
+Third, we need to define expected values for our outputs. In our case, we just assume that `count sheep` should have a value of 100, whereas `count wolves` should have a value of 80.
+
+```{r eval=FALSE}
+input <- getsim(nl, "siminput") %>% 
+  dplyr::select(names(getexp(nl, "variables")))
+output <- getsim(nl, "simoutput") %>% 
+  dplyr::select(getexp(nl, "metrics"))
+target <- c("count sheep"=100, "count wolves"=80)
+```
+
+We use the `abc` function of the [abc package](https://cran.r-project.org/package=abc) to perform the rejection sampling. For this example, we perform both algorithms provided by this function ("rejection" and "loclinear").
+
+```{r eval=FALSE}
+results.abc.reject <- abc::abc(target=target, 
+                        param=input,
+                        sumstat=output,
+                        tol=0.3, 
+                        method="rejection")
+
+results.abc.loclin <- abc::abc(target=target, 
+                               param=input,
+                               sumstat=output,
+                               tol=0.3, 
+                               method="loclinear")
+```
+
+Finally, we might want to compare the accepted parameter distributions of both algorithms and the initial distribution of the Latin Hypercube sampling.
+Thus, we reformat the results to a tidy data format and attach the initial parameter distributions. This dataset can now be used for displaying the parameter distributions with ggplot.
+
+```{r eval=FALSE}
+results.abc.all <- tibble::as_tibble(results.abc.reject$unadj.values) %>% # results from rejection method
+  tidyr::gather(parameter, value) %>% 
+  dplyr::mutate(method="rejection") %>% 
+  dplyr::bind_rows(tibble::as_tibble(results.abc.loclin$adj.values) %>% # results from local linear regression method
+                     tidyr::gather(parameter, value) %>% 
+                     dplyr::mutate(method="loclinear")) %>% 
+  dplyr::bind_rows(input %>%                # initial parameter distribution (lhs)
+                     tidyr::gather(parameter, value) %>% 
+                     dplyr::mutate(method="lhs"))
+
+ggplot2::ggplot(results.abc.all) +
+  ggplot2::facet_grid(method~parameter, scales="free") +
+  ggplot2::geom_histogram(ggplot2::aes(x=value))
+
+ggplot2::ggplot(results.abc.all) +
+  ggplot2::facet_wrap(~parameter, scales="free") +
+  ggplot2::geom_density(ggplot2::aes(x=value, fill=method), alpha=0.1)
+
+```
+

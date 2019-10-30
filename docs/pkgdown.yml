@@ -2,10 +2,10 @@ pandoc: 2.7.2
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
+  abc: abc.html
   interfacing-different-models: articles/interfacing-different-models.html
   nlrx_nldoc: articles/nlrx_nldoc.html
   spatial-output: articles/spatial-output.html
-  calibration: calibration.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html
   optimization: optimization.html

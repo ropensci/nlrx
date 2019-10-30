@@ -25,9 +25,9 @@ navbar:
        - text: "Optimization with nlrx"
          icon: fa-sticky-note
          href: articles/optimization.html
-       - text: "Calibration with nlrx"
+       - text: "Approximate Bayesian Computation (ABC) with nlrx"
          icon: fa-sticky-note
-         href: articles/calibration.html
+         href: articles/abc.html
        - text: "Capturing spatial NetLogo output"
          icon: fa-book
          href: articles/articles/spatial-output.html
