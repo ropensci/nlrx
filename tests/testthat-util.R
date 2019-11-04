@@ -4,5 +4,7 @@ library(testthat)
 library(nlrx)
 
 #test_check("nlrx")
-test_check("nlrx", filter = "^[a-m]")
-test_check("nlrx", filter = "^[n-z]")
+test_check("nlrx", filter = "util")
+
+
+
