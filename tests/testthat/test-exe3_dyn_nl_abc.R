@@ -36,26 +36,28 @@ testthat::test_that("run_nl_dyn abc", {
                               runtime=1,
                               metrics=c("count sheep", "count wolves"),
                               variables = list("sheep-gain-from-food" = list(min=2, max=6, qfun="qunif")),
-                              constants = list('initial-number-sheep' = 100,
-                                               'initial-number-wolves' = 50,
+                              constants = list('initial-number-sheep' = 5,
+                                               'initial-number-wolves' = 5,
                                                "wolf-gain-from-food" = 20,
                                                "grass-regrowth-time" = 30,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "model-version" = "\"sheep-wolves-grass\"",
+                                               "model-version" = "\"sheep-wolves\"",
                                                "show-energy?" = "false"))
 
   testthat::context("Run optimization with run_nl_dyn() abcmcmc")
   nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
                                              summary_stat_target = c(100, 80),
-                                             n_rec = 10,
+                                             n_rec = 5,
                                              n_cluster = 1,
                                              use_seed = FALSE,
                                              progress_bar = TRUE,
-                                             n_calibration = 110,
+                                             n_calibration = 105,
                                              nseeds = 1)
 
+  #start <- Sys.time()
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  #end <- Sys.time()
   testthat::expect_match(class(results.dyn)[1], "tbl_df")
   testthat::expect_equal(length(results.dyn), 8)
 
