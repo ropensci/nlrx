@@ -52,7 +52,7 @@ testthat::test_that("run_nl_dyn abc", {
                                              n_cluster = 1,
                                              use_seed = FALSE,
                                              progress_bar = TRUE,
-                                             n_calibration = 115,
+                                             n_calibration = 110,
                                              nseeds = 1)
 
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
