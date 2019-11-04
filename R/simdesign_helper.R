@@ -1187,7 +1187,7 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
                                                 dist_weights = NULL,
                                                 dist_max = 0,
                                                 tab_normalization = summary_stat_target,
-                                                proposal_range = vector(mode = "numeric", length = length(getexp(nl, "metrics"))),
+                                                proposal_range = vector(mode = "numeric", length = length(getexp(nl, "variables"))),
                                                 seed_count = 0,
                                                 progress_bar = FALSE,
                                                 nseeds)

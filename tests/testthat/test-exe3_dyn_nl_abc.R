@@ -34,10 +34,10 @@ testthat::test_that("run_nl_dyn abc", {
                               idsetup="setup",
                               idgo="go",
                               runtime=1,
-                              metrics=c("count sheep", "count wolves"),
+                              metrics=c("count sheep"),
                               variables = list("sheep-gain-from-food" = list(min=2, max=6, qfun="qunif")),
-                              constants = list('initial-number-sheep' = 5,
-                                               'initial-number-wolves' = 5,
+                              constants = list('initial-number-sheep' = 1,
+                                               'initial-number-wolves' = 1,
                                                "wolf-gain-from-food" = 20,
                                                "grass-regrowth-time" = 30,
                                                "sheep-reproduce" = 4,
@@ -47,12 +47,12 @@ testthat::test_that("run_nl_dyn abc", {
 
   testthat::context("Run optimization with run_nl_dyn() abcmcmc")
   nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
-                                             summary_stat_target = c(100, 80),
-                                             n_rec = 5,
+                                             summary_stat_target = c(1),
+                                             n_rec = 2,
                                              n_cluster = 1,
                                              use_seed = FALSE,
                                              progress_bar = TRUE,
-                                             n_calibration = 105,
+                                             n_calibration = 101, #102
                                              nseeds = 1)
 
   #start <- Sys.time()
