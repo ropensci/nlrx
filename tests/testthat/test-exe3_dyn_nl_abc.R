@@ -1,5 +1,5 @@
-testthat::context("Exe2: run_nl_dyn tests")
-testthat::test_that("run_nl_dyn", {
+testthat::context("Exe3: run_nl_dyn abc tests")
+testthat::test_that("run_nl_dyn abc", {
 
   # Run these tests only on TRAVIS:
   testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
@@ -45,24 +45,18 @@ testthat::test_that("run_nl_dyn", {
                                                "model-version" = "\"sheep-wolves-grass\"",
                                                "show-energy?" = "false"))
 
-  testthat::context("Run optimization with run_nl_dyn() GenSA")
-  nl@simdesign <- simdesign_GenSA(nl,
-                                  par=NULL,
-                                  evalcrit=1,
-                                  control=list(max.time = 1),
-                                  nseeds=1)
+  testthat::context("Run optimization with run_nl_dyn() abcmcmc")
+  nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
+                                             summary_stat_target = c(100, 80),
+                                             n_rec = 10,
+                                             n_cluster = 1,
+                                             use_seed = FALSE,
+                                             progress_bar = TRUE,
+                                             n_calibration = 115,
+                                             nseeds = 1)
 
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
-  testthat::expect_match(class(results.dyn), "list")
-  testthat::expect_equal(length(results.dyn), 4)
-
-  testthat::context("Run optimization with run_nl_dyn() GenAlg")
-  nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,
-                                   evalcrit = 1, elitism = NA,
-                                   mutationChance = NA, nseeds = 1)
-
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
-  testthat::expect_match(class(results.dyn), "rbga")
-  testthat::expect_equal(length(results.dyn), 12)
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(length(results.dyn), 8)
 
 })
