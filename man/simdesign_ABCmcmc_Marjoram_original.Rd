@@ -9,7 +9,7 @@ simdesign_ABCmcmc_Marjoram_original(nl, postpro_function = NULL,
   n_between_sampling = 10, n_cluster = 1, use_seed = FALSE,
   dist_weights = NULL, dist_max = 0,
   tab_normalization = summary_stat_target, proposal_range = vector(mode
-  = "numeric", length = length(getexp(nl, "metrics"))), seed_count = 0,
+  = "numeric", length = length(getexp(nl, "variables"))), seed_count = 0,
   progress_bar = FALSE, nseeds)
 }
 \arguments{
