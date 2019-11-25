@@ -116,20 +116,27 @@ util_print.summary <- function(x, ...)
   output <- ifelse(length(x@experiment@variables) > 0, style_def("\u2713"), style_na("\u2717"))
   cat(paste0(output, "\n"))
 
-  cat("variables present in model: ")
-  output <- ifelse(length(x@experiment@variables) > 0 & all(names(x@experiment@variables) %in% names(report_model_parameters(x))),
-                   style_def("\u2713"), style_na("\u2717"))
-  cat(paste0(output, "\n"))
+  if(!identical(x@modelpath, character(0))){
+    if(file.exists(x@modelpath)){
+      cat("variables present in model: ")
+      output <- ifelse(length(x@experiment@variables) > 0 & all(names(x@experiment@variables) %in% names(report_model_parameters(x))),
+                       style_def("\u2713"), style_na("\u2717"))
+      cat(paste0(output, "\n"))
+    }
+  }
 
   cat("constants defined: ")
   output <- ifelse(length(x@experiment@constants) > 0, style_def("\u2713"), style_na("\u2717"))
   cat(paste0(output, "\n"))
 
-  cat("constants present in model: ")
-  output <- ifelse(length(x@experiment@constants) > 0 & all(names(x@experiment@constants) %in% names(report_model_parameters(x))),
-                   style_def("\u2713"), style_na("\u2717"))
-  cat(paste0(output, "\n"))
-
+  if(!identical(x@modelpath, character(0))){
+    if(file.exists(x@modelpath)){
+      cat("constants present in model: ")
+      output <- ifelse(length(x@experiment@constants) > 0 & all(names(x@experiment@constants) %in% names(report_model_parameters(x))),
+                       style_def("\u2713"), style_na("\u2717"))
+      cat(paste0(output, "\n"))
+    }
+  }
 
   cat("metrics defined: ")
   output <- ifelse(length(x@experiment@metrics) > 0, style_def("\u2713"), style_na("\u2717"))
