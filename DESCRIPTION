@@ -42,6 +42,7 @@ Imports:
     tidyr,
     methods,
     tibble,
+    crayon,
     igraph,
     stringr,
     EasyABC

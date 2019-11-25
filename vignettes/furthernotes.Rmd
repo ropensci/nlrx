@@ -51,6 +51,13 @@ Additionally, please note the following restrictions in order to define variable
 A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
 After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_variables_constants()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
+## Print functions
+
+`print(nl)` can be used with any nl class object. The function will print a formatted overview of class contents to the console.
+The function will also print a short summary checklist that may be helpful for debugging certain issues.
+Depending on the simdesign, the summary table also prints the estimated number of runs.
+
+
 ## Capturing progress of model simulations
 
 The `run_nl_all()`, `run_nl_one()` and `run_nl_dyn()` functions provide a "silent" parameter that allows to capture progress of running simulations.

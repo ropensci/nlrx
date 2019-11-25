@@ -157,7 +157,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-11-05</h4>
+            <h4 class="date">2019-11-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -259,6 +259,11 @@
 <li>simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.</li>
 </ul>
 <p>A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function <code><a href="../reference/report_model_parameters.html">report_model_parameters()</a></code>. This function reads all GUI elements of the NetLogo model that can be set by nlrx. After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function <code><a href="../reference/eval_variables_constants.html">eval_variables_constants()</a></code>. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.</p>
+</div>
+<div id="print-functions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#print-functions" class="anchor"></a>Print functions</h2>
+<p><code><a href="https://rdrr.io/r/base/print.html">print(nl)</a></code> can be used with any nl class object. The function will print a formatted overview of class contents to the console. The function will also print a short summary checklist that may be helpful for debugging certain issues. Depending on the simdesign, the summary table also prints the estimated number of runs.</p>
 </div>
 <div id="capturing-progress-of-model-simulations" class="section level2">
 <h2 class="hasAnchor">
@@ -455,6 +460,7 @@
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#variables-and-constants-definitions">Variables and constants definitions</a></li>
+      <li><a href="#print-functions">Print functions</a></li>
       <li><a href="#capturing-progress-of-model-simulations">Capturing progress of model simulations</a></li>
       <li><a href="#handling-netlogo-runtime-errors">Handling NetLogo runtime errors</a></li>
       <li><a href="#self-written-netlogo-output">Self-written NetLogo output</a></li>

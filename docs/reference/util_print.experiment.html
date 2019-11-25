@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create NetLogo documentation — nldoc • nlrx | NetLogo from R</title>
+<title>Print experiment object content — util_print.experiment • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Create NetLogo documentation — nldoc" />
-<meta property="og:description" content="Create NetLogo documentation" />
+<meta property="og:title" content="Print experiment object content — util_print.experiment" />
+<meta property="og:description" content="Print experiment object content" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -193,103 +193,40 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create NetLogo documentation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/nldoc.R'><code>R/nldoc.R</code></a></small>
-    <div class="hidden name"><code>nldoc.Rd</code></div>
+    <h1>Print experiment object content</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/print_nl.R'><code>R/print_nl.R</code></a></small>
+    <div class="hidden name"><code>util_print.experiment.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create NetLogo documentation</p>
+    <p>Print experiment object content</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nldoc</span>(<span class='no'>modelfiles</span>, <span class='no'>outpath</span>, <span class='kw'>infotab</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>gui</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>bs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"html"</span>, <span class='kw'>number_sections</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>theme</span> <span class='kw'>=</span> <span class='st'>"journal"</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'>today</span>(), <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>util_print.experiment</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>modelfiles</th>
-      <td><p>vector of filepaths to model files</p></td>
+      <th>x</th>
+      <td><p>experiment object</p></td>
     </tr>
     <tr>
-      <th>outpath</th>
-      <td><p>Path to folder where rendered documentation should be created</p></td>
-    </tr>
-    <tr>
-      <th>infotab</th>
-      <td><p>TRUE/FALSE, if TRUE infotab section will be included in the documentation</p></td>
-    </tr>
-    <tr>
-      <th>gui</th>
-      <td><p>TRUE/FALSE, if TRUE a table with GUI elements from the model will be included in the documentation</p></td>
-    </tr>
-    <tr>
-      <th>bs</th>
-      <td><p>TRUE/FALSE, if TRUE a table with behavior space experiments will be included in the documentation</p></td>
-    </tr>
-    <tr>
-      <th>output_format</th>
-      <td><p>either "html", "pdf" or "docx"</p></td>
-    </tr>
-    <tr>
-      <th>number_sections</th>
-      <td><p>TRUE/FALSE, if TRUE sections in the documentation will be numbered</p></td>
-    </tr>
-    <tr>
-      <th>theme</th>
-      <td><p>markdown theme, supported themes are "journal", "cerulean", "flatly", "readable", "spacelab", "united", "cosmo"</p></td>
-    </tr>
-    <tr>
-      <th>date</th>
-      <td><p>date that is printed in the documentation header</p></td>
-    </tr>
-    <tr>
-      <th>toc</th>
-      <td><p>TRUE/FALSE, if TRUE the documentation contains a table of contents - only for html and pdf output format</p></td>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>nldoc reads model code from the provided model files.
-The code is then split into several groups (code, gui, behavior space).
-The procedures then finds noxygen commands within the NetLogo model code.
-For a complete list of noxygen commands type ?nldoc
-These commands are translated into a markdown documentation file.
-If needed, tables of gui elements and behavior space experiments are added to the markdown file.
-Finally, the document is rendered in the specified format.</p>
+    <p>Print content of experiment object in a nice formatted overview to console</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'># List model files (.nls subfiles are also supported)</span>
-<span class='no'>modelfiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo"</span>,
-                <span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls"</span>)
-
-<span class='co'># Define output directory:</span>
-<span class='no'>outdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()  <span class='co'># adjust path to your needs</span>
-
-<span class='co'># Create documentation:</span>
-<span class='fu'>nldoc</span>(<span class='kw'>modelfiles</span> <span class='kw'>=</span> <span class='no'>modelfiles</span>,
-      <span class='kw'>infotab</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>gui</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>bs</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='no'>outdir</span>,
-      <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"html"</span>,
-      <span class='kw'>number_sections</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-      <span class='kw'>theme</span> <span class='kw'>=</span> <span class='st'>"cosmo"</span>,
-      <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/date.html'>date</a></span>(),
-      <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS nldoc.utf8.md --to html4 --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash+smart --output nldoc.html --email-obfuscation none --self-contained --standalone --section-divs --table-of-contents --toc-depth 3 --template "C:\Users\jan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --number-sections --variable "theme:cosmo" --include-in-header "C:\Users\jan\AppData\Local\Temp\RtmpY55DQJ\rmarkdown-str117c7d3c6029.html" --mathjax --variable "mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Output created: nldoc.html</span></div><div class='output co'>#&gt; [1] "File successfully compiled!"</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
