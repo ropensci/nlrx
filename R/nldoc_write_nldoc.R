@@ -272,10 +272,17 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   close(fileConn)
 
   # Render the file
-  rmarkdown::render(mdfile)
+  if(rmarkdown::pandoc_available())
+  {
+    rmarkdown::render(mdfile)
+    print("File successfully compiled!")
+  } else
+  {
+    warning("MarkDown file (*.md) created but could not be compiled due to missing pandoc installation.")
+  }
+
 
   # Open the file:
-  outfile <- file.path(outpath, paste0("nldoc.", output_format))
-  # Print success
-  print("File successfully compiled!")
+  #outfile <- file.path(outpath, paste0("nldoc.", output_format))
+
 }

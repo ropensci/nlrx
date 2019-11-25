@@ -300,7 +300,7 @@ nl@simdesign <- simdesign_GenSA(nl=nl,
 ## Calibration simdesigns (Approximate Bayesian Computation (ABC))
 
 Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models.
-The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/web/packages/EasyABC/index.html).
+The nlrx package provides different algorithms from the [EasyABC package](https://cran.r-project.org/package=EasyABC).
 These algorithms can be used by attaching the corresponding simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`). 
 
 ```{r eval=FALSE}

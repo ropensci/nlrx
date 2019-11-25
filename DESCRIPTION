@@ -54,4 +54,4 @@ Suggests:
     rmarkdown,
     covr
 VignetteBuilder: knitr
-SystemRequirements: 'NetLogo' (>= 5.3.1), 'Java' (JDK 1.8)
+SystemRequirements: 'NetLogo' (>= 5.3.1), 'Java' (JDK 1.8), 'pandoc'
