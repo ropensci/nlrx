@@ -26,8 +26,8 @@ testthat::test_that("nldoc", {
     testthat::expect_true(file.exists(nldoc_html))
 
     ## Read html back in:
-    nldoc_readin <- XML::readHTMLList(nldoc_html)
-    testthat::expect_equal(length(nldoc_readin), 8)
+    #nldoc_readin <- XML::readHTMLList(nldoc_html)
+    #testthat::expect_equal(length(nldoc_readin), 8)
 
     # Create docx documentation:
     nldoc_dir <- tempdir()
@@ -69,7 +69,7 @@ testthat::test_that("nldoc", {
     testthat::expect_true(file.exists(nldoc_html))
 
     ## Read html back in:
-    nldoc_readin <- XML::readHTMLList(nldoc_html)
-    testthat::expect_equal(length(nldoc_readin), 3)
+    #nldoc_readin <- XML::readHTMLList(nldoc_html)
+    #testthat::expect_equal(length(nldoc_readin), 3)
   }
 })
