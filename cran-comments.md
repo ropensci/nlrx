@@ -16,9 +16,10 @@ nlrx version 0.4.0
 * Updated package tests
 
 ## Test environments
-* Windows 10, R 3.5.2
-* ubuntu 18.10, R 3.5.2
-* macOS Mojave, R 3.5.2
+* Windows 10, R 3.6.1
+* Windows Server 2012 R2 x64, R 3.6.1
+* ubuntu 18.10, R 3.6.1
+* macOS Mojave, R 3.6.1
 * win-builder (release and devel)
 
 ## R CMD check results

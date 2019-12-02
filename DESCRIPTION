@@ -14,7 +14,7 @@ Description: Setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/net
     The user defines all information that is needed in an intuitive framework, using class objects.
     Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user.
     By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.
-    This also enables simulating 'NetLogo' experiments on remote HPC machines.
+    This also enables simulating 'NetLogo' experiments on remote high performance computing machines.
     In order to use this package, 'Java' and 'NetLogo' (>= 5.3.1) need to be available on the executing system.
 License: GPL-3
 Encoding: UTF-8
@@ -54,4 +54,5 @@ Suggests:
     rmarkdown,
     covr
 VignetteBuilder: knitr
-SystemRequirements: 'NetLogo' (>= 5.3.1), 'Java' (JDK 1.8), 'pandoc'
+SystemRequirements: 
+    NetLogo (>= 5.3.1), Java (JDK 1.8), pandoc, OpenSSL, udunits-2, PROJ.4, GEOS, GDAL, libxml2
