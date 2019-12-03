@@ -5,19 +5,19 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "nlrx",
-  "description": "The purpose of this package is to provide tools to setup, run and analyze NetLogo model simulations in R.\n    nlrx experiments use a similar structure as NetLogos Behavior Space experiments. \n    However, nlrx offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.\n    The user defines all information that is needed in an intuitive framework, using class objects.\n    Experiments are submitted from R to NetLogo via XML files that are dynamically written, based on specifications defined by the user.\n    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.\n    This also enables simulating NetLogo experiments on remote HPC machines.\n    In order to use this package, Java and NetLogo (>= 5.3.1) need to be installed on the executing system.",
-  "name": "nlrx: Setup, Run and Analyze NetLogo Model Simulations from R via XML",
-  "codeRepository": "https://github.com/nldoc/nlrx/",
-  "issueTracker": "https://github.com/nldoc/nlrx/issues/",
+  "description": "Setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/netlogo/>) model simulations in 'R'.\n    'nlrx' experiments use a similar structure as 'NetLogos' Behavior Space experiments. \n    However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.\n    The user defines all information that is needed in an intuitive framework, using class objects.\n    Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user.\n    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.\n    This also enables simulating 'NetLogo' experiments on remote high performance computing machines.\n    In order to use this package, 'Java' and 'NetLogo' (>= 5.3.1) need to be available on the executing system.",
+  "name": "nlrx: Setup, Run and Analyze 'NetLogo' Model Simulations from 'R' via 'XML'",
+  "codeRepository": "https://github.com/ropensci/nlrx/",
+  "issueTracker": "https://github.com/ropensci/nlrx/issues/",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.1",
+    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.1 (2018-07-02)",
+  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
   "author": [
     {
       "@type": "Person",
@@ -291,6 +291,30 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "crayon",
+      "name": "crayon",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=crayon"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "igraph",
+      "name": "igraph",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=igraph"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
       "provider": {
@@ -303,14 +327,62 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "EasyABC",
+      "name": "EasyABC",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=EasyABC"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.3"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/java"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libgdal"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/pandoc"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libudunits2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libxml2"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/openssl"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/gdal"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libproj"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libgeos"
     }
   ],
   "releaseNotes": "https://github.com/nldoc/nlrx/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
-  "fileSize": "306.567KB",
+  "fileSize": "480.545KB",
   "contIntegration": [
     "https://ci.appveyor.com/project/nldoc/nlrx",
     "https://travis-ci.org/ropensci/nlrx",
@@ -327,6 +399,61 @@
     "netlogo",
     "individual-based-modelling",
     "agent-based-modeling",
-    "r"
-  ]
+    "r",
+    "r-package",
+    "rstats"
+  ],
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {},
+  "citation": [
+    {
+      "@type": "ScholarlyArticle",
+      "datePublished": "2019",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Jan",
+          "familyName": "Salecker"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Marco",
+          "familyName": "Sciaini"
+        },
+        {
+          "@type": "Person",
+          "givenName": ["Katrin", "M."],
+          "familyName": "Meyer"
+        },
+        {
+          "@type": "Person",
+          "givenName": "Kerstin",
+          "familyName": "Wiegand"
+        }
+      ],
+      "name": "The nlrx r package: A next-generation framework for reproducible NetLogo model analyses",
+      "identifier": "10.1111/2041-210X.13286",
+      "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13286",
+      "paginiation": "2041--210X",
+      "@id": "https://doi.org/10.1111/2041-210X.13286",
+      "sameAs": "https://doi.org/10.1111/2041-210X.13286",
+      "isPartOf": {
+        "@type": "PublicationIssue",
+        "datePublished": "2019",
+        "isPartOf": {
+          "@type": ["PublicationVolume", "Periodical"],
+          "volumeNumber": "00",
+          "name": "Methods in Ecololgy and Evolution"
+        }
+      }
+    }
+  ],
+  "relatedLink": "https://CRAN.R-project.org/package=nlrx"
 }
