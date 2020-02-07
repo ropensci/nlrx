@@ -1,0 +1,27 @@
+;`@procedure reset-patches
+;`@details This function just resets all patches to green color
+;`@code TRUE
+to reset-patches
+  ask patches
+  [
+    set pcolor green
+  ]
+end
+
+;`@procedure reset-turtles
+;`@details This function creates some turtles
+;`@code TRUE
+to reset-turtles
+  ask turtles [die]
+  create-turtles 10
+end
+
+;`@procedure calc-sum
+;`@param a any number
+;`@param b any number
+;`@return sum of a and b
+;`@details This function calculates the sum of two privded numbers
+;`@code TRUE
+to-report calc-sum [a b]
+  report (a + b)
+end

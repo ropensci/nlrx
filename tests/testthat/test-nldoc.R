@@ -5,8 +5,8 @@ testthat::test_that("nldoc", {
 
   if (rmarkdown::pandoc_available())
   {
-    modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
-                    "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
+    modelfiles <- c("WSP.nlogo",
+                    "WSP.nls")
 
 
     # Create html documentation:

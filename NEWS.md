@@ -1,4 +1,9 @@
 
+## nlrx 0.4.1
+* fixed dependency on external file source in nldoc automated tests
+* these files are now included in the package
+* added link to documentation website in description
+
 ## nlrx 0.4.0
 
 * Added new simdesigns simdesign_ABCmcmc_Marjoram, simdesign_ABCmcmc_Marjoram_original and simdesign_ABCmcmc_Wegmann to perform approximate bayesian computation
