@@ -24,6 +24,7 @@
 #' Finally, the document is rendered in the specified format.
 #'
 #' @examples
+#' \dontrun{
 #'
 #' # List model files (.nls subfiles are also supported)
 #' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
@@ -43,6 +44,7 @@
 #'       theme = "cosmo",
 #'       date = date(),
 #'       toc = TRUE)
+#' }
 #'
 #' @aliases nldoc
 #' @rdname nldoc
