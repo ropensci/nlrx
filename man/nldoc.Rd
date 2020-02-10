@@ -42,6 +42,7 @@ If needed, tables of gui elements and behavior space experiments are added to th
 Finally, the document is rendered in the specified format.
 }
 \examples{
+\dontrun{
 
 # List model files (.nls subfiles are also supported)
 modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
@@ -61,5 +62,6 @@ nldoc(modelfiles = modelfiles,
       theme = "cosmo",
       date = date(),
       toc = TRUE)
+}
 
 }

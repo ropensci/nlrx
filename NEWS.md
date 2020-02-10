@@ -1,4 +1,7 @@
 
+## nlrx 0.4.2
+* hotfix for another dependency on external files in nldoc roxygen examples
+
 ## nlrx 0.4.1
 * fixed dependency on external file source in nldoc automated tests
 * these files are now included in the package

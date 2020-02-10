@@ -1,12 +1,12 @@
 # Resubmission
 
-nlrx version 0.4.1
+nlrx version 0.4.2
 
 ## CRAN check error fixes
-* One test of the package had a dependency on an external file. This issue was fixed.
-* The testfiles are now self-contained and the files are now included in the package.
+* An error was thrown because of a dependency on external files in the roxygen example of the nldoc function.
+* This error has now been fixed.
 
-## Changes in version 0.4.1
+## Changes in version 0.4.2
 * no additional changes were made
 
 

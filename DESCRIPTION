@@ -1,7 +1,7 @@
 Package: nlrx
 Type: Package
 Title: Setup, Run and Analyze 'NetLogo' Model Simulations from 'R' via 'XML'
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(person("Jan", "Salecker", email = "jsaleck@gwdg.de",
                      role = c("aut", "cre"), comment = c(ORCID = '0000-0002-9000-4229')),
              person("Marco", "Sciaini", email = "sciaini.marco@gmail.com", role = c("aut"), comment = c(ORCID = '0000-0002-3042-5435')),
