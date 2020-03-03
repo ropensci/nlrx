@@ -1,6 +1,7 @@
 
 ## nlrx 0.4.2
 * hotfix for another dependency on external files in nldoc roxygen examples
+* small bugfix in analyze_morris: A warning is no thrown if NA are present in the simulation data
 
 ## nlrx 0.4.1
 * fixed dependency on external file source in nldoc automated tests

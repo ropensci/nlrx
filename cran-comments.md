@@ -7,7 +7,7 @@ nlrx version 0.4.2
 * This error has now been fixed.
 
 ## Changes in version 0.4.2
-* no additional changes were made
+* small bugfix in analyze_morris: A warning is no thrown if NA are present in the simulation data
 
 
 ## Test environments

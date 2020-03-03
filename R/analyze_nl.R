@@ -503,7 +503,7 @@ analyze_morris <- function(nl, metrics, funs) {
   # Print warning if NAs were discovered:
   if (isTRUE(na.discovered))
   {
-    warning("NAs were discovered during morris index calculation!")
+    warning("NAs were discovered in the simulation output data during morris index calculation!")
   }
 
   # Remove rownames
