@@ -446,6 +446,7 @@ analyze_soboljansen <- function(nl, metrics, funs) {
 #' @keywords internal
 analyze_morris <- function(nl, metrics, funs) {
   sensindex <- NULL
+  na.discovered <- FALSE
   mo <- getsim(nl, "simobject")[[1]]
 
   # Calculate sensitivity indices separately for each random seed:
@@ -467,30 +468,42 @@ analyze_morris <- function(nl, metrics, funs) {
     for (j in seq_len(nrow(simoutput.i))) {
       sensitivity::tell(mo, simoutput.i[j, ])
 
+      if (anyNA(mo$ee))
+      {
+        na.discovered <- TRUE
+      }
+
+
       mustar <- tibble::tibble(
         metric = metrics[j],
         parameter = colnames(mo$ee),
         index = "mustar",
-        value = apply(mo$ee, 2, function(x) mean(abs(x))),
+        value = apply(mo$ee, 2, function(x) mean(abs(x), na.rm=TRUE)),
         seed = i
       )
       mu <- tibble::tibble(
         metric = metrics[j],
         parameter = colnames(mo$ee),
         index = "mu",
-        value = apply(mo$ee, 2, mean),
+        value = apply(mo$ee, 2, function(x) mean(x, na.rm=TRUE)),
         seed = i
       )
       sigma <- tibble::tibble(
         metric = metrics[j],
         parameter = colnames(mo$ee),
         index = "sigma",
-        value = apply(mo$ee, 2, stats::sd),
+        value = apply(mo$ee, 2, function(x) stats::sd(x, na.rm=TRUE)),
         seed = i
       )
 
       sensindex <- rbind(sensindex, mustar, mu, sigma)
     }
+  }
+
+  # Print warning if NAs were discovered:
+  if (isTRUE(na.discovered))
+  {
+    warning("NAs were discovered during morris index calculation!")
   }
 
   # Remove rownames
