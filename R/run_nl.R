@@ -119,6 +119,7 @@ run_nl_all <- function(nl,
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
 #' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
+#' @param writeRDS TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -156,14 +157,15 @@ run_nl_one <- function(nl,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
                        cleanup.bat = TRUE,
-                       silent = TRUE) {
+                       silent = TRUE,
+                       writeRDS = FALSE) {
 
   util_eval_simdesign(nl)
 
   ## Write XML File:
   xmlfile <-
     tempfile(
-      pattern = paste0("nlrx", seed, "_", siminputrow),
+      pattern = paste0("nlrx_seed_", seed, "_row_", siminputrow, "_"),
       fileext = ".xml"
     )
 
@@ -172,7 +174,7 @@ run_nl_one <- function(nl,
   ## Execute:
   outfile <-
     tempfile(
-      pattern = paste0("nlrx", seed, "_", siminputrow),
+      pattern = paste0("nlrx_seed_", seed, "_row_", siminputrow, "_"),
       fileext = ".csv"
     )
 
@@ -188,6 +190,19 @@ run_nl_one <- function(nl,
                         "bat" = batchpath)
 
   util_cleanup(nl, cleanup.csv, cleanup.xml, cleanup.bat, cleanup.files)
+
+
+  if (isTRUE(writeRDS))
+  {
+    if(dir.exists(nl@experiment@outpath))
+    {
+      filename <- paste0("nlrx_seed_", seed, "_row_", siminputrow, ".rds")
+      saveRDS(nl_results, file=file.path(nl@experiment@outpath, filename))
+    } else
+    {
+      warning(paste0("Outpath of nl object does not exist on remote file system: ", nl@experiment@outpath, ". Cannot write rds file!"))
+    }
+  }
 
   if(!isTRUE(silent)) {
     message(paste0("Finished simulation with random-seed: ", seed, " and siminputrow: ", siminputrow))
@@ -286,3 +301,5 @@ run_nl_dyn <- function(nl,
 
   return(nl_results)
 }
+
+

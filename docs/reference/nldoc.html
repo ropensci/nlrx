@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -262,7 +262,8 @@ If needed, tables of gui elements and behavior space experiments are added to th
 Finally, the document is rendered in the specified format.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+
 <span class='co'># List model files (.nls subfiles are also supported)</span>
 <span class='no'>modelfiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo"</span>,
                 <span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls"</span>)
@@ -280,9 +281,8 @@ Finally, the document is rendered in the specified format.</p>
       <span class='kw'>number_sections</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
       <span class='kw'>theme</span> <span class='kw'>=</span> <span class='st'>"cosmo"</span>,
       <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/date.html'>date</a></span>(),
-      <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; "C:/Program Files/RStudio/bin/pandoc/pandoc" +RTS -K512m -RTS nldoc.utf8.md --to html4 --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash+smart --output nldoc.html --email-obfuscation none --self-contained --standalone --section-divs --table-of-contents --toc-depth 3 --template "C:\Users\jan\Documents\R\win-library\3.6\rmarkdown\rmd\h\default.html" --no-highlight --variable highlightjs=1 --number-sections --variable "theme:cosmo" --include-in-header "C:\Users\jan\AppData\Local\Temp\Rtmp8ktkHi\rmarkdown-str243413ed181b.html" --mathjax --variable "mathjax-url:https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Output created: nldoc.html</span></div><div class='output co'>#&gt; [1] "File successfully compiled!"</div><div class='input'>
-</div></pre>
+      <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

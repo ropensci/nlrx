@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -157,7 +157,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-12-03</h4>
+            <h4 class="date">2020-03-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -286,8 +286,8 @@
 <a href="#temporary-files-management" class="anchor"></a>Temporary files management</h2>
 <p>nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files. These temporary files are stored in the default temporary files directory of the R session. By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the <code>run_nl</code> functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).</p>
 <p>On unix systems, it can happen that system processes delete files in the default temporary files folder. Thus, we recommend to reassign the temporary files folder for the R-session to another folder. The R-package <a href="https://www.rforge.net/unixtools/">unixtools</a> provides a function to reassign the temporary files folder for the current R-session:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'unixtools'</span>, <span class="dt">repos =</span> <span class="st">'http://www.rforge.net/'</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"&lt;path-to-temp-dir&gt;"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'unixtools'</span>, <span class="dt">repos =</span> <span class="st">'http://www.rforge.net/'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"&lt;path-to-temp-dir&gt;"</span>)</span></code></pre></div>
 </div>
 <div id="random-seed-and-repetitions-management" class="section level2">
 <h2 class="hasAnchor">
@@ -319,9 +319,9 @@
 <li>metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list(“links” = c(“[who] of end1”, “[who] of end2”)))</li>
 </ul>
 <p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clean results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">to<span class="op">-</span>report green.patches</a>
-<a class="sourceLine" id="cb2-2" title="2">  report count patches with [pcolor =<span class="st"> </span>green]</a>
-<a class="sourceLine" id="cb2-3" title="3">end</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>to<span class="op">-</span>report green.patches</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  report count patches with [pcolor =<span class="st"> </span>green]</span>
+<span id="cb2-3"><a href="#cb2-3"></a>end</span></code></pre></div>
 <p>In your nlrx experiment metrics field you can then enter “green.patches” which is way more intuitive then “count patches with [pcolor = green]”.</p>
 </div>
 <div id="netlogo-extensions" class="section level2">
@@ -338,17 +338,17 @@
 <a href="#parallelisation-on-local-machine" class="anchor"></a>Parallelisation on local machine</h3>
 <p>Model simulations can be distributed to each logical processor on the local machine in parallel. The future package provides two options for parallelization, explicit futures and implicit futures which are executed in the background and do not block the console while running.</p>
 <p>Running parallel simulations with an explicit future command:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">plan</span>(multiprocess)</a>
-<a class="sourceLine" id="cb3-3" title="3">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">plan</span>(multiprocess)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</span></code></pre></div>
 <p>For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level. Note, that we use the assignment operator for implicit futures (<code>%&lt;-%</code>):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">plan</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(sequential, multiprocess))</a>
-<a class="sourceLine" id="cb4-3" title="3">results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">plan</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(sequential, multiprocess))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>results <span class="op">%&lt;-%</span><span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</span></code></pre></div>
 <p>In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw">plan</span>(multisession)</a>
-<a class="sourceLine" id="cb5-3" title="3">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">split =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl, <span class="dt">split =</span> <span class="dv">4</span>)</span></code></pre></div>
 </div>
 <div id="parallelisation-on-remote-hpc-cluster" class="section level3">
 <h3 class="hasAnchor">
@@ -360,94 +360,94 @@
 <h4 class="hasAnchor">
 <a href="#using-the-future-framework" class="anchor"></a>Using the future framework</h4>
 <p>For sending jobs to the remote HPC under the future framework, we need to install and load additional R packages and adjust the future plan before executing <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. You need to define a path to your ssh key, a server adress for the HPC, a user name for the HPC and a path to the slurm template file on the HPC. Please also make sure that the <code>nlpath</code>, <code>modelpath</code> and <code>outpath</code> variables within your nl object point to locations on the filesystem of the HPC and not your local filesystem.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># Load required packages</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future.batchtools)</a>
-<a class="sourceLine" id="cb6-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(debugme)</a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="kw"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="dt">DEBUGME=</span><span class="st">'batchtools'</span>)</a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(batchtools)</a>
-<a class="sourceLine" id="cb6-7" title="7"></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co"># Define the path to the ssh key for your machine:</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">future.makeNodePSOCK.rshopts =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"-i"</span>, <span class="st">"/patch/to/id_rsa"</span>))</a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co"># Define server and your login credentials for the remote HPC:</span></a>
-<a class="sourceLine" id="cb6-11" title="11">login &lt;-<span class="st"> </span><span class="kw">tweak</span>(remote, <span class="dt">workers=</span><span class="st">"server.HPC.de"</span>, <span class="dt">user=</span><span class="st">"username"</span>)</a>
-<a class="sourceLine" id="cb6-12" title="12"></a>
-<a class="sourceLine" id="cb6-13" title="13"><span class="co"># Define plan for future environment:</span></a>
-<a class="sourceLine" id="cb6-14" title="14">bsub &lt;-<span class="st"> </span><span class="kw">tweak</span>(batchtools_slurm, <span class="dt">template =</span> <span class="st">"slurm.tmpl"</span>, <span class="co"># define name of slurm tmeplate on HPC filesystem</span></a>
-<a class="sourceLine" id="cb6-15" title="15">              <span class="dt">resources =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job.name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></a>
-<a class="sourceLine" id="cb6-16" title="16">                               <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></a>
-<a class="sourceLine" id="cb6-17" title="17">                               <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></a>
-<a class="sourceLine" id="cb6-18" title="18">                               <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></a>
-<a class="sourceLine" id="cb6-19" title="19">                               <span class="dt">walltime =</span> <span class="st">"00:30"</span>, <span class="co"># define walltime</span></a>
-<a class="sourceLine" id="cb6-20" title="20">                               <span class="dt">n_jobs =</span> <span class="st">"1"</span>,   <span class="co"># define number of processes per job</span></a>
-<a class="sourceLine" id="cb6-21" title="21">                               <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>) <span class="co"># define memory per cpu   </span></a>
-<a class="sourceLine" id="cb6-22" title="22"></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co"># Load HPC plan:</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="kw">plan</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(login,</a>
-<a class="sourceLine" id="cb6-25" title="25">          bsub,</a>
-<a class="sourceLine" id="cb6-26" title="26">          multisession))</a>
-<a class="sourceLine" id="cb6-27" title="27"></a>
-<a class="sourceLine" id="cb6-28" title="28"><span class="co"># Execute simulations</span></a>
-<a class="sourceLine" id="cb6-29" title="29">results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># Load required packages</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(future.batchtools)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(debugme)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span>(<span class="dt">DEBUGME=</span><span class="st">'batchtools'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(batchtools)</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co"># Define the path to the ssh key for your machine:</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw"><a href="https://rdrr.io/r/base/options.html">options</a></span>(<span class="dt">future.makeNodePSOCK.rshopts =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"-i"</span>, <span class="st">"/patch/to/id_rsa"</span>))</span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co"># Define server and your login credentials for the remote HPC:</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>login &lt;-<span class="st"> </span><span class="kw">tweak</span>(remote, <span class="dt">workers=</span><span class="st">"server.HPC.de"</span>, <span class="dt">user=</span><span class="st">"username"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co"># Define plan for future environment:</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>bsub &lt;-<span class="st"> </span><span class="kw">tweak</span>(batchtools_slurm, <span class="dt">template =</span> <span class="st">"slurm.tmpl"</span>, <span class="co"># define name of slurm tmeplate on HPC filesystem</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>              <span class="dt">resources =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job.name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>                               <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>                               <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>                               <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>                               <span class="dt">walltime =</span> <span class="st">"00:30"</span>, <span class="co"># define walltime</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a>                               <span class="dt">n_jobs =</span> <span class="st">"1"</span>,   <span class="co"># define number of processes per job</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a>                               <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>) <span class="co"># define memory per cpu   </span></span>
+<span id="cb6-22"><a href="#cb6-22"></a></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co"># Load HPC plan:</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="kw">plan</span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(login,</span>
+<span id="cb6-25"><a href="#cb6-25"></a>          bsub,</span>
+<span id="cb6-26"><a href="#cb6-26"></a>          multisession))</span>
+<span id="cb6-27"><a href="#cb6-27"></a></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co"># Execute simulations</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a>results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</span></code></pre></div>
 </div>
 <div id="using-the-clustermq-framework" class="section level4">
 <h4 class="hasAnchor">
 <a href="#using-the-clustermq-framework" class="anchor"></a>Using the clusterMQ framework</h4>
 <p>The clusterMQ framework is somewhat different from the future framework. However, in our experience it worked more reliable in combination with a slurm HPC. For installation of clustermq and .Rprofile settings see also the <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/">detailed HPC setup manual</a>.</p>
 <p>clusterMQ does not directly support parallelisation of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> loops of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function. We need to define our own parallel simulation function, using the <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function of the nlrx package:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(clustermq)</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co"># First, we set the total number of jobs for the HPC</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co"># In this example we run each simulation as an individual job (recommended).</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co"># Thus to calculate the number of jobs we just multiply the number of parameterizations of the simdesign with the number of random seeds.</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co"># If you want to group several runs into the same job you can adjust this line and choose a lower number.</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co"># However, the number must be chosen that nrow(nl@simdesign@siminput)/njobs results in an integer value</span></a>
-<a class="sourceLine" id="cb7-8" title="8">njobs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput) <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds)</a>
-<a class="sourceLine" id="cb7-9" title="9"></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co"># Second, we generate vectors for looping trough model runs.</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co"># We generate a vector for simpinputrows by repeating the sequence of parameterisations for each seed.</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="co"># Then, we generate a vector of random-seeds by repeating each seed for n times, where n is the number of siminputrows.</span></a>
-<a class="sourceLine" id="cb7-13" title="13">siminputrows &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput)), <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds))</a>
-<a class="sourceLine" id="cb7-14" title="14">rndseeds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds, <span class="dt">each=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput))</a>
-<a class="sourceLine" id="cb7-15" title="15"></a>
-<a class="sourceLine" id="cb7-16" title="16"><span class="co"># Third, we define our simulation function</span></a>
-<a class="sourceLine" id="cb7-17" title="17"><span class="co"># Please adjust the path to the temporary file directory</span></a>
-<a class="sourceLine" id="cb7-18" title="18">simfun &lt;-<span class="st"> </span><span class="cf">function</span>(nl, siminputrow, rndseed, <span class="dt">writeRDS=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb7-19" title="19">{</a>
-<a class="sourceLine" id="cb7-20" title="20">  unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"/hpath/to/temp/dir"</span>)</a>
-<a class="sourceLine" id="cb7-21" title="21">  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</a>
-<a class="sourceLine" id="cb7-22" title="22">  res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_one.html">run_nl_one</a></span>(<span class="dt">nl =</span> nl, <span class="dt">siminputrow =</span> siminputrow, <span class="dt">seed =</span> rndseed)</a>
-<a class="sourceLine" id="cb7-23" title="23">  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(writeRDS))</a>
-<a class="sourceLine" id="cb7-24" title="24">  {</a>
-<a class="sourceLine" id="cb7-25" title="25">    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(res, <span class="dt">file=</span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"nlrx_sim_"</span>, siminputrow, <span class="st">"_seed_"</span>, rndseed, <span class="st">".rds"</span>)))</a>
-<a class="sourceLine" id="cb7-26" title="26">  }</a>
-<a class="sourceLine" id="cb7-27" title="27">  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(res)</a>
-<a class="sourceLine" id="cb7-28" title="28">}</a>
-<a class="sourceLine" id="cb7-29" title="29"></a>
-<a class="sourceLine" id="cb7-30" title="30"><span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span></a>
-<a class="sourceLine" id="cb7-31" title="31"><span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span></a>
-<a class="sourceLine" id="cb7-32" title="32"><span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span></a>
-<a class="sourceLine" id="cb7-33" title="33"><span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span></a>
-<a class="sourceLine" id="cb7-34" title="34"><span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span></a>
-<a class="sourceLine" id="cb7-35" title="35"><span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span></a>
-<a class="sourceLine" id="cb7-36" title="36">results &lt;-<span class="st"> </span>clustermq<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/clustermq/man/Q.html">Q</a></span>(<span class="dt">fun =</span> simfun, </a>
-<a class="sourceLine" id="cb7-37" title="37">                        <span class="dt">siminputrow =</span> siminputrows,</a>
-<a class="sourceLine" id="cb7-38" title="38">                        <span class="dt">rndseed =</span> rndseeds,</a>
-<a class="sourceLine" id="cb7-39" title="39">                        <span class="dt">const =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">nl =</span> nl,</a>
-<a class="sourceLine" id="cb7-40" title="40">                                     <span class="dt">writeRDS =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb7-41" title="41">                        <span class="dt">export =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(), </a>
-<a class="sourceLine" id="cb7-42" title="42">                        <span class="dt">seed =</span> <span class="dv">42</span>, </a>
-<a class="sourceLine" id="cb7-43" title="43">                        <span class="dt">n_jobs =</span> njobs, </a>
-<a class="sourceLine" id="cb7-44" title="44">                        <span class="dt">template =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job_name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></a>
-<a class="sourceLine" id="cb7-45" title="45">                                        <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></a>
-<a class="sourceLine" id="cb7-46" title="46">                                        <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></a>
-<a class="sourceLine" id="cb7-47" title="47">                                        <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></a>
-<a class="sourceLine" id="cb7-48" title="48">                                        <span class="dt">walltime =</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span></a>
-<a class="sourceLine" id="cb7-49" title="49">                                        <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>)) <span class="co"># define memory per cpu   </span></a>
-<a class="sourceLine" id="cb7-50" title="50"></a>
-<a class="sourceLine" id="cb7-51" title="51"><span class="co"># The Q function reports the individual results of each job as a list</span></a>
-<a class="sourceLine" id="cb7-52" title="52"><span class="co"># Thus, we convert the list results to tibble format:</span></a>
-<a class="sourceLine" id="cb7-53" title="53">results &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(clustermq)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># First, we set the total number of jobs for the HPC</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co"># In this example we run each simulation as an individual job (recommended).</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># Thus to calculate the number of jobs we just multiply the number of parameterizations of the simdesign with the number of random seeds.</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co"># If you want to group several runs into the same job you can adjust this line and choose a lower number.</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># However, the number must be chosen that nrow(nl@simdesign@siminput)/njobs results in an integer value</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>njobs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput) <span class="op">*</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds)</span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># Second, we generate vectors for looping trough model runs.</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co"># We generate a vector for simpinputrows by repeating the sequence of parameterisations for each seed.</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co"># Then, we generate a vector of random-seeds by repeating each seed for n times, where n is the number of siminputrows.</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>siminputrows &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput)), <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds))</span>
+<span id="cb7-14"><a href="#cb7-14"></a>rndseeds &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>simseeds, <span class="dt">each=</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(nl<span class="op">@</span>simdesign<span class="op">@</span>siminput))</span>
+<span id="cb7-15"><a href="#cb7-15"></a></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co"># Third, we define our simulation function</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co"># Please adjust the path to the temporary file directory</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>simfun &lt;-<span class="st"> </span><span class="cf">function</span>(nl, siminputrow, rndseed, <span class="dt">writeRDS=</span><span class="ot">FALSE</span>)</span>
+<span id="cb7-19"><a href="#cb7-19"></a>{</span>
+<span id="cb7-20"><a href="#cb7-20"></a>  unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"/hpath/to/temp/dir"</span>)</span>
+<span id="cb7-21"><a href="#cb7-21"></a>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</span>
+<span id="cb7-22"><a href="#cb7-22"></a>  res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_one.html">run_nl_one</a></span>(<span class="dt">nl =</span> nl, <span class="dt">siminputrow =</span> siminputrow, <span class="dt">seed =</span> rndseed)</span>
+<span id="cb7-23"><a href="#cb7-23"></a>  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(writeRDS))</span>
+<span id="cb7-24"><a href="#cb7-24"></a>  {</span>
+<span id="cb7-25"><a href="#cb7-25"></a>    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(res, <span class="dt">file=</span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"nlrx_sim_"</span>, siminputrow, <span class="st">"_seed_"</span>, rndseed, <span class="st">".rds"</span>)))</span>
+<span id="cb7-26"><a href="#cb7-26"></a>  }</span>
+<span id="cb7-27"><a href="#cb7-27"></a>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(res)</span>
+<span id="cb7-28"><a href="#cb7-28"></a>}</span>
+<span id="cb7-29"><a href="#cb7-29"></a></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span></span>
+<span id="cb7-33"><a href="#cb7-33"></a><span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span></span>
+<span id="cb7-34"><a href="#cb7-34"></a><span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span></span>
+<span id="cb7-35"><a href="#cb7-35"></a><span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span></span>
+<span id="cb7-36"><a href="#cb7-36"></a>results &lt;-<span class="st"> </span>clustermq<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/clustermq/man/Q.html">Q</a></span>(<span class="dt">fun =</span> simfun, </span>
+<span id="cb7-37"><a href="#cb7-37"></a>                        <span class="dt">siminputrow =</span> siminputrows,</span>
+<span id="cb7-38"><a href="#cb7-38"></a>                        <span class="dt">rndseed =</span> rndseeds,</span>
+<span id="cb7-39"><a href="#cb7-39"></a>                        <span class="dt">const =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">nl =</span> nl,</span>
+<span id="cb7-40"><a href="#cb7-40"></a>                                     <span class="dt">writeRDS =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb7-41"><a href="#cb7-41"></a>                        <span class="dt">export =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(), </span>
+<span id="cb7-42"><a href="#cb7-42"></a>                        <span class="dt">seed =</span> <span class="dv">42</span>, </span>
+<span id="cb7-43"><a href="#cb7-43"></a>                        <span class="dt">n_jobs =</span> njobs, </span>
+<span id="cb7-44"><a href="#cb7-44"></a>                        <span class="dt">template =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job_name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></span>
+<span id="cb7-45"><a href="#cb7-45"></a>                                        <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></span>
+<span id="cb7-46"><a href="#cb7-46"></a>                                        <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a>                                        <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a>                                        <span class="dt">walltime =</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span></span>
+<span id="cb7-49"><a href="#cb7-49"></a>                                        <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>)) <span class="co"># define memory per cpu   </span></span>
+<span id="cb7-50"><a href="#cb7-50"></a></span>
+<span id="cb7-51"><a href="#cb7-51"></a><span class="co"># The Q function reports the individual results of each job as a list</span></span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="co"># Thus, we convert the list results to tibble format:</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a>results &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(results)</span></code></pre></div>
 </div>
 </div>
 </div>

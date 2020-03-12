@@ -8,6 +8,8 @@ nlrx version 0.4.2
 
 ## Changes in version 0.4.2
 * small bugfix in analyze_morris: A warning is no thrown if NA are present in the simulation data
+* bugfix in random seed generator
+* added option to run_nl_one that allows to store results as rds files
 
 
 ## Test environments

@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
       </span>
     </div>
 
@@ -157,7 +157,7 @@
       <h1>Spatial Output</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2019-12-03</h4>
+            <h4 class="date">2020-03-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/articles/spatial-output.Rmd"><code>vignettes/articles/spatial-output.Rmd</code></a></small>
       <div class="hidden name"><code>spatial-output.Rmd</code></div>
@@ -198,109 +198,109 @@
 <h2 class="hasAnchor">
 <a href="#application-example-1-wolf-sheep-predation" class="anchor"></a>Application Example 1: Wolf Sheep Predation</h2>
 <p>We use the Wolf Sheep Model from the NetLogo models library to capture metrics of patches and turtles. We measure coordinates, who numbers and the breed of turtles, and coordinates of patches and the corresponding pcolor on each tick. We define our experiment accordingly and run the simulations:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gganimate) <span class="co"># devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency</span></a>
-<a class="sourceLine" id="cb1-4" title="4"></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></a>
-<a class="sourceLine" id="cb1-6" title="6">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)</a>
-<a class="sourceLine" id="cb1-7" title="7">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</a>
-<a class="sourceLine" id="cb1-8" title="8">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)</a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></a>
-<a class="sourceLine" id="cb1-10" title="10">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)</a>
-<a class="sourceLine" id="cb1-11" title="11">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</a>
-<a class="sourceLine" id="cb1-12" title="12">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</a>
-<a class="sourceLine" id="cb1-13" title="13"></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="co"># Define nl object</span></a>
-<a class="sourceLine" id="cb1-15" title="15">nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.3"</span>,</a>
-<a class="sourceLine" id="cb1-16" title="16">         <span class="dt">nlpath =</span> netlogopath,</a>
-<a class="sourceLine" id="cb1-17" title="17">         <span class="dt">modelpath =</span> modelpath,</a>
-<a class="sourceLine" id="cb1-18" title="18">         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</a>
-<a class="sourceLine" id="cb1-19" title="19"></a>
-<a class="sourceLine" id="cb1-20" title="20"><span class="co"># Define experiment</span></a>
-<a class="sourceLine" id="cb1-21" title="21">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"nlrx_spatial"</span>,</a>
-<a class="sourceLine" id="cb1-22" title="22">                            <span class="dt">outpath =</span> outpath,</a>
-<a class="sourceLine" id="cb1-23" title="23">                            <span class="dt">repetition =</span> <span class="dv">1</span>,      </a>
-<a class="sourceLine" id="cb1-24" title="24">                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,</a>
-<a class="sourceLine" id="cb1-25" title="25">                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   </a>
-<a class="sourceLine" id="cb1-26" title="26">                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         </a>
-<a class="sourceLine" id="cb1-27" title="27">                            <span class="dt">runtime =</span> <span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb1-28" title="28">                            <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>,<span class="st">"count wolves"</span>),</a>
-<a class="sourceLine" id="cb1-29" title="29">                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>)),</a>
-<a class="sourceLine" id="cb1-30" title="30">                            <span class="dt">metrics.patches =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>),</a>
-<a class="sourceLine" id="cb1-31" title="31">                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> =<span class="st"> "</span><span class="ch">\"</span><span class="st">sheep-wolves-grass</span><span class="ch">\"</span><span class="st">"</span>,</a>
-<a class="sourceLine" id="cb1-32" title="32">                                             <span class="st">'initial-number-sheep'</span> =<span class="st"> </span><span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb1-33" title="33">                                             <span class="st">'initial-number-wolves'</span> =<span class="st"> </span><span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb1-34" title="34">                                             <span class="st">"grass-regrowth-time"</span> =<span class="st"> </span><span class="dv">30</span>,</a>
-<a class="sourceLine" id="cb1-35" title="35">                                             <span class="st">"sheep-gain-from-food"</span> =<span class="st"> </span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1-36" title="36">                                             <span class="st">"wolf-gain-from-food"</span> =<span class="st"> </span><span class="dv">20</span>,</a>
-<a class="sourceLine" id="cb1-37" title="37">                                             <span class="st">"sheep-reproduce"</span> =<span class="st"> </span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb1-38" title="38">                                             <span class="st">"wolf-reproduce"</span> =<span class="st"> </span><span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb1-39" title="39">                                             <span class="st">"show-energy?"</span> =<span class="st"> "false"</span>)</a>
-<a class="sourceLine" id="cb1-40" title="40">                            )</a>
-<a class="sourceLine" id="cb1-41" title="41"></a>
-<a class="sourceLine" id="cb1-42" title="42"><span class="co"># Attach simdesign simple using only constants</span></a>
-<a class="sourceLine" id="cb1-43" title="43">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl=</span>nl,</a>
-<a class="sourceLine" id="cb1-44" title="44">                                 <span class="dt">nseeds=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb1-45" title="45"></a>
-<a class="sourceLine" id="cb1-46" title="46"><span class="co"># Run simulations and store output in results</span></a>
-<a class="sourceLine" id="cb1-47" title="47">results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gganimate) <span class="co"># devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># Define nl object</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.3"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16"></a>         <span class="dt">nlpath =</span> netlogopath,</span>
+<span id="cb1-17"><a href="#cb1-17"></a>         <span class="dt">modelpath =</span> modelpath,</span>
+<span id="cb1-18"><a href="#cb1-18"></a>         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co"># Define experiment</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname =</span> <span class="st">"nlrx_spatial"</span>,</span>
+<span id="cb1-22"><a href="#cb1-22"></a>                            <span class="dt">outpath =</span> outpath,</span>
+<span id="cb1-23"><a href="#cb1-23"></a>                            <span class="dt">repetition =</span> <span class="dv">1</span>,      </span>
+<span id="cb1-24"><a href="#cb1-24"></a>                            <span class="dt">tickmetrics =</span> <span class="st">"true"</span>,</span>
+<span id="cb1-25"><a href="#cb1-25"></a>                            <span class="dt">idsetup =</span> <span class="st">"setup"</span>,   </span>
+<span id="cb1-26"><a href="#cb1-26"></a>                            <span class="dt">idgo =</span> <span class="st">"go"</span>,         </span>
+<span id="cb1-27"><a href="#cb1-27"></a>                            <span class="dt">runtime =</span> <span class="dv">100</span>,</span>
+<span id="cb1-28"><a href="#cb1-28"></a>                            <span class="dt">metrics =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>,<span class="st">"count wolves"</span>),</span>
+<span id="cb1-29"><a href="#cb1-29"></a>                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>)),</span>
+<span id="cb1-30"><a href="#cb1-30"></a>                            <span class="dt">metrics.patches =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>),</span>
+<span id="cb1-31"><a href="#cb1-31"></a>                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> =<span class="st"> "</span><span class="ch">\"</span><span class="st">sheep-wolves-grass</span><span class="ch">\"</span><span class="st">"</span>,</span>
+<span id="cb1-32"><a href="#cb1-32"></a>                                             <span class="st">'initial-number-sheep'</span> =<span class="st"> </span><span class="dv">100</span>,</span>
+<span id="cb1-33"><a href="#cb1-33"></a>                                             <span class="st">'initial-number-wolves'</span> =<span class="st"> </span><span class="dv">50</span>,</span>
+<span id="cb1-34"><a href="#cb1-34"></a>                                             <span class="st">"grass-regrowth-time"</span> =<span class="st"> </span><span class="dv">30</span>,</span>
+<span id="cb1-35"><a href="#cb1-35"></a>                                             <span class="st">"sheep-gain-from-food"</span> =<span class="st"> </span><span class="dv">4</span>,</span>
+<span id="cb1-36"><a href="#cb1-36"></a>                                             <span class="st">"wolf-gain-from-food"</span> =<span class="st"> </span><span class="dv">20</span>,</span>
+<span id="cb1-37"><a href="#cb1-37"></a>                                             <span class="st">"sheep-reproduce"</span> =<span class="st"> </span><span class="dv">4</span>,</span>
+<span id="cb1-38"><a href="#cb1-38"></a>                                             <span class="st">"wolf-reproduce"</span> =<span class="st"> </span><span class="dv">5</span>,</span>
+<span id="cb1-39"><a href="#cb1-39"></a>                                             <span class="st">"show-energy?"</span> =<span class="st"> "false"</span>)</span>
+<span id="cb1-40"><a href="#cb1-40"></a>                            )</span>
+<span id="cb1-41"><a href="#cb1-41"></a></span>
+<span id="cb1-42"><a href="#cb1-42"></a><span class="co"># Attach simdesign simple using only constants</span></span>
+<span id="cb1-43"><a href="#cb1-43"></a>nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="dt">nl=</span>nl,</span>
+<span id="cb1-44"><a href="#cb1-44"></a>                                 <span class="dt">nseeds=</span><span class="dv">1</span>)</span>
+<span id="cb1-45"><a href="#cb1-45"></a></span>
+<span id="cb1-46"><a href="#cb1-46"></a><span class="co"># Run simulations and store output in results</span></span>
+<span id="cb1-47"><a href="#cb1-47"></a>results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="dt">nl =</span> nl)</span></code></pre></div>
 <p>This experiment will run for 100 ticks (runtime) and collects all metrics, metrics.turtles and metrics.patches on each tick (evalticks). Thus, executing <code><a href="../../reference/run_nl_all.html">run_nl_all()</a></code> will report a tibble containing all metrics, metrics.turtles and metrics.patches. However, because the spatial metrics contain more than one value, these datasets are stored as lists inside the output tibble. These lists already contain all measured agent metrics and can for example be used to analyze distributions of these variables for specific agent groups.</p>
 <div id="postprocessing-example-1-unnest_simoutput" class="section level4">
 <h4 class="hasAnchor">
 <a href="#postprocessing-example-1-unnest_simoutput" class="anchor"></a>Postprocessing example 1: <code>unnest_simoutput()</code>
 </h4>
 <p>We use the <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> function to create a large tibble format which we can use for plotting. In order to use this function, the simulation output need to be attached to the nl object first (otherwise a warning will appear). The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="../../reference/setsim.html">setsim(nl, "simoutput")</a></code>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Attach results to nl object:</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results</a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="co"># Report spatial data:</span></a>
-<a class="sourceLine" id="cb2-5" title="5">results_unnest &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(nl)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Attach results to nl object:</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Report spatial data:</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>results_unnest &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(nl)</span></code></pre></div>
 <p>The spatial tibble output from <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> can for example be used to plot maps for different ticks of the model simulation. Here is an example to create a facet plot using spatial simulation data of every 10th simulation tick:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="co"># Split tibble into turtles and patches tibbles and select each 10th step:</span></a>
-<a class="sourceLine" id="cb3-3" title="3">results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">10</span>,<span class="dv">80</span>,<span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb3-6" title="6">results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"patches"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb3-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">10</span>,<span class="dv">80</span>,<span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb3-9" title="9"></a>
-<a class="sourceLine" id="cb3-10" title="10"><span class="co"># Create facet plot:</span></a>
-<a class="sourceLine" id="cb3-11" title="11"><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>, <span class="dt">ncol=</span><span class="dv">4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-13" title="13"><span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-14" title="14"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">fill=</span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(pcolor))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-16" title="16"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-17" title="17"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-18" title="18"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-19" title="19"><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb3-20" title="20"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Output maps of each 10th simulation tick"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># Split tibble into turtles and patches tibbles and select each 10th step:</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"turtles"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">10</span>,<span class="dv">80</span>,<span class="dv">10</span>))</span>
+<span id="cb3-6"><a href="#cb3-6"></a>results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent<span class="op">==</span><span class="st">"patches"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span> <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">10</span>,<span class="dv">80</span>,<span class="dv">10</span>))</span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co"># Create facet plot:</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>, <span class="dt">ncol=</span><span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">fill=</span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(pcolor))) <span class="op">+</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Output maps of each 10th simulation tick"</span>)</span></code></pre></div>
 <p><img src="wolfsheep_world.png" align="center" width="100%"></p>
 <p>Using the gganimate package(<a href="https://github.com/thomasp85/gganimate" class="uri">https://github.com/thomasp85/gganimate</a>), it is even possible to generate animated plots from this spatial data tibble. Here is an example for a plot that has been generated by running the above experiment and postprocessing the data with <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"></a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="co"># Split tibble into turtles and patches tibbles:</span></a>
-<a class="sourceLine" id="cb4-3" title="3">results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent <span class="op">==</span><span class="st"> "turtles"</span>)</a>
-<a class="sourceLine" id="cb4-5" title="5">results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent <span class="op">==</span><span class="st"> "patches"</span>)</a>
-<a class="sourceLine" id="cb4-7" title="7"></a>
-<a class="sourceLine" id="cb4-8" title="8"><span class="co"># Create an animated plot, using the step column as animation variable</span></a>
-<a class="sourceLine" id="cb4-9" title="9">p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">fill=</span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(pcolor))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-11" title="11"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">group=</span>who, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-12" title="12"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-13" title="13"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-14" title="14"><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-15" title="15"><span class="st">  </span><span class="kw">transition_time</span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-16" title="16"><span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-17" title="17"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">'Step: {frame_time}'</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-18" title="18"><span class="st">  </span><span class="kw">theme_void</span>()</a>
-<a class="sourceLine" id="cb4-19" title="19"></a>
-<a class="sourceLine" id="cb4-20" title="20"><span class="co"># Animate the plot and use 1 frame for each step of the model simulations</span></a>
-<a class="sourceLine" id="cb4-21" title="21">gganimate<span class="op">::</span><span class="kw">animate</span>(p1, <span class="dt">nframes =</span> <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(results_unnest_patches<span class="op">$</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>)), <span class="dt">width=</span><span class="dv">400</span>, <span class="dt">height=</span><span class="dv">400</span>, <span class="dt">fps=</span><span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb4-22" title="22"><span class="kw">anim_save</span>(<span class="st">"wolfsheep_world.gif"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># Split tibble into turtles and patches tibbles:</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>results_unnest_turtles &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent <span class="op">==</span><span class="st"> "turtles"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>results_unnest_patches &lt;-<span class="st"> </span>results_unnest <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(agent <span class="op">==</span><span class="st"> "patches"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co"># Create an animated plot, using the step column as animation variable</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data=</span>results_unnest_patches, <span class="kw">aes</span>(<span class="dt">x=</span>pxcor, <span class="dt">y=</span>pycor, <span class="dt">fill=</span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(pcolor))) <span class="op">+</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data=</span>results_unnest_turtles, <span class="kw">aes</span>(<span class="dt">x =</span> pxcor, <span class="dt">y =</span> pycor, <span class="dt">group=</span>who, <span class="dt">color =</span> breed), <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span>, <span class="st">"55"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>)) <span class="op">+</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">breaks=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span>, <span class="st">"wolves"</span>), <span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>)) <span class="op">+</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill=</span><span class="kw">guide_legend</span>(<span class="dt">title=</span><span class="st">"LandCover"</span>)) <span class="op">+</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="st">  </span><span class="kw">transition_time</span>(<span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>) <span class="op">+</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">coord_equal</span>() <span class="op">+</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">'Step: {frame_time}'</span>) <span class="op">+</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="st">  </span><span class="kw">theme_void</span>()</span>
+<span id="cb4-19"><a href="#cb4-19"></a></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="co"># Animate the plot and use 1 frame for each step of the model simulations</span></span>
+<span id="cb4-21"><a href="#cb4-21"></a>gganimate<span class="op">::</span><span class="kw">animate</span>(p1, <span class="dt">nframes =</span> <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(results_unnest_patches<span class="op">$</span><span class="st">`</span><span class="dt">[step]</span><span class="st">`</span>)), <span class="dt">width=</span><span class="dv">400</span>, <span class="dt">height=</span><span class="dv">400</span>, <span class="dt">fps=</span><span class="dv">4</span>)</span>
+<span id="cb4-22"><a href="#cb4-22"></a><span class="kw">anim_save</span>(<span class="st">"wolfsheep_world.gif"</span>)</span></code></pre></div>
 <center>
 <img src="wolfsheep_world.gif" align="center" width="50%">
 </center>
@@ -310,16 +310,16 @@
 <a href="#postprocessing-example-2-nl_to_raster-and-nl_to_points" class="anchor"></a>Postprocessing example 2: <code>nl_to_raster()</code> and <code>nl_to_points()</code>
 </h4>
 <p>A second option to postprocess spatial data is to convert patches data to raster objects and turtles data to spatial point objects. This can be handy if further spatial analyses are carried out, such as calculating landscape metrics (e.g. with R-package <a href="https://github.com/r-spatialecology/landscapemetrics">landscapemetrics</a>). In this example, we use the nl object with attached simulation output of the previous example to generate raster and spatial point objects.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co">## Create raster and point objects from patches and turtles data:</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(raster)</a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</a>
-<a class="sourceLine" id="cb5-4" title="4">nlraster &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_raster.html">nl_to_raster</a></span>(nl)</a>
-<a class="sourceLine" id="cb5-5" title="5">nlpoints &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_points.html">nl_to_points</a></span>(nl, <span class="dt">coords =</span> <span class="st">"px"</span>)</a>
-<a class="sourceLine" id="cb5-6" title="6"></a>
-<a class="sourceLine" id="cb5-7" title="7"><span class="co">## Plot raster and turtles of tick n:</span></a>
-<a class="sourceLine" id="cb5-8" title="8">n &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb5-9" title="9"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(nlraster<span class="op">$</span>spatial.raster[[n]], <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>))</a>
-<a class="sourceLine" id="cb5-10" title="10"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(nlpoints<span class="op">$</span>spatial.turtles[[n]][<span class="st">"breed"</span>], <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">## Create raster and point objects from patches and turtles data:</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(raster)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(sf)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>nlraster &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_raster.html">nl_to_raster</a></span>(nl)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>nlpoints &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_points.html">nl_to_points</a></span>(nl, <span class="dt">coords =</span> <span class="st">"px"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">## Plot raster and turtles of tick n:</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>n &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(nlraster<span class="op">$</span>spatial.raster[[n]], <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"35"</span> =<span class="st"> "#D9AF6B"</span>, <span class="st">"55"</span> =<span class="st"> "#68855C"</span>))</span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(nlpoints<span class="op">$</span>spatial.turtles[[n]][<span class="st">"breed"</span>], <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"sheep"</span> =<span class="st"> "beige"</span>, <span class="st">"wolves"</span> =<span class="st"> "black"</span>))</span></code></pre></div>
 </div>
 </div>
 <div id="application-example-2-giant-component" class="section level2">
@@ -328,64 +328,64 @@
 <p>We use the Giant Component model from the NetLogo models library to capture metrics of turtles and links. The <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code> function generates igraph objects from measured turtles and links data. It produces an igraph object for each row of the simoutput results tibble. Thus, it reports one igraph network for each combination of random-seed, siminputrow and step.</p>
 <p>In order to generate igraph objects some metrics are mandatory: The metrics.turtles slot of the experiment must contain “who” numbers (see example experiment). Additional turtle metrics will be stored as properties of the igraph vertices. The metrics.links slot of the experiment must contain “who” numbers of link end1 and end2 (see example experiment). Additional link metrics will be stored as properties of the igraph edges.</p>
 <p>For our application example, we are mainly interested in the final network structure. We want to measure who numbers and color of turtles, and who numbers of end1 and end2 of links on the final tick. We define our experiment accordingly and run the simulations:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(igraph)</a>
-<a class="sourceLine" id="cb6-4" title="4"></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></a>
-<a class="sourceLine" id="cb6-6" title="6">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.4"</span>)</a>
-<a class="sourceLine" id="cb6-7" title="7">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)</a>
-<a class="sourceLine" id="cb6-8" title="8">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)</a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></a>
-<a class="sourceLine" id="cb6-10" title="10">netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.4"</span>)</a>
-<a class="sourceLine" id="cb6-11" title="11">modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)</a>
-<a class="sourceLine" id="cb6-12" title="12">outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</a>
-<a class="sourceLine" id="cb6-13" title="13"></a>
-<a class="sourceLine" id="cb6-14" title="14">nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,</a>
-<a class="sourceLine" id="cb6-15" title="15">         <span class="dt">nlpath =</span> netlogopath,</a>
-<a class="sourceLine" id="cb6-16" title="16">         <span class="dt">modelpath =</span> modelpath,</a>
-<a class="sourceLine" id="cb6-17" title="17">         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</a>
-<a class="sourceLine" id="cb6-18" title="18"></a>
-<a class="sourceLine" id="cb6-19" title="19">nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"networks"</span>,</a>
-<a class="sourceLine" id="cb6-20" title="20">                            <span class="dt">outpath=</span>outpath,</a>
-<a class="sourceLine" id="cb6-21" title="21">                            <span class="dt">repetition=</span><span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb6-22" title="22">                            <span class="dt">tickmetrics=</span><span class="st">"false"</span>,</a>
-<a class="sourceLine" id="cb6-23" title="23">                            <span class="dt">idsetup=</span><span class="st">"setup"</span>,</a>
-<a class="sourceLine" id="cb6-24" title="24">                            <span class="dt">idgo=</span><span class="st">"go"</span>,</a>
-<a class="sourceLine" id="cb6-25" title="25">                            <span class="dt">runtime=</span><span class="dv">50</span>,</a>
-<a class="sourceLine" id="cb6-26" title="26">                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"color"</span>)),</a>
-<a class="sourceLine" id="cb6-27" title="27">                            <span class="dt">metrics.links =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"links"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"[who] of end1"</span>, <span class="st">"[who] of end2"</span>)),</a>
-<a class="sourceLine" id="cb6-28" title="28">                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"num-nodes"</span> =<span class="st"> </span><span class="dv">80</span>,</a>
-<a class="sourceLine" id="cb6-29" title="29">                                             <span class="st">"layout?"</span> =<span class="st"> "true"</span>))</a>
-<a class="sourceLine" id="cb6-30" title="30"></a>
-<a class="sourceLine" id="cb6-31" title="31">nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(nl, <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb6-32" title="32">results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(nl)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(igraph)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.4"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8"></a>outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>netlogopath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.4"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11"></a>modelpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(netlogopath, <span class="st">"app/models/Sample Models/Networks/Giant Component.nlogo"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12"></a>outpath &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a>nl &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl.html">nl</a></span>(<span class="dt">nlversion =</span> <span class="st">"6.0.4"</span>,</span>
+<span id="cb6-15"><a href="#cb6-15"></a>         <span class="dt">nlpath =</span> netlogopath,</span>
+<span id="cb6-16"><a href="#cb6-16"></a>         <span class="dt">modelpath =</span> modelpath,</span>
+<span id="cb6-17"><a href="#cb6-17"></a>         <span class="dt">jvmmem =</span> <span class="dv">1024</span>)</span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a>nl<span class="op">@</span>experiment &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/experiment.html">experiment</a></span>(<span class="dt">expname=</span><span class="st">"networks"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20"></a>                            <span class="dt">outpath=</span>outpath,</span>
+<span id="cb6-21"><a href="#cb6-21"></a>                            <span class="dt">repetition=</span><span class="dv">1</span>,</span>
+<span id="cb6-22"><a href="#cb6-22"></a>                            <span class="dt">tickmetrics=</span><span class="st">"false"</span>,</span>
+<span id="cb6-23"><a href="#cb6-23"></a>                            <span class="dt">idsetup=</span><span class="st">"setup"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24"></a>                            <span class="dt">idgo=</span><span class="st">"go"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25"></a>                            <span class="dt">runtime=</span><span class="dv">50</span>,</span>
+<span id="cb6-26"><a href="#cb6-26"></a>                            <span class="dt">metrics.turtles =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"color"</span>)),</span>
+<span id="cb6-27"><a href="#cb6-27"></a>                            <span class="dt">metrics.links =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"links"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"[who] of end1"</span>, <span class="st">"[who] of end2"</span>)),</span>
+<span id="cb6-28"><a href="#cb6-28"></a>                            <span class="dt">constants =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"num-nodes"</span> =<span class="st"> </span><span class="dv">80</span>,</span>
+<span id="cb6-29"><a href="#cb6-29"></a>                                             <span class="st">"layout?"</span> =<span class="st"> "true"</span>))</span>
+<span id="cb6-30"><a href="#cb6-30"></a></span>
+<span id="cb6-31"><a href="#cb6-31"></a>nl<span class="op">@</span>simdesign &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(nl, <span class="dv">1</span>)</span>
+<span id="cb6-32"><a href="#cb6-32"></a>results &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(nl)</span></code></pre></div>
 <p>In order to execute the <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code> function, the output results need to be attached to the nl object. Afterwards we can create the igraph object with <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># Attach results to nl object:</span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results</a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co"># Create igraph:</span></a>
-<a class="sourceLine" id="cb7-4" title="4">nl.graph &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_graph.html">nl_to_graph</a></span>(nl)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Attach results to nl object:</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw"><a href="../../reference/setsim.html">setsim</a></span>(nl, <span class="st">"simoutput"</span>) &lt;-<span class="st"> </span>results</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co"># Create igraph:</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>nl.graph &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/nl_to_graph.html">nl_to_graph</a></span>(nl)</span></code></pre></div>
 <p>The igraph objects are attached to the output results tibble in the newly generated column “spatial.links”. In our case, we only have one row of results and thus only one igraph object. We can now extract this object and do some plotting, using the igraph plotting function:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co">## Extract graph of tick 1:</span></a>
-<a class="sourceLine" id="cb8-2" title="2">nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co">## Set vertex colors by measured color variable:</span></a>
-<a class="sourceLine" id="cb8-4" title="4">vcols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"7"</span> =<span class="st"> "grey"</span>, <span class="st">"15"</span> =<span class="st"> "red"</span>)</a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>vcols[<span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color)]</a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">## Set edge colors by measured link breed:</span></a>
-<a class="sourceLine" id="cb8-7" title="7">ecols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"links"</span> =<span class="st"> "black"</span>)</a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="kw">E</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>ecols[<span class="kw">E</span>(nl.graph.i)<span class="op">$</span>breed]</a>
-<a class="sourceLine" id="cb8-9" title="9"></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="co">## Plot:</span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="kw">plot.igraph</span>(nl.graph.i, <span class="dt">vertex.size=</span><span class="dv">8</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">edge.arrow.size=</span><span class="fl">0.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">## Extract graph of tick 1:</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">## Set vertex colors by measured color variable:</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>vcols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"7"</span> =<span class="st"> "grey"</span>, <span class="st">"15"</span> =<span class="st"> "red"</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>vcols[<span class="kw"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="kw">V</span>(nl.graph.i)<span class="op">$</span>color)]</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">## Set edge colors by measured link breed:</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>ecols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"links"</span> =<span class="st"> "black"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="kw">E</span>(nl.graph.i)<span class="op">$</span>color &lt;-<span class="st"> </span>ecols[<span class="kw">E</span>(nl.graph.i)<span class="op">$</span>breed]</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">## Plot:</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="kw">plot.igraph</span>(nl.graph.i, <span class="dt">vertex.size=</span><span class="dv">8</span>, <span class="dt">vertex.label=</span><span class="ot">NA</span>, <span class="dt">edge.arrow.size=</span><span class="fl">0.2</span>)</span></code></pre></div>
 <p>We can also calculate network metrics using the igraph package:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co">## Extract graph of tick 1:</span></a>
-<a class="sourceLine" id="cb9-2" title="2">nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]</a>
-<a class="sourceLine" id="cb9-3" title="3"></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">## Vertex and edge betweenness centrality</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="kw">betweenness</span>(nl.graph.i)</a>
-<a class="sourceLine" id="cb9-6" title="6"></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="co">## Clusters</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="kw">clusters</span>(nl.graph.i)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">## Extract graph of tick 1:</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>nl.graph.i &lt;-<span class="st"> </span>nl.graph<span class="op">$</span>spatial.links[[<span class="dv">1</span>]]</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">## Vertex and edge betweenness centrality</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">betweenness</span>(nl.graph.i)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">## Clusters</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="kw">clusters</span>(nl.graph.i)</span></code></pre></div>
 </div>
   </div>
 

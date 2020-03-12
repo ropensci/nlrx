@@ -5,7 +5,8 @@
 \title{Execute one NetLogo simulation from a nl object}
 \usage{
 run_nl_one(nl, seed, siminputrow, cleanup.csv = TRUE,
-  cleanup.xml = TRUE, cleanup.bat = TRUE, silent = TRUE)
+  cleanup.xml = TRUE, cleanup.bat = TRUE, silent = TRUE,
+  writeRDS = FALSE)
 }
 \arguments{
 \item{nl}{nl object}
@@ -21,6 +22,8 @@ run_nl_one(nl, seed, siminputrow, cleanup.csv = TRUE,
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
 
 \item{silent}{TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).}
+
+\item{writeRDS}{TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.}
 }
 \value{
 tibble with simulation output results

@@ -59,7 +59,18 @@ util_create_lhs <- function(input, samples, precision) {
 #' @rdname util_generate_seeds
 #' @keywords internal
 util_generate_seeds <- function(nseeds) {
-  seeds <- ceiling(stats::runif(nseeds, 0, 10000))
+
+  ## possible NetLogo seed interval (only integers)
+  nl.seed.min <- -2147483648
+  nl.seed.max <- 2147483647
+  ## Generate seeds
+  seeds <- ceiling(stats::runif(nseeds, min=nl.seed.min, max=nl.seed.max))
+
+  ## Check for duplicates and print warning:
+  if(length(unique(seeds)) < length(seeds))
+  {
+    warning("The generated seed vector (nl@simdesign@simseeds) contains duplicates. This may be desired (true random numbers) or not and it depends on the specific use case if this may be a problem for your experiment. You can either repeat attaching a simdesign to generate a new vector of random seeds or replace the simseeds vector with your own vector of random seeds!")
+  }
   return(seeds)
 }
 
@@ -174,3 +185,4 @@ report_model_parameters <- function(nl) {
 
   return(modelparam)
 }
+
