@@ -8,35 +8,32 @@ create_sample_data <- function() {
   modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"
   outpath <- "C:/out"
 
-  # Create nl
+  # Create testdata nl_simple
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_simple(nl = nl,
                                    nseeds = 1)
-  # Store data
   nl_simple <- run_sample_data(nl)
-  devtools::use_data(nl_simple, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_simple, compress = "gzip", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_ff
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_ff(nl = nl,
                                nseeds = 1)
-  # Store data
   nl_ff <- run_sample_data(nl)
-  devtools::use_data(nl_ff, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_ff, compress = "gzip", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_lhs
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=100,
                                 nseeds=1,
                                 precision=3)
-  # Store data
   nl_lhs <- run_sample_data(nl)
-  devtools::use_data(nl_lhs, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_lhs, compress = "gzip", overwrite = TRUE)
 
-  # Create nl
+  # Create testdata nl_sobol
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_sobol(nl=nl,
                                   samples=1000,
@@ -45,12 +42,11 @@ create_sample_data <- function() {
                                   sobolconf=0.95,
                                   nseeds=1,
                                   precision=3)
-  # Store data
   nl_sobol <- run_sample_data(nl)
-  devtools::use_data(nl_sobol, compress = "xz", overwrite = TRUE)
+  usethis::use_data(nl_sobol, compress = "xz", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_sobol2007
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_sobol2007(nl=nl,
                                       samples=1000,
@@ -58,12 +54,11 @@ create_sample_data <- function() {
                                       sobolconf=0.95,
                                       nseeds=1,
                                       precision=3)
-  # Store data
   nl_sobol2007 <- run_sample_data(nl)
-  devtools::use_data(nl_sobol2007, compress = "xz", overwrite = TRUE)
+  usethis::use_data(nl_sobol2007, compress = "xz", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_soboljansen
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_soboljansen(nl=nl,
                                         samples=1000,
@@ -71,12 +66,11 @@ create_sample_data <- function() {
                                         sobolconf=0.95,
                                         nseeds=1,
                                         precision=3)
-  # Store data
   nl_soboljansen <- run_sample_data(nl)
-  devtools::use_data(nl_soboljansen, compress = "xz", overwrite = TRUE)
+  usethis::use_data(nl_soboljansen, compress = "xz", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_morris
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_morris(nl=nl,
                                    morristype="oat",
@@ -84,36 +78,39 @@ create_sample_data <- function() {
                                    morrisr=26,
                                    morrisgridjump=2,
                                    nseeds=1)
-  # Store data
   nl_morris <- run_sample_data(nl)
-  devtools::use_data(nl_morris, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_morris, compress = "gzip", overwrite = TRUE)
 
 
-  # Create nl
+  # Create testdata nl_eFast
   nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_eFast(nl=nl,
                                   samples=100,
                                   nseeds=1)
-  # Store data
   nl_eFast <- run_sample_data(nl)
-  devtools::use_data(nl_eFast, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_eFast, compress = "gzip", overwrite = TRUE)
 
-  ## Spatial testdata:
+  ## Create testdata nl_spatial
   nl <- setup_sample_data_nl_spatial(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_simple(nl, nseeds=1)
-
-  # Store data:
   nl_spatial <- run_sample_data(nl)
-  devtools::use_data(nl_spatial, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_spatial, compress = "gzip", overwrite = TRUE)
 
-  ## Nl distinct:
+  ## Create testdata nl_distinct
   nl <- setup_sample_data_nl_distinct(nlpath, modelpath, outpath)
   nl@simdesign <- simdesign_distinct(nl, nseeds=1)
-
-  # Store data:
   nl_distinct <- run_sample_data(nl)
-  devtools::use_data(nl_distinct, compress = "gzip", overwrite = TRUE)
+  usethis::use_data(nl_distinct, compress = "gzip", overwrite = TRUE)
 
+  ## Create testdata nl_gensa
+  nl <- setup_sample_data_nl(nlpath, modelpath, outpath)
+  nl@simdesign <- simdesign_GenSA(nl=nl,
+                                  par=NULL,
+                                  evalcrit=1,
+                                  control=list(max.time = 10),
+                                  nseeds=1)
+  nl_gensa <- run_sample_data_dyn(nl)
+  usethis::use_data(nl_gensa, compress = "gzip", overwrite = TRUE)
 
 }
 
@@ -223,6 +220,16 @@ run_sample_data <- function (nl) {
   plan(multisession)
 
   results <- run_nl_all(nl = nl)
+
+  ## Attach output to nl
+  setsim(nl, "simoutput") <- results
+
+  return(nl)
+}
+
+run_sample_data_dyn <- function (nl) {
+
+  results <- run_nl_dyn(nl = nl, seed=getsim(nl, "simseeds"[1]))
 
   ## Attach output to nl
   setsim(nl, "simoutput") <- results

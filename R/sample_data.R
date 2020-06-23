@@ -130,3 +130,14 @@
 #' @format nl object with defined experiment, simdesign and model output
 "nl_spatial"
 # > [1] "nl_spatial"
+
+
+#' Wolf Sheep model sample data: gensa
+#'
+#' The dataset contains a complete nl object.
+#' The nl object has been used to setup and run a simulated annealing simulation design.
+#'
+#'
+#' @format nl object with defined experiment, simdesign and model output
+"nl_gensa"
+# > [1] "nl_gensa"

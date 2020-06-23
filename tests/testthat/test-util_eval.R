@@ -15,7 +15,7 @@ testthat::test_that("util_eval", {
 
 
   ## Now we check if we can run a simple simulation:
-  ## Step1: Create a nl obejct:
+  ## Step1: Create a nl object:
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
                          "Biology", "Wolf Sheep Predation.nlogo")
 
@@ -312,5 +312,20 @@ testthat::test_that("util_eval", {
                                 precision=3)
 
   testthat::expect_true(is.null(util_eval_simdesign(nl)))
+
+
+  ## Test eval_simoutput() with empty simoutput
+  nl <- nl()
+  testthat::expect_error(eval_simoutput(nl))
+
+  ## Test eval_simoutput() with results
+  nl <- nl_lhs
+  testthat::expect_equal(nrow(eval_simoutput(nl)), 0)
+
+  ## Test eval_simoutput() with results and removed data
+  nl <- nl_lhs
+  nl@simdesign@simoutput <- nl@simdesign@simoutput[-1,]
+  testthat::expect_equal(nrow(eval_simoutput(nl)), 1)
+
 
 })
