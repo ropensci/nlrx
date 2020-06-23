@@ -25,7 +25,8 @@ jdk:
 before_install:
   - sudo apt-get update
   - mkdir "/home/travis/netlogo"
-  - wget -qO- "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz --directory "/home/travis/netlogo"
+  - curl -s "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz -C "/home/travis/netlogo"
+  #- wget -qO- "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz --directory "/home/travis/netlogo"
 
 after_success:
   -  travis_wait 30 Rscript tests/testthat/codecov.R #Rscript -e 'covr::codecov(token = "3651cae6-2263-4130-a651-75eb7fc02149")'
