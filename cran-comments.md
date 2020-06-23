@@ -18,6 +18,7 @@ nlrx version 0.4.2
 * bugfix for sobol simulation design when sobolorder is higher than the available number of variables
 * analyze_nl now prints a warning if missing combinations were detected in the simulation output
 * updated testdata
+* user rights for temporary sh scripts are now set correctly
 
 
 ## Test environments

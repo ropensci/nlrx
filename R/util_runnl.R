@@ -566,6 +566,9 @@ util_read_write_batch <- function(nl) {
       system(paste0("sed -i -r 's!^JVM_OPTS=.*!",
                     jvmoptsline, "!'", " \"",
                     batchpath_temp, "\""))
+
+      ## Make sh executable on linux:
+      system(paste0("chmod +x ", batchpath_temp), wait = TRUE)
     }
   }
 
