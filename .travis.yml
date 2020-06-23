@@ -25,7 +25,7 @@ jdk:
 before_install:
   - sudo apt-get update
   - mkdir "/home/travis/netlogo"
-  - curl -s "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz -C "/home/travis/netlogo"
+  - curl -s -k "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz -C "/home/travis/netlogo"
   #- wget -qO- "https://ccl.northwestern.edu/netlogo/6.0.3/NetLogo-6.0.3-64.tgz" | tar xvz --directory "/home/travis/netlogo"
 
 after_success:
