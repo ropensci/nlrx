@@ -313,6 +313,12 @@ simdesign_sobol <- function(nl,
   util_eval_experiment(nl)
   util_eval_variables(nl)
   util_eval_variables_sa(nl)
+
+  ## Additionally check that sobolorder is <= number of variables
+  if(sobolorder > length(getexp(nl, "variables"))) {
+    stop("Sobolorder must be lower or equal than the number of defined variables in your experiment!")
+  }
+
   message("Creating sobol simulation design")
 
   lhs_1 <- util_create_lhs(input = getexp(nl, "variables"),
