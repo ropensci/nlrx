@@ -12,20 +12,23 @@
 #'
 #' @examples
 #' \dontrun{
-#'
-#' # Check output:
+#' # Check eval_simoutput for testdata nl_lhs:
 #' nl <- nl_lhs
 #' eval_simoutput(nl)
 #'
-#' # Check output and rerun missing combinations:
+#' # Now remove one row of simoutput and check output:
 #' nl <- nl_lhs
+#' nl@@simdesign@@simoutput <- nl@@simdesign@@simoutput[-1,]
 #' check <- eval_simoutput(nl)
+#' check
 #'
+#' # Rerun missing combinations within check tibble:
 #' rerun <- purrr::map_dfr(seq(nrow(check)), function(x) {
 #'   res <- run_nl_one(nl, siminputrow=check$siminputrow[x], seed=check$seed[x])
-#'   return(res)
-#' }) %>%
-#' dplyr::bind_rows(., nl@@simdesign@@siminput)
+#'     return(res)
+#'     }) %>%
+#'       dplyr::bind_rows(., nl@@simdesign@@simoutput)
+#'
 #'
 #' }
 #'
@@ -36,7 +39,7 @@ eval_simoutput <- function(nl) {
 
   ## Check if siminput and simoutput are present
   if (purrr::is_empty(getsim(nl, "siminput")) | purrr::is_empty(getsim(nl, "simoutput"))) {
-    stop("eval_simoutput can be executed only for nl objects with attached simdesign and simoutput (simulation results)!")
+    stop("eval_simoutput can be executed only for nl objects with attached simdesign containing a siminput tibble (i.e. not the case for optimization simdesigns) and attached simoutput (simulation results)!")
   }
 
   ## Create a tibble with missing combinations:
@@ -52,8 +55,11 @@ eval_simoutput <- function(nl) {
     dplyr::filter(!paste0(seed, "_", siminputrow) %in% paste0(computed.combinations$`random-seed`, "_", computed.combinations$siminputrow))
 
   # Print summary:
-  print(paste0(nrow(missing.combinations), " missing combinations were detected. Details see reported tibble."))
-
+  if(nrow(missing.combinations) > 0) {
+    print(paste0(nrow(missing.combinations), " missing siminputrow/random-seed combinations were detected. Check output of eval_simoutput for more details."))
+  } else {
+    print("No missing combinations detected!")
+  }
 
   return(missing.combinations)
 

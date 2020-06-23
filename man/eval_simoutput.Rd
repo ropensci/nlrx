@@ -22,20 +22,23 @@ Such a tibble can then be used directly to rerun missing combinations convenient
 }
 \examples{
 \dontrun{
-
-# Check output:
+# Check eval_simoutput for testdata nl_lhs:
 nl <- nl_lhs
 eval_simoutput(nl)
 
-# Check output and rerun missing combinations:
+# Now remove one row of simoutput and check output:
 nl <- nl_lhs
+nl@simdesign@simoutput <- nl@simdesign@simoutput[-1,]
 check <- eval_simoutput(nl)
+check
 
+# Rerun missing combinations within check tibble:
 rerun <- purrr::map_dfr(seq(nrow(check)), function(x) {
   res <- run_nl_one(nl, siminputrow=check$siminputrow[x], seed=check$seed[x])
-  return(res)
-}) \%>\%
-dplyr::bind_rows(., nl@simdesign@siminput)
+    return(res)
+    }) \%>\%
+      dplyr::bind_rows(., nl@simdesign@simoutput)
+
 
 }
 

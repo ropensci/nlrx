@@ -15,7 +15,7 @@
 #' zipped folder. This enables other person to run the same experiment as you.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'
 #' # Load nl object from testdata:
 #' nl <- nl_lhs

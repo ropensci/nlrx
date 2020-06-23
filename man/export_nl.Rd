@@ -25,7 +25,7 @@ as a zip file. Furthermore, \code{export_nl} takes your nl object and saves it i
 zipped folder. This enables other person to run the same experiment as you.
 }
 \examples{
-\donttest{
+\dontrun{
 
 # Load nl object from testdata:
 nl <- nl_lhs

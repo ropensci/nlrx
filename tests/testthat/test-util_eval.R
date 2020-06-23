@@ -327,5 +327,9 @@ testthat::test_that("util_eval", {
   nl@simdesign@simoutput <- nl@simdesign@simoutput[-1,]
   testthat::expect_equal(nrow(eval_simoutput(nl)), 1)
 
+  ## Test eval_simoutput() with gensa data
+  nl <- nl_gensa
+  testthat::expect_error(eval_simoutput(nl))
+
 
 })

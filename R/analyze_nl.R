@@ -205,6 +205,8 @@ analyze_simple <- function(nl, metrics, funs) {
 #' @keywords internal
 analyze_ff <- function(nl, metrics, funs) {
 
+  eval_simoutput(nl)
+
   ## For ff we compute mean and sd values of each run/tick combination:
   ffagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars(
@@ -236,6 +238,8 @@ analyze_ff <- function(nl, metrics, funs) {
 #' @keywords internal
 analyze_lhs <- function(nl, metrics, funs) {
 
+  eval_simoutput(nl)
+
   ## For lhs we compute mean and sd values of each run/tick combination:
   lhsagg <- getsim(nl, "simoutput") %>%
     dplyr::group_by_at(dplyr::vars(
@@ -266,6 +270,9 @@ analyze_lhs <- function(nl, metrics, funs) {
 #' @rdname analyze_sobol
 #' @keywords internal
 analyze_sobol <- function(nl, metrics, funs) {
+
+  eval_simoutput(nl)
+
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
@@ -319,6 +326,8 @@ analyze_sobol <- function(nl, metrics, funs) {
 #' @rdname analyze_sobol2007
 #' @keywords internal
 analyze_sobol2007 <- function(nl, metrics, funs) {
+
+  eval_simoutput(nl)
 
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
@@ -382,6 +391,9 @@ analyze_sobol2007 <- function(nl, metrics, funs) {
 #' @rdname analyze_soboljansen
 #' @keywords internal
 analyze_soboljansen <- function(nl, metrics, funs) {
+
+  eval_simoutput(nl)
+
   sensindex <- NULL
   so <- getsim(nl, "simobject")[[1]]
 
@@ -445,6 +457,9 @@ analyze_soboljansen <- function(nl, metrics, funs) {
 #' @rdname analyze_morris
 #' @keywords internal
 analyze_morris <- function(nl, metrics, funs) {
+
+  eval_simoutput(nl)
+
   sensindex <- NULL
   na.discovered <- FALSE
   mo <- getsim(nl, "simobject")[[1]]
@@ -529,6 +544,9 @@ analyze_morris <- function(nl, metrics, funs) {
 #' @rdname analyze_eFast
 #' @keywords internal
 analyze_eFast <- function(nl, metrics, funs) {
+
+  eval_simoutput(nl)
+
   sensindex <- NULL
   f99 <- getsim(nl, "simobject")[[1]]
 

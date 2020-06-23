@@ -1,11 +1,17 @@
 
 ## nlrx 0.4.2
+
+#### functionality
+* added option to run_nl_one that allows to store results as rds files
+* added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
+
+#### bugfixes
 * hotfix for another dependency on external files in nldoc roxygen examples
 * small bugfix in analyze_morris: A warning is now thrown if NA are present in the simulation data
 * bugfix in random seed generator
-* added option to run_nl_one that allows to store results as rds files
 * bugfix for sobol simulation design when sobolorder is higher than the available number of variables
-* added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
+* analyze_nl now prints a warning if missing combinations were detected in the simulation output
+* updated testdata
 
 ## nlrx 0.4.1
 * fixed dependency on external file source in nldoc automated tests
