@@ -267,7 +267,7 @@ The function calculates eFast sensitivity indices from the output results using 
 <span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span><span class='kw'>=</span><span class='no'>mean</span>, <span class='kw'>sd</span><span class='kw'>=</span><span class='no'>sd</span>, <span class='kw'>min</span><span class='kw'>=</span><span class='no'>min</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='no'>max</span>)
 
 <span class='co'># Calculate sensitivity indices:</span>
-<span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'sensitivity':</span>
+<span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; [1] "No missing combinations detected!"</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'sensitivity':</span>
 #&gt; <span class='message'>  method    from </span>
 #&gt; <span class='message'>  print.src dplyr</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 18 x 8</span><span>
 #&gt;    original     bias `std. error` `min. c.i.` `max. c.i.` parameter metric  seed

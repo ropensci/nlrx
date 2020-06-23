@@ -257,11 +257,7 @@ simfun <- function(nl, siminputrow, rndseed, writeRDS=FALSE)
 {
   unixtools::set.tempdir("/hpath/to/temp/dir")
   library(nlrx)
-  res <- run_nl_one(nl = nl, siminputrow = siminputrow, seed = rndseed)
-  if (isTRUE(writeRDS))
-  {
-    saveRDS(res, file=file.path(nl@experiment@outpath, paste0("nlrx_sim_", siminputrow, "_seed_", rndseed, ".rds")))
-  }
+  res <- run_nl_one(nl = nl, siminputrow = siminputrow, seed = rndseed, writeRDS = TRUE)
   return(res)
 }
 

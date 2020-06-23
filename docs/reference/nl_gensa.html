@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • nlrx | NetLogo from R</title>
+<title>Wolf Sheep model sample data: gensa — nl_gensa • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,7 +42,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Wolf Sheep model sample data: gensa — nl_gensa" />
+<meta property="og:description" content="The dataset contains a complete nl object.
+The nl object has been used to setup and run a simulated annealing simulation design." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -63,7 +65,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -192,104 +194,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/ropensci/nlrx/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Wolf Sheep model sample data: gensa</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/sample_data.R'><code>R/sample_data.R</code></a></small>
+    <div class="hidden name"><code>nl_gensa.Rd</code></div>
     </div>
 
-    <div id="nlrx-042" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-042" class="anchor"></a>nlrx 0.4.2</h2>
-<div id="functionality" class="section level4">
-<h4 class="hasAnchor">
-<a href="#functionality" class="anchor"></a>functionality</h4>
-<ul>
-<li>added option to run_nl_one that allows to store results as rds files</li>
-<li>added eval_simoutput option to check for missing combinations of siminputrow and random-seeds</li>
-</ul>
-</div>
-<div id="bugfixes" class="section level4">
-<h4 class="hasAnchor">
-<a href="#bugfixes" class="anchor"></a>bugfixes</h4>
-<ul>
-<li>hotfix for another dependency on external files in nldoc roxygen examples</li>
-<li>small bugfix in analyze_morris: A warning is now thrown if NA are present in the simulation data</li>
-<li>bugfix in random seed generator</li>
-<li>bugfix for sobol simulation design when sobolorder is higher than the available number of variables</li>
-<li>analyze_nl now prints a warning if missing combinations were detected in the simulation output</li>
-<li>updated testdata</li>
-</ul>
-</div>
-</div>
-    <div id="nlrx-041" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-041" class="anchor"></a>nlrx 0.4.1</h2>
-<ul>
-<li>fixed dependency on external file source in nldoc automated tests</li>
-<li>these files are now included in the package</li>
-<li>added link to documentation website in description</li>
-</ul>
-</div>
-    <div id="nlrx-040" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-040" class="anchor"></a>nlrx 0.4.0</h2>
-<ul>
-<li>Added new simdesigns simdesign_ABCmcmc_Marjoram, simdesign_ABCmcmc_Marjoram_original and simdesign_ABCmcmc_Wegmann to perform approximate bayesian computation</li>
-<li>Added print function for nl objects</li>
-<li>Added dependencies: crayon, EasyABC</li>
-<li>Added pandoc to system requirements</li>
-<li>Added additional pandoc_available() check for nldoc function</li>
-<li>Added support to download_netLogo() for NetLogo version 6.1.1</li>
-<li>Added new vignette showing an example for approximate bayesian computation with nlrx</li>
-<li>Updated “Sensitivity Analyses with nlrx”" vignette</li>
-<li>Updated “Advanced Configuration” vignette</li>
-<li>Updated package tests</li>
-</ul>
-</div>
-    <div id="nlrx-030" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-030" class="anchor"></a>nlrx 0.3.0</h2>
-<ul>
-<li>Added support for self-defined evaluation functions to optimization functions simdesign_GenAlg and simdesign_GenSA.</li>
-<li>Added support to simdesign_simple() for models without any GUI parameters</li>
-<li>Added support to download_netLogo() for NetLogo version 6.1.0</li>
-<li>Added new vignette showing an example for Sensitivity Analysis with nlrx.</li>
-<li>Added new vignette showing an example for Optimization with nlrx.</li>
-<li>Updated “Advanced Configuration” vignette.</li>
-<li>Updated citation information of the package.</li>
-<li>Hotfix for unnest_simoutput(). In the previous package version, under some circumstances an error occured due to NA data.</li>
-<li>Corrected spelling errors in some vignettes and documentation files.</li>
-</ul>
-</div>
-    <div id="nlrx-020" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-020" class="anchor"></a>nlrx 0.2.0</h2>
-<ul>
-<li>nl_to_raster() hotfix</li>
-</ul>
-</div>
-    <div id="nlrx-010" class="section level2">
-<h2 class="hasAnchor">
-<a href="#nlrx-010" class="anchor"></a>nlrx 0.1.0</h2>
-<ul>
-<li>First release to CRAN.</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>The dataset contains a complete nl object.
+The nl object has been used to setup and run a simulated annealing simulation design.</p>
+    </div>
 
+    <pre class="usage"><span class='no'>nl_gensa</span></pre>
+
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>nl object with defined experiment, simdesign and model output</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#nlrx-042">0.4.2</a></li>
-        <li><a href="#nlrx-041">0.4.1</a></li>
-        <li><a href="#nlrx-040">0.4.0</a></li>
-        <li><a href="#nlrx-030">0.3.0</a></li>
-        <li><a href="#nlrx-020">0.2.0</a></li>
-        <li><a href="#nlrx-010">0.1.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#format">Format</a></li>
+    </ul>
 
+  </div>
 </div>
 
 

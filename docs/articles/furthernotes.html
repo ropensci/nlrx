@@ -157,7 +157,7 @@
       <h1>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-03-12</h4>
+            <h4 class="date">2020-06-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -416,38 +416,34 @@
 <span id="cb7-19"><a href="#cb7-19"></a>{</span>
 <span id="cb7-20"><a href="#cb7-20"></a>  unixtools<span class="op">::</span><span class="kw">set.tempdir</span>(<span class="st">"/hpath/to/temp/dir"</span>)</span>
 <span id="cb7-21"><a href="#cb7-21"></a>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nlrx)</span>
-<span id="cb7-22"><a href="#cb7-22"></a>  res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_one.html">run_nl_one</a></span>(<span class="dt">nl =</span> nl, <span class="dt">siminputrow =</span> siminputrow, <span class="dt">seed =</span> rndseed)</span>
-<span id="cb7-23"><a href="#cb7-23"></a>  <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/Logic.html">isTRUE</a></span>(writeRDS))</span>
-<span id="cb7-24"><a href="#cb7-24"></a>  {</span>
-<span id="cb7-25"><a href="#cb7-25"></a>    <span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(res, <span class="dt">file=</span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(nl<span class="op">@</span>experiment<span class="op">@</span>outpath, <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"nlrx_sim_"</span>, siminputrow, <span class="st">"_seed_"</span>, rndseed, <span class="st">".rds"</span>)))</span>
-<span id="cb7-26"><a href="#cb7-26"></a>  }</span>
-<span id="cb7-27"><a href="#cb7-27"></a>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(res)</span>
-<span id="cb7-28"><a href="#cb7-28"></a>}</span>
-<span id="cb7-29"><a href="#cb7-29"></a></span>
-<span id="cb7-30"><a href="#cb7-30"></a><span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span></span>
-<span id="cb7-31"><a href="#cb7-31"></a><span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span></span>
-<span id="cb7-32"><a href="#cb7-32"></a><span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span></span>
-<span id="cb7-33"><a href="#cb7-33"></a><span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span></span>
-<span id="cb7-34"><a href="#cb7-34"></a><span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span></span>
-<span id="cb7-35"><a href="#cb7-35"></a><span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span></span>
-<span id="cb7-36"><a href="#cb7-36"></a>results &lt;-<span class="st"> </span>clustermq<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/clustermq/man/Q.html">Q</a></span>(<span class="dt">fun =</span> simfun, </span>
-<span id="cb7-37"><a href="#cb7-37"></a>                        <span class="dt">siminputrow =</span> siminputrows,</span>
-<span id="cb7-38"><a href="#cb7-38"></a>                        <span class="dt">rndseed =</span> rndseeds,</span>
-<span id="cb7-39"><a href="#cb7-39"></a>                        <span class="dt">const =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">nl =</span> nl,</span>
-<span id="cb7-40"><a href="#cb7-40"></a>                                     <span class="dt">writeRDS =</span> <span class="ot">TRUE</span>),</span>
-<span id="cb7-41"><a href="#cb7-41"></a>                        <span class="dt">export =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(), </span>
-<span id="cb7-42"><a href="#cb7-42"></a>                        <span class="dt">seed =</span> <span class="dv">42</span>, </span>
-<span id="cb7-43"><a href="#cb7-43"></a>                        <span class="dt">n_jobs =</span> njobs, </span>
-<span id="cb7-44"><a href="#cb7-44"></a>                        <span class="dt">template =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job_name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></span>
-<span id="cb7-45"><a href="#cb7-45"></a>                                        <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></span>
-<span id="cb7-46"><a href="#cb7-46"></a>                                        <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></span>
-<span id="cb7-47"><a href="#cb7-47"></a>                                        <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></span>
-<span id="cb7-48"><a href="#cb7-48"></a>                                        <span class="dt">walltime =</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span></span>
-<span id="cb7-49"><a href="#cb7-49"></a>                                        <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>)) <span class="co"># define memory per cpu   </span></span>
-<span id="cb7-50"><a href="#cb7-50"></a></span>
-<span id="cb7-51"><a href="#cb7-51"></a><span class="co"># The Q function reports the individual results of each job as a list</span></span>
-<span id="cb7-52"><a href="#cb7-52"></a><span class="co"># Thus, we convert the list results to tibble format:</span></span>
-<span id="cb7-53"><a href="#cb7-53"></a>results &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(results)</span></code></pre></div>
+<span id="cb7-22"><a href="#cb7-22"></a>  res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_nl_one.html">run_nl_one</a></span>(<span class="dt">nl =</span> nl, <span class="dt">siminputrow =</span> siminputrow, <span class="dt">seed =</span> rndseed, <span class="dt">writeRDS =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb7-23"><a href="#cb7-23"></a>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(res)</span>
+<span id="cb7-24"><a href="#cb7-24"></a>}</span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a>results &lt;-<span class="st"> </span>clustermq<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/clustermq/man/Q.html">Q</a></span>(<span class="dt">fun =</span> simfun, </span>
+<span id="cb7-33"><a href="#cb7-33"></a>                        <span class="dt">siminputrow =</span> siminputrows,</span>
+<span id="cb7-34"><a href="#cb7-34"></a>                        <span class="dt">rndseed =</span> rndseeds,</span>
+<span id="cb7-35"><a href="#cb7-35"></a>                        <span class="dt">const =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">nl =</span> nl,</span>
+<span id="cb7-36"><a href="#cb7-36"></a>                                     <span class="dt">writeRDS =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb7-37"><a href="#cb7-37"></a>                        <span class="dt">export =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(), </span>
+<span id="cb7-38"><a href="#cb7-38"></a>                        <span class="dt">seed =</span> <span class="dv">42</span>, </span>
+<span id="cb7-39"><a href="#cb7-39"></a>                        <span class="dt">n_jobs =</span> njobs, </span>
+<span id="cb7-40"><a href="#cb7-40"></a>                        <span class="dt">template =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">job_name =</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></span>
+<span id="cb7-41"><a href="#cb7-41"></a>                                        <span class="dt">log.file =</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></span>
+<span id="cb7-42"><a href="#cb7-42"></a>                                        <span class="dt">queue =</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></span>
+<span id="cb7-43"><a href="#cb7-43"></a>                                        <span class="dt">service =</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></span>
+<span id="cb7-44"><a href="#cb7-44"></a>                                        <span class="dt">walltime =</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span></span>
+<span id="cb7-45"><a href="#cb7-45"></a>                                        <span class="dt">mem_cpu =</span> <span class="st">"4000"</span>)) <span class="co"># define memory per cpu   </span></span>
+<span id="cb7-46"><a href="#cb7-46"></a></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="co"># The Q function reports the individual results of each job as a list</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a><span class="co"># Thus, we convert the list results to tibble format:</span></span>
+<span id="cb7-49"><a href="#cb7-49"></a>results &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span>(results)</span></code></pre></div>
 </div>
 </div>
 </div>
