@@ -36,18 +36,11 @@ testthat::test_that("Get nl spatial", {
                               runtime = 2,
                               evalticks = c(1,2),
                               metrics = c("count sheep","count wolves"),
-                              metrics.turtles = list("turtles" = c("who", "breed",
-                                                  "pxcor", "pycor",
-                                                  "xcor", "ycor")),
+                              metrics.turtles = list("turtles" = c("who", "breed", "pxcor", "pycor", "xcor", "ycor")),
                               metrics.patches = c("pxcor", "pycor", "pcolor"),
-                              variables = list('initial-number-sheep' =
-                                                 list(min=50, max=150,
-                                                      step=10, qfun="qunif"),
-                                               'initial-number-wolves' =
-                                                 list(min=50, max=150,
-                                                      step=10, qfun="qunif")),
-                              constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                              variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
+                                               'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
+                              constants = list("model-version" = "\"sheep-wolves-grass\"",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
