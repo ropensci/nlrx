@@ -14,7 +14,7 @@
 #' This network can be used to plot the model procedure network and identify model components.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'
 #' # List model files (.nls subfiles are also supported)
 #' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
