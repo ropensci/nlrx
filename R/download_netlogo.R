@@ -20,7 +20,7 @@
 #'
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' dlpath <- tempdir()  # adjust path to your needs
 #' download_netlogo(dlpath, "6.0.3")
 #' }
