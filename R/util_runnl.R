@@ -342,7 +342,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 ## Clean patch metrics
 .util_clean_metrics_patches <- function(NLtable, nl) {
 
-  patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]
+  patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]  %>%
+    dplyr::mutate_all(function(x) gsub('[\"]', '',x))
+
   patches_string <- stringr::str_split(patches_string$metrics.patches, " ")
   patches_string <- purrr::map(patches_string, function(x) {
     patches_owns <- tibble::as_tibble(x = x)
@@ -363,7 +365,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
 .util_clean_metrics_turtles <- function(NLtable, nl, col.name, metrics) {
 
-  turtles_string <- NLtable[, grepl(col.name, names(NLtable))]
+  turtles_string <- NLtable[, grepl(col.name, names(NLtable))]  %>%
+    dplyr::mutate_all(function(x) gsub('[\"]', '',x))
+
   turtles_string <- stringr::str_split(dplyr::pull(turtles_string, col.name), " ")
   turtles_string <- purrr::map(turtles_string, function(x) {
     turtles_owns <- tibble::as_tibble(x = x)
@@ -385,7 +389,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 # nocov start
 .util_clean_metrics_links <- function(NLtable, nl, col.name, metrics) {
 
-  links_string <- NLtable[, grepl(col.name, names(NLtable))]
+  links_string <- NLtable[, grepl(col.name, names(NLtable))]  %>%
+    dplyr::mutate_all(function(x) gsub('[\"]', '',x))
+
   links_string <- stringr::str_split(dplyr::pull(links_string, col.name), " ")
   links_string <- purrr::map(links_string, function(x) {
     links_owns <- tibble::as_tibble(x = x)
