@@ -56,9 +56,9 @@ eval_simoutput <- function(nl) {
 
   # Print summary:
   if(nrow(missing.combinations) > 0) {
-    print(paste0(nrow(missing.combinations), " missing siminputrow/random-seed combinations were detected. Check output of eval_simoutput for more details."))
+    #print(paste0(nrow(missing.combinations), " missing siminputrow/random-seed combinations were detected. Check output of eval_simoutput for more details."))
   } else {
-    print("No missing combinations detected!")
+    #print("No missing combinations detected!")
   }
 
   return(missing.combinations)
