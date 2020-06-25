@@ -351,7 +351,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     patches_owns <- tidyr::separate(patches_owns, value,
                                     getexp(nl, "metrics.patches"), sep=",")
     patches_owns <- dplyr::mutate_all(patches_owns, function(x) {
-      suppressWarnings(if(!is.na(x)) {ifelse(is.na(as.numeric(as.character(x))),
+      suppressWarnings(if(!all(is.na(x))) {ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x)))})
     })
@@ -376,7 +376,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
                                     metrics,
                                     sep=",")
     turtles_owns <- dplyr::mutate_all(turtles_owns, function(x) {
-      suppressWarnings(if(!is.na(x)) {ifelse(is.na(as.numeric(as.character(x))),
+      suppressWarnings(if(!all(is.na(x))) {ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x)))})
     })
@@ -400,7 +400,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
                                   metrics,
                                   sep=",")
     links_owns <- dplyr::mutate_all(links_owns, function(x) {
-      suppressWarnings(if(!is.na(x)) {ifelse(is.na(as.numeric(as.character(x))),
+      suppressWarnings(if(!all(is.na(x))) {ifelse(is.na(as.numeric(as.character(x))),
                               as.character(x),
                               as.numeric(as.character(x)))})
 
