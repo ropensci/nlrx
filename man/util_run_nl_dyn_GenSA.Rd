@@ -4,8 +4,7 @@
 \alias{util_run_nl_dyn_GenSA}
 \title{Simulated Annealing call simulations function}
 \usage{
-util_run_nl_dyn_GenSA(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat,
-  silent)
+util_run_nl_dyn_GenSA(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat, silent)
 }
 \arguments{
 \item{nl}{nl object}

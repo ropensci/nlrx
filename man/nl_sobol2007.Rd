@@ -4,7 +4,9 @@
 \name{nl_sobol2007}
 \alias{nl_sobol2007}
 \title{Wolf Sheep model sample data: simdesign sobol2007}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_sobol2007
 }

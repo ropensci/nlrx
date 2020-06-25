@@ -4,8 +4,7 @@
 \alias{simdesign_morris}
 \title{Add a morris elementary effects simdesign to a nl object}
 \usage{
-simdesign_morris(nl, morristype, morrislevels, morrisr, morrisgridjump,
-  nseeds)
+simdesign_morris(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

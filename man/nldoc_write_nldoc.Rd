@@ -4,8 +4,18 @@
 \alias{nldoc_write_nldoc}
 \title{Write NetLogo documentation}
 \usage{
-nldoc_write_nldoc(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outpath,
-  output_format, number_sections, theme, date, toc)
+nldoc_write_nldoc(
+  noxygen,
+  noxygen_it,
+  noxygen_gui,
+  noxygen_bs,
+  outpath,
+  output_format,
+  number_sections,
+  theme,
+  date,
+  toc
+)
 }
 \arguments{
 \item{noxygen}{list with parsed and processed noxygen tags from NetLogo model code}

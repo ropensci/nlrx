@@ -4,9 +4,16 @@
 \alias{run_nl_one}
 \title{Execute one NetLogo simulation from a nl object}
 \usage{
-run_nl_one(nl, seed, siminputrow, cleanup.csv = TRUE,
-  cleanup.xml = TRUE, cleanup.bat = TRUE, silent = TRUE,
-  writeRDS = FALSE)
+run_nl_one(
+  nl,
+  seed,
+  siminputrow,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  silent = TRUE,
+  writeRDS = FALSE
+)
 }
 \arguments{
 \item{nl}{nl object}

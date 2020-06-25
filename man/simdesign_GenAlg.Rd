@@ -4,8 +4,15 @@
 \alias{simdesign_GenAlg}
 \title{Add a Genetic Algorithm simdesign to a nl object}
 \usage{
-simdesign_GenAlg(nl, popSize = 200, iters = 100, evalcrit = 1,
-  elitism = NA, mutationChance = NA, nseeds = 1)
+simdesign_GenAlg(
+  nl,
+  popSize = 200,
+  iters = 100,
+  evalcrit = 1,
+  elitism = NA,
+  mutationChance = NA,
+  nseeds = 1
+)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

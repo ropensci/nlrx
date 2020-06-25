@@ -4,10 +4,15 @@
 \alias{nl}
 \title{Construct a new nl object}
 \usage{
-nl(nlversion = "6.0.2", nlpath = character(),
-  modelpath = character(), jvmmem = 1024,
+nl(
+  nlversion = "6.0.2",
+  nlpath = character(),
+  modelpath = character(),
+  jvmmem = 1024,
   experiment = methods::new("experiment"),
-  simdesign = methods::new("simdesign"), ...)
+  simdesign = methods::new("simdesign"),
+  ...
+)
 }
 \arguments{
 \item{nlversion}{A character string defining the NetLogo version that is used}

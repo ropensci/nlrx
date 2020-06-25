@@ -4,8 +4,7 @@
 \alias{util_run_nl_dyn_GenAlg}
 \title{Genetic Algorithm call simulations function}
 \usage{
-util_run_nl_dyn_GenAlg(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat,
-  silent)
+util_run_nl_dyn_GenAlg(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat, silent)
 }
 \arguments{
 \item{nl}{nl object}

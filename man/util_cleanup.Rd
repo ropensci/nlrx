@@ -4,8 +4,13 @@
 \alias{util_cleanup}
 \title{Delete temporary files}
 \usage{
-util_cleanup(nl, cleanup.csv = TRUE, cleanup.xml = TRUE,
-  cleanup.bat = TRUE, cleanup.files)
+util_cleanup(
+  nl,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  cleanup.files
+)
 }
 \arguments{
 \item{nl}{nl object}

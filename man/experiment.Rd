@@ -4,13 +4,26 @@
 \alias{experiment}
 \title{Construct a new experiment object}
 \usage{
-experiment(expname = "defaultexp", outpath = NA_character_,
-  repetition = 1, tickmetrics = "true", idsetup = "setup",
-  idgo = "go", idfinal = NA_character_, idrunnum = NA_character_,
-  runtime = 1, evalticks = NA_integer_, stopcond = NA_character_,
-  metrics = c("count turtles"), metrics.turtles = list(),
-  metrics.patches = NA_character_, metrics.links = list(),
-  variables = list(), constants = list(), ...)
+experiment(
+  expname = "defaultexp",
+  outpath = NA_character_,
+  repetition = 1,
+  tickmetrics = "true",
+  idsetup = "setup",
+  idgo = "go",
+  idfinal = NA_character_,
+  idrunnum = NA_character_,
+  runtime = 1,
+  evalticks = NA_integer_,
+  stopcond = NA_character_,
+  metrics = c("count turtles"),
+  metrics.turtles = list(),
+  metrics.patches = NA_character_,
+  metrics.links = list(),
+  variables = list(),
+  constants = list(),
+  ...
+)
 }
 \arguments{
 \item{expname}{A character string defining the name of the experiment, no whitespaces allowed}
@@ -45,7 +58,7 @@ experiment(expname = "defaultexp", outpath = NA_character_,
 
 \item{variables}{a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))}
 
-\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"=""default""))}
+\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))}
 
 \item{...}{...}
 }
@@ -189,7 +202,7 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                               'initial-number-wolves' =
                              list(min=50, max=150, step=10, qfun="qunif")),
                              constants = list("model-version" =
-                                              "\\"sheep-wolves-grass\\"",
+                                              "\"sheep-wolves-grass\"",
                                               "grass-regrowth-time" = 30,
                                               "sheep-gain-from-food" = 4,
                                               "wolf-gain-from-food" = 20,

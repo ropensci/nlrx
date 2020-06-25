@@ -4,8 +4,14 @@
 \alias{run_nl_all}
 \title{Execute all NetLogo simulations from a nl object}
 \usage{
-run_nl_all(nl, split = 1, cleanup.csv = TRUE, cleanup.xml = TRUE,
-  cleanup.bat = TRUE, silent = TRUE)
+run_nl_all(
+  nl,
+  split = 1,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  silent = TRUE
+)
 }
 \arguments{
 \item{nl}{nl object}

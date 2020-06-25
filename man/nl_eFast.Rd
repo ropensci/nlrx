@@ -4,7 +4,9 @@
 \name{nl_eFast}
 \alias{nl_eFast}
 \title{Wolf Sheep model sample data: simdesign eFast}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_eFast
 }

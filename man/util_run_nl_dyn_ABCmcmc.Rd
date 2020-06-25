@@ -4,8 +4,14 @@
 \alias{util_run_nl_dyn_ABCmcmc}
 \title{ABCmcmc call simulations function}
 \usage{
-util_run_nl_dyn_ABCmcmc(nl, seed, cleanup.csv = TRUE,
-  cleanup.xml = TRUE, cleanup.bat = TRUE, silent = FALSE)
+util_run_nl_dyn_ABCmcmc(
+  nl,
+  seed,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  silent = FALSE
+)
 }
 \arguments{
 \item{nl}{nl object}

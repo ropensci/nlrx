@@ -4,9 +4,18 @@
 \alias{nldoc}
 \title{Create NetLogo documentation}
 \usage{
-nldoc(modelfiles, outpath, infotab = TRUE, gui = TRUE, bs = TRUE,
-  output_format = "html", number_sections = TRUE, theme = "journal",
-  date = today(), toc = TRUE)
+nldoc(
+  modelfiles,
+  outpath,
+  infotab = TRUE,
+  gui = TRUE,
+  bs = TRUE,
+  output_format = "html",
+  number_sections = TRUE,
+  theme = "journal",
+  date = today(),
+  toc = TRUE
+)
 }
 \arguments{
 \item{modelfiles}{vector of filepaths to model files}

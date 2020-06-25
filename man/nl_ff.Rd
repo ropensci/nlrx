@@ -4,7 +4,9 @@
 \name{nl_ff}
 \alias{nl_ff}
 \title{Wolf Sheep model sample data: simdesign ff}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_ff
 }

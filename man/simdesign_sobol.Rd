@@ -4,8 +4,15 @@
 \alias{simdesign_sobol}
 \title{Add a sobol simdesign to a nl object}
 \usage{
-simdesign_sobol(nl, samples, sobolorder, sobolnboot, sobolconf, nseeds,
-  precision)
+simdesign_sobol(
+  nl,
+  samples,
+  sobolorder,
+  sobolnboot,
+  sobolconf,
+  nseeds,
+  precision
+)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

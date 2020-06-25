@@ -4,7 +4,9 @@
 \name{nl_distinct}
 \alias{nl_distinct}
 \title{Wolf Sheep model sample data: simdesign distinct}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_distinct
 }

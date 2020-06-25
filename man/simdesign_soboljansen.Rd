@@ -4,8 +4,7 @@
 \alias{simdesign_soboljansen}
 \title{Add a soboljansen simdesign to a nl object}
 \usage{
-simdesign_soboljansen(nl, samples, sobolnboot, sobolconf, nseeds,
-  precision)
+simdesign_soboljansen(nl, samples, sobolnboot, sobolconf, nseeds, precision)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

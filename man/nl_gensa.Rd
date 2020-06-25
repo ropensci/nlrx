@@ -4,7 +4,9 @@
 \name{nl_gensa}
 \alias{nl_gensa}
 \title{Wolf Sheep model sample data: gensa}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_gensa
 }

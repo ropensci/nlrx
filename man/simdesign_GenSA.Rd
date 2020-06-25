@@ -4,8 +4,7 @@
 \alias{simdesign_GenSA}
 \title{Add a Simulated Annealing simdesign to a nl object}
 \usage{
-simdesign_GenSA(nl, par = NULL, evalcrit = 1, control = list(),
-  nseeds = 1)
+simdesign_GenSA(nl, par = NULL, evalcrit = 1, control = list(), nseeds = 1)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

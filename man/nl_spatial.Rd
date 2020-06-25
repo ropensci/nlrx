@@ -4,7 +4,9 @@
 \name{nl_spatial}
 \alias{nl_spatial}
 \title{Wolf Sheep model sample data: spatial}
-\format{nl object with defined experiment, simdesign and model output}
+\format{
+nl object with defined experiment, simdesign and model output
+}
 \usage{
 nl_spatial
 }

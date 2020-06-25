@@ -4,8 +4,7 @@
 \alias{analyze_nl}
 \title{Analyze NetLogo simulation output}
 \usage{
-analyze_nl(nl, metrics = getexp(nl, "metrics"), funs = list(mean =
-  mean))
+analyze_nl(nl, metrics = getexp(nl, "metrics"), funs = list(mean = mean))
 }
 \arguments{
 \item{nl}{nl object}

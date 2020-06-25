@@ -4,12 +4,23 @@
 \alias{simdesign_ABCmcmc_Marjoram}
 \title{Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object}
 \usage{
-simdesign_ABCmcmc_Marjoram(nl, postpro_function = NULL,
-  summary_stat_target, prior_test = NULL, n_rec,
-  n_between_sampling = 10, n_cluster = 1, use_seed = FALSE,
-  dist_weights = NULL, n_calibration = 10000,
-  tolerance_quantile = 0.01, proposal_phi = 1, seed_count = 0,
-  progress_bar = FALSE, nseeds)
+simdesign_ABCmcmc_Marjoram(
+  nl,
+  postpro_function = NULL,
+  summary_stat_target,
+  prior_test = NULL,
+  n_rec,
+  n_between_sampling = 10,
+  n_cluster = 1,
+  use_seed = FALSE,
+  dist_weights = NULL,
+  n_calibration = 10000,
+  tolerance_quantile = 0.01,
+  proposal_phi = 1,
+  seed_count = 0,
+  progress_bar = FALSE,
+  nseeds
+)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}

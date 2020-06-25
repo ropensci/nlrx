@@ -4,8 +4,14 @@
 \alias{run_nl_dyn}
 \title{Execute NetLogo simulation without pregenerated parametersets}
 \usage{
-run_nl_dyn(nl, seed, cleanup.csv = TRUE, cleanup.xml = TRUE,
-  cleanup.bat = TRUE, silent = TRUE)
+run_nl_dyn(
+  nl,
+  seed,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  silent = TRUE
+)
 }
 \arguments{
 \item{nl}{nl object}
