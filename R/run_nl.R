@@ -9,7 +9,7 @@
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
-#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
+#' @param verbose if TRUE, prints a progress bar to the console.
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -54,7 +54,7 @@ run_nl_all <- function(nl,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
                        cleanup.bat = TRUE,
-                       silent = TRUE) {
+                       verbose = FALSE) {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
@@ -73,36 +73,51 @@ run_nl_all <- function(nl,
 
 
   ## Execute on remote location
-  nl_results <- furrr::future_map_dfr(
-    seq_along(jobs[[1]]),
-    function(job) {
-      ## Extract current seed and part from job id:
-      job_seed <- jobs[[1]][[job]]
-      job_part <- jobs[[2]][[job]]
+  nl_results <- progressr::with_progress({
 
-      ## Calculate rowids of the current part:
-      rowids <-
-        seq(1:n_per_part) +
-        (job_part - 1) * n_per_part
-
-      ## Start inner loop to run model simulations:
-      furrr::future_map_dfr(
-        rowids,
-        function(siminputrow) {
-          run_nl_one(
-            nl = nl,
-            seed = job_seed,
-            siminputrow = siminputrow,
-            cleanup.csv = cleanup.csv,
-            cleanup.xml = cleanup.xml,
-            cleanup.bat = cleanup.bat,
-            silent = silent
-          )
-        }
-      )
+    if(isTRUE(verbose)){
+      progressr::handlers("progress")
+      total_steps <- nrow(getsim(nl, "siminput")) * length(getsim(nl, "simseeds"))
+      p <- progressr::progressor(steps = total_steps)
     }
-  )
 
+    res_all <- furrr::future_map_dfr(
+      seq_along(jobs[[1]]),
+      function(job) {
+        ## Extract current seed and part from job id:
+        job_seed <- jobs[[1]][[job]]
+        job_part <- jobs[[2]][[job]]
+
+        ## Calculate rowids of the current part:
+        rowids <-
+          seq(1:n_per_part) +
+          (job_part - 1) * n_per_part
+
+        ## Start inner loop to run model simulations:
+        res_job <- furrr::future_map_dfr(
+          rowids,
+          function(siminputrow) {
+
+            if(isTRUE(verbose)){
+              p(sprintf("starting row=%d/%d & seed=%d",
+                        siminputrow, nrow(getsim(nl, "siminput")),
+                        job_seed))
+            }
+
+            res_one <- run_nl_one(
+              nl = nl,
+              seed = job_seed,
+              siminputrow = siminputrow,
+              cleanup.csv = cleanup.csv,
+              cleanup.xml = cleanup.xml,
+              cleanup.bat = cleanup.bat
+            )
+            return(res_one)
+          })
+        return(res_job)
+      })
+    return(res_all)
+  })
   return(nl_results)
 }
 
@@ -118,7 +133,6 @@ run_nl_all <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
-#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @param writeRDS TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.
 #' @return tibble with simulation output results
 #' @details
@@ -157,7 +171,6 @@ run_nl_one <- function(nl,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
                        cleanup.bat = TRUE,
-                       silent = TRUE,
                        writeRDS = FALSE) {
 
   util_eval_simdesign(nl)
@@ -204,10 +217,6 @@ run_nl_one <- function(nl,
     }
   }
 
-  if(!isTRUE(silent)) {
-    message(paste0("Finished simulation with random-seed: ", seed, " and siminputrow: ", siminputrow))
-  }
-
   return(nl_results)
 }
 
@@ -223,7 +232,6 @@ run_nl_one <- function(nl,
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
-#' @param silent TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).
 #' @return simulation output results can be tibble, list, ...
 #' @details
 #'
@@ -260,8 +268,7 @@ run_nl_dyn <- function(nl,
                        seed,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE,
-                       silent = TRUE) {
+                       cleanup.bat = TRUE) {
   nl_results <- NULL
 
 
@@ -271,8 +278,7 @@ run_nl_dyn <- function(nl,
       seed = seed,
       cleanup.csv = cleanup.csv,
       cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat,
-      silent = silent
+      cleanup.bat = cleanup.bat
     )
   }
 
@@ -282,8 +288,7 @@ run_nl_dyn <- function(nl,
       seed = seed,
       cleanup.csv = cleanup.csv,
       cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat,
-      silent = silent
+      cleanup.bat = cleanup.bat
     )
   }
 
@@ -293,8 +298,7 @@ run_nl_dyn <- function(nl,
       seed = seed,
       cleanup.csv = cleanup.csv,
       cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat,
-      silent = silent
+      cleanup.bat = cleanup.bat
     )
   }
 

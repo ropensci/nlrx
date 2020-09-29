@@ -45,6 +45,7 @@ Imports:
     crayon,
     igraph,
     stringr,
+    progressr,
     EasyABC
 Depends:
     R (>= 3.3)

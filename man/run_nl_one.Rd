@@ -11,7 +11,6 @@ run_nl_one(
   cleanup.csv = TRUE,
   cleanup.xml = TRUE,
   cleanup.bat = TRUE,
-  silent = TRUE,
   writeRDS = FALSE
 )
 }
@@ -27,8 +26,6 @@ run_nl_one(
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
-
-\item{silent}{TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).}
 
 \item{writeRDS}{TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.}
 }

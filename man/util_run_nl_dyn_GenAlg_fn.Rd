@@ -12,8 +12,7 @@ util_run_nl_dyn_GenAlg_fn(
   seed,
   cleanup.csv,
   cleanup.xml,
-  cleanup.bat,
-  silent
+  cleanup.bat
 )
 
 util_run_nl_dyn_ABCmcmc_fn(param)
@@ -32,8 +31,6 @@ util_run_nl_dyn_ABCmcmc_fn(param)
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
-
-\item{silent}{TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).}
 }
 \description{
 Genetic Algorithm run simulation function

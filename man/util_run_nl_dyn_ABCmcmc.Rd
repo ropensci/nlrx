@@ -9,8 +9,7 @@ util_run_nl_dyn_ABCmcmc(
   seed,
   cleanup.csv = TRUE,
   cleanup.xml = TRUE,
-  cleanup.bat = TRUE,
-  silent = FALSE
+  cleanup.bat = TRUE
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ util_run_nl_dyn_ABCmcmc(
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
-
-\item{silent}{TRUE/FALSE, if FALSE prints the current seed and siminputrow after successful execution of a simulation (only for sequential execution).}
 }
 \description{
 ABCmcmc call simulations function

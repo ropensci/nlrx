@@ -62,13 +62,18 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  testthat::context("Run one simulation with run_nl_one() and silten=FALSE")
-  results <- run_nl_one(nl, seed, siminputrow, silent = FALSE)
+  testthat::context("Run one simulation with run_nl_one()")
+  results <- run_nl_one(nl, seed, siminputrow)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
   testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
+  testthat::expect_match(class(results)[1], "tbl_df")
+  testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
+
+  testthat::context("Run all simulations with run_nl_all() and progress bar")
+  results <- run_nl_all(nl, verbose = TRUE)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 

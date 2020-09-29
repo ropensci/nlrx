@@ -16,11 +16,11 @@
 #' These objects store all information that is needed to run NetLogo simulations.
 #' nl objects are initialized with basic information on Netlogo and the model.
 #'
-#' After setting up the nl object, an experiment needs to be attached \link[nlrx]{experiment}.
+#' After setting up the nl object, an experiment needs to be attached.
 #' The experiment class stores all information related to the NetLogo simulation experiment, such as runtime,
 #' variables, constants, measurements, and more.
 #'
-#' After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object \link[nlrx]{simdesign}.
+#' After attaching an experiment, different simdesign helper functions can be used to attach a simdesign to the nl object.
 #' The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 #'
 #'
