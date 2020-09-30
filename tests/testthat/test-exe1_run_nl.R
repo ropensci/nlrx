@@ -72,11 +72,6 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
-  testthat::context("Run all simulations with run_nl_all() and progress bar")
-  results <- run_nl_all(nl, verbose = TRUE)
-  testthat::expect_match(class(results)[1], "tbl_df")
-  testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
-
   testthat::context("Run all simulations with run_nl_all() and wrong split parameter")
   testthat::expect_error(run_nl_all(nl, split=4))
 

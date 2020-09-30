@@ -9,7 +9,6 @@
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
-#' @param verbose if TRUE, prints a progress bar to the console.
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -53,8 +52,7 @@ run_nl_all <- function(nl,
                        split = 1,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE,
-                       verbose = FALSE) {
+                       cleanup.bat = TRUE) {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
@@ -70,18 +68,12 @@ run_nl_all <- function(nl,
   n_per_part <- siminput_nrow / split
   ## Generate job ids from seeds and parts:
   jobs <- as.list(expand.grid(getsim(nl, "simseeds"), seq(1:split)))
-
+  ## Setup progress bar:
+  total_steps <- siminput_nrow * length(getsim(nl, "simseeds"))
+  p <- progressr::progressor(steps = total_steps)
 
   ## Execute on remote location
-  nl_results <- progressr::with_progress({
-
-    if(isTRUE(verbose)){
-      progressr::handlers("progress")
-      total_steps <- nrow(getsim(nl, "siminput")) * length(getsim(nl, "simseeds"))
-      p <- progressr::progressor(steps = total_steps)
-    }
-
-    res_all <- furrr::future_map_dfr(
+  nl_results <- furrr::future_map_dfr(
       seq_along(jobs[[1]]),
       function(job) {
         ## Extract current seed and part from job id:
@@ -98,12 +90,11 @@ run_nl_all <- function(nl,
           rowids,
           function(siminputrow) {
 
-            if(isTRUE(verbose)){
-              p(sprintf("starting row=%d/%d & seed=%d",
-                        siminputrow, nrow(getsim(nl, "siminput")),
-                        job_seed))
-            }
-
+            # Update progress bar:
+            p(sprintf("row %d/%d seed %d",
+                      siminputrow, nrow(getsim(nl, "siminput")),
+                      job_seed))
+            # Run simulation
             res_one <- run_nl_one(
               nl = nl,
               seed = job_seed,
@@ -116,8 +107,6 @@ run_nl_all <- function(nl,
           })
         return(res_job)
       })
-    return(res_all)
-  })
   return(nl_results)
 }
 
