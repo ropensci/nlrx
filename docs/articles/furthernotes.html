@@ -157,7 +157,7 @@
       <h1 data-toc-skip>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-06-25</h4>
+            <h4 class="date">2020-09-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -268,8 +268,13 @@
 <div id="capturing-progress-of-model-simulations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#capturing-progress-of-model-simulations" class="anchor"></a>Capturing progress of model simulations</h2>
-<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>, <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> functions provide a “silent” parameter that allows to capture progress of running simulations. If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of each simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
-<p>However, both approaches only work for sequential execution. Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section “Notes on self-written output”). These output files can then be monitored to capture the progress of the parallelized model executions.</p>
+<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr">progressr</a> framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a <code><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">progressr::with_progress()</a></code> call. By using different handlers, the layout of the progress bar is different. For example, installing the package <a href="https://github.com/r-lib/progress">progress</a> and using the handler <code><a href="https://rdrr.io/pkg/progressr/man/handlers.html">progressr::handlers("progress")</a></code> will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">progressr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/handlers.html">handlers</a></span>(<span class="st">"progress"</span>)
+<span class="no">results</span> <span class="kw">&lt;-</span> <span class="kw pkg">progressr</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">with_progress</a></span>(<span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>))</pre></body></html></div>
+<p>The <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function might provide progress output depending on the chosen method (for example ABC offers a progress bar). However, dynamic experiments are difficult to track because it is not clear how long the complete experiment will take from the beginning.</p>
+<p>The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> does not report any progress because it only executes one simulation.</p>
+<p>In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
+<p>Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section “Notes on self-written output”). These output files can then be monitored to capture the progress of the parallelized model executions.</p>
 </div>
 <div id="handling-netlogo-runtime-errors" class="section level2">
 <h2 class="hasAnchor">
@@ -286,7 +291,7 @@
 <a href="#temporary-files-management" class="anchor"></a>Temporary files management</h2>
 <p>nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files. These temporary files are stored in the default temporary files directory of the R session. By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the <code>run_nl</code> functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).</p>
 <p>On unix systems, it can happen that system processes delete files in the default temporary files folder. Thus, we recommend to reassign the temporary files folder for the R-session to another folder. The R-package <a href="https://www.rforge.net/unixtools/">unixtools</a> provides a function to reassign the temporary files folder for the current R-session:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'unixtools'</span>, <span class="kw">repos</span> <span class="kw">=</span> <span class="st">'http://www.rforge.net/'</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'unixtools'</span>, <span class="kw">repos</span> <span class="kw">=</span> <span class="st">'http://www.rforge.net/'</span>)
 <span class="kw pkg">unixtools</span><span class="kw ns">::</span><span class="fu">set.tempdir</span>(<span class="st">"&lt;path-to-temp-dir&gt;"</span>)</pre></body></html></div>
 </div>
 <div id="random-seed-and-repetitions-management" class="section level2">
@@ -319,7 +324,7 @@
 <li>metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list(“links” = c(“[who] of end1”, “[who] of end2”)))</li>
 </ul>
 <p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clean results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r">to-report green.patches
+<div class="sourceCode" id="cb3"><html><body><pre class="r">to-report green.patches
   report count patches with [pcolor = green]
 end</pre></body></html></div>
 <p>In your nlrx experiment metrics field you can then enter “green.patches” which is way more intuitive then “count patches with [pcolor = green]”.</p>
@@ -338,15 +343,15 @@ end</pre></body></html></div>
 <a href="#parallelisation-on-local-machine" class="anchor"></a>Parallelisation on local machine</h3>
 <p>Model simulations can be distributed to each logical processor on the local machine in parallel. The future package provides two options for parallelization, explicit futures and implicit futures which are executed in the background and do not block the console while running.</p>
 <p>Running parallel simulations with an explicit future command:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span>(<span class="no">multiprocess</span>)
 <span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)</pre></body></html></div>
 <p>For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level. Note, that we use the assignment operator for implicit futures (<code><a href="https://rdrr.io/pkg/future/man/future.html">%&lt;-%</a></code>):</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">sequential</span>, <span class="no">multiprocess</span>))
 <span class="no">results</span> <span class="kw">%&lt;-%</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)</pre></body></html></div>
 <p>In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">future</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span>(<span class="no">multisession</span>)
 <span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>, <span class="kw">split</span> <span class="kw">=</span> <span class="fl">4</span>)</pre></body></html></div>
 </div>
@@ -360,7 +365,7 @@ end</pre></body></html></div>
 <h4 class="hasAnchor">
 <a href="#using-the-future-framework" class="anchor"></a>Using the future framework</h4>
 <p>For sending jobs to the remote HPC under the future framework, we need to install and load additional R packages and adjust the future plan before executing <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. You need to define a path to your ssh key, a server adress for the HPC, a user name for the HPC and a path to the slurm template file on the HPC. Please also make sure that the <code>nlpath</code>, <code>modelpath</code> and <code>outpath</code> variables within your nl object point to locations on the filesystem of the HPC and not your local filesystem.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"># Load required packages
+<div class="sourceCode" id="cb7"><html><body><pre class="r"># Load required packages
 library(future)
 library(future.batchtools)
 library(debugme)
@@ -395,7 +400,7 @@ results &lt;- run_nl_all(nl = nl)</pre></body></html></div>
 <a href="#using-the-clustermq-framework" class="anchor"></a>Using the clusterMQ framework</h4>
 <p>The clusterMQ framework is somewhat different from the future framework. However, in our experience it worked more reliable in combination with a slurm HPC. For installation of clustermq and .Rprofile settings see also the <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/">detailed HPC setup manual</a>.</p>
 <p>clusterMQ does not directly support parallelisation of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> loops of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function. We need to define our own parallel simulation function, using the <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function of the nlrx package:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">clustermq</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">clustermq</span>)
 
 <span class="co"># First, we set the total number of jobs for the HPC</span>
 <span class="co"># In this example we run each simulation as an individual job (recommended).</span>
@@ -426,7 +431,7 @@ results &lt;- run_nl_all(nl = nl)</pre></body></html></div>
 <span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span>
 <span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span>
 <span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="kw pkg">clustermq</span><span class="kw ns">::</span><span class="fu">Q</span>(<span class="kw">fun</span> <span class="kw">=</span> <span class="no">simfun</span>,
+<span class="no">results</span> <span class="kw">&lt;-</span> <span class="kw pkg">clustermq</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/clustermq/man/Q.html">Q</a></span>(<span class="kw">fun</span> <span class="kw">=</span> <span class="no">simfun</span>,
                         <span class="kw">siminputrow</span> <span class="kw">=</span> <span class="no">siminputrows</span>,
                         <span class="kw">rndseed</span> <span class="kw">=</span> <span class="no">rndseeds</span>,
                         <span class="kw">const</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,

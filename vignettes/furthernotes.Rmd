@@ -60,10 +60,20 @@ Depending on the simdesign, the summary table also prints the estimated number o
 
 ## Capturing progress of model simulations
 
-The `run_nl_all()`, `run_nl_one()` and `run_nl_dyn()` functions provide a "silent" parameter that allows to capture progress of running simulations.
-If silent is set to FALSE, a message with the current random seed and siminputrow is printed to the console after successful execution of each simulation run. In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
+The `run_nl_all()` function supports the [progressr](https://github.com/HenrikBengtsson/progressr) framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a `progressr::with_progress()` call. By using different handlers, the layout of the progress bar is different. For example, installing the package [progress](https://github.com/r-lib/progress) and using the handler `progressr::handlers("progress")` will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:
 
-However, both approaches only work for sequential execution. Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
+```{r progress, eval=FALSE}
+progressr::handlers("progress")
+results <- progressr::with_progress(run_nl_all(nl))
+```
+
+The `run_nl_dyn()` function might provide progress output depending on the chosen method (for example ABC offers a progress bar). However, dynamic experiments are difficult to track because it is not clear how long the complete experiment will take from the beginning.
+
+The `run_nl_one()` does not report any progress because it only executes one simulation.
+
+In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
+
+Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
 
 ## Handling NetLogo runtime errors
 

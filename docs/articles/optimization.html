@@ -157,7 +157,7 @@
       <h1 data-toc-skip>Optimization</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-06-25</h4>
+            <h4 class="date">2020-09-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
@@ -292,7 +292,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">landscapemetrics</span>)
   <span class="no">res_spat</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nl_to_raster.html">nl_to_raster</a></span>(<span class="no">nl</span>)
   <span class="no">res_spat_raster</span> <span class="kw">&lt;-</span> <span class="no">res_spat</span>$<span class="no">spatial.raster</span><span class="kw">[[</span><span class="fl">1</span>]]
-  <span class="no">lsm</span> <span class="kw">&lt;-</span> <span class="fu">lsm_l_ed</span>(<span class="no">res_spat_raster</span>)
+  <span class="no">lsm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/landscapemetrics/man/lsm_l_ed.html">lsm_l_ed</a></span>(<span class="no">res_spat_raster</span>)
   <span class="no">crit</span> <span class="kw">&lt;-</span> <span class="no">lsm</span>$<span class="no">value</span>
   <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">crit</span>)
 }</pre></body></html></div>

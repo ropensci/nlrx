@@ -9,8 +9,7 @@ run_nl_all(
   split = 1,
   cleanup.csv = TRUE,
   cleanup.xml = TRUE,
-  cleanup.bat = TRUE,
-  verbose = FALSE
+  cleanup.bat = TRUE
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ run_nl_all(
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
-
-\item{verbose}{if TRUE, prints a progress bar to the console.}
 }
 \value{
 tibble with simulation output results

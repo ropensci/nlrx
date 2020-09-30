@@ -260,7 +260,6 @@ run_nl_dyn <- function(nl,
                        cleanup.bat = TRUE) {
   nl_results <- NULL
 
-
   if (getsim(nl, "simmethod") == "GenSA") {
     nl_results <- util_run_nl_dyn_GenSA(
       nl = nl,

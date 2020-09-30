@@ -157,7 +157,7 @@
       <h1 data-toc-skip>Get Started</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-06-25</h4>
+            <h4 class="date">2020-09-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/getstarted.Rmd"><code>vignettes/getstarted.Rmd</code></a></small>
       <div class="hidden name"><code>getstarted.Rmd</code></div>
@@ -275,6 +275,64 @@
 <span class="fu"><a href="../reference/analyze_nl.html">analyze_nl</a></span>(<span class="no">nl</span>)</pre></body></html></div>
 </div>
 </div>
+</div>
+<div id="complete-code-example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#complete-code-example" class="anchor"></a>Complete code example</h2>
+<p>This code block contains the above code example for easy copy-pasting into your R script:</p>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlrx</span>)
+<span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
+<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)
+<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
+<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)
+<span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
+<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)
+<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
+<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)
+
+<span class="co"># Setup nl object</span>
+<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.3"</span>,
+         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
+         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="no">modelpath</span>,
+         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+
+<span class="co"># Attach experiment</span>
+<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
+                            <span class="kw">outpath</span><span class="kw">=</span><span class="no">outpath</span>,
+                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
+                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
+                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
+                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
+                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
+                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
+                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
+                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>),
+                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>)),
+                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+
+<span class="co"># Attach simdesign</span>
+<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
+                               <span class="kw">samples</span><span class="kw">=</span><span class="fl">100</span>,
+                               <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
+                               <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
+
+<span class="co"># Execute simulations</span>
+<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)
+
+<span class="co"># Attach results to nl object:</span>
+<span class="fu"><a href="../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+
+<span class="co"># Write output to outpath of experiment within nl</span>
+<span class="fu"><a href="../reference/write_simoutput.html">write_simoutput</a></span>(<span class="no">nl</span>)
+
+<span class="co"># Do further analysis:</span>
+<span class="fu"><a href="../reference/analyze_nl.html">analyze_nl</a></span>(<span class="no">nl</span>)</pre></body></html></div>
 </div>
 </div>
   </div>
