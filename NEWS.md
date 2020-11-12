@@ -4,6 +4,7 @@
 #### functionality
 * added option to run_nl_one that allows to store results as rds files
 * added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
+* added support for progressr progress bars for run_nl_all function (details see further notes vignette) and removed the silent parameter of the run_nl_all function
 
 #### bugfixes
 * hotfix for another dependency on external files in nldoc roxygen examples

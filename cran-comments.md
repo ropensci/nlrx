@@ -11,6 +11,7 @@ nlrx version 0.4.2
 #### functionality
 * added option to run_nl_one that allows to store results as rds files
 * added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
+* added support for progressr progress bars for run_nl_all function (details see further notes vignette) and removed the silent parameter of the run_nl_all function
 
 #### bugfixes
 * hotfix for another dependency on external files in nldoc roxygen examples
@@ -22,11 +23,12 @@ nlrx version 0.4.2
 * user rights for temporary sh scripts are now set correctly
 
 
+
 ## Test environments
-* Windows 10, R 3.6.1
-* Windows Server 2012 R2 x64, R 3.6.1
-* ubuntu 18.10, R 3.6.1
-* macOS Mojave, R 3.6.1
+* Windows 10, R 4.0.2
+* Windows Server 2012 R2 x64, R 4.0.3 (appveyor)
+* ubuntu 16.04.6 LTS, R 4.0.2 (travis)
+* macOS Mojave, R 4.0.2
 * win-builder (release and devel)
 
 ## R CMD check results
