@@ -30,9 +30,9 @@ Supported Versions for Download and Usage (parameter \code{version}):
 }
 }
 \examples{
-
+\donttest{
 dlpath <- tempdir()  # adjust path to your needs
 try(download_netlogo(dlpath, "6.0.3"))
-
+}
 
 }

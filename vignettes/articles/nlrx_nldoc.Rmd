@@ -3,6 +3,10 @@ title: "NetLogo documentation with nlrx"
 author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NetLogo documentation with nlrx}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # nldoc

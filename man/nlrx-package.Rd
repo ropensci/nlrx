@@ -101,7 +101,7 @@ analyze_nl(nl)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/nlrx}
+  \item \url{https://docs.ropensci.org/nlrx/}
   \item \url{https://github.com/ropensci/nlrx/}
   \item Report bugs at \url{https://github.com/ropensci/nlrx/issues/}
 }

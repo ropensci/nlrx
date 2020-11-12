@@ -18,12 +18,11 @@
 #' * "5.3.1" = NetLogo Version 5.3.1
 #'
 #'
-#'
 #' @examples
-#'
+#' \donttest{
 #' dlpath <- tempdir()  # adjust path to your needs
 #' try(download_netlogo(dlpath, "6.0.3"))
-#'
+#' }
 #'
 #' @aliases download_netlogo
 #' @rdname download_netlogo

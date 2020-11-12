@@ -4,7 +4,7 @@ author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{abc}
+  %\VignetteIndexEntry{Approximate Bayesian Computation (ABC)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

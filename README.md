@@ -12,7 +12,7 @@ coverage](https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg)](ht
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.r-project.org/package=nlrx)
-[![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/onboarding/issues/262)
+[![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/software-review/issues/262)
 [![DOI:10.1111/2041-210X.13286](https://zenodo.org/badge/DOI/10.1111/2041-210X.13286.svg)](https://doi.org/10.1111/2041-210X.13286)
 
 The nlrx package provides tools to setup and execute NetLogo simulations
@@ -249,7 +249,7 @@ analyze_nl(nl)
 ## Meta
 
   - Please [report any issues or
-    bugs](https://github.com/nldoc/nlrx/issues/new/).
+    bugs](https://github.com/ropensci/nlrx/issues/new).
   - License: GPL3
   - Get citation information for `nlrx` in R doing `citation(package =
     'nlrx')`

@@ -3,6 +3,10 @@ title: "Interfacing a variety of different NetLogo models"
 author: "Marco Sciaini"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Interfacing a variety of different NetLogo models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Here, we present examples on how to interface a variety of different NetLogo models.
