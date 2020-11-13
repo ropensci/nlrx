@@ -5,6 +5,7 @@ nlrx version 0.4.2
 ## CRAN check error fixes
 * Fixed an error that was thrown because of a dependency on external files in the roxygen example of the nldoc function. 
 * Fixed an error that was thrown because of a dependency on external files in the example of the download_netlogo function.
+* Fixed (possibly) invalid URLs in readme and vignettes
 
 
 ## Changes in version 0.4.2
