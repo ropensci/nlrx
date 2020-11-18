@@ -57,8 +57,9 @@ Our findings highlight the crucial role of socialization at local environments o
 }
 
 @Inbook{Ma2020,
+  chapter   = {High-Performance Pareto-Based Optimization Model for Spatial Land Use Allocation},
   pages     = {185--209},
-  title     = {High-Performance Pareto-Based Optimization Model for Spatial Land Use Allocation},
+  title     = {High Performance Computing for Geospatial Applications},
   publisher = {Springer International Publishing},
   year      = {2020},
   author    = {Ma, Xiaoya and Zhao, Xiang and Jiang, Ping and Liu, Yuangang},
