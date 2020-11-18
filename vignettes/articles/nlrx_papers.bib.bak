@@ -115,8 +115,9 @@ To reach sustainability transitions, we must learn to leverage social systems in
 }
 
 @Inbook{Tang2020,
+  chapter   = {Code Reusability and Transparency of Agent-Based Modeling: A Review from a Cyberinfrastructure Perspective},
   pages     = {115--134},
-  title     = {Code Reusability and Transparency of Agent-Based Modeling: A Review from a Cyberinfrastructure Perspective},
+  title     = {High Performance Computing for Geospatial Applications},
   publisher = {Springer International Publishing},
   year      = {2020},
   author    = {Tang, Wenwu and Grimm, Volker and Tesfatsion, Leigh and Shook, Eric and Bennett, David and An, Li and Gong, Zhaoya and Ye, Xinyue},
@@ -163,7 +164,7 @@ To reach sustainability transitions, we must learn to leverage social systems in
   title    = {Steps to a Sustainable Mind : Explorations into the Ecology of Mind and Behaviour},
   school   = {University of Helsinki, Faculty of Social Sciences},
   year     = {2020},
-  type     = {Doctoral dissertatio},
+  type     = {Doctoral dissertation},
   abstract = {This transdisciplinary doctoral thesis presents various theoretical, methodological and empirical approaches that together form an ecological approach to the study of social sciences. The key argument follows: to understand how sustainable behaviours and cultures may emerge, and how their development can be facilitated, we must further learn how behaviours emerge as a function of the person and the material and social environment. Furthermore, in this thesis the sustainability crises are framed as sustain-ability crises. We must better equip our cultures with abilities to deal with the complexity and uncertainty of socio-ecological systems, and use these cultural skillsets to survive in and adapt to an increasingly unpredictable world.
 
 This thesis employs a plurality of ecological social sciences and related methodologies—such as ecological psychology, ecological rationality and agent-based modelling—to enlighten the question of how the collective adoption of sustainable behaviours can be leveraged, particularly by changing the affordances in the material environment. What is common to these ecological approaches is the appreciation of ‘processes’ over ‘products’: we must understand the various processes through which sustainable forms of behaviour or decision-making emerge to truly locate leverage points in social systems. Finally, this thesis deals extensively with uncertainty in complex systems. It proposes that we can look to local and traditional knowledge in learning how to deal adaptively with uncertainty.},
