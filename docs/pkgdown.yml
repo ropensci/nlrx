@@ -5,11 +5,12 @@ articles:
   abc: abc.html
   interfacing-different-models: articles/interfacing-different-models.html
   nlrx_nldoc: articles/nlrx_nldoc.html
+  nlrx_papers: articles/nlrx_papers.html
   spatial-output: articles/spatial-output.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html
   optimization: optimization.html
   sensitivity: sensitivity.html
   simdesign-examples: simdesign-examples.html
-last_built: 2020-11-13T07:44Z
+last_built: 2020-11-18T16:41Z
 

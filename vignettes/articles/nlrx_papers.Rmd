@@ -1,0 +1,28 @@
+---
+title: "Publication record"
+author: "Jan Salecker"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Publication record}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Publication record
+
+## Using nlrx in your research
+
+On this page we aim to collect research papers that have used and cited the nlrx package. We will update this database from time to time. If your article is missing, please drop us an [email](mailto:jsaleck@gwdg.de) or file an [issue](https://github.com/ropensci/nlrx/issues/new).
+
+If you use the package in your research, please cite the nlrx package as:
+
+Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041-210X. [https://doi.org/10.1111/2041-210X.13286](https://doi.org/10.1111/2041-210X.13286).
+
+Citation information for `nlrx` can also be accessed in R doing `citation(package = 'nlrx')`.
+
+
+## Publication record
+
+<script src="//bibbase.org/show?bib=https://raw.githubusercontent.com/ropensci/nlrx/master/vignettes/articles/nlrx_papers.bib&jsonp=1&sort=author_short"></script>
+

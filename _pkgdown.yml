@@ -37,6 +37,9 @@ navbar:
        - text: "NetLogo documentation with nlrx"
          icon: fa-book
          href: articles/articles/nlrx_nldoc.html
+       - text: "Publication record"
+         icon: fa-book
+         href: articles/articles/nlrx_papers.html
   right:
     - icon: fa-newspaper-o
       text: "news"
