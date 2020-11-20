@@ -11,11 +11,15 @@ vignette: >
 
 # Publication record
 
-## Using nlrx in your research
-
 On this page we aim to collect research papers that have used and cited the nlrx package. We will update this database from time to time. If your article is missing, please drop us an [email](mailto:jsaleck@gwdg.de) or file an [issue](https://github.com/ropensci/nlrx/issues/new).
 
-If you use the package in your research, please cite the nlrx package as:
+## Share your nlrx use cases
+
+We are always interested in all kind of use cases where nlrx is applied. We therefore encourage you to share your tips and tricks for nlrx so that the nlrx community can benefit from your experience. A nice way to share your use cases is the [ropensci community board](https://discuss.ropensci.org/c/usecases/10). Your use case will then also be featured via the ropensci twitter account. Of course you can also get in touch with us if you want to share your work, e.g. on our documentation and examples pages.
+
+## Using nlrx in your research
+
+If you use the nlrx package in your research, please cite the nlrx package as:
 
 Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation framework for reproducible NetLogo model analyses. Methods Ecol Evol. 2019;2041-210X. [https://doi.org/10.1111/2041-210X.13286](https://doi.org/10.1111/2041-210X.13286).
 
