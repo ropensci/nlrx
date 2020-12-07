@@ -57,6 +57,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           wget http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
+          mkdir /home/runner/work/netlogo
           tar -xvzf NetLogo-6.1.1-64.tgz --directory /home/runner/work/netlogo
           rm -rf NetLogo-6.1.1-64.tgz
 
