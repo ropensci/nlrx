@@ -55,15 +55,17 @@ jobs:
 
       - name: Setup NETLOGO Linux
         if: runner.os == 'Linux'
-        run: sudo apt-get install netlogo
+        uses: teddyking/dependency-action@master
+        with:
+          deps: http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
 
       - name: Setup NETLOGO MacOS
         if: runner.os == 'MacOS'
-        run: brew install ninja
+        run: brew install https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab6bc2bebb332b01db1babc896996b8fa01cd54a/Casks/netlogo.rb
 
       - name: Setup NETLOGO Windows
         if: runner.os == 'Windows'
-        run: choco install netlogo
+        run: choco install netlogo --version=6.1.1
 
       - name: Setup R
         uses: r-lib/actions/setup-r@v1
