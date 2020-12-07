@@ -11,7 +11,7 @@ testthat::test_that("Run nl", {
 
   ## Check that netLogo installation worked:
   nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/github/home/NetLogo 6.1.1",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
                           ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
                                  "FAILED")))
 
