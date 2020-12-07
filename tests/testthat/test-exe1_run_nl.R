@@ -15,6 +15,7 @@ testthat::test_that("Run nl", {
                           ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
                                  "FAILED")))
 
+  print(paste("NetLogo path set to", nlpath))
   #nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",

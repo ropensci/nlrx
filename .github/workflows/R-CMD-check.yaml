@@ -55,9 +55,9 @@ jobs:
 
       - name: Setup NETLOGO Linux
         if: runner.os == 'Linux'
-        uses: teddyking/dependency-action@master
-        with:
-          deps: http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
+        run: |
+          wget http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
+          tar -xvf ./NetLogo-6.1.1-64.tgz
 
       - name: Setup NETLOGO MacOS
         if: runner.os == 'MacOS'
