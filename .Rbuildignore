@@ -16,3 +16,4 @@ vignettes/articles
 ^CODE_OF_CONDUCT\.md$
 ^CONTRIBUTING\.md$
 ^data_raw$
+^\.github$
