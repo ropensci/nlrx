@@ -2,9 +2,7 @@ testthat::context("Run nl tests")
 testthat::test_that("Run nl", {
 
   # Run these tests only on Github actions:
-  #testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
   testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
-
 
   ## Check that JAVA is installed:
   testthat::expect_true(system('java -version') == 0)
@@ -15,8 +13,6 @@ testthat::test_that("Run nl", {
                           ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
                                  "FAILED")))
 
-  print(paste("NetLogo path set to", nlpath))
-  #nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",
                                               "netlogo-6.1.1.jar")))
