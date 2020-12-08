@@ -16,7 +16,7 @@ testthat::test_that("Run nl", {
   testthat::expect_true(nlpath != "FAILED")
   testthat::expect_true(dir.exists(nlpath))
   testthat::expect_true(file.exists(file.path(nlpath,
-                                              "app",
+                                              "Java",
                                               "netlogo-6.1.1.jar")))
 
 
