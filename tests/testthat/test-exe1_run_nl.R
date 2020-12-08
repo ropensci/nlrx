@@ -13,9 +13,6 @@ testthat::test_that("Run nl", {
                           ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
                                  "FAILED")))
 
-  print("nlpath:")
-  print(nlpath)
-
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",
                                               "netlogo-6.1.1.jar")))
@@ -29,9 +26,6 @@ testthat::test_that("Run nl", {
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
-
-  print("nl object setup:")
-  print(nl)
 
   outpath <- tempdir()
 
@@ -71,22 +65,28 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  print("Complete nl object:")
-  print(nl)
+  testthat::test_that ("Before run_nl_one", {
+    testthat::expect_message(f(), "^Message: Before run_nl_one\\n")
+  })
+
 
   testthat::context("Run one simulation with run_nl_one()")
   results <- run_nl_one(nl, seed, siminputrow)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
-  print("Execution of run_nl_one succesfull!")
+  testthat::test_that ("After run_nl_one", {
+    testthat::expect_message(f(), "^Message: After run_nl_one\\n")
+  })
 
   testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
-  print("Execution of run_nl_all succesfull!")
+  testthat::test_that ("After run_nl_all", {
+    testthat::expect_message(f(), "^Message: After run_nl_all\\n")
+  })
 
   testthat::context("Run all simulations with run_nl_all() and wrong split parameter")
   testthat::expect_error(run_nl_all(nl, split=4))
