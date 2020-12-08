@@ -64,9 +64,13 @@ jobs:
       - name: Setup NETLOGO MacOS
         if: runner.os == 'MacOS'
         run: |
-          wget https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab6bc2bebb332b01db1babc896996b8fa01cd54a/Casks/netlogo.rb
-          brew install --HEAD -s netlogo.rb
-          rm -rf netlogo.rb
+          wget http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
+          mkdir /home/runner/work/netlogo
+          tar -xvzf NetLogo-6.1.1-64.tgz --directory /home/runner/work/netlogo
+          rm -rf NetLogo-6.1.1-64.tgz
+#          wget https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab6bc2bebb332b01db1babc896996b8fa01cd54a/Casks/netlogo.rb
+#          brew install --HEAD -s netlogo.rb
+#          rm -rf netlogo.rb
 
       - name: Setup NETLOGO Windows
         if: runner.os == 'Windows'
