@@ -65,28 +65,16 @@ testthat::test_that("Run nl", {
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
 
-  testthat::test_that ("Before run_nl_one", {
-    testthat::expect_message(f(), "^Message: Before run_nl_one\\n")
-  })
-
 
   testthat::context("Run one simulation with run_nl_one()")
   results <- run_nl_one(nl, seed, siminputrow)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
-  testthat::test_that ("After run_nl_one", {
-    testthat::expect_message(f(), "^Message: After run_nl_one\\n")
-  })
-
   testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
-
-  testthat::test_that ("After run_nl_all", {
-    testthat::expect_message(f(), "^Message: After run_nl_all\\n")
-  })
 
   testthat::context("Run all simulations with run_nl_all() and wrong split parameter")
   testthat::expect_error(run_nl_all(nl, split=4))
