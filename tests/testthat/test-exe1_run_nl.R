@@ -13,6 +13,7 @@ testthat::test_that("Run nl", {
                           ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
                                  "FAILED")))
 
+  testthat::expect_true(nlpath != "FAILED")
   testthat::expect_true(file.exists(file.path(nlpath,
                                               "app",
                                               "netlogo-6.1.1.jar")))
