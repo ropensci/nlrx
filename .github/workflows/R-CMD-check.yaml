@@ -8,13 +8,13 @@ on:
   push:
     branches:
       - ghactions
-#      - main
-#      - master
+      - main
+      - master
   pull_request:
     branches:
       - ghactions
-#      - main
-#      - master
+      - main
+      - master
 
 name: R-CMD-check
 
