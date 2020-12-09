@@ -10,12 +10,19 @@ testthat::test_that("util_runnl", {
   ## Check that netLogo installation worked:
   nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/NetLogo 6.1.1",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
                                  "FAILED")))
 
-  testthat::expect_true(file.exists(file.path(nlpath,
-                                              "app",
-                                              "netlogo-6.1.1.jar")))
+  testthat::expect_true(nlpath != "FAILED")
+  testthat::expect_true(dir.exists(nlpath))
+
+  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                                  "FAILED")))
+
+  testthat::expect_true(jarpath != "FAILED")
+  testthat::expect_true(file.exists(jarpath))
 
   ## Check that util_create_sim_XML can handle idrunnumber
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
