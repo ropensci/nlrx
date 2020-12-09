@@ -1,24 +1,36 @@
 testthat::context("Get nl spatial")
 testthat::test_that("Get nl spatial", {
 
-  # Run these tests only on TRAVIS:
-  testthat::skip_if(!identical(Sys.getenv("TRAVIS"), "true"))
+  # Run these tests only on Github actions:
+  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
 
   ## Check that JAVA is installed:
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- "/home/travis/netlogo/NetLogo 6.0.3"
-  testthat::expect_true(file.exists(file.path(nlpath,
-                                              "app",
-                                              "netlogo-6.0.3.jar")))
+  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
+                                 "FAILED")))
+
+  testthat::expect_true(nlpath != "FAILED")
+  testthat::expect_true(dir.exists(nlpath))
+
+  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+                                  "FAILED")))
+
+
+  testthat::expect_true(jarpath != "FAILED")
+  testthat::expect_true(file.exists(jarpath))
 
 
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
                          "Biology", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = "6.0.3",
+  nl <- nl(nlversion = "6.1.1",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -210,7 +222,7 @@ testthat::test_that("Get nl spatial", {
   testthat::context("nl_to_graph")
   modelpath <- file.path(nlpath, "app", "models", "Sample Models",
                          "Networks", "Giant Component.nlogo")
-  nl <- nl(nlversion = "6.0.3",
+  nl <- nl(nlversion = "6.1.1",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)

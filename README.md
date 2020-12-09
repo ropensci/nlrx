@@ -3,9 +3,13 @@
 
 # nlrx <img src="man/figures/logo.png" align="right" width="150" />
 
-[![Build
-Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[![Build
-status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master)
+<!-- old badges: [![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
+![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) -->
+
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/ropensci/nlrx/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/nlrx/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
@@ -14,6 +18,7 @@ status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/p
 [![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.r-project.org/package=nlrx)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/software-review/issues/262)
 [![DOI:10.1111/2041-210X.13286](https://zenodo.org/badge/DOI/10.1111/2041-210X.13286.svg)](https://doi.org/10.1111/2041-210X.13286)
+<!-- badges: end -->
 
 The nlrx package provides tools to setup and execute NetLogo simulations
 from R. NetLogo is a free, open-source and cross-platform modelling
