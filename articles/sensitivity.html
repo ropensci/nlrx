@@ -164,7 +164,7 @@
       <h1 data-toc-skip>Sensitivity Analysis</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-12-15</h4>
+            <h4 class="date">2020-12-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/sensitivity.Rmd"><code>vignettes/sensitivity.Rmd</code></a></small>
       <div class="hidden name"><code>sensitivity.Rmd</code></div>
@@ -204,7 +204,7 @@
 <div id="step-2-attach-an-experiment" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-2-attach-an-experiment" class="anchor"></a>Step 2: Attach an experiment</h4>
-<p>In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches). We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics. Thus, we define parameter ranges and distribution functions for all our numeric model parameters. We set the runtime of the model to 500 ticks and measure our metrics on each tick (<code>evalticks = "true"</code>). However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to <code><a href="https://rdrr.io/r/base/seq.html">seq(300,500)</a></code>.</p>
+<p>In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches). We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics. Thus, we define parameter ranges and distribution functions for all our numeric model parameters. We set the runtime of the model to 500 ticks and measure our metrics on each tick (<code>tickmetrics = "true"</code>). However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to <code><a href="https://rdrr.io/r/base/seq.html">seq(300,500)</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"wolf-sheep-morris"</span>,
                             outpath <span class="op">=</span> <span class="va">outpath</span>,
@@ -251,7 +251,7 @@
 <a href="#step-5-investigate-output" class="anchor"></a>Step 5: Investigate output</h4>
 <p>First, we need to attach the results to the nl object.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"morris.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>After results have been attached, we can use the <code><a href="../reference/analyze_nl.html">analyze_nl()</a></code> function to calculate morris sensetivity indices.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -325,7 +325,7 @@
 <a href="#step-5-investigate-output-1" class="anchor"></a>Step 5: Investigate output</h4>
 <p>First, we need to attach the results to the nl object.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"lhs.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>After results have been attached, we need to post-process our data to run the <code>pcc</code> and <code>src</code> function of the sensitivity package. We first take our parameter matrix (<code>siminput</code>) and select only columns with variable parameters and drop all other columns. We also need to rename the columns because <code>pcc</code> and <code>src</code> do not support special characters (-) in column names.</p>
 <p>Our simulation results are measured for each tick, thus we first need to aggregate our output. Here we just calculate the mean and standard deviation of outputs for each random-seed and siminputrow combination. Afterwards, we drop the random seed and siminputrow columns and rename the columns to remove special characters.</p>

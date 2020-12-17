@@ -164,7 +164,7 @@
       <h1 data-toc-skip>Approximate Bayesian Computation (ABC)</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-12-15</h4>
+            <h4 class="date">2020-12-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/abc.Rmd"><code>vignettes/abc.Rmd</code></a></small>
       <div class="hidden name"><code>abc.Rmd</code></div>
@@ -268,7 +268,7 @@
 <a href="#step-5-investigate-output" class="anchor"></a>Step 5: Investigate output</h4>
 <p>The output is reported as nested tibble which can be attached to the nl object. There are many possible ways to inspect the simulation output of the <code>ABCmcmc</code> functions. Below you find some guidance on how to summarize the output for calculating parameter statistics, sampling distributions, sampling density and exporting the best parameter combination.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"ABCmcmc.rds"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Calculate descriptive statistics</span>
@@ -391,7 +391,7 @@
 <a href="#step-5-investigate-output-1" class="anchor"></a>Step 5: Investigate output</h4>
 <p>We first attach the output results to our nl object and store a copy of the nl object on disk.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"ABClhs.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>For post-processing, we need a tibble with input parameter distributions. This can be easily extracted from the <code>siminput</code> slot of the <code>simdesign</code> by selecting only the columns with variable (non-constant) parameters. Next, we need corresponding outputs for these parameters. In this example we just take the measured output tibble (<code>simoutput</code>) and only select the columns with our metrics. Of course, you can also perform additional post-processing of these outputs if desired. Third, we need to define expected values for our outputs. In our case, we just assume that <code>count sheep</code> should have a value of 100, whereas <code>count wolves</code> should have a value of 80.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">

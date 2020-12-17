@@ -164,7 +164,7 @@
       <h1 data-toc-skip>Optimization</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-12-15</h4>
+            <h4 class="date">2020-12-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
@@ -250,7 +250,7 @@
 <code class="sourceCode R"><span class="va">results</span></code></pre></div>
 <p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_1.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
@@ -334,7 +334,7 @@
 <code class="sourceCode R"><span class="va">results</span></code></pre></div>
 <p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simoutput</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_2.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
