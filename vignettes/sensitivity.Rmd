@@ -55,7 +55,7 @@ nl <- nl(nlversion = "6.0.3",
 In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches).
 We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics.
 Thus, we define parameter ranges and distribution functions for all our numeric model parameters.
-We set the runtime of the model to 500 ticks and measure our metrics on each tick (`evalticks = "true"`).
+We set the runtime of the model to 500 ticks and measure our metrics on each tick (`tickmetrics = "true"`).
 However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to `seq(300,500)`.
 
 ```{r eval=FALSE}
@@ -114,7 +114,7 @@ results <- run_nl_all(nl)
 First, we need to attach the results to the nl object.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- results
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "morris.rds"))
 ```
 
@@ -200,7 +200,7 @@ results <- run_nl_all(nl, split=10)
 First, we need to attach the results to the nl object.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- results
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "lhs.rds"))
 ```
 

@@ -122,7 +122,7 @@ In order to store our results together with the nl object we need to attach the 
 As explained above, we need to enframe the results as a tibble.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- tibble::enframe(results)
+setsim(nl, "simoutput") <- tibble::enframe(results)
 saveRDS(nl, file.path(nl@experiment@outpath, "genSA_1.rds"))
 
 ```
@@ -238,7 +238,7 @@ In order to store our results together with the nl object we need to attach the 
 As explained above, we need to enframe the results as a tibble.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- tibble::enframe(results)
+setsim(nl, "simoutput") <- tibble::enframe(results)
 saveRDS(nl, file.path(nl@experiment@outpath, "genSA_2.rds"))
 
 ```

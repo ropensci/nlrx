@@ -138,7 +138,7 @@ There are many possible ways to inspect the simulation output of the `ABCmcmc` f
 Below you find some guidance on how to summarize the output for calculating parameter statistics, sampling distributions, sampling density and exporting the best parameter combination.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- results
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "ABCmcmc.rds"))
 
 ## Calculate descriptive statistics
@@ -267,7 +267,7 @@ results <- run_nl_all(nl)
 We first attach the output results to our nl object and store a copy of the nl object on disk.
 
 ```{r eval=FALSE}
-nl@simdesign@simoutput <- results
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "ABClhs.rds"))
 ```
 
