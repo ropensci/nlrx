@@ -10,35 +10,38 @@ navbar:
     - text: "Get Started"
       icon: fa fa-magic
       href: articles/getstarted.html
+    - text: "Advanced configuration"
+      icon: fa-book
+      href: articles/furthernotes.html
     - text: "More"
       icon: fa-graduation-cap
       menu:
-       - text: "Simdesign examples"
-         icon: fa-book
-         href: articles/simdesign-examples.html
-       - text: "Advanced configuration"
-         icon: fa-book
-         href: articles/furthernotes.html
-       - text: "Sensitivity Analysis with nlrx"
-         icon: fa-sticky-note
-         href: articles/sensitivity.html
-       - text: "Optimization with nlrx"
-         icon: fa-sticky-note
-         href: articles/optimization.html
-       - text: "Approximate Bayesian Computation (ABC) with nlrx"
-         icon: fa-sticky-note
-         href: articles/abc.html
        - text: "Capturing spatial NetLogo output"
          icon: fa-book
          href: articles/articles/spatial-output.html
-       - text: "Interfacing a variety of different NetLogo models"
+       - text: "Capturing NetLogo output manually"
          icon: fa-book
+         href: articles/articles/manual-output.html
+       - text: "Sensitivity Analysis with nlrx"
+         icon: fa-wrench
+         href: articles/sensitivity.html
+       - text: "Optimization with nlrx"
+         icon: fa-wrench
+         href: articles/optimization.html
+       - text: "Approximate Bayesian Computation (ABC) with nlrx"
+         icon: fa-wrench
+         href: articles/abc.html
+       - text: "Simdesign examples"
+         icon: fa-wrench
+         href: articles/simdesign-examples.html
+       - text: "Interfacing a variety of different NetLogo models"
+         icon: fa-wrench
          href: articles/articles/interfacing-different-models.html
        - text: "NetLogo documentation with nlrx"
-         icon: fa-book
+         icon: fa-wrench
          href: articles/articles/nlrx_nldoc.html
        - text: "Publication record"
-         icon: fa-book
+         icon: fa-bookmark
          href: articles/articles/nlrx_papers.html
   right:
     - icon: fa-newspaper-o

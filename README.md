@@ -84,7 +84,10 @@ be installed on remote machines as well. The nlrx package provides a
 utility function (`download_netlogo()`) that can be used to download and
 unzip (only unix systems) a specified NetLogo version to a local folder.
 For windows machines, the downloaded file needs to be executed in order
-to install NetLogo on the local system.
+to install NetLogo on the local system. If you are running MacOS, please
+use the Linux tar.gz version of NetLogo (either from the NetLogo
+Homepage or by using the `download_netlogo()` function). The dmg version
+from the NetLogo homepage is not compatible with nlrx.
 
 ### Java
 
@@ -222,9 +225,19 @@ specific simulation from the siminput parameter table. The
 parameter input table siminput. The loops are constructed in a way that
 allows easy parallelisation, either locally or on remote HPC machines
 (see “Advanced configuration” vignette for more information on
-parallelisation).
+parallelisation). Before running your simulations you might want to
+check your current nl object setup. `eval_variables_constants(nl)`
+evaluates if the defined variables and constants are correctly defined
+and are consistent with the attached model. `print(nl)` prints a
+complete summary of the provided nl object including checkmarks that
+might help to indicate potential problems.
 
 ``` r
+# Evaluate nl object:
+eval_variables_constants(nl)
+print(nl)
+
+# Run all simulations (loop over all siminputrows and simseeds)
 results <- run_nl_all(nl)
 ```
 

@@ -51,6 +51,13 @@
     Get Started
   </a>
 </li>
+<li>
+  <a href="../articles/furthernotes.html">
+    <span class="fa fa-book"></span>
+     
+    Advanced configuration
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-graduation-cap"></span>
@@ -61,41 +68,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-book"></span>
-         
-        Simdesign examples
-      </a>
-    </li>
-    <li>
-      <a href="../articles/furthernotes.html">
-        <span class="fa fa-book"></span>
-         
-        Advanced configuration
-      </a>
-    </li>
-    <li>
-      <a href="../articles/sensitivity.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Sensitivity Analysis with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/optimization.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Optimization with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/abc.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Approximate Bayesian Computation (ABC) with nlrx
-      </a>
-    </li>
-    <li>
       <a href="../articles/articles/spatial-output.html">
         <span class="fa fa-book"></span>
          
@@ -103,22 +75,57 @@
       </a>
     </li>
     <li>
-      <a href="../articles/articles/interfacing-different-models.html">
+      <a href="../articles/articles/manual-output.html">
         <span class="fa fa-book"></span>
+         
+        Capturing NetLogo output manually
+      </a>
+    </li>
+    <li>
+      <a href="../articles/sensitivity.html">
+        <span class="fa fa-wrench"></span>
+         
+        Sensitivity Analysis with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/optimization.html">
+        <span class="fa fa-wrench"></span>
+         
+        Optimization with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/abc.html">
+        <span class="fa fa-wrench"></span>
+         
+        Approximate Bayesian Computation (ABC) with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/simdesign-examples.html">
+        <span class="fa fa-wrench"></span>
+         
+        Simdesign examples
+      </a>
+    </li>
+    <li>
+      <a href="../articles/articles/interfacing-different-models.html">
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -164,7 +171,7 @@
       <h1 data-toc-skip>Sensitivity Analysis</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-11-20</h4>
+            <h4 class="date">2021-01-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/sensitivity.Rmd"><code>vignettes/sensitivity.Rmd</code></a></small>
       <div class="hidden name"><code>sensitivity.Rmd</code></div>
@@ -203,7 +210,7 @@
 <div id="step-2-attach-an-experiment" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-2-attach-an-experiment" class="anchor"></a>Step 2: Attach an experiment</h4>
-<p>In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches). We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics. Thus, we define parameter ranges and distribution functions for all our numeric model parameters. We set the runtime of the model to 500 ticks and measure our metrics on each tick (<code>evalticks = "true"</code>). However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to <code><a href="https://rdrr.io/r/base/seq.html">seq(300,500)</a></code>.</p>
+<p>In this example, we want to calculate sensitivity for 3 outputs (number of sheep, number of wolves, number of grass patches). We vary all numeric model parameters to estimate their sensitivity on the three defined output metrics. Thus, we define parameter ranges and distribution functions for all our numeric model parameters. We set the runtime of the model to 500 ticks and measure our metrics on each tick (<code>tickmetrics = "true"</code>). However, for calculation of sensitivity indices, we only want to consider the last 200 ticks. Thus, we set evalticks to <code><a href="https://rdrr.io/r/base/seq.html">seq(300,500)</a></code>.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"wolf-sheep-morris"</span>,
                             <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
                             <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
@@ -246,7 +253,7 @@
 <h4 class="hasAnchor">
 <a href="#step-5-investigate-output" class="anchor"></a>Step 5: Investigate output</h4>
 <p>First, we need to attach the results to the nl object.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">simdesign</span>@<span class="kw">simoutput</span> <span class="kw">&lt;-</span> <span class="no">results</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">outpath</span>, <span class="st">"morris.rds"</span>))</pre></body></html></div>
 <p>After results have been attached, we can use the <code><a href="../reference/analyze_nl.html">analyze_nl()</a></code> function to calculate morris sensetivity indices.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">morris</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/analyze_nl.html">analyze_nl</a></span>(<span class="no">nl</span>)</pre></body></html></div>
@@ -314,7 +321,7 @@
 <h4 class="hasAnchor">
 <a href="#step-5-investigate-output-1" class="anchor"></a>Step 5: Investigate output</h4>
 <p>First, we need to attach the results to the nl object.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">simdesign</span>@<span class="kw">simoutput</span> <span class="kw">&lt;-</span> <span class="no">results</span>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">outpath</span>, <span class="st">"lhs.rds"</span>))</pre></body></html></div>
 <p>After results have been attached, we need to post-process our data to run the <code>pcc</code> and <code>src</code> function of the sensitivity package. We first take our parameter matrix (<code>siminput</code>) and select only columns with variable parameters and drop all other columns. We also need to rename the columns because <code>pcc</code> and <code>src</code> do not support special characters (-) in column names.</p>
 <p>Our simulation results are measured for each tick, thus we first need to aggregate our output. Here we just calculate the mean and standard deviation of outputs for each random-seed and siminputrow combination. Afterwards, we drop the random seed and siminputrow columns and rename the columns to remove special characters.</p>

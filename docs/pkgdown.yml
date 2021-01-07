@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   abc: abc.html
   interfacing-different-models: articles/interfacing-different-models.html
+  manual-output: articles/manual-output.html
   nlrx_nldoc: articles/nlrx_nldoc.html
   nlrx_papers: articles/nlrx_papers.html
   spatial-output: articles/spatial-output.html
@@ -12,5 +13,5 @@ articles:
   optimization: optimization.html
   sensitivity: sensitivity.html
   simdesign-examples: simdesign-examples.html
-last_built: 2020-11-20T09:28Z
+last_built: 2021-01-07T11:49Z
 

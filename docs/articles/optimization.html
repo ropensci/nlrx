@@ -51,6 +51,13 @@
     Get Started
   </a>
 </li>
+<li>
+  <a href="../articles/furthernotes.html">
+    <span class="fa fa-book"></span>
+     
+    Advanced configuration
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-graduation-cap"></span>
@@ -61,41 +68,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-book"></span>
-         
-        Simdesign examples
-      </a>
-    </li>
-    <li>
-      <a href="../articles/furthernotes.html">
-        <span class="fa fa-book"></span>
-         
-        Advanced configuration
-      </a>
-    </li>
-    <li>
-      <a href="../articles/sensitivity.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Sensitivity Analysis with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/optimization.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Optimization with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/abc.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Approximate Bayesian Computation (ABC) with nlrx
-      </a>
-    </li>
-    <li>
       <a href="../articles/articles/spatial-output.html">
         <span class="fa fa-book"></span>
          
@@ -103,22 +75,57 @@
       </a>
     </li>
     <li>
-      <a href="../articles/articles/interfacing-different-models.html">
+      <a href="../articles/articles/manual-output.html">
         <span class="fa fa-book"></span>
+         
+        Capturing NetLogo output manually
+      </a>
+    </li>
+    <li>
+      <a href="../articles/sensitivity.html">
+        <span class="fa fa-wrench"></span>
+         
+        Sensitivity Analysis with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/optimization.html">
+        <span class="fa fa-wrench"></span>
+         
+        Optimization with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/abc.html">
+        <span class="fa fa-wrench"></span>
+         
+        Approximate Bayesian Computation (ABC) with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/simdesign-examples.html">
+        <span class="fa fa-wrench"></span>
+         
+        Simdesign examples
+      </a>
+    </li>
+    <li>
+      <a href="../articles/articles/interfacing-different-models.html">
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -164,7 +171,7 @@
       <h1 data-toc-skip>Optimization</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-11-20</h4>
+            <h4 class="date">2021-01-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
@@ -244,7 +251,7 @@
 <p>The output list of the Simulated Annealing procedure contains four elements: <code>value</code> reports the minimum final value of the evaluation criterion. <code>par</code> reports the parameter settings of the final parameterisation in the same order as defined in the experiment of the nl object. <code>trace.mat</code> gives you detailed information on the optimization process over all iterations. <code>counts</code> indicates how often the optimization procedure was executed in total.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">results</span></pre></body></html></div>
 <p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">simdesign</span>@<span class="kw">simoutput</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span>(<span class="no">results</span>)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span>(<span class="no">results</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">outpath</span>, <span class="st">"genSA_1.rds"</span>))</pre></body></html></div>
 </div>
 </div>
@@ -321,7 +328,7 @@
 <p>The output list of the Simulated Annealing procedure contains four elements: <code>value</code> reports the minimum final value of the evaluation criterion. <code>par</code> reports the parameter settings of the final parameterisation in the same order as defined in the experiment of the nl object. <code>trace.mat</code> gives you detailed information on the optimization process over all iterations. <code>counts</code> indicates how often the optimization procedure was executed in total.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">results</span></pre></body></html></div>
 <p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">simdesign</span>@<span class="kw">simoutput</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span>(<span class="no">results</span>)
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span>(<span class="no">results</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">outpath</span>, <span class="st">"genSA_2.rds"</span>))</pre></body></html></div>
 </div>
 </div>

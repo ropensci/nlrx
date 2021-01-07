@@ -51,6 +51,13 @@
     Get Started
   </a>
 </li>
+<li>
+  <a href="../articles/furthernotes.html">
+    <span class="fa fa-book"></span>
+     
+    Advanced configuration
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-graduation-cap"></span>
@@ -61,41 +68,6 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-book"></span>
-         
-        Simdesign examples
-      </a>
-    </li>
-    <li>
-      <a href="../articles/furthernotes.html">
-        <span class="fa fa-book"></span>
-         
-        Advanced configuration
-      </a>
-    </li>
-    <li>
-      <a href="../articles/sensitivity.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Sensitivity Analysis with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/optimization.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Optimization with nlrx
-      </a>
-    </li>
-    <li>
-      <a href="../articles/abc.html">
-        <span class="fa fa-sticky-note"></span>
-         
-        Approximate Bayesian Computation (ABC) with nlrx
-      </a>
-    </li>
-    <li>
       <a href="../articles/articles/spatial-output.html">
         <span class="fa fa-book"></span>
          
@@ -103,22 +75,57 @@
       </a>
     </li>
     <li>
-      <a href="../articles/articles/interfacing-different-models.html">
+      <a href="../articles/articles/manual-output.html">
         <span class="fa fa-book"></span>
+         
+        Capturing NetLogo output manually
+      </a>
+    </li>
+    <li>
+      <a href="../articles/sensitivity.html">
+        <span class="fa fa-wrench"></span>
+         
+        Sensitivity Analysis with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/optimization.html">
+        <span class="fa fa-wrench"></span>
+         
+        Optimization with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/abc.html">
+        <span class="fa fa-wrench"></span>
+         
+        Approximate Bayesian Computation (ABC) with nlrx
+      </a>
+    </li>
+    <li>
+      <a href="../articles/simdesign-examples.html">
+        <span class="fa fa-wrench"></span>
+         
+        Simdesign examples
+      </a>
+    </li>
+    <li>
+      <a href="../articles/articles/interfacing-different-models.html">
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-book"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -164,7 +171,7 @@
       <h1 data-toc-skip>Get Started</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2020-11-20</h4>
+            <h4 class="date">2021-01-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/getstarted.Rmd"><code>vignettes/getstarted.Rmd</code></a></small>
       <div class="hidden name"><code>getstarted.Rmd</code></div>
@@ -192,7 +199,7 @@
 <div id="netlogo" class="section level3">
 <h3 class="hasAnchor">
 <a href="#netlogo" class="anchor"></a>NetLogo</h3>
-<p>In order to use the nlrx package, <a href="http://netlogoweb.org/">NetLogo</a> (&gt;=5.3.1) needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (<code><a href="../reference/download_netlogo.html">download_netlogo()</a></code>) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system.</p>
+<p>In order to use the nlrx package, <a href="http://netlogoweb.org/">NetLogo</a> (&gt;=5.3.1) needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (<code><a href="../reference/download_netlogo.html">download_netlogo()</a></code>) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system. If you are running MacOS, please use the Linux tar.gz version of NetLogo (either from the NetLogo Homepage or by using the <code><a href="../reference/download_netlogo.html">download_netlogo()</a></code> function). The dmg version from the NetLogo homepage is not compatible with nlrx.</p>
 </div>
 <div id="java" class="section level3">
 <h3 class="hasAnchor">
@@ -271,8 +278,13 @@
 <div id="step-4-run-simulations" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-4-run-simulations" class="anchor"></a>Step 4: Run simulations</h4>
-<p>All information that is needed to run the simulations is now stored within the nl object. The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function allows to run one specific simulation from the siminput parameter table. The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see “Advanced configuration” vignette for more information on parallelisation).</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)</pre></body></html></div>
+<p>All information that is needed to run the simulations is now stored within the nl object. The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function allows to run one specific simulation from the siminput parameter table. The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see “Advanced configuration” vignette for more information on parallelisation). Before running your simulations you might want to check your current nl object setup. <code><a href="../reference/eval_variables_constants.html">eval_variables_constants(nl)</a></code> evaluates if the defined variables and constants are correctly defined and are consistent with the attached model. <code><a href="https://rdrr.io/r/base/print.html">print(nl)</a></code> prints a complete summary of the provided nl object including checkmarks that might help to indicate potential problems.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># Evaluate nl object:</span>
+<span class="fu"><a href="../reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">nl</span>)
+
+<span class="co"># Run all simulations (loop over all siminputrows and simseeds)</span>
+<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)</pre></body></html></div>
 </div>
 <div id="step-5-attach-results-to-nl-and-run-analysis" class="section level4">
 <h4 class="hasAnchor">
@@ -335,7 +347,11 @@
                                <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
                                <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
 
-<span class="co"># Execute simulations</span>
+<span class="co"># Evaluate nl object:</span>
+<span class="fu"><a href="../reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">nl</span>)
+
+<span class="co"># Run all simulations (loop over all siminputrows and simseeds)</span>
 <span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)
 
 <span class="co"># Attach results to nl object:</span>
