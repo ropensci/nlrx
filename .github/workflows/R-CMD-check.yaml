@@ -108,7 +108,7 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
 
-       - name: Install source dependencies
+      - name: Install source dependencies
         if: runner.os == 'Linux'
         run: |
           remotes::install_deps(dependencies = TRUE)
