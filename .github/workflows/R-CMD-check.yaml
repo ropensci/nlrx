@@ -108,10 +108,16 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
 
-      - name: Install dependencies
+       - name: Install source dependencies
+        if: runner.os == 'Linux'
         run: |
           remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
+        shell: Rscript {0}
+
+      - name: Install binary dependencies
+        if: runner.os != 'Linux'
+        run: |
+          remotes::install_deps(dependencies = TRUE, type="binary")
         shell: Rscript {0}
 
       - name: Session info

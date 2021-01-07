@@ -1,12 +1,12 @@
 ---
-title: "Capturing output manually"
+title: "Capturing NetLogo output manually"
 author: "Jan Salecker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 editor_options: 
   chunk_output_type: console
 vignette: >
-  %\VignetteIndexEntry{Manual Output}
+  %\VignetteIndexEntry{Capturing NetLogo output manually}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
