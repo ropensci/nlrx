@@ -139,8 +139,15 @@ All information that is needed to run the simulations is now stored within the n
 The `run_nl_one()` function allows to run one specific simulation from the siminput parameter table.
 The `run_nl_all()` function runs a loop over all simseeds and rows of the parameter input table siminput.
 The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
+Before running your simulations you might want to check your current nl object setup. `eval_variables_constants(nl)` evaluates if the defined variables and constants are correctly defined and are consistent with the attached model. `print(nl)` prints a complete summary of the provided nl object including checkmarks that might help to indicate potential problems.
+
 
 ```{r eval=FALSE}
+# Evaluate nl object:
+eval_variables_constants(nl)
+print(nl)
+
+# Run all simulations (loop over all siminputrows and simseeds)
 results <- run_nl_all(nl)
 ```
 
@@ -210,7 +217,11 @@ nl@simdesign <- simdesign_lhs(nl=nl,
                                nseeds=3,
                                precision=3)
 
-# Execute simulations
+# Evaluate nl object:
+eval_variables_constants(nl)
+print(nl)
+
+# Run all simulations (loop over all siminputrows and simseeds)
 results <- run_nl_all(nl)
 
 # Attach results to nl object:
