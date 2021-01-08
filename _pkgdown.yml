@@ -50,6 +50,6 @@ navbar:
     - icon: fa-cogs
       text: "functions"
       href: reference/index.html
-    - icon: fa-github
+    - icon: "fab fa-github fa-lg"
       text: "github"
       href: https://github.com/ropensci/nlrx

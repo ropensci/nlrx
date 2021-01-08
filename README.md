@@ -112,8 +112,8 @@ install.packages("nlrx")
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("ropensci/nlrx")
+# install.packages("remotes")
+remotes::install_github("ropensci/nlrx")
 ```
 
 ## Get started
