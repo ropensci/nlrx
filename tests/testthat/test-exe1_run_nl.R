@@ -24,6 +24,9 @@ testthat::test_that("Run nl", {
   testthat::expect_true(jarpath != "FAILED")
   testthat::expect_true(file.exists(jarpath))
 
+  ## Check the test_nlrx() function:
+  testthat::expect_true(test_nlrx(nlpath=nlpath, nlversion="6.1.1"))
+
 
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:

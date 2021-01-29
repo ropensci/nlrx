@@ -234,8 +234,8 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   # Check if csv file exists:
   if (!file.exists(outfile))
   {
-    stop(paste0("Temporary output file ", outfile, "not found. On unix systems this can happen if the default system temp folder is used.
-                Try reassigning the default temp folder for this R session (unixtools package)."))
+    stop(paste0("Temporary simulation output file not found: ", outfile, ".\n",
+                "Either the simulation did not run or crashed, check the debugging section in ??run_nl_all() for help."))
   }
 
   NLtable <- readr::read_csv(outfile, skip = 6, col_types = readr::cols())
