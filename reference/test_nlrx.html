@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Execute all NetLogo simulations from a nl object — run_nl_all • nlrx | NetLogo from R</title>
+<title>Test if nlrx runs on the local system — test_nlrx • nlrx | NetLogo from R</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Execute all NetLogo simulations from a nl object — run_nl_all" />
-<meta property="og:description" content="Execute all NetLogo simulations from a nl object with a defined experiment and simdesign" />
+<meta property="og:title" content="Test if nlrx runs on the local system — test_nlrx" />
+<meta property="og:description" content="Runs a short test if nlrx runs on the local system" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -210,104 +210,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Execute all NetLogo simulations from a nl object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/run_nl.R'><code>R/run_nl.R</code></a></small>
-    <div class="hidden name"><code>run_nl_all.Rd</code></div>
+    <h1>Test if nlrx runs on the local system</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ropensci/nlrx/blob/master/R/test_nlrx.R'><code>R/test_nlrx.R</code></a></small>
+    <div class="hidden name"><code>test_nlrx.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Execute all NetLogo simulations from a nl object with a defined experiment and simdesign</p>
+    <p>Runs a short test if nlrx runs on the local system</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_all</span><span class='op'>(</span>
-  <span class='va'>nl</span>,
-  split <span class='op'>=</span> <span class='fl'>1</span>,
-  cleanup.csv <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  cleanup.xml <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  cleanup.bat <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>test_nlrx</span><span class='op'>(</span><span class='va'>nlpath</span>, <span class='va'>nlversion</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>nl</th>
-      <td><p>nl object</p></td>
+      <th>nlpath</th>
+      <td><p>Provide a path to a netlogo folder</p></td>
     </tr>
     <tr>
-      <th>split</th>
-      <td><p>number of parts the job should be split into</p></td>
-    </tr>
-    <tr>
-      <th>cleanup.csv</th>
-      <td><p>TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.</p></td>
-    </tr>
-    <tr>
-      <th>cleanup.xml</th>
-      <td><p>TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.</p></td>
-    </tr>
-    <tr>
-      <th>cleanup.bat</th>
-      <td><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></td>
+      <th>nlversion</th>
+      <td><p>Matching version string of the provided NetLogo folder (e.g. "6.1.1")</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>tibble with simulation output results</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
-The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-The loops are created by calling <a href='https://rdrr.io/pkg/furrr/man/future_map.html'>future_map_dfr</a>, which allows running the function either locally or on remote HPC machines.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.</p>
-<p>When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
-the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
-The inner loop (siminputrows) distributes simulation tasks to these cores.
-However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
-This can be done using the split parameter. If split is &gt; 1 the siminput matrix is split into smaller parts.
-Jobs are created for each combination of part and random seed.
-If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.</p>
-<p>Debugging "Temporary simulation output file not found" error message:</p>
-<p>Whenever this error message appears it means that the simulation did not produce any output.
-Two main reasons can lead to this problem, either the simulation did not even start or the simulation crashed during runtime.
-Both can happen for several reasons and here are some hints for debugging this:</p><ol>
-<li><p>Missing software:
-Make sure that java is installed and available from the terminal (java -version).
-Make sure that NetLogo is installed and available from the terminal.</p></li>
-<li><p>Wrong path definitions
-Make sure your nlpath points to a folder containing NetLogo.
-Make sure your modelpath points to a *.nlogo model file.
-Make sure that the nlversion within your nl object matches the NetLogo version of your nlpath.
-Use the convenience function of nlrx for checking your nl object (print(nl), eval_variables_constants(nl)).</p></li>
-<li><p>Temporary files cleanup
-Due to automatic temp file cleanup on unix systems temporary output might be deleted.
-Try reassigning the default temp folder for this R session (the unixtools package has a neat function).</p></li>
-<li><p>NetLogo runtime crashes
-It can happen that your NetLogo model started but failed to produce output because of a NetLogo runtime error.
-Make sure your model is working correctly or track progress using print statements.
-Sometimes the java virtual machine crashes due to memory constraints.</p></li>
-</ol>
-
+    <p>Runs a short test if nlrx runs on the local system. Reports TRUE if successful!</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-
-<span class='co'># Load nl object from test data:</span>
-<span class='va'>nl</span> <span class='op'>&lt;-</span> <span class='va'>nl_lhs</span>
-
-<span class='co'># Execute all simulations from an nl object with properly attached simdesign.</span>
-<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>run_nl_all</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span>
-
-<span class='co'># Run in parallel on local machine:</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HenrikBengtsson/future'>future</a></span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span><span class='op'>)</span>
-<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>run_nl_all</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span>
-
+<span class='fu'>test_nlrx</span><span class='op'>(</span>nlpath<span class='op'>=</span><span class='st'>"/Users/xyz/netlogo/NetLogo 6.1.1"</span>, nlversion<span class='op'>=</span><span class='st'>"6.1.1"</span><span class='op'>)</span>
 <span class='op'>}</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
