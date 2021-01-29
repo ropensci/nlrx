@@ -45,8 +45,7 @@ However, it might be advantageous to split up large jobs into smaller jobs for e
 This can be done using the split parameter. If split is > 1 the siminput matrix is split into smaller parts.
 Jobs are created for each combination of part and random seed.
 If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.
-
-Debugging "Temporary simulation output file not found" error message:
+\subsection{Debugging "Temporary simulation output file not found" error message:}{
 
 Whenever this error message appears it means that the simulation did not produce any output.
 Two main reasons can lead to this problem, either the simulation did not even start or the simulation crashed during runtime.
@@ -55,18 +54,19 @@ Both can happen for several reasons and here are some hints for debugging this:
 \item Missing software:
 Make sure that java is installed and available from the terminal (java -version).
 Make sure that NetLogo is installed and available from the terminal.
-\item Wrong path definitions
+\item Wrong path definitions:
 Make sure your nlpath points to a folder containing NetLogo.
 Make sure your modelpath points to a *.nlogo model file.
 Make sure that the nlversion within your nl object matches the NetLogo version of your nlpath.
 Use the convenience function of nlrx for checking your nl object (print(nl), eval_variables_constants(nl)).
-\item Temporary files cleanup
+\item Temporary files cleanup:
 Due to automatic temp file cleanup on unix systems temporary output might be deleted.
 Try reassigning the default temp folder for this R session (the unixtools package has a neat function).
-\item NetLogo runtime crashes
+\item NetLogo runtime crashes:
 It can happen that your NetLogo model started but failed to produce output because of a NetLogo runtime error.
 Make sure your model is working correctly or track progress using print statements.
 Sometimes the java virtual machine crashes due to memory constraints.
+}
 }
 }
 \examples{
