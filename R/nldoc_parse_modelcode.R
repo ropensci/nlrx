@@ -72,8 +72,8 @@ nldoc_parse_modelcode <- function(nlogocode)
                             grep(pattern=";`@global", gsub(" ", "", modelcode, fixed = TRUE)) > start)[1],
                      subset(grep(pattern=";`@procedure", gsub(" ", "", modelcode, fixed = TRUE)),
                             grep(pattern=";`@procedure", gsub(" ", "", modelcode, fixed = TRUE)) > start)[1],
-                     subset(grep(pattern="TO", toupper(modelcode)),
-                            grep(pattern="TO", toupper(modelcode)) > start)[1]), na.rm = TRUE) - 1)
+                     subset(grep(pattern="^TO", toupper(modelcode)),
+                            grep(pattern="^TO", toupper(modelcode)) > start)[1]), na.rm = TRUE) - 1)
 
 
           codelines <- ""
