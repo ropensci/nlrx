@@ -213,21 +213,42 @@
       <small>Source: <a href='https://github.com/ropensci/nlrx/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="nlrx-043" class="section level2">
+<h2 class="hasAnchor">
+<a href="#nlrx-043" class="anchor"></a>nlrx 0.4.3</h2>
+<div id="functionality" class="section level4">
+<h4 class="hasAnchor">
+<a href="#functionality" class="anchor"></a>Functionality</h4>
+<ul>
+<li>added test_nlrx() function to check functionality of the package</li>
+<li>added support to download_netLogo() for NetLogo version 6.2.0</li>
+</ul>
+</div>
+<div id="bugfixes" class="section level4">
+<h4 class="hasAnchor">
+<a href="#bugfixes" class="anchor"></a>Bugfixes</h4>
+<ul>
+<li>changed timestamp for nldoc function from lubridate to base date</li>
+<li>fixed an error in the function parser of the nldoc procedure</li>
+<li>fixed bug in calculation of number of computed runs in print_nl()</li>
+</ul>
+</div>
+</div>
     <div id="nlrx-042" class="section level2">
 <h2 class="hasAnchor">
 <a href="#nlrx-042" class="anchor"></a>nlrx 0.4.2</h2>
-<div id="functionality" class="section level4">
+<div id="functionality-1" class="section level4">
 <h4 class="hasAnchor">
-<a href="#functionality" class="anchor"></a>functionality</h4>
+<a href="#functionality-1" class="anchor"></a>Functionality</h4>
 <ul>
 <li>added option to run_nl_one that allows to store results as rds files</li>
 <li>added eval_simoutput option to check for missing combinations of siminputrow and random-seeds</li>
 <li>added support for progressr progress bars for run_nl_all function (details see further notes vignette) and removed the silent parameter of the run_nl_all function</li>
 </ul>
 </div>
-<div id="bugfixes" class="section level4">
+<div id="bugfixes-1" class="section level4">
 <h4 class="hasAnchor">
-<a href="#bugfixes" class="anchor"></a>bugfixes</h4>
+<a href="#bugfixes-1" class="anchor"></a>Bugfixes</h4>
 <ul>
 <li>hotfix for another dependency on external files in nldoc roxygen examples</li>
 <li>small bugfix in analyze_morris: A warning is now thrown if NA are present in the simulation data</li>
