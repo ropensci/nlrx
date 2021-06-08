@@ -59,7 +59,7 @@ nldoc <- function(modelfiles,
                   output_format = "html",
                   number_sections = TRUE,
                   theme = "journal",
-                  date = today(),
+                  date = as.Date(Sys.time()),
                   toc = TRUE)
 {
   ## Read code from provided netlogo files:
