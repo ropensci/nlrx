@@ -19,6 +19,7 @@ Auxiliary function to download NetLogo
 \details{
 Supported Versions for Download and Usage (parameter \code{version}):
 \itemize{
+\item "6.2.0" = NetLogo Version 6.2.0
 \item "6.1.1" = NetLogo Version 6.1.1
 \item "6.1.0" = NetLogo Version 6.1.0
 \item "6.0.4" = NetLogo Version 6.0.4

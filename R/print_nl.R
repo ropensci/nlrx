@@ -179,7 +179,7 @@ util_print.summary <- function(x, ...)
 
   cat("number of runs calculated: ")
   output <- ifelse(nrow(x@simdesign@simoutput) > 0,
-                   style_def(nrow(x@simdesign@simoutput)),
+                   style_def(length(unique(paste(x@simdesign@simoutput$'random-seed', x@simdesign@simoutput$siminputrow)))),
                    style_na("\u2717"))
   cat(paste0(output, "\n"))
 

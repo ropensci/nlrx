@@ -16,7 +16,7 @@
 #'
 #' @export
 test_nlrx <- function(nlpath, nlversion){
-
+  testresult = FALSE
   message("Checking path...")
   if(!dir.exists(nlpath)) {
     stop("Provided NetLogo path does not exist!")
@@ -61,6 +61,6 @@ test_nlrx <- function(nlpath, nlversion){
   # Run all simulations (loop over all siminputrows and simseeds)
   results <- run_nl_all(nl)
   message("success!")
-
-  return(TRUE)
+  testresult = TRUE
+  return(testresult)
 }

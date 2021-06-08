@@ -1,12 +1,24 @@
 
+## nlrx 0.4.3
+
+#### Functionality
+* added test_nlrx() function to check functionality of the package
+* added support to download_netLogo() for NetLogo version 6.2.0
+
+#### Bugfixes
+* changed timestamp for nldoc function from lubridate to base date
+* fixed an error in the function parser of the nldoc procedure
+* fixed bug in calculation of number of computed runs in print_nl()
+
+
 ## nlrx 0.4.2
 
-#### functionality
+#### Functionality
 * added option to run_nl_one that allows to store results as rds files
 * added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
 * added support for progressr progress bars for run_nl_all function (details see further notes vignette) and removed the silent parameter of the run_nl_all function
 
-#### bugfixes
+#### Bugfixes
 * hotfix for another dependency on external files in nldoc roxygen examples
 * small bugfix in analyze_morris: A warning is now thrown if NA are present in the simulation data
 * bugfix in random seed generator
