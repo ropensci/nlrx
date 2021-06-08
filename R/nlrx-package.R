@@ -112,7 +112,7 @@
 #'
 #' @docType package
 #' @name nlrx-package
-#' @author Jan Salecker \email{jsaleck@gwdg.de}
+#' @author Jan Salecker \email{jan.salecker@posteo.de}
 #' @keywords package
 # nocov start
 "_PACKAGE"

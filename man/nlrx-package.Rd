@@ -108,6 +108,6 @@ Useful links:
 
 }
 \author{
-Jan Salecker \email{jsaleck@gwdg.de}
+Jan Salecker \email{jan.salecker@posteo.de}
 }
 \keyword{package}

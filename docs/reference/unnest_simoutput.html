@@ -95,14 +95,14 @@
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -111,63 +111,63 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -178,21 +178,21 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -219,7 +219,7 @@
     <p>Turn results from NetLogo in spatial data objects</p>
     </div>
 
-    <pre class="usage"><span class='fu'>unnest_simoutput</span>(<span class='no'>nl</span>)</pre>
+    <pre class="usage"><span class='fu'>unnest_simoutput</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -242,27 +242,27 @@
 <span class='co'># To unnest data a nl object containing spatial output data is needed.</span>
 <span class='co'># For this example, we load a nl object from test data.</span>
 
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_spatial</span>
-<span class='fu'>unnest_simoutput</span>(<span class='no'>nl</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 30,370 x 21</span><span>
-#&gt;    `[run number]` `model-version` `initial-number~ `initial-number~
+<span class='va'>nl</span> <span class='op'>&lt;-</span> <span class='va'>nl_spatial</span>
+<span class='fu'>unnest_simoutput</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 30,370 x 21</span><span>
+#&gt;    `[run number]` `model-version` `initial-number… `initial-number…
 #&gt;             </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                      </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>            </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 2</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 3</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 4</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 5</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 6</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 7</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 8</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'> 9</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'>10</span><span>              1 sheep-wolves-g~              100               50
-#&gt; </span><span style='color: #555555;'># ... with 30,360 more rows, and 17 more variables:</span><span>
-#&gt; </span><span style='color: #555555;'>#   `grass-regrowth-time` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `sheep-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   `wolf-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `sheep-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   `wolf-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `show-energy?` </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span style='color: #555555;'>, `random-seed` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   `[step]` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count sheep` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count wolves` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, breed </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   who </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pxcor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pycor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, agent </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, siminputrow </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
-#&gt; </span><span style='color: #555555;'>#   pcolor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
+#&gt; </span><span style='color: #555555;'> 1</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 2</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 3</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 4</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 5</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 6</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 7</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 8</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'> 9</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'>10</span><span>              1 sheep-wolves-g…              100               50
+#&gt; </span><span style='color: #555555;'># … with 30,360 more rows, and 17 more variables: `grass-regrowth-time` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   `sheep-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `wolf-gain-from-food` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   `sheep-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `wolf-reproduce` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `show-energy?` </span><span style='color: #555555;font-style: italic;'>&lt;lgl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   `random-seed` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `[step]` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count sheep` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, `count</span><span>
+#&gt; </span><span style='color: #555555;'>#   wolves` </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, breed </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, who </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pxcor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pycor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>,</span><span>
+#&gt; </span><span style='color: #555555;'>#   agent </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span style='color: #555555;'>, siminputrow </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span style='color: #555555;'>, pcolor </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span></div><div class='input'>
 
 </div></span></pre>
   </div>
@@ -280,7 +280,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

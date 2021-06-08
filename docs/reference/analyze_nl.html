@@ -95,14 +95,14 @@
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -111,63 +111,63 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -178,21 +178,21 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -219,7 +219,7 @@
     <p>Analyze NetLogo simulation output</p>
     </div>
 
-    <pre class="usage"><span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>metrics</span> <span class='kw'>=</span> <span class='fu'><a href='getexp.html'>getexp</a></span>(<span class='no'>nl</span>, <span class='st'>"metrics"</span>), <span class='kw'>funs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span> <span class='kw'>=</span> <span class='no'>mean</span>))</pre>
+    <pre class="usage"><span class='fu'>analyze_nl</span><span class='op'>(</span><span class='va'>nl</span>, metrics <span class='op'>=</span> <span class='fu'><a href='getexp.html'>getexp</a></span><span class='op'>(</span><span class='va'>nl</span>, <span class='st'>"metrics"</span><span class='op'>)</span>, funs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>mean <span class='op'>=</span> <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -277,35 +277,36 @@ The function calculates eFast sensitivity indices from the output results using 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
 <span class='co'># Load nl object including output data from testdata</span>
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_sobol</span>
+<span class='va'>nl</span> <span class='op'>&lt;-</span> <span class='va'>nl_sobol</span>
 
 <span class='co'># Define aggregation measurements:</span>
-<span class='no'>myfuns</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>mean</span><span class='kw'>=</span><span class='no'>mean</span>, <span class='kw'>sd</span><span class='kw'>=</span><span class='no'>sd</span>, <span class='kw'>min</span><span class='kw'>=</span><span class='no'>min</span>, <span class='kw'>max</span><span class='kw'>=</span><span class='no'>max</span>)
+<span class='va'>myfuns</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>mean<span class='op'>=</span><span class='va'>mean</span>, sd<span class='op'>=</span><span class='va'>sd</span>, min<span class='op'>=</span><span class='va'>min</span>, max<span class='op'>=</span><span class='va'>max</span><span class='op'>)</span>
 
 <span class='co'># Calculate sensitivity indices:</span>
-<span class='fu'>analyze_nl</span>(<span class='no'>nl</span>, <span class='kw'>funs</span> <span class='kw'>=</span> <span class='no'>myfuns</span>)</div><div class='output co'>#&gt; [1] "No missing combinations detected!"</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'sensitivity':</span>
+<span class='fu'>analyze_nl</span><span class='op'>(</span><span class='va'>nl</span>, funs <span class='op'>=</span> <span class='va'>myfuns</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "No missing combinations detected!"</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'sensitivity':</span>
 #&gt; <span class='message'>  method    from </span>
 #&gt; <span class='message'>  print.src dplyr</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 18 x 8</span><span>
 #&gt;    original     bias `std. error` `min. c.i.` `max. c.i.` parameter metric  seed
 #&gt;       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>        </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span>    0.114  4.47</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.176       0            0.490 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 2</span><span>    0.554  0.  </span><span style='color: #555555;'> </span><span>         0.097</span><span style='text-decoration: underline;'>8</span><span>      0.372        0.757 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 3</span><span>    0.346  3.67</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-4</span><span>       0.213       0            0.797 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 4</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.046</span><span style='text-decoration: underline;'>1</span><span>      0.576        0.761 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 5</span><span>    0      3.86</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-5</span><span>       0.105       0            0.172 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 6</span><span>    0.365  4.67</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.122       0.124        0.625 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 7</span><span>    0.114  3.85</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.171       0            0.476 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 8</span><span>    0.554  1.55</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.113       0.334        0.796 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'> 9</span><span>    0.346  0.  </span><span style='color: #555555;'> </span><span>         0.242       0            0.865 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>10</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.063</span><span style='text-decoration: underline;'>3</span><span>      0.515        0.783 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>11</span><span>    0      0.  </span><span style='color: #555555;'> </span><span>         0.090</span><span style='text-decoration: underline;'>1</span><span>      0            0.197 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>12</span><span>    0.365  1.83</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span><span>       0.120       0.051</span><span style='text-decoration: underline;'>7</span><span>       0.599 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>13</span><span>    0.114  6.74</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.153       0            0.425 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>14</span><span>    0.554  9.99</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.110       0.300        0.776 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>15</span><span>    0.346  0.  </span><span style='color: #555555;'> </span><span>         0.200       0            0.825 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>16</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.058</span><span style='text-decoration: underline;'>9</span><span>      0.557        0.790 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>17</span><span>    0      0.  </span><span style='color: #555555;'> </span><span>         0.089</span><span style='text-decoration: underline;'>4</span><span>      0            0.171 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515
-#&gt; </span><span style='color: #555555;'>18</span><span>    0.365  7.07</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.123       0.068</span><span style='text-decoration: underline;'>5</span><span>       0.626 initial-~ count~  </span><span style='text-decoration: underline;'>8</span><span>515</div><div class='input'>
+#&gt; </span><span style='color: #555555;'> 1</span><span>    0.114  4.47</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.176       0            0.490 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 2</span><span>    0.554  0.  </span><span style='color: #555555;'> </span><span>         0.097</span><span style='text-decoration: underline;'>8</span><span>      0.372        0.757 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 3</span><span>    0.346  3.67</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-4</span><span>       0.213       0            0.797 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 4</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.046</span><span style='text-decoration: underline;'>1</span><span>      0.576        0.761 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 5</span><span>    0      3.86</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-5</span><span>       0.105       0            0.172 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 6</span><span>    0.365  4.67</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.122       0.124        0.625 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 7</span><span>    0.114  3.85</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.171       0            0.476 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 8</span><span>    0.554  1.55</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.113       0.334        0.796 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'> 9</span><span>    0.346  0.  </span><span style='color: #555555;'> </span><span>         0.242       0            0.865 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>10</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.063</span><span style='text-decoration: underline;'>3</span><span>      0.515        0.783 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>11</span><span>    0      0.  </span><span style='color: #555555;'> </span><span>         0.090</span><span style='text-decoration: underline;'>1</span><span>      0            0.197 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>12</span><span>    0.365  1.83</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-2</span><span>       0.120       0.051</span><span style='text-decoration: underline;'>7</span><span>       0.599 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>13</span><span>    0.114  6.74</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.153       0            0.425 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>14</span><span>    0.554  9.99</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.110       0.300        0.776 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>15</span><span>    0.346  0.  </span><span style='color: #555555;'> </span><span>         0.200       0            0.825 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>16</span><span>    0.652  0.  </span><span style='color: #555555;'> </span><span>         0.058</span><span style='text-decoration: underline;'>9</span><span>      0.557        0.790 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>17</span><span>    0      0.  </span><span style='color: #555555;'> </span><span>         0.089</span><span style='text-decoration: underline;'>4</span><span>      0            0.171 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515
+#&gt; </span><span style='color: #555555;'>18</span><span>    0.365  7.07</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-3</span><span>       0.123       0.068</span><span style='text-decoration: underline;'>5</span><span>       0.626 initial-… count…  </span><span style='text-decoration: underline;'>8</span><span>515</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -322,7 +323,7 @@ The function calculates eFast sensitivity indices from the output results using 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

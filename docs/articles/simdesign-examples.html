@@ -53,14 +53,14 @@
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +69,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,21 +136,21 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -165,13 +165,13 @@
 
       
 
-      </header><script src="simdesign-examples_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="simdesign-examples_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simdesign examples</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2021-01-08</h4>
+            <h4 class="date">2021-06-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/simdesign-examples.Rmd"><code>vignettes/simdesign-examples.Rmd</code></a></small>
       <div class="hidden name"><code>simdesign-examples.Rmd</code></div>
@@ -186,288 +186,296 @@
 <a href="#simdesign-examples-for-the-wolf-sheep-predation-model" class="anchor"></a>Simdesign examples for the Wolf Sheep Predation model</h2>
 <p>The following section provides valid experiment setups for all supported simdesigns using the Wolf Sheep Model from the NetLogo models library.</p>
 <p>First we set up a nl object. We use this nl object for all simdesigns:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlrx</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
 <span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span>
 <span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span>
 
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.3"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="no">modelpath</span>,
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)</pre></body></html></div>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="va">modelpath</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="simple-simulation-using-constants-simdesign_simple" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simple-simulation-using-constants-simdesign_simple" class="anchor"></a>Simple simulation using constants (simdesign_simple)</h2>
 <p>The simple simdesign only uses defined constants and reports a parameter matrix with only one parameterization. To setup a simple simdesign, no variables have to be defined. The simple simdesign can be used to test a specific parameterisation of the model. It is also useful to for creating animated output of one specific parameterisation (see “Capturing Spatial NetLogo Output” vignette).</p>
 <p><code>simdesign_simple</code> is most useful, if you want to imitate pressing the <em>go</em> button in your model in NetLogo - just a single run, with a defined parameterisation.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"initial-number-sheep"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"initial-number-wolves"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"initial-number-sheep"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"initial-number-wolves"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                 <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                 nseeds<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="distinct-parameter-combinations-simdesign_distinct" class="section level2">
 <h2 class="hasAnchor">
 <a href="#distinct-parameter-combinations-simdesign_distinct" class="anchor"></a>Distinct parameter combinations (simdesign_distinct)</h2>
 <p>The distinct simdesign can be used to run distinct parameter combinations. To setup a distinct simdesign, vectors of values need to be defined for each variable. These vectors must have the same number of elements across all variables. The first simulation run consist of all 1st elements of these variable vectors; the second run uses all 2nd values, and so on.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">values</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>)),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">values</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span>))),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">40</span>, <span class="fl">50</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_distinct.html">simdesign_distinct</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                   <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_distinct.html">simdesign_distinct</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                   nseeds<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="full-factorial-simulation-simdesign_ff" class="section level2">
 <h2 class="hasAnchor">
 <a href="#full-factorial-simulation-simdesign_ff" class="anchor"></a>Full-factorial simulation (simdesign_ff)</h2>
 <p>The full factorial simdesign creates a full-factorial parameter matrix with all possible combinations of parameter values. To setup a full-factorial simdesign, vectors of values need to be defined for each variable. Alternatively, a sequence can be defined by setting min, max and step. However, if both (values and min, max, step) are defined, the values vector is prioritized.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">values</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span>)),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">step</span><span class="kw">=</span><span class="fl">10</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">0</span>, max<span class="op">=</span><span class="fl">50</span>, step<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ff.html">simdesign_ff</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                             <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ff.html">simdesign_ff</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                             nseeds<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="latin-hypercube-sampling-simdesign_lhs" class="section level2">
 <h2 class="hasAnchor">
 <a href="#latin-hypercube-sampling-simdesign_lhs" class="anchor"></a>Latin Hypercube Sampling (simdesign_lhs)</h2>
 <p>The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix. The method can be used to generate a near-random sample of parameter values from the defined parameter distributions. More Details on Latin Hypercube Sampling can be found in <a href="https://www.tandfonline.com/doi/abs/10.1080/00401706.1979.10489755">McKay 1979</a>. nlrx uses the <a href="https://CRAN.R-project.org/package=lhs/index.html">lhs</a> package to generate the Latin Hypercube parameter matrix. To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                               <span class="kw">samples</span><span class="kw">=</span><span class="fl">100</span>,
-                               <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                               <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                               samples<span class="op">=</span><span class="fl">100</span>,
+                               nseeds<span class="op">=</span><span class="fl">3</span>,
+                               precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sensitivity-analyses-simdesign_sobol-_sobol2007-_soboljansen-_morris-_efast" class="anchor"></a>Sensitivity Analyses (simdesign_sobol, _sobol2007, _soboljansen, _morris, _eFast)</h2>
 <p>Sensitivity analyses are useful to estimate the importance of model parameters and to scan the parameter space in an efficient way. nlrx uses the <a href="https://CRAN.R-project.org/package=sensitivity/index.html">sensitivity</a> package to setup sensitivity analysis parameter matrices. All supported sensitivity analysis simdesigns can be used to calculate sensitivity indices for each parameter-output combination. These indices can be calculated by using the <code><a href="../reference/analyze_nl.html">analyze_nl()</a></code> function after attaching the simulation results to the nl object. To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun) need to be defined.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                               <span class="kw">samples</span><span class="kw">=</span><span class="fl">100</span>,
-                               <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                               <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
-
-
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_sobol.html">simdesign_sobol</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                 <span class="kw">samples</span><span class="kw">=</span><span class="fl">200</span>,
-                                 <span class="kw">sobolorder</span><span class="kw">=</span><span class="fl">2</span>,
-                                 <span class="kw">sobolnboot</span><span class="kw">=</span><span class="fl">20</span>,
-                                 <span class="kw">sobolconf</span><span class="kw">=</span><span class="fl">0.95</span>,
-                                 <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                                 <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
-
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_sobol2007.html">simdesign_sobol2007</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                     <span class="kw">samples</span><span class="kw">=</span><span class="fl">200</span>,
-                                     <span class="kw">sobolnboot</span><span class="kw">=</span><span class="fl">20</span>,
-                                     <span class="kw">sobolconf</span><span class="kw">=</span><span class="fl">0.95</span>,
-                                     <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                                     <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
-
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_soboljansen.html">simdesign_soboljansen</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                       <span class="kw">samples</span><span class="kw">=</span><span class="fl">200</span>,
-                                       <span class="kw">sobolnboot</span><span class="kw">=</span><span class="fl">20</span>,
-                                       <span class="kw">sobolconf</span><span class="kw">=</span><span class="fl">0.95</span>,
-                                       <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                                       <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                               samples<span class="op">=</span><span class="fl">100</span>,
+                               nseeds<span class="op">=</span><span class="fl">3</span>,
+                               precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_morris.html">simdesign_morris</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                  <span class="kw">morristype</span><span class="kw">=</span><span class="st">"oat"</span>,
-                                  <span class="kw">morrislevels</span><span class="kw">=</span><span class="fl">4</span>,
-                                  <span class="kw">morrisr</span><span class="kw">=</span><span class="fl">100</span>,
-                                  <span class="kw">morrisgridjump</span><span class="kw">=</span><span class="fl">2</span>,
-                                  <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_sobol.html">simdesign_sobol</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                 samples<span class="op">=</span><span class="fl">200</span>,
+                                 sobolorder<span class="op">=</span><span class="fl">2</span>,
+                                 sobolnboot<span class="op">=</span><span class="fl">20</span>,
+                                 sobolconf<span class="op">=</span><span class="fl">0.95</span>,
+                                 nseeds<span class="op">=</span><span class="fl">3</span>,
+                                 precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_eFast.html">simdesign_eFast</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                 <span class="kw">samples</span><span class="kw">=</span><span class="fl">100</span>,
-                                 <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_sobol2007.html">simdesign_sobol2007</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                     samples<span class="op">=</span><span class="fl">200</span>,
+                                     sobolnboot<span class="op">=</span><span class="fl">20</span>,
+                                     sobolconf<span class="op">=</span><span class="fl">0.95</span>,
+                                     nseeds<span class="op">=</span><span class="fl">3</span>,
+                                     precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
+
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_soboljansen.html">simdesign_soboljansen</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                       samples<span class="op">=</span><span class="fl">200</span>,
+                                       sobolnboot<span class="op">=</span><span class="fl">20</span>,
+                                       sobolconf<span class="op">=</span><span class="fl">0.95</span>,
+                                       nseeds<span class="op">=</span><span class="fl">3</span>,
+                                       precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
+
+
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_morris.html">simdesign_morris</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                  morristype<span class="op">=</span><span class="st">"oat"</span>,
+                                  morrislevels<span class="op">=</span><span class="fl">4</span>,
+                                  morrisr<span class="op">=</span><span class="fl">100</span>,
+                                  morrisgridjump<span class="op">=</span><span class="fl">2</span>,
+                                  nseeds<span class="op">=</span><span class="fl">3</span><span class="op">)</span>
+
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_eFast.html">simdesign_eFast</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                 samples<span class="op">=</span><span class="fl">100</span>,
+                                 nseeds<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="optimization-techniques-simdesign_gensa-_genalg" class="section level2">
 <h2 class="hasAnchor">
 <a href="#optimization-techniques-simdesign_gensa-_genalg" class="anchor"></a>Optimization techniques (simdesign_GenSA, _GenAlg)</h2>
 <p>Optimization techniques are a powerful tool to search the parameter space for specific solutions. Both approaches try to minimize a specified model output reporter by systematically (genetic algorithm, utilizing the <a href="https://CRAN.R-project.org/package=genalg/index.html">genalg</a> package) or randomly (simulated annealing, utilizing the <a href="https://CRAN.R-project.org/package=GenSA/index.html">genSA</a> package) changing the model parameters within the allowed ranges. To setup optimization simdesigns, variable ranges (min, max) need to be defined. Optimization simdesigns can only be executed using the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function - instead of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> or <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                 <span class="kw">popSize</span> <span class="kw">=</span> <span class="fl">200</span>,
-                                 <span class="kw">iters</span> <span class="kw">=</span> <span class="fl">100</span>,
-                                 <span class="kw">evalcrit</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                 <span class="kw">elitism</span> <span class="kw">=</span> <span class="fl">NA</span>,
-                                 <span class="kw">mutationChance</span> <span class="kw">=</span> <span class="fl">NA</span>,
-                                 <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>, 
+                                 popSize <span class="op">=</span> <span class="fl">200</span>, 
+                                 iters <span class="op">=</span> <span class="fl">100</span>, 
+                                 evalcrit <span class="op">=</span> <span class="fl">1</span>,
+                                 elitism <span class="op">=</span> <span class="cn">NA</span>, 
+                                 mutationChance <span class="op">=</span> <span class="cn">NA</span>, 
+                                 nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                <span class="kw">par</span><span class="kw">=</span><span class="kw">NULL</span>,
-                                <span class="kw">evalcrit</span><span class="kw">=</span><span class="fl">1</span>,
-                                <span class="kw">control</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">max.time</span> <span class="kw">=</span> <span class="fl">600</span>),
-                                <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">1</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                par<span class="op">=</span><span class="cn">NULL</span>,
+                                evalcrit<span class="op">=</span><span class="fl">1</span>,
+                                control<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>max.time <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>,
+                                nseeds<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="calibration-simdesigns-approximate-bayesian-computation-abc" class="section level2">
 <h2 class="hasAnchor">
 <a href="#calibration-simdesigns-approximate-bayesian-computation-abc" class="anchor"></a>Calibration simdesigns (Approximate Bayesian Computation (ABC))</h2>
 <p>Approximate bayesian computation (ABC) algorithms have been increasingly used for calibration of agent-based simulation models. The nlrx package provides different algorithms from the <a href="https://cran.r-project.org/package=EasyABC">EasyABC package</a>. These algorithms can be used by attaching the corresponding simdesigns (<code><a href="../reference/simdesign_ABCmcmc_Marjoram.html">simdesign_ABCmcmc_Marjoram()</a></code>, <code><a href="../reference/simdesign_ABCmcmc_Marjoram_original.html">simdesign_ABCmcmc_Marjoram_original()</a></code>, <code><a href="../reference/simdesign_ABCmcmc_Wegmann.html">simdesign_ABCmcmc_Wegmann()</a></code>).</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="st">"C:/out/"</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idfinal</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="fl">NA_character_</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="st">"C:/out/"</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idfinal<span class="op">=</span><span class="cn">NA_character_</span>,
+                            idrunnum<span class="op">=</span><span class="cn">NA_character_</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Marjoram.html">simdesign_ABCmcmc_Marjoram</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                           <span class="kw">summary_stat_target</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">100</span>, <span class="fl">80</span>),
-                                           <span class="kw">n_rec</span> <span class="kw">=</span> <span class="fl">100</span>,
-                                           <span class="kw">n_calibration</span><span class="kw">=</span><span class="fl">200</span>,
-                                           <span class="kw">use_seed</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                           <span class="kw">progress_bar</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                           <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Marjoram.html">simdesign_ABCmcmc_Marjoram</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                           summary_stat_target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">80</span><span class="op">)</span>,
+                                           n_rec <span class="op">=</span> <span class="fl">100</span>, 
+                                           n_calibration<span class="op">=</span><span class="fl">200</span>,
+                                           use_seed <span class="op">=</span> <span class="cn">TRUE</span>,
+                                           progress_bar <span class="op">=</span> <span class="cn">TRUE</span>,
+                                           nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Marjoram_original.html">simdesign_ABCmcmc_Marjoram_original</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                           <span class="kw">summary_stat_target</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">100</span>, <span class="fl">80</span>),
-                                           <span class="kw">n_rec</span> <span class="kw">=</span> <span class="fl">10</span>,
-                                           <span class="kw">use_seed</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                           <span class="kw">progress_bar</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                           <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Marjoram_original.html">simdesign_ABCmcmc_Marjoram_original</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                           summary_stat_target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">80</span><span class="op">)</span>,
+                                           n_rec <span class="op">=</span> <span class="fl">10</span>, 
+                                           use_seed <span class="op">=</span> <span class="cn">TRUE</span>,
+                                           progress_bar <span class="op">=</span> <span class="cn">TRUE</span>,
+                                           nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Wegmann.html">simdesign_ABCmcmc_Wegmann</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                                          <span class="kw">summary_stat_target</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">100</span>, <span class="fl">80</span>),
-                                          <span class="kw">n_rec</span> <span class="kw">=</span> <span class="fl">10</span>,
-                                          <span class="kw">n_calibration</span><span class="kw">=</span><span class="fl">200</span>,
-                                          <span class="kw">use_seed</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                          <span class="kw">progress_bar</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                                          <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)</pre></body></html></div>
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_ABCmcmc_Wegmann.html">simdesign_ABCmcmc_Wegmann</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                                          summary_stat_target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">80</span><span class="op">)</span>,
+                                          n_rec <span class="op">=</span> <span class="fl">10</span>, 
+                                          n_calibration<span class="op">=</span><span class="fl">200</span>,
+                                          use_seed <span class="op">=</span> <span class="cn">TRUE</span>,
+                                          progress_bar <span class="op">=</span> <span class="cn">TRUE</span>,
+                                          nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 
@@ -486,7 +494,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

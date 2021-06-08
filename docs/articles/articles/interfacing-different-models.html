@@ -53,14 +53,14 @@
 </li>
 <li>
   <a href="../../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +69,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,21 +136,21 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -165,13 +165,13 @@
 
       
 
-      </header><script src="interfacing-different-models_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="interfacing-different-models_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Interfacing a variety of different NetLogo models</h1>
                         <h4 class="author">Marco Sciaini</h4>
             
-            <h4 class="date">2021-01-08</h4>
+            <h4 class="date">2021-06-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/articles/interfacing-different-models.Rmd"><code>vignettes/articles/interfacing-different-models.Rmd</code></a></small>
       <div class="hidden name"><code>interfacing-different-models.Rmd</code></div>
@@ -183,21 +183,23 @@
 <p>Here, we present examples on how to interface a variety of different NetLogo models. NetLogo model interfaces are very diverse across models and might contain spatial elements of different types (patches, different groups of turtles, links). With our interfacing examples, we try to cover a wide range of different models to show how <strong>nlrx</strong> can be utilized for various applications.</p>
 <p>Our examples show how spatial output from NetLogo models can be used to create animated gif files, displaying patches and turtles properties over time. We explicitly show how to setup, postprocess and plot spatial output for very different model types. Although, the following examples cover a wide range of output types, it is likely that different experiment measurements or postprocessing needs to be done for specific and complex models. If you have problems to interface a specific type of model, feel free to send one of the authors of nlrx an email!</p>
 <p>First, we need to load a bunch of packages, mainly for the subsetting of the spatial data and the plotting:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co">## Load packages</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlrx</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyverse</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gganimate</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cartography</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rcartocolor</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggthemes</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load packages</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gganimate</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">cartography</span><span class="op">)</span> 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rcartocolor</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ggthemes</span><span class="op">)</span> </code></pre></div>
 <p>Second, we need to define the path variables pointing to the NetLogo installation. Depending on the operation system, the NetLogo and output paths need to be adjusted.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.4"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.4"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span>
 <span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.4"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)</pre></body></html></div>
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.4"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span></code></pre></div>
 <p>… and now are ready to interface some of the models of the NetLogo model library.</p>
 <div id="diffusion-model" class="section level2">
 <h2 class="hasAnchor">
@@ -205,63 +207,64 @@
 <p>The diffusion model is a simple example of how to plot moving turtles and patches. Turtles move over the lattice and generate heat on cells they move over. The accumulated heat also diffuses to neighboring cells.</p>
 <p>In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).</p>
 <p>After converting the spatial data to tibble format (<code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code>), we split the spatial data into a turtles tibble and a patches tibble using the agent column of the returned tibble from <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code>. The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who).</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Art/Diffusion Graphics.nlogo"</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Step1: Create a nl obejct:</span>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Art/Diffusion Graphics.nlogo"</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"diffusion"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">500</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">500</span>),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"num-turtles"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"diffusion-rate"</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                             <span class="st">"turtle-heat"</span> <span class="kw">=</span> <span class="fl">139</span>,
-                                             <span class="st">"turtle-speed"</span> <span class="kw">=</span> <span class="fl">1.0</span>,
-                                             <span class="st">"wander?"</span> <span class="kw">=</span> <span class="st">"TRUE"</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>)),
-                            <span class="kw">metrics.patches</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"heat"</span>))
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"diffusion"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,   
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>,  
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,        
+                            runtime <span class="op">=</span> <span class="fl">500</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">500</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"num-turtles"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"diffusion-rate"</span> <span class="op">=</span> <span class="fl">1</span>,
+                                             <span class="st">"turtle-heat"</span> <span class="op">=</span> <span class="fl">139</span>,
+                                             <span class="st">"turtle-speed"</span> <span class="op">=</span> <span class="fl">1.0</span>,
+                                             <span class="st">"wander?"</span> <span class="op">=</span> <span class="st">"TRUE"</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span><span class="op">)</span><span class="op">)</span>,
+                            metrics.patches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"heat"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Evaluate if variables and constants are valid:</span>
-<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Step3: Add a Simulation Design</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                                 <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                                 nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 
 <span class="co"># Step4: Run simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Postprocessing:</span>
 <span class="co">## Step1: Attach results to nl:</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
 
 <span class="co"># Prepare data for plotting</span>
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
-<span class="no">n</span> <span class="kw">&lt;-</span> <span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">runtime</span>
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">runtime</span>
 
-<span class="no">turtles</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">agent</span> <span class="kw">==</span> <span class="st">"turtles"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">`[step]`</span>, <span class="no">who</span>)
-<span class="no">patches</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">agent</span> <span class="kw">==</span> <span class="st">"patches"</span><span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">pcolor</span>, <span class="no">`[step]`</span>)
+<span class="va">turtles</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">agent</span> <span class="op">==</span> <span class="st">"turtles"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">`[step]`</span>, <span class="va">who</span><span class="op">)</span>
+<span class="va">patches</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">agent</span> <span class="op">==</span> <span class="st">"patches"</span><span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">pcolor</span>, <span class="va">`[step]`</span><span class="op">)</span>
 
 <span class="co">## Plot animation:</span>
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">patches</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">pycor</span>, <span class="kw">fill</span><span class="kw">=</span><span class="no">pcolor</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">turtles</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>) +
-  <span class="fu">scale_fill_carto_c</span>(<span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Prism"</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">fill</span><span class="kw">=</span><span class="st">"none"</span>, <span class="kw">color</span><span class="kw">=</span><span class="st">"none"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patches</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y <span class="op">=</span> <span class="va">pycor</span>, fill<span class="op">=</span><span class="va">pcolor</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">turtles</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor</span>, y <span class="op">=</span> <span class="va">ycor</span>, group <span class="op">=</span> <span class="va">who</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_fill_carto_c</span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"Prism"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> 
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">nframes</span> <span class="kw">=</span> <span class="no">n</span>, <span class="kw">width</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">duration</span><span class="kw">=</span><span class="fl">6</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, nframes <span class="op">=</span> <span class="va">n</span>, width<span class="op">=</span><span class="fl">800</span>, height<span class="op">=</span><span class="fl">800</span>, duration<span class="op">=</span><span class="fl">6</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/diffusion.gif" align="center" width="100%">
 </center>
@@ -271,69 +274,70 @@
 <a href="#fire-model" class="anchor"></a>Fire model</h2>
 <p>Similar to the diffusion example, the fire model displays patches and moving turtles. However, the model contains two turtle breeds which need to be displayed differently.</p>
 <p>Thus, we also measure the turtle breed (metrics.turtles). Before plotting we split up the turtle data into two tibbles, one for each breed. This allows us to create two different geom_point layers with different aesthetics.</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Earth Science/Fire.nlogo"</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Step1: Create a nl obejct:</span>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Earth Science/Fire.nlogo"</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"fire"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">500</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">500</span>),
-                            <span class="kw">metrics</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count patches"</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>, <span class="st">"color"</span>)),
-                            <span class="kw">metrics.patches</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'density'</span> <span class="kw">=</span> <span class="fl">62</span>)
-)
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"fire"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,    
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>, 
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,       
+                            runtime <span class="op">=</span> <span class="fl">500</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">500</span><span class="op">)</span>,
+                            metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count patches"</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>, <span class="st">"color"</span><span class="op">)</span><span class="op">)</span>,
+                            metrics.patches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'density'</span> <span class="op">=</span> <span class="fl">62</span><span class="op">)</span>
+<span class="op">)</span>
 
 <span class="co"># Evaluate if variables and constants are valid:</span>
-<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Step3: Add a Simulation Design</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                                 <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                                 nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 
 <span class="co"># Step4: Run simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Postprocessing:</span>
 <span class="co">## Step1: Attach results to nl:</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
-<span class="no">n</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">nl_spatial</span>$<span class="no">`[step]`</span>)
-
-<span class="no">embers</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">breed</span> <span class="kw">==</span> <span class="st">"embers"</span> <span class="kw">&amp;</span> <span class="no">agent</span> <span class="kw">==</span> <span class="st">"turtles"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">`[step]`</span>, <span class="no">color</span>, <span class="no">who</span>)
-<span class="no">fires</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">breed</span> <span class="kw">==</span> <span class="st">"fires"</span> <span class="kw">&amp;</span> <span class="no">agent</span> <span class="kw">==</span> <span class="st">"turtles"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">`[step]`</span>, <span class="no">color</span>, <span class="no">who</span>)
-<span class="no">patches</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">agent</span> <span class="kw">==</span> <span class="st">"patches"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">pcolor</span>, <span class="no">`[step]`</span>)
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">$</span><span class="va">`[step]`</span><span class="op">)</span>
+         
+<span class="va">embers</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">breed</span> <span class="op">==</span> <span class="st">"embers"</span> <span class="op">&amp;</span> <span class="va">agent</span> <span class="op">==</span> <span class="st">"turtles"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">`[step]`</span>, <span class="va">color</span>, <span class="va">who</span><span class="op">)</span>
+<span class="va">fires</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">breed</span> <span class="op">==</span> <span class="st">"fires"</span> <span class="op">&amp;</span> <span class="va">agent</span> <span class="op">==</span> <span class="st">"turtles"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">`[step]`</span>, <span class="va">color</span>, <span class="va">who</span><span class="op">)</span>
+<span class="va">patches</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">agent</span> <span class="op">==</span> <span class="st">"patches"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">pcolor</span>, <span class="va">`[step]`</span><span class="op">)</span>
 
 <span class="co"># make same space in the memory</span>
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="no">nl</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="no">results</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span>(<span class="no">nl_spatial</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span>()
+<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/gc.html">gc</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">#----------------------------------</span>
 <span class="co">## Plot animation:</span>
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">embers</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">patches</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">pycor</span>, <span class="kw">fill</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">pcolor</span>))) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">embers</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">pxcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">pycor</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">color</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_color_gradientn</a></span>(<span class="kw">colors</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="kw pkg">cartography</span><span class="kw ns">::</span><span class="fu">carto.pal</span>(<span class="st">"orange.pal"</span>, <span class="kw">n1</span> <span class="kw">=</span> <span class="fl">8</span>))) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">fires</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">pxcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">pycor</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">color</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">3</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0"</span> <span class="kw">=</span> <span class="st">"gray24"</span>, <span class="st">"55"</span> <span class="kw">=</span> <span class="st">"#83B37D"</span>, <span class="st">"11.4"</span> <span class="kw">=</span> <span class="st">"#B59A89"</span>)) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">fill</span><span class="kw">=</span><span class="st">"none"</span>, <span class="kw">color</span><span class="kw">=</span><span class="st">"none"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
-
-<span class="no">g1</span> <span class="kw">&lt;-</span> <span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">nframes</span> <span class="kw">=</span> <span class="no">n</span>, <span class="kw">width</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">duration</span> <span class="kw">=</span> <span class="fl">6</span>)</pre></body></html></div>
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">embers</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">patches</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y<span class="op">=</span><span class="va">pycor</span>, fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">pcolor</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">embers</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pxcor</span>, y <span class="op">=</span> <span class="va">pycor</span>, color <span class="op">=</span> <span class="va">color</span>, group <span class="op">=</span> <span class="va">who</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_color_gradientn</a></span><span class="op">(</span>colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu">cartography</span><span class="fu">::</span><span class="fu">carto.pal</span><span class="op">(</span><span class="st">"orange.pal"</span>, n1 <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fires</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pxcor</span>, y <span class="op">=</span> <span class="va">pycor</span>, color <span class="op">=</span> <span class="va">color</span>, group <span class="op">=</span> <span class="va">who</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"0"</span> <span class="op">=</span> <span class="st">"gray24"</span>, <span class="st">"55"</span> <span class="op">=</span> <span class="st">"#83B37D"</span>, <span class="st">"11.4"</span> <span class="op">=</span> <span class="st">"#B59A89"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> 
+  
+<span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, nframes <span class="op">=</span> <span class="va">n</span>, width<span class="op">=</span><span class="fl">800</span>, height<span class="op">=</span><span class="fl">800</span>, duration <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/fire.gif" align="center" width="100%">
 </center>
@@ -351,70 +355,71 @@
 </ul>
 <p>The turtle data is plotted by adding another geom_text layer, using a Yen sign (￥) that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the layer correctly (group=who).</p>
 <p>The plot need to be stored in an object before it can be rendered with the <code>gganimate</code> function. In some cases, it is important to set the number of frames explicitly to the number of steps of your simulation output. Otherwise, gganimate may interpolate between measured steps, which may lead to incorrect results.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Ants.nlogo"</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Step1: Create a nl obejct:</span>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Ants.nlogo"</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"ants"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">1000</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">1000</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span>)),
-                            <span class="kw">metrics.patches</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"chemical"</span>, <span class="st">"food"</span>, <span class="st">"food-source-number"</span>),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"population"</span> <span class="kw">=</span> <span class="fl">125</span>,
-                                             <span class="st">'diffusion-rate'</span> <span class="kw">=</span> <span class="fl">50</span>,
-                                             <span class="st">'evaporation-rate'</span> <span class="kw">=</span> <span class="fl">10</span>))
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"ants"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,      
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>,   
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,         
+                            runtime <span class="op">=</span> <span class="fl">1000</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1000</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"breed"</span><span class="op">)</span><span class="op">)</span>,
+                            metrics.patches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span>, <span class="st">"chemical"</span>, <span class="st">"food"</span>, <span class="st">"food-source-number"</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"population"</span> <span class="op">=</span> <span class="fl">125</span>,
+                                             <span class="st">'diffusion-rate'</span> <span class="op">=</span> <span class="fl">50</span>,
+                                             <span class="st">'evaporation-rate'</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Step3: Add a Simulation Design</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                                 <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                                 nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 
 <span class="co">## Step4: Run simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Step5: Attach results to nl and reformat spatial data with get_nl_spatial()</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Step6: Prepare data for plotting</span>
 <span class="co"># Extract infromation on food sources and select maximum step as simulation length:</span>
-<span class="no">food_dat</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">food</span> <span class="kw">&gt;</span> <span class="fl">0</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">`[step]`</span>)
-<span class="no">nmax</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">food_dat</span>$<span class="no">`[step]`</span>)
-<span class="no">food_dat</span> <span class="kw">&lt;-</span> <span class="no">food_dat</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`[step]`</span> <span class="kw">%in%</span> <span class="fl">1</span>:<span class="no">nmax</span>)
+<span class="va">food_dat</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">food</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">`[step]`</span><span class="op">)</span>
+<span class="va">nmax</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">food_dat</span><span class="op">$</span><span class="va">`[step]`</span><span class="op">)</span>
+<span class="va">food_dat</span> <span class="op">&lt;-</span> <span class="va">food_dat</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`[step]`</span> <span class="op">%in%</span> <span class="fl">1</span><span class="op">:</span><span class="va">nmax</span><span class="op">)</span>
 <span class="co"># Extract information on chemicals and apply minimum treshhold for coloring:</span>
-<span class="no">chem_dat</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`[step]`</span> <span class="kw">%in%</span> <span class="fl">1</span>:<span class="no">nmax</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">chemical</span>, <span class="no">`[step]`</span>)
-<span class="no">chem_dat</span>$<span class="no">chemical</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">chem_dat</span>$<span class="no">chemical</span> <span class="kw">&lt;=</span> <span class="fl">0.2</span>, <span class="fl">NA</span>, <span class="no">chem_dat</span>$<span class="no">chemical</span>)
+<span class="va">chem_dat</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`[step]`</span> <span class="op">%in%</span> <span class="fl">1</span><span class="op">:</span><span class="va">nmax</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">chemical</span>, <span class="va">`[step]`</span><span class="op">)</span>
+<span class="va">chem_dat</span><span class="op">$</span><span class="va">chemical</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">chem_dat</span><span class="op">$</span><span class="va">chemical</span> <span class="op">&lt;=</span> <span class="fl">0.2</span>, <span class="cn">NA</span>, <span class="va">chem_dat</span><span class="op">$</span><span class="va">chemical</span><span class="op">)</span>
 <span class="co"># Extract information on turtle positions:</span>
-<span class="no">turt_dat</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(!<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">who</span>)) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`[step]`</span> <span class="kw">%in%</span> <span class="fl">1</span>:<span class="no">nmax</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">pxcor</span>, <span class="no">pycor</span>, <span class="no">who</span>, <span class="no">`[step]`</span>)
+<span class="va">turt_dat</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">who</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`[step]`</span> <span class="op">%in%</span> <span class="fl">1</span><span class="op">:</span><span class="va">nmax</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">pxcor</span>, <span class="va">pycor</span>, <span class="va">who</span>, <span class="va">`[step]`</span><span class="op">)</span>
 <span class="co"># Create a new data frame to overlay the nest position (in this case the center of the world 0,0)</span>
-<span class="no">nest_dat</span> <span class="kw">&lt;-</span> <span class="no">food_dat</span>
-<span class="no">nest_dat</span>$<span class="no">pxcor</span> <span class="kw">&lt;-</span> <span class="fl">0</span>
-<span class="no">nest_dat</span>$<span class="no">pycor</span> <span class="kw">&lt;-</span> <span class="fl">0</span>
+<span class="va">nest_dat</span> <span class="op">&lt;-</span> <span class="va">food_dat</span>
+<span class="va">nest_dat</span><span class="op">$</span><span class="va">pxcor</span> <span class="op">&lt;-</span> <span class="fl">0</span>
+<span class="va">nest_dat</span><span class="op">$</span><span class="va">pycor</span> <span class="op">&lt;-</span> <span class="fl">0</span>
 
 <span class="co">## Step7: Plotting</span>
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">food_dat</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">chem_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">pycor</span>, <span class="kw">fill</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span>(<span class="no">chemical</span>))) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">food_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">pycor</span>), <span class="kw">color</span><span class="kw">=</span><span class="st">"black"</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">15</span>, <span class="kw">size</span><span class="kw">=</span><span class="fl">4.5</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">1</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">turt_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">pycor</span>, <span class="kw">group</span><span class="kw">=</span><span class="no">who</span>, <span class="kw">color</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">who</span>)), <span class="kw">size</span><span class="kw">=</span><span class="fl">5</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">label</span><span class="kw">=</span><span class="st">"&lt;U+FFE5&gt;"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">nest_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">pxcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">pycor</span>), <span class="kw">color</span><span class="kw">=</span><span class="st">"brown"</span>, <span class="kw">fill</span><span class="kw">=</span><span class="st">"white"</span>, <span class="kw">size</span><span class="kw">=</span><span class="fl">30</span>, <span class="kw">stroke</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">shape</span><span class="kw">=</span><span class="fl">21</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span>(<span class="kw">direction</span><span class="kw">=</span>-<span class="fl">1</span>, <span class="kw">option</span><span class="kw">=</span><span class="st">"magma"</span>, <span class="kw">na.value</span> <span class="kw">=</span> <span class="st">"white"</span>) +
-  <span class="fu"><a href="https://rdrr.io/pkg/ggthemes/man/scale_colour_gradient_tableau.html">scale_color_gradient_tableau</a></span>(<span class="kw">palette</span><span class="kw">=</span><span class="st">"Orange"</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">fill</span><span class="kw">=</span><span class="st">"none"</span>, <span class="kw">color</span><span class="kw">=</span><span class="st">"none"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">'Step: {frame_time}'</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">food_dat</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">chem_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y<span class="op">=</span><span class="va">pycor</span>, fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">chemical</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">food_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y<span class="op">=</span><span class="va">pycor</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"black"</span>, shape<span class="op">=</span><span class="fl">15</span>, size<span class="op">=</span><span class="fl">4.5</span>, alpha<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">turt_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y<span class="op">=</span><span class="va">pycor</span>, group<span class="op">=</span><span class="va">who</span>, color<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">who</span><span class="op">)</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">5</span>, alpha<span class="op">=</span><span class="fl">1</span>, label<span class="op">=</span><span class="st">"￥"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">nest_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">pxcor</span>, y<span class="op">=</span><span class="va">pycor</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"brown"</span>, fill<span class="op">=</span><span class="st">"white"</span>, size<span class="op">=</span><span class="fl">30</span>, stroke<span class="op">=</span><span class="fl">2</span>, shape<span class="op">=</span><span class="fl">21</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>direction<span class="op">=</span><span class="op">-</span><span class="fl">1</span>, option<span class="op">=</span><span class="st">"magma"</span>, na.value <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_color_gradient_tableau</span><span class="op">(</span>palette<span class="op">=</span><span class="st">"Orange"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill<span class="op">=</span><span class="st">"none"</span>, color<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Step: {frame_time}'</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## Step8: Animate the plot and use 1 frame for each step of the model simulations</span>
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">nframes</span> <span class="kw">=</span> <span class="no">nmax</span>, <span class="kw">width</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">fps</span><span class="kw">=</span><span class="fl">10</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, nframes <span class="op">=</span> <span class="va">nmax</span>, width<span class="op">=</span><span class="fl">800</span>, height<span class="op">=</span><span class="fl">800</span>, fps<span class="op">=</span><span class="fl">10</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/ants.gif" align="center" width="100%">
 </center>
@@ -425,71 +430,72 @@
 <p>The waves model contains no patch information. Three types of turtle agents are present in the model: waves, edges and a driver. However, these agents are not defined by using breeds but by using turtles-own variables (driver?, edge?).</p>
 <p>In addition to these two variables we measure the who number, turtle coordinates and turtle color. Again, before plotting we split the spatial data tibble from <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> into three different tibbles, one for each agent group. These agent groups are then plotted by using geom_point layers with different aesthetics.</p>
 <p>Instead of a simple simdesign with only one parameterization, this example uses a distinct simdesign with 4 different friction values. We can use the facet functionality of ggplot to visualize all four model runs at once.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co">## The models library filepath pointing to the waves model contains an ampersand which needs to be escaped on Windows but not on Linux.</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## The models library filepath pointing to the waves model contains an ampersand which needs to be escaped on Windows but not on Linux.</span>
 <span class="co">## Choose the filepath according to your OS:</span>
 <span class="co">## Windows:</span>
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="st">"app/models/Sample Models/Chemistry ^&amp; Physics/Waves/Wave Machine.nlogo"</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="st">"app/models/Sample Models/Chemistry ^&amp; Physics/Waves/Wave Machine.nlogo"</span>
 <span class="co">## Linux:</span>
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="st">"app/models/Sample Models/Chemistry &amp; Physics/Waves/Wave Machine.nlogo"</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="st">"app/models/Sample Models/Chemistry &amp; Physics/Waves/Wave Machine.nlogo"</span>
 
 <span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="no">modelpath</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="va">modelpath</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"waves"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">100</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">100</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'friction'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5</span>,<span class="fl">25</span>,<span class="fl">50</span>,<span class="fl">90</span>))),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"stiffness"</span> <span class="kw">=</span> <span class="fl">20</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"driver?"</span>, <span class="st">"edge?"</span>, <span class="st">"color"</span>)))
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"waves"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,      
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>,  
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,
+                            runtime <span class="op">=</span> <span class="fl">100</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">100</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'friction'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">25</span>,<span class="fl">50</span>,<span class="fl">90</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"stiffness"</span> <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"driver?"</span>, <span class="st">"edge?"</span>, <span class="st">"color"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Step3: Add a Simulation Design</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_distinct.html">simdesign_distinct</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                                   <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_distinct.html">simdesign_distinct</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                                   nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 
 <span class="co"># Step4: Run simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Postprocessing:</span>
 <span class="co">## Step1: Attach results to nl:</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
 
 <span class="co"># Prepare data for plotting</span>
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
-<span class="no">nl_spatial</span>$<span class="no">friction</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">nl_spatial</span>$<span class="no">friction</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">nl_spatial</span>$<span class="no">friction</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Friction = 5"</span>,
+<span class="va">nl_spatial</span><span class="op">$</span><span class="va">friction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">$</span><span class="va">friction</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">$</span><span class="va">friction</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Friction = 5"</span>,
                                  <span class="st">"Friction = 25"</span>,
                                  <span class="st">"Friction = 50"</span>,
-                                 <span class="st">"Friction = 90"</span>)
+                                 <span class="st">"Friction = 90"</span><span class="op">)</span>
 
-<span class="no">n</span> <span class="kw">&lt;-</span> <span class="no">nl</span>@<span class="kw">experiment</span>@<span class="kw">runtime</span>
+<span class="va">n</span> <span class="op">&lt;-</span> <span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">runtime</span>
 
-<span class="no">waves</span>  <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`driver?`</span> <span class="kw">==</span> <span class="st">"false"</span> <span class="kw">&amp;</span> <span class="no">`edge?`</span> <span class="kw">==</span> <span class="st">"false"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">`[step]`</span>, <span class="no">who</span>, <span class="no">color</span>, <span class="no">friction</span>)
-<span class="no">egde</span>   <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`driver?`</span> <span class="kw">==</span> <span class="st">"false"</span> <span class="kw">&amp;</span> <span class="no">`edge?`</span> <span class="kw">==</span> <span class="st">"true"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">`[step]`</span>, <span class="no">who</span>, <span class="no">friction</span>)
-<span class="no">driver</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`driver?`</span> <span class="kw">==</span> <span class="st">"true"</span> <span class="kw">&amp;</span> <span class="no">`edge?`</span> <span class="kw">==</span> <span class="st">"false"</span> <span class="kw">&amp;</span> <span class="no">`[step]`</span> <span class="kw">&lt;</span> <span class="no">n</span>) <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">`[step]`</span>, <span class="no">who</span>, <span class="no">friction</span>)
+<span class="va">waves</span>  <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`driver?`</span> <span class="op">==</span> <span class="st">"false"</span> <span class="op">&amp;</span> <span class="va">`edge?`</span> <span class="op">==</span> <span class="st">"false"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">`[step]`</span>, <span class="va">who</span>, <span class="va">color</span>, <span class="va">friction</span><span class="op">)</span>
+<span class="va">egde</span>   <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`driver?`</span> <span class="op">==</span> <span class="st">"false"</span> <span class="op">&amp;</span> <span class="va">`edge?`</span> <span class="op">==</span> <span class="st">"true"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">`[step]`</span>, <span class="va">who</span>, <span class="va">friction</span><span class="op">)</span>
+<span class="va">driver</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`driver?`</span> <span class="op">==</span> <span class="st">"true"</span> <span class="op">&amp;</span> <span class="va">`edge?`</span> <span class="op">==</span> <span class="st">"false"</span> <span class="op">&amp;</span> <span class="va">`[step]`</span> <span class="op">&lt;</span> <span class="va">n</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">`[step]`</span>, <span class="va">who</span>, <span class="va">friction</span><span class="op">)</span>
 
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">waves</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">waves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="no">color</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">driver</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"grey"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">egde</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">who</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"black"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(~<span class="no">friction</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="st">"none"</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">waves</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">waves</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor</span>, y <span class="op">=</span> <span class="va">ycor</span>, group <span class="op">=</span> <span class="va">who</span>, color <span class="op">=</span> <span class="va">color</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">driver</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor</span>, y <span class="op">=</span> <span class="va">ycor</span>, group <span class="op">=</span> <span class="va">who</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span>, color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">egde</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor</span>, y <span class="op">=</span> <span class="va">ycor</span>, group <span class="op">=</span> <span class="va">who</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">2</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">friction</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> 
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">width</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">800</span>, <span class="kw">duration</span> <span class="kw">=</span> <span class="fl">6</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, width<span class="op">=</span><span class="fl">800</span>, height<span class="op">=</span><span class="fl">800</span>, duration <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/waves.gif" align="center" width="100%">
 </center>
@@ -502,76 +508,78 @@
 <li><p>geom_text can be used to plot arrows pointing into the heading of the agent. geom_text also uses degree angles, however an angle of 0 means text is pointing to the right edge of the plotting area. Furthermore, angles are counter-clockwise, whereas NetLogo headings are defined in clockwise direction. In our case we use a right-pointing ASCII-arrow as geom_text label. Thus, we need to shift all NetLogo headings by 90 degree to the right and invert the direction by multiplying all headings with -1.</p></li>
 <li><p>geom_spoke can be used to plot arrows pointing into the heading of the agent. geom_spoke uses radians angles. Similar to geom_text angles, an angle of 0 is pointing to the right and angles are defined in counter-clockwise direction. Thus, we need to shift NetLogo headings by 90 degree to the right, inverse the direction by multiplying all headings with -1 and finally transform the degree angles to radians angles.</p></li>
 </ol>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Flocking.nlogo"</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Step1: Create a nl obejct:</span>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Flocking.nlogo"</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"flocking"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">300</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">300</span>),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"population"</span> <span class="kw">=</span> <span class="fl">100</span>,
-                                             <span class="st">"vision"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"minimum-separation"</span> <span class="kw">=</span> <span class="fl">1</span>,
-                                             <span class="st">"max-align-turn"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"max-cohere-turn"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"max-separate-turn"</span> <span class="kw">=</span> <span class="fl">4</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"heading"</span>, <span class="st">"color"</span>)))
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"flocking"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,      
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>,   
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,         
+                            runtime <span class="op">=</span> <span class="fl">300</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">300</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"population"</span> <span class="op">=</span> <span class="fl">100</span>,
+                                             <span class="st">"vision"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"minimum-separation"</span> <span class="op">=</span> <span class="fl">1</span>, 
+                                             <span class="st">"max-align-turn"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"max-cohere-turn"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"max-separate-turn"</span> <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, <span class="st">"xcor"</span>, <span class="st">"ycor"</span>, <span class="st">"heading"</span>, <span class="st">"color"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Evaluate if variables and constants are valid:</span>
-<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="../../reference/eval_variables_constants.html">eval_variables_constants</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Step3: Add a Simulation Design</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                                 <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                                 nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 
 <span class="co"># Step4: Run simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span>
 
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Calculate angles for plotting:</span>
 <span class="co"># (a) convert NetLogo degree headings (clockwise with 0 = top) to geom_text degree angle (counter-clockwise with 0 = right)</span>
 <span class="co"># (b) convert geom_text degree angle to geom_spoke radians angle</span>
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">`[step]`</span>, <span class="no">who</span>, <span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">heading</span>, <span class="no">color</span>) <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>(<span class="kw">heading_text</span> <span class="kw">=</span> ((<span class="no">heading</span> * -<span class="fl">1</span>) + <span class="fl">90</span>)) <span class="kw">%&gt;%</span>
-  <span class="fu">mutate</span>(<span class="kw">heading_radians</span> <span class="kw">=</span> ((<span class="no">heading_text</span> * <span class="no">pi</span>) / <span class="fl">180</span>))
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`[step]`</span>, <span class="va">who</span>, <span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">heading</span>, <span class="va">color</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">mutate</span><span class="op">(</span>heading_text <span class="op">=</span> <span class="op">(</span><span class="op">(</span><span class="va">heading</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">mutate</span><span class="op">(</span>heading_radians <span class="op">=</span> <span class="op">(</span><span class="op">(</span><span class="va">heading_text</span> <span class="op">*</span> <span class="va">pi</span><span class="op">)</span> <span class="op">/</span> <span class="fl">180</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Plot with geom_point and geom_spoke</span>
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">nl_spatial</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">xcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">ycor</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="no">color</span>, <span class="kw">group</span><span class="kw">=</span><span class="no">who</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_spoke.html">geom_spoke</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="no">color</span>, <span class="kw">group</span><span class="kw">=</span><span class="no">who</span>, <span class="kw">angle</span><span class="kw">=</span><span class="no">heading_radians</span>), <span class="kw">arrow</span><span class="kw">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/reexports.html">arrow</a></span>(<span class="kw">length</span><span class="kw">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/reexports.html">unit</a></span>(<span class="fl">0.2</span>, <span class="st">"inches"</span>)), <span class="kw">radius</span><span class="kw">=</span><span class="fl">1</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="fl">FALSE</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">nl_spatial</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">xcor</span>, y<span class="op">=</span><span class="va">ycor</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="va">color</span>, group<span class="op">=</span><span class="va">who</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_spoke.html">geom_spoke</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="va">color</span>, group<span class="op">=</span><span class="va">who</span>, angle<span class="op">=</span><span class="va">heading_radians</span><span class="op">)</span>, arrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="st">"inches"</span><span class="op">)</span><span class="op">)</span>, radius<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> 
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">nframes</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">nl_spatial</span>$<span class="no">`[step]`</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">600</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">600</span>, <span class="kw">fps</span><span class="kw">=</span><span class="fl">20</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, nframes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">$</span><span class="va">`[step]`</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">600</span>, height<span class="op">=</span><span class="fl">600</span>, fps<span class="op">=</span><span class="fl">20</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_spoke.gif" align="center" width="75%">
 </center>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># Plot with geom_text</span>
-<span class="no">p2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">nl_spatial</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span><span class="kw">=</span><span class="no">xcor</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">ycor</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="no">color</span>, <span class="kw">group</span><span class="kw">=</span><span class="no">who</span>, <span class="kw">angle</span><span class="kw">=</span><span class="no">heading_text</span>), <span class="kw">label</span><span class="kw">=</span><span class="st">"&lt;U+2192&gt;"</span>, <span class="kw">size</span><span class="kw">=</span><span class="fl">5</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span>(<span class="kw">color</span><span class="kw">=</span><span class="fl">FALSE</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Plot with geom_text</span>
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">nl_spatial</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">xcor</span>, y<span class="op">=</span><span class="va">ycor</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color<span class="op">=</span><span class="va">color</span>, group<span class="op">=</span><span class="va">who</span>, angle<span class="op">=</span><span class="va">heading_text</span><span class="op">)</span>, label<span class="op">=</span><span class="st">"→"</span>, size<span class="op">=</span><span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> 
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p2</span>, <span class="kw">nframes</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">nl_spatial</span>$<span class="no">`[step]`</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">600</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">600</span>, <span class="kw">fps</span><span class="kw">=</span><span class="fl">20</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p2</span>, nframes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">nl_spatial</span><span class="op">$</span><span class="va">`[step]`</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">600</span>, height<span class="op">=</span><span class="fl">600</span>, fps<span class="op">=</span><span class="fl">20</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_text.gif" align="center" width="75%">
 </center>
@@ -585,65 +593,66 @@
 <a href="#visualize-network-using-ggplot" class="anchor"></a>Visualize network using ggplot</h4>
 <p>Again, after attaching the simulation results and postprocessing with <code><a href="../../reference/unnest_simoutput.html">unnest_simoutput()</a></code> we split the tibble into a turtles tibble and a links tibble by subsetting the group column.</p>
 <p>Finally, we need to reference the who number start and end points of the links to the actual coordinates of the corresponding turtle on each step. This can be easily achieved with two left_join calls, one for end1 who numbers and one for end2 who numbers.</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co">## Step1: Create a nl obejct:</span>
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.4"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Networks/Preferential Attachment.nlogo"</span>),
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Step1: Create a nl obejct:</span>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.4"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Networks/Preferential Attachment.nlogo"</span><span class="op">)</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span>
 
 <span class="co">## Step2: Add Experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span> <span class="kw">=</span> <span class="st">"networks"</span>,
-                            <span class="kw">outpath</span> <span class="kw">=</span> <span class="no">outpath</span>,
-                            <span class="kw">repetition</span> <span class="kw">=</span> <span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span> <span class="kw">=</span> <span class="st">"true"</span>,
-                            <span class="kw">idsetup</span> <span class="kw">=</span> <span class="st">"setup"</span>,
-                            <span class="kw">idgo</span> <span class="kw">=</span> <span class="st">"go"</span>,
-                            <span class="kw">runtime</span> <span class="kw">=</span> <span class="fl">200</span>,
-                            <span class="kw">evalticks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>,<span class="fl">200</span>),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"layout?"</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                            <span class="kw">metrics.turtles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"turtles"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"who"</span>,
-                                                                 <span class="st">"xcor"</span>,
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname <span class="op">=</span> <span class="st">"networks"</span>,
+                            outpath <span class="op">=</span> <span class="va">outpath</span>,
+                            repetition <span class="op">=</span> <span class="fl">1</span>,    
+                            tickmetrics <span class="op">=</span> <span class="st">"true"</span>,
+                            idsetup <span class="op">=</span> <span class="st">"setup"</span>, 
+                            idgo <span class="op">=</span> <span class="st">"go"</span>,       
+                            runtime <span class="op">=</span> <span class="fl">200</span>,
+                            evalticks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">200</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"layout?"</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
+                            metrics.turtles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"turtles"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"who"</span>, 
+                                                                 <span class="st">"xcor"</span>,                            
                                                                  <span class="st">"ycor"</span>,
-                                                                 <span class="st">"color"</span>)),
-                            <span class="kw">metrics.links</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"links"</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"[who] of end1"</span>,<span class="st">"[who] of end2"</span>)))
+                                                                 <span class="st">"color"</span><span class="op">)</span><span class="op">)</span>,
+                            metrics.links <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"links"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"[who] of end1"</span>,<span class="st">"[who] of end2"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Step3: Add simdesign</span>
-<span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>, <span class="kw">nseeds</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/simdesign_simple.html">simdesign_simple</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>, nseeds <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="co">## Run simulation:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_one.html">run_nl_one</a></span>(<span class="kw">nl</span> <span class="kw">=</span> <span class="no">nl</span>,
-                      <span class="kw">seed</span> <span class="kw">=</span> <span class="fu"><a href="../../reference/getsim.html">getsim</a></span>(<span class="no">nl</span>, <span class="st">"simseeds"</span>)[<span class="fl">1</span>],
-                      <span class="kw">siminputrow</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_one.html">run_nl_one</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
+                      seed <span class="op">=</span> <span class="fu"><a href="../../reference/getsim.html">getsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simseeds"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,
+                      siminputrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
 <span class="co">## Attach results to nl</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
 <span class="co">## Postprocess spatial metrics with get_nl_spatial:</span>
-<span class="no">nl_spatial</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span>(<span class="no">nl</span>)
+<span class="va">nl_spatial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/unnest_simoutput.html">unnest_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Subset nl_spatial using the group column:</span>
-<span class="no">nl_links</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">agent</span> <span class="kw">==</span> <span class="st">"links"</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(-<span class="no">who</span>, -<span class="no">xcor</span>, -<span class="no">ycor</span>, -<span class="no">color</span>)
+<span class="va">nl_links</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">agent</span> <span class="op">==</span> <span class="st">"links"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">who</span>, <span class="op">-</span><span class="va">xcor</span>, <span class="op">-</span><span class="va">ycor</span>, <span class="op">-</span><span class="va">color</span><span class="op">)</span>
 
-<span class="no">nl_turtles</span> <span class="kw">&lt;-</span> <span class="no">nl_spatial</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">agent</span> <span class="kw">==</span> <span class="st">"turtles"</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">`[step]`</span>, <span class="no">who</span>, <span class="no">xcor</span>, <span class="no">ycor</span>, <span class="no">color</span>)
+<span class="va">nl_turtles</span> <span class="op">&lt;-</span> <span class="va">nl_spatial</span> <span class="op">%&gt;%</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">agent</span> <span class="op">==</span> <span class="st">"turtles"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">`[step]`</span>, <span class="va">who</span>, <span class="va">xcor</span>, <span class="va">ycor</span>, <span class="va">color</span><span class="op">)</span>
 
 <span class="co">## Reference who numbers of link start (end1) and end (end2) points to actual coordinates:</span>
-<span class="no">nl_links</span> <span class="kw">&lt;-</span> <span class="no">nl_links</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="no">nl_turtles</span>, <span class="kw">by</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"[step]"</span><span class="kw">=</span><span class="st">"[step]"</span>,<span class="st">"end1"</span> <span class="kw">=</span> <span class="st">"who"</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="no">nl_turtles</span>, <span class="kw">by</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"[step]"</span><span class="kw">=</span><span class="st">"[step]"</span>,<span class="st">"end2"</span> <span class="kw">=</span> <span class="st">"who"</span>))
+<span class="va">nl_links</span> <span class="op">&lt;-</span> <span class="va">nl_links</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">nl_turtles</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"[step]"</span><span class="op">=</span><span class="st">"[step]"</span>,<span class="st">"end1"</span> <span class="op">=</span> <span class="st">"who"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">nl_turtles</span>, by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"[step]"</span><span class="op">=</span><span class="st">"[step]"</span>,<span class="st">"end2"</span> <span class="op">=</span> <span class="st">"who"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Plot:</span>
-<span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">nl_turtles</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor</span>, <span class="kw">group</span><span class="kw">=</span><span class="no">who</span>), <span class="kw">color</span><span class="kw">=</span><span class="st">"red"</span>, <span class="kw">size</span><span class="kw">=</span><span class="fl">2</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span>(<span class="kw">data</span><span class="kw">=</span><span class="no">nl_links</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">xcor.x</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">ycor.x</span>, <span class="kw">xend</span> <span class="kw">=</span> <span class="no">xcor.y</span>, <span class="kw">yend</span> <span class="kw">=</span> <span class="no">ycor.y</span>), <span class="kw">size</span><span class="kw">=</span><span class="fl">0.5</span>) +
-  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html">transition_time</a></span>(<span class="no">`[step]`</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span>() +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span>()
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">nl_turtles</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor</span>, y <span class="op">=</span> <span class="va">ycor</span>, group<span class="op">=</span><span class="va">who</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"red"</span>, size<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">nl_links</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">xcor.x</span>, y <span class="op">=</span> <span class="va">ycor.x</span>, xend <span class="op">=</span> <span class="va">xcor.y</span>, yend <span class="op">=</span> <span class="va">ycor.y</span><span class="op">)</span>, size<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">transition_time</span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw pkg">gganimate</span><span class="kw ns">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(<span class="no">p1</span>, <span class="kw">nframes</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">nl_turtles</span>$<span class="no">`[step]`</span>), <span class="kw">width</span><span class="kw">=</span><span class="fl">400</span>, <span class="kw">height</span><span class="kw">=</span><span class="fl">400</span>, <span class="kw">fps</span><span class="kw">=</span><span class="fl">8</span>)</pre></body></html></div>
+<span class="fu">gganimate</span><span class="fu">::</span><span class="fu">animate</span><span class="op">(</span><span class="va">p1</span>, nframes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">nl_turtles</span><span class="op">$</span><span class="va">`[step]`</span><span class="op">)</span>, width<span class="op">=</span><span class="fl">400</span>, height<span class="op">=</span><span class="fl">400</span>, fps<span class="op">=</span><span class="fl">8</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/networks.gif" align="center" width="75%">
 </center>
@@ -653,26 +662,27 @@
 <a href="#visualize-network-using-igraph-package" class="anchor"></a>Visualize network using igraph package</h4>
 <p>It is also possible to use the <a href="https://igraph.org/r/">igraph</a> package to visualize a NetLogo network. We use the <code><a href="../../reference/nl_to_graph.html">nl_to_graph()</a></code> function from the nlrx package to convert our spatial data into an igraph object. Here we want to display the network for only one simulation step, thus we filter our spatial data and select only the last simulation step. Again, we split the data into a turtles and a links tibble and rename the columns.</p>
 <p>After conversion to an igraph object we can use the power of network analysis functions from the igraph package to do further analyses. In this example we perform a community cluster algorithm to color the nodes based on their community membership within the network.</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co">## Load igraph package and convert spatial tibbles to igraph:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">igraph</span>)
-<span class="no">nw.all</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/nl_to_graph.html">nl_to_graph</a></span>(<span class="no">nl</span>)
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Load igraph package and convert spatial tibbles to igraph:</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+<span class="va">nw.all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/nl_to_graph.html">nl_to_graph</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co">## Select the last step and extract list element to get igraph object</span>
-<span class="no">nw</span> <span class="kw">&lt;-</span> <span class="no">nw.all</span> <span class="kw">%&gt;%</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">`[step]`</span> <span class="kw">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">`[step]`</span>))
-<span class="no">nw</span> <span class="kw">&lt;-</span> <span class="no">nw</span>$<span class="no">spatial.links</span><span class="kw">[[</span><span class="fl">1</span>]]
+<span class="va">nw</span> <span class="op">&lt;-</span> <span class="va">nw.all</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`[step]`</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">`[step]`</span><span class="op">)</span><span class="op">)</span>
+<span class="va">nw</span> <span class="op">&lt;-</span> <span class="va">nw</span><span class="op">$</span><span class="va">spatial.links</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 
 <span class="co">## Perform community cluster algorithm and set community dependend colors:</span>
-<span class="no">com</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html">walktrap.community</a></span>(<span class="no">nw</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span>(<span class="no">nw</span>)$<span class="no">community</span> <span class="kw">&lt;-</span> <span class="no">com</span>$<span class="no">membership</span>
-<span class="no">rain</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">rainbow</a></span>(<span class="fl">14</span>, <span class="kw">alpha</span><span class="kw">=</span><span class="fl">.5</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span>(<span class="no">nw</span>)$<span class="no">color</span> <span class="kw">&lt;-</span> <span class="no">rain</span>[<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span>(<span class="no">nw</span>)$<span class="no">community</span>]
+<span class="va">com</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cluster_walktrap.html">walktrap.community</a></span><span class="op">(</span><span class="va">nw</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">nw</span><span class="op">)</span><span class="op">$</span><span class="va">community</span> <span class="op">&lt;-</span> <span class="va">com</span><span class="op">$</span><span class="va">membership</span>
+<span class="va">rain</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">rainbow</a></span><span class="op">(</span><span class="fl">14</span>, alpha<span class="op">=</span><span class="fl">.5</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">nw</span><span class="op">)</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="va">rain</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">nw</span><span class="op">)</span><span class="op">$</span><span class="va">community</span><span class="op">]</span>
 
 <span class="co">## Plot:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">nw</span>,
-     <span class="kw">vertex.label</span><span class="kw">=</span><span class="fl">NA</span>,
-     <span class="kw">vertex.size</span><span class="kw">=</span><span class="fl">4</span>,
-     <span class="kw">edge.curved</span><span class="kw">=</span><span class="fl">0</span>,
-     <span class="kw">layout</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr</a></span>(<span class="no">nw</span>, <span class="kw">niter</span> <span class="kw">=</span> <span class="fl">3000</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">nw</span>,
+     vertex.label<span class="op">=</span><span class="cn">NA</span>,
+     vertex.size<span class="op">=</span><span class="fl">4</span>,
+     edge.curved<span class="op">=</span><span class="fl">0</span>,
+     layout<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr</a></span><span class="op">(</span><span class="va">nw</span>, niter <span class="op">=</span> <span class="fl">3000</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="networks_igraph.png" align="center" width="75%">
 </center>
@@ -695,7 +705,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

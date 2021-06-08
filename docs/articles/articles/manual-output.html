@@ -53,14 +53,14 @@
 </li>
 <li>
   <a href="../../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +69,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,21 +136,21 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -165,13 +165,13 @@
 
       
 
-      </header><script src="manual-output_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="manual-output_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Capturing NetLogo output manually</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2021-01-08</h4>
+            <h4 class="date">2021-06-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/articles/manual-output.Rmd"><code>vignettes/articles/manual-output.Rmd</code></a></small>
       <div class="hidden name"><code>manual-output.Rmd</code></div>
@@ -197,26 +197,27 @@
 <h4 class="hasAnchor">
 <a href="#step-2-define-idrunnum-of-the-experiment" class="anchor"></a>Step 2: Define idrunnum of the experiment</h4>
 <p>The idrunnum field of the experiment is a built-in feature that allows to transfer the current experiment name, siminputrow and random seed to a defined NetLogo gui parameter widget. In our case we want to use our newly created <code>nlrx_id</code> string input field, so we just set <code>idrunnum = nlrx_id</code>.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># Attach experiment</span>
-<span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="no">outpath</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">idrunnum</span><span class="kw">=</span><span class="st">"nlrx_id"</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Attach experiment</span>
+<span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="va">outpath</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            idrunnum<span class="op">=</span><span class="st">"nlrx_id"</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-3-use-nlrx_id-within-netlogo-model-to-tag-self-written-output" class="section level4">
 <h4 class="hasAnchor">
@@ -235,43 +236,46 @@ end</code></pre>
 <a href="#step-4-linking-self-written-output-to-nlrx-collected-output" class="anchor"></a>Step 4: Linking self-written output to nlrx collected output</h4>
 <p>Finally, we want to read in our self-written raster files, calculate some landscape metrics and add those to the results table that we received from the <code><a href="../../reference/run_nl_all.html">run_nl_all()</a></code> function.</p>
 <p>We basically have two types of output now: The tibble from our model executions, and a folder with self-written output (here defined as a subfolder of our modelpath).</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co">## Output from nlrx simulations:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Output from nlrx simulations:</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 <span class="co">## Self-writte output directory:</span>
-<span class="no">ascdir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/basename.html">dirname</a></span>(<span class="no">nl</span>@<span class="kw">modelpath</span>), <span class="st">"output"</span>)</pre></body></html></div>
+<span class="va">ascdir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/basename.html">dirname</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">modelpath</span><span class="op">)</span>, <span class="st">"output"</span><span class="op">)</span></code></pre></div>
 <p>We can now loop over the files in that folder, read the content and use the <code>strplit</code> function on the filename to identify the experiment name, the siminputrow, the random seed and the tick count. As an example application, we then calculate some landscapemetrics using the <code>landscapemetrics</code> package. Finally we put everything into a results tibble:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">results.lsm</span> <span class="kw">&lt;-</span> <span class="kw pkg">purrr</span><span class="kw ns">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dfr</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="no">ascdir</span>, <span class="kw">pattern</span> <span class="kw">=</span> <span class="st">"asc"</span>, <span class="kw">full.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>), <span class="kw">function</span>(<span class="no">x</span>) {
-  <span class="no">x.split</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">x</span>, <span class="st">"_"</span>)<span class="kw">[[</span><span class="fl">1</span>]]
-  <span class="no">x.tick</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">x.split</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x.split</span>)]], <span class="st">"\\."</span>)<span class="kw">[[</span><span class="fl">1</span>]]<span class="kw">[[</span><span class="fl">1</span>]])
-  <span class="no">x.siminputrow</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">x.split</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x.split</span>) - <span class="fl">1</span>]]<span class="kw">[[</span><span class="fl">1</span>]])
-  <span class="no">x.seed</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">x.split</span><span class="kw">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">x.split</span>) - <span class="fl">2</span>]]<span class="kw">[[</span><span class="fl">1</span>]])
-  <span class="no">x.raster</span> <span class="kw">&lt;-</span> <span class="fu">raster</span>(<span class="no">x</span>)
-
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">results.lsm</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dfr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">ascdir</span>, pattern <span class="op">=</span> <span class="st">"asc"</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">x.split</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"_"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
+  <span class="va">x.tick</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>, <span class="st">"\\."</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">x.siminputrow</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">x.seed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">x.split</span><span class="op">)</span> <span class="op">-</span> <span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+  <span class="va">x.raster</span> <span class="op">&lt;-</span> <span class="fu">raster</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+  
   <span class="co">## netlogo asc files use NaN as default nodata value in the asc file header</span>
   <span class="co">## this leads to problems when reading the raster because it sets ´zeros to NA</span>
   <span class="co">## here we set NAs back to zertos manually:</span>
-  <span class="no">x.raster</span> <span class="kw">&lt;-</span> <span class="fu">reclassify</span>(<span class="no">x.raster</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="fl">NA</span>, <span class="fl">0</span>))
-
+  <span class="va">x.raster</span> <span class="op">&lt;-</span> <span class="fu">reclassify</span><span class="op">(</span><span class="va">x.raster</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span>
+  
   <span class="co">## Calculate landscape metrics:</span>
-  <span class="no">metrics</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"lsm_l_ed"</span>, <span class="st">"lsm_l_shdi"</span>, <span class="st">"lsm_l_lsi"</span>, <span class="st">"lsm_l_lpi"</span>, <span class="st">"lsm_l_area_mn"</span>)
-  <span class="no">x.metrics</span> <span class="kw">&lt;-</span> <span class="kw pkg">landscapemetrics</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/landscapemetrics/man/calculate_lsm.html">calculate_lsm</a></span>(<span class="no">x.raster</span>, <span class="kw">what</span><span class="kw">=</span><span class="no">metrics</span>) <span class="kw">%&gt;%</span>
-    <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">metric</span>, <span class="no">value</span>) <span class="kw">%&gt;%</span>
-    <span class="kw pkg">tidyr</span><span class="kw ns">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span>(<span class="kw">names_from</span><span class="kw">=</span><span class="no">metric</span>, <span class="kw">values_from</span> <span class="kw">=</span> <span class="no">value</span>)
-
-  <span class="no">x.final</span> <span class="kw">&lt;-</span> <span class="kw pkg">tibble</span><span class="kw ns">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(<span class="kw">siminputrow</span> <span class="kw">=</span> <span class="no">x.siminputrow</span>,
-                            <span class="kw">`[step]`</span> <span class="kw">=</span> <span class="no">x.tick</span>,
-                            <span class="kw">`random-seed`</span> <span class="kw">=</span> <span class="no">x.seed</span>)
-
-  <span class="no">x.final</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">x.final</span>, <span class="no">x.metrics</span>)
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="no">x.final</span>)
-})</pre></body></html></div>
+  <span class="va">metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lsm_l_ed"</span>, <span class="st">"lsm_l_shdi"</span>, <span class="st">"lsm_l_lsi"</span>, <span class="st">"lsm_l_lpi"</span>, <span class="st">"lsm_l_area_mn"</span><span class="op">)</span>
+  <span class="va">x.metrics</span> <span class="op">&lt;-</span> <span class="fu">landscapemetrics</span><span class="fu">::</span><span class="fu">calculate_lsm</span><span class="op">(</span><span class="va">x.raster</span>, what<span class="op">=</span><span class="va">metrics</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">metric</span>, <span class="va">value</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from<span class="op">=</span><span class="va">metric</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span>
+  
+  <span class="va">x.final</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>siminputrow <span class="op">=</span> <span class="va">x.siminputrow</span>,
+                            `[step]` <span class="op">=</span> <span class="va">x.tick</span>,
+                            `random-seed` <span class="op">=</span> <span class="va">x.seed</span><span class="op">)</span>
+  
+  <span class="va">x.final</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">x.final</span>, <span class="va">x.metrics</span><span class="op">)</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">x.final</span><span class="op">)</span>
+<span class="op">}</span><span class="op">)</span></code></pre></div>
 <p>Now we have the same identifier columns in the nlrx reported output and the self-written output tibble which allows us to join both tibbles together:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co">## Combine results with lsm and store:</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="no">results</span> <span class="kw">%&gt;%</span> <span class="fu">left_join</span>(<span class="no">results.lsm</span>, <span class="kw">by</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"siminputrow"</span>, <span class="st">"random-seed"</span>, <span class="st">"[step]"</span>))
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Combine results with lsm and store:</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op">%&gt;%</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">results.lsm</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"siminputrow"</span>, <span class="st">"random-seed"</span>, <span class="st">"[step]"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co">## Attach output to nl object:</span>
-<span class="fu"><a href="../../reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
-<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="no">nl</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">outpath</span>, <span class="st">"my_final_nl_object.rds"</span>))</pre></body></html></div>
+<span class="fu"><a href="../../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
+<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">outpath</span>, <span class="st">"my_final_nl_object.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>
@@ -291,7 +295,7 @@ end</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

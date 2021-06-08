@@ -22,6 +22,6 @@ Before making changes make sure to pull changes in from upstream by doing either
 * Push up to your account
 * Submit a pull request to home base at `ropensci/nlrx`
 
-### Questions? Get in touch: [jsaleck@gwdg.de](mailto:jsaleck@gwdg.de)
+### Questions? Get in touch: [jan.salecker@posteo.de](mailto:jan.salecker@posteo.de)
 
 ### Thanks for contributing!

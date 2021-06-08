@@ -95,14 +95,14 @@
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -111,63 +111,63 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -178,21 +178,21 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -219,13 +219,13 @@
     <p>Execute all NetLogo simulations from a nl object with a defined experiment and simdesign</p>
     </div>
 
-    <pre class="usage"><span class='fu'>run_nl_all</span>(
-  <span class='no'>nl</span>,
-  <span class='kw'>split</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>cleanup.csv</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cleanup.xml</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>cleanup.bat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>run_nl_all</span><span class='op'>(</span>
+  <span class='va'>nl</span>,
+  split <span class='op'>=</span> <span class='fl'>1</span>,
+  cleanup.csv <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  cleanup.xml <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  cleanup.bat <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -270,23 +270,47 @@ The inner loop (siminputrows) distributes simulation tasks to these cores.
 However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
 This can be done using the split parameter. If split is &gt; 1 the siminput matrix is split into smaller parts.
 Jobs are created for each combination of part and random seed.
-If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.</p>
+If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Debugging "Temporary simulation output file not found" error message:</h3>
+
+
+<p>Whenever this error message appears it means that the simulation did not produce any output.
+Two main reasons can lead to this problem, either the simulation did not even start or the simulation crashed during runtime.
+Both can happen for several reasons and here are some hints for debugging this:</p><ol>
+<li><p>Missing software:
+Make sure that java is installed and available from the terminal (java -version).
+Make sure that NetLogo is installed and available from the terminal.</p></li>
+<li><p>Wrong path definitions:
+Make sure your nlpath points to a folder containing NetLogo.
+Make sure your modelpath points to a *.nlogo model file.
+Make sure that the nlversion within your nl object matches the NetLogo version of your nlpath.
+Use the convenience function of nlrx for checking your nl object (print(nl), eval_variables_constants(nl)).</p></li>
+<li><p>Temporary files cleanup:
+Due to automatic temp file cleanup on unix systems temporary output might be deleted.
+Try reassigning the default temp folder for this R session (the unixtools package has a neat function).</p></li>
+<li><p>NetLogo runtime crashes:
+It can happen that your NetLogo model started but failed to produce output because of a NetLogo runtime error.
+Make sure your model is working correctly or track progress using print statements.
+Sometimes the java virtual machine crashes due to memory constraints.</p></li>
+</ol>
+
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'># Load nl object from test data:</span>
-<span class='no'>nl</span> <span class='kw'>&lt;-</span> <span class='no'>nl_lhs</span>
+<span class='va'>nl</span> <span class='op'>&lt;-</span> <span class='va'>nl_lhs</span>
 
 <span class='co'># Execute all simulations from an nl object with properly attached simdesign.</span>
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>)
+<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>run_nl_all</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span>
 
 <span class='co'># Run in parallel on local machine:</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>future</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span>(<span class='no'>multisession</span>)
-<span class='no'>results</span> <span class='kw'>&lt;-</span> <span class='fu'>run_nl_all</span>(<span class='no'>nl</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/HenrikBengtsson/future'>future</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/future/man/plan.html'>plan</a></span><span class='op'>(</span><span class='va'>multisession</span><span class='op'>)</span>
+<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>run_nl_all</span><span class='op'>(</span><span class='va'>nl</span><span class='op'>)</span>
 
-}</div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -302,7 +326,7 @@ If the split parameter is set such that the siminput matrix can not be splitted 
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -1,17 +1,17 @@
-pandoc: 2.7.3
-pkgdown: 1.5.1
+pandoc: 2.11.2
+pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   abc: abc.html
-  interfacing-different-models: articles/interfacing-different-models.html
-  manual-output: articles/manual-output.html
-  nlrx_nldoc: articles/nlrx_nldoc.html
-  nlrx_papers: articles/nlrx_papers.html
-  spatial-output: articles/spatial-output.html
+  articles/interfacing-different-models: interfacing-different-models.html
+  articles/manual-output: manual-output.html
+  articles/nlrx_nldoc: nlrx_nldoc.html
+  articles/nlrx_papers: nlrx_papers.html
+  articles/spatial-output: spatial-output.html
   furthernotes: furthernotes.html
   getstarted: getstarted.html
   optimization: optimization.html
   sensitivity: sensitivity.html
   simdesign-examples: simdesign-examples.html
-last_built: 2021-01-08T13:57Z
+last_built: 2021-06-08T09:29Z
 

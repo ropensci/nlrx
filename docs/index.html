@@ -60,14 +60,14 @@
 </li>
 <li>
   <a href="articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -76,63 +76,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -143,21 +143,21 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -210,10 +210,12 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the released version of nlrx from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"nlrx"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"nlrx"</span><span class="op">)</span></code></pre></div>
 <p>And the development version from <a href="https://github.com/">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># install.packages("remotes")</span>
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"ropensci/nlrx"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"ropensci/nlrx"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="get-started" class="section level2">
 <h2 class="hasAnchor">
@@ -227,76 +229,81 @@
 <h4 class="hasAnchor">
 <a href="#step-1-create-a-nl-object" class="anchor"></a>Step 1: Create a nl object:</h4>
 <p>The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine. Depending on the operation system, paths to NetLogo and the model need to be adjusted.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">nlrx</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
 <span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"C:/out"</span>)
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span>
 <span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
-<span class="no">netlogopath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/NetLogo 6.0.3"</span>)
-<span class="no">modelpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)
-<span class="no">outpath</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"/home/out"</span>)
+<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span>
+<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
+<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span>
 
-<span class="no">nl</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/nl.html">nl</a></span>(<span class="kw">nlversion</span> <span class="kw">=</span> <span class="st">"6.0.3"</span>,
-         <span class="kw">nlpath</span> <span class="kw">=</span> <span class="no">netlogopath</span>,
-         <span class="kw">modelpath</span> <span class="kw">=</span> <span class="no">modelpath</span>,
-         <span class="kw">jvmmem</span> <span class="kw">=</span> <span class="fl">1024</span>)</pre></div>
+<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,
+         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
+         modelpath <span class="op">=</span> <span class="va">modelpath</span>,
+         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-2-attach-an-experiment" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-2-attach-an-experiment" class="anchor"></a>Step 2: Attach an experiment</h4>
 <p>The experiment object is organized in a similar fashion as NetLogo Behavior Space experiments. It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations. Details on the specific slots of the experiment class can be found in the package documentation (<code><a href="reference/experiment.html">?experiment</a></code>) and the “Advanced configuration” vignette.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">nl</span>@<span class="kw">experiment</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/experiment.html">experiment</a></span>(<span class="kw">expname</span><span class="kw">=</span><span class="st">"wolf-sheep"</span>,
-                            <span class="kw">outpath</span><span class="kw">=</span><span class="no">outpath</span>,
-                            <span class="kw">repetition</span><span class="kw">=</span><span class="fl">1</span>,
-                            <span class="kw">tickmetrics</span><span class="kw">=</span><span class="st">"true"</span>,
-                            <span class="kw">idsetup</span><span class="kw">=</span><span class="st">"setup"</span>,
-                            <span class="kw">idgo</span><span class="kw">=</span><span class="st">"go"</span>,
-                            <span class="kw">runtime</span><span class="kw">=</span><span class="fl">50</span>,
-                            <span class="kw">evalticks</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">40</span>,<span class="fl">50</span>),
-                            <span class="kw">metrics</span><span class="kw">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),
-                            <span class="kw">variables</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">'initial-number-sheep'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>),
-                                             <span class="st">'initial-number-wolves'</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">min</span><span class="kw">=</span><span class="fl">50</span>, <span class="kw">max</span><span class="kw">=</span><span class="fl">150</span>, <span class="kw">qfun</span><span class="kw">=</span><span class="st">"qunif"</span>)),
-                            <span class="kw">constants</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="st">"model-version"</span> <span class="kw">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="kw">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="kw">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="kw">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="kw">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="kw">=</span> <span class="st">"false"</span>))</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,
+                            outpath<span class="op">=</span><span class="va">outpath</span>,
+                            repetition<span class="op">=</span><span class="fl">1</span>,
+                            tickmetrics<span class="op">=</span><span class="st">"true"</span>,
+                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
+                            idgo<span class="op">=</span><span class="st">"go"</span>,
+                            runtime<span class="op">=</span><span class="fl">50</span>,
+                            evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,
+                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,
+                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,
+                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,
+                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
+                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
+                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
+                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
+                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
+                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-3-attach-a-simulation-design" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-3-attach-a-simulation-design" class="anchor"></a>Step 3: Attach a simulation design</h4>
 <p>While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method. nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see “Simdesign Examples” vignette for more information on simdesigns). All simdesign helper functions need a properly defined nl object with a valid experiment design. Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see “Advanced configuration” vignette for more information on random-seed and repetition management). A simulation design is attached to a nl object by using one of the simdesign helper functions:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">nl</span>@<span class="kw">simdesign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/simdesign_lhs.html">simdesign_lhs</a></span>(<span class="kw">nl</span><span class="kw">=</span><span class="no">nl</span>,
-                               <span class="kw">samples</span><span class="kw">=</span><span class="fl">100</span>,
-                               <span class="kw">nseeds</span><span class="kw">=</span><span class="fl">3</span>,
-                               <span class="kw">precision</span><span class="kw">=</span><span class="fl">3</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simdesign_lhs.html">simdesign_lhs</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,
+                               samples<span class="op">=</span><span class="fl">100</span>,
+                               nseeds<span class="op">=</span><span class="fl">3</span>,
+                               precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-4-run-simulations" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-4-run-simulations" class="anchor"></a>Step 4: Run simulations</h4>
 <p>All information that is needed to run the simulations is now stored within the nl object. The <code><a href="reference/run_nl_one.html">run_nl_one()</a></code> function allows to run one specific simulation from the siminput parameter table. The <code><a href="reference/run_nl_all.html">run_nl_all()</a></code> function runs a loop over all simseeds and rows of the parameter input table siminput. The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see “Advanced configuration” vignette for more information on parallelisation). Before running your simulations you might want to check your current nl object setup. <code><a href="reference/eval_variables_constants.html">eval_variables_constants(nl)</a></code> evaluates if the defined variables and constants are correctly defined and are consistent with the attached model. <code><a href="https://rdrr.io/r/base/print.html">print(nl)</a></code> prints a complete summary of the provided nl object including checkmarks that might help to indicate potential problems.</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="co"># Evaluate nl object:</span>
-<span class="fu"><a href="reference/eval_variables_constants.html">eval_variables_constants</a></span>(<span class="no">nl</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">nl</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Evaluate nl object:</span>
+<span class="fu"><a href="reference/eval_variables_constants.html">eval_variables_constants</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co"># Run all simulations (loop over all siminputrows and simseeds)</span>
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/run_nl_all.html">run_nl_all</a></span>(<span class="no">nl</span>)</pre></div>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-5-attach-results-to-nl-and-run-analysis" class="section level4">
 <h4 class="hasAnchor">
 <a href="#step-5-attach-results-to-nl-and-run-analysis" class="anchor"></a>Step 5: Attach results to nl and run analysis</h4>
-<p>nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze_nl function, the simulation output has to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="reference/setsim.html">setsim(nl, "simoutput")</a></code>. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="co"># Attach results to nl object:</span>
-<span class="fu"><a href="reference/setsim.html">setsim</a></span>(<span class="no">nl</span>, <span class="st">"simoutput"</span>) <span class="kw">&lt;-</span> <span class="no">results</span>
+<p>nlrx provides method specific analysis functions for each simulation design. Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices. In order to run the analyze_nl function, the simulation output has to be attached to the nl object first. The simdesign class within the nl object provides a slot for attaching output results (simoutput). An output results tibble can be attached to this slot by using the simdesign setter function <code><a href="reference/setsim&lt;-.html">setsim(nl, "simoutput")</a></code>. After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Attach results to nl object:</span>
+<span class="fu"><a href="reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span>
 
 <span class="co"># Write output to outpath of experiment within nl</span>
-<span class="fu"><a href="reference/write_simoutput.html">write_simoutput</a></span>(<span class="no">nl</span>)
+<span class="fu"><a href="reference/write_simoutput.html">write_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
 
 <span class="co"># Do further analysis:</span>
-<span class="fu"><a href="reference/analyze_nl.html">analyze_nl</a></span>(<span class="no">nl</span>)</pre></div>
+<span class="fu"><a href="reference/analyze_nl.html">analyze_nl</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -306,7 +313,7 @@
 <ul>
 <li>Please <a href="https://github.com/ropensci/nlrx/issues/new">report any issues or bugs</a>.</li>
 <li>License: GPL3</li>
-<li>Get citation information for <code>nlrx</code> in R doing <code><a href="https://rdrr.io/r/utils/citation.html">citation(package = 'nlrx')</a></code>
+<li>Get citation information for <code>nlrx</code> in R doing <code><a href="https://rdrr.io/r/utils/citation.html">citation(package =     'nlrx')</a></code>
 </li>
 <li>We are very open to contributions - if you are interested check <a href="https://github.com/ropensci/nlrx/blob/master/CONTRIBUTING.md">Contributing</a>.
 <ul>
@@ -381,7 +388,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -2,7 +2,6 @@
 
 nlrx version 0.4.3
 
-
 ## CRAN check error fixes
 * updated maintainer email address (package was archived because of an auto-response from the previous email address)
 
@@ -17,13 +16,14 @@ nlrx version 0.4.3
 * fixed an error in the function parser of the nldoc procedure
 * fixed bug in calculation of number of computed runs in print_nl()
 
-
 ## Test environments
-* Windows 10, R 4.0.2
-* Windows Server 2012 R2 x64, R 4.0.3 (appveyor)
-* ubuntu 16.04.6 LTS, R 4.0.2 (travis)
-* macOS Mojave, R 4.0.2
 * win-builder (release and devel)
+* Windows 10, R 4.1.0
+* macOS 11.3 (Big Sur), R 4.1.0
+* macOS 10.14 (Mojave), R 4.1.0
+* macOS 10.15 (Catalina), R 4.1.0 (github actions)
+* Windows Server 2019 x64, R 4.1.0 (github actions)
+* Ubuntu 20.04, R 4.1.0 (github actions)
 
 ## R CMD check results
 

@@ -95,14 +95,14 @@
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fa fa-book"></span>
+    <span class="fas fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-graduation-cap"></span>
+    <span class="fas fa-graduation-cap"></span>
      
     More
      
@@ -111,63 +111,63 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fa fa-book"></span>
+        <span class="fas fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fa fa-wrench"></span>
+        <span class="fas fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fa fa-bookmark"></span>
+        <span class="fas fa-bookmark"></span>
          
         Publication record
       </a>
@@ -178,21 +178,21 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="../news/index.html">
-    <span class="fa fa-newspaper"></span>
+    <span class="fas fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fa fa-cogs"></span>
+    <span class="fas fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
   <a href="https://github.com/ropensci/nlrx">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
     github
   </a>
@@ -219,18 +219,18 @@
     <p>Create NetLogo documentation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nldoc</span>(
-  <span class='no'>modelfiles</span>,
-  <span class='no'>outpath</span>,
-  <span class='kw'>infotab</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>gui</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>bs</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"html"</span>,
-  <span class='kw'>number_sections</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>theme</span> <span class='kw'>=</span> <span class='st'>"journal"</span>,
-  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'>today</span>(),
-  <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>nldoc</span><span class='op'>(</span>
+  <span class='va'>modelfiles</span>,
+  <span class='va'>outpath</span>,
+  infotab <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  gui <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  bs <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  output_format <span class='op'>=</span> <span class='st'>"html"</span>,
+  number_sections <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  theme <span class='op'>=</span> <span class='st'>"journal"</span>,
+  date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.time.html'>Sys.time</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>,
+  toc <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -288,27 +288,29 @@ If needed, tables of gui elements and behavior space experiments are added to th
 Finally, the document is rendered in the specified format.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 
 <span class='co'># List model files (.nls subfiles are also supported)</span>
-<span class='no'>modelfiles</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo"</span>,
-                <span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls"</span>)
+<span class='va'>modelfiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo"</span>,
+                <span class='st'>"https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls"</span><span class='op'>)</span>
 
 <span class='co'># Define output directory:</span>
-<span class='no'>outdir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()  <span class='co'># adjust path to your needs</span>
+<span class='va'>outdir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>  <span class='co'># adjust path to your needs</span>
 
 <span class='co'># Create documentation:</span>
-<span class='fu'>nldoc</span>(<span class='kw'>modelfiles</span> <span class='kw'>=</span> <span class='no'>modelfiles</span>,
-      <span class='kw'>infotab</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>gui</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>bs</span><span class='kw'>=</span><span class='fl'>TRUE</span>,
-      <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='no'>outdir</span>,
-      <span class='kw'>output_format</span> <span class='kw'>=</span> <span class='st'>"html"</span>,
-      <span class='kw'>number_sections</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-      <span class='kw'>theme</span> <span class='kw'>=</span> <span class='st'>"cosmo"</span>,
-      <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/date.html'>date</a></span>(),
-      <span class='kw'>toc</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-}</div></pre>
+<span class='fu'>nldoc</span><span class='op'>(</span>modelfiles <span class='op'>=</span> <span class='va'>modelfiles</span>,
+      infotab<span class='op'>=</span><span class='cn'>TRUE</span>,
+      gui<span class='op'>=</span><span class='cn'>TRUE</span>,
+      bs<span class='op'>=</span><span class='cn'>TRUE</span>,
+      outpath <span class='op'>=</span> <span class='va'>outdir</span>,
+      output_format <span class='op'>=</span> <span class='st'>"html"</span>,
+      number_sections <span class='op'>=</span> <span class='cn'>TRUE</span>,
+      theme <span class='op'>=</span> <span class='st'>"cosmo"</span>,
+      date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/date.html'>date</a></span><span class='op'>(</span><span class='op'>)</span>,
+      toc <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -324,7 +326,7 @@ Finally, the document is rendered in the specified format.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

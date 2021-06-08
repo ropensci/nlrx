@@ -11,7 +11,7 @@ vignette: >
 
 # Publication record
 
-On this page we aim to collect research papers that have used and cited the nlrx package. We will update this database from time to time. If your article is missing, please drop us an [email](mailto:jsaleck@gwdg.de) or file an [issue](https://github.com/ropensci/nlrx/issues/new).
+On this page we aim to collect research papers that have used and cited the nlrx package. We will update this database from time to time. If your article is missing, please drop us an [email](mailto:jan.salecker@posteo.de) or file an [issue](https://github.com/ropensci/nlrx/issues/new).
 
 ## Share your nlrx use cases
 
