@@ -46,21 +46,21 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../articles/getstarted.html">
-    <span class="fa fa fa fa-magic"></span>
+    <span class="fa fa-magic"></span>
      
     Get Started
   </a>
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fas fa-book"></span>
+    <span class="fa fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-graduation-cap"></span>
+    <span class="fa fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +69,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fas fa-bookmark"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,14 +136,14 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../news/index.html">
-    <span class="fas fa-newspaper"></span>
+    <span class="fa fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fas fa-cogs"></span>
+    <span class="fa fa-cogs"></span>
      
     functions
   </a>
@@ -171,7 +171,7 @@
       <h1 data-toc-skip>Sensitivity Analysis</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2021-06-08</h4>
+            <h4 class="date">2021-09-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/sensitivity.Rmd"><code>vignettes/sensitivity.Rmd</code></a></small>
       <div class="hidden name"><code>sensitivity.Rmd</code></div>
@@ -249,8 +249,8 @@
 <a href="#step-4-run-simulations" class="anchor"></a>Step 4: Run simulations</h4>
 <p>To execute the simulations, we can use the function <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the “Advanced configuration” vignette).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-5-investigate-output" class="section level4">
@@ -323,8 +323,8 @@
 <a href="#step-4-run-simulations-1" class="anchor"></a>Step 4: Run simulations</h4>
 <p>To execute the simulations, we can use the function <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the “Advanced configuration” vignette).</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span>, split<span class="op">=</span><span class="fl">10</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="step-5-investigate-output-1" class="section level4">
@@ -398,7 +398,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jan Salecker, Marco Sciaini.</p>
+  <p>Developed by Jan Salecker, Marco Sciaini, Sebastian Hanss.</p>
 </div>
 
 <div class="pkgdown">

@@ -46,21 +46,21 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../articles/getstarted.html">
-    <span class="fa fa fa fa-magic"></span>
+    <span class="fa fa-magic"></span>
      
     Get Started
   </a>
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fas fa-book"></span>
+    <span class="fa fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-graduation-cap"></span>
+    <span class="fa fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +69,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fas fa-bookmark"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,14 +136,14 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../news/index.html">
-    <span class="fas fa-newspaper"></span>
+    <span class="fa fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fas fa-cogs"></span>
+    <span class="fa fa-cogs"></span>
      
     functions
   </a>
@@ -171,7 +171,7 @@
       <h1 data-toc-skip>Advanced configuration</h1>
                         <h4 class="author">Jan Salecker</h4>
             
-            <h4 class="date">2021-06-08</h4>
+            <h4 class="date">2021-09-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -282,10 +282,10 @@
 <div id="capturing-progress-of-model-simulations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#capturing-progress-of-model-simulations" class="anchor"></a>Capturing progress of model simulations</h2>
-<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr">progressr</a> framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a <code><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">progressr::with_progress()</a></code> call. By using different handlers, the layout of the progress bar is different. For example, installing the package <a href="https://github.com/r-lib/progress">progress</a> and using the handler <code><a href="https://rdrr.io/pkg/progressr/man/handlers.html">progressr::handlers("progress")</a></code> will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:</p>
+<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr">progressr</a> framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a <code><a href="https://progressr.futureverse.org/reference/with_progress.html">progressr::with_progress()</a></code> call. By using different handlers, the layout of the progress bar is different. For example, installing the package <a href="https://github.com/r-lib/progress">progress</a> and using the handler <code><a href="https://progressr.futureverse.org/reference/handlers.html">progressr::handlers("progress")</a></code> will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/handlers.html">handlers</a></span><span class="op">(</span><span class="st">"progress"</span><span class="op">)</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">with_progress</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html">handlers</a></span><span class="op">(</span><span class="st">"progress"</span><span class="op">)</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html">with_progress</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>The <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function might provide progress output depending on the chosen method (for example ABC offers a progress bar). However, dynamic experiments are difficult to track because it is not clear how long the complete experiment will take from the beginning.</p>
 <p>The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> does not report any progress because it only executes one simulation.</p>
 <p>In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
@@ -360,18 +360,18 @@
 <p>Model simulations can be distributed to each logical processor on the local machine in parallel. The future package provides two options for parallelization, explicit futures and implicit futures which are executed in the background and do not block the console while running.</p>
 <p>Running parallel simulations with an explicit future command:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multiprocess</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multiprocess</span><span class="op">)</span>
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></code></pre></div>
-<p>For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level. Note, that we use the assignment operator for implicit futures (<code><a href="https://rdrr.io/pkg/future/man/future.html">%&lt;-%</a></code>):</p>
+<p>For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level. Note, that we use the assignment operator for implicit futures (<code><a href="https://future.futureverse.org/reference/future.html">%&lt;-%</a></code>):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="va">multiprocess</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="va">multiprocess</span><span class="op">)</span><span class="op">)</span>
 <span class="va">results</span> <span class="op">%&lt;-%</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></code></pre></div>
 <p>In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org">future</a></span><span class="op">)</span>
+<span class="fu"><a href="https://future.futureverse.org/reference/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>, split <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="parallelisation-on-remote-hpc-cluster" class="section level3">
@@ -485,7 +485,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jan Salecker, Marco Sciaini.</p>
+  <p>Developed by Jan Salecker, Marco Sciaini, Sebastian Hanss.</p>
 </div>
 
 <div class="pkgdown">
