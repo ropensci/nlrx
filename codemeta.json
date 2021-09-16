@@ -10,14 +10,13 @@
   "codeRepository": "https://github.com/ropensci/nlrx/",
   "issueTracker": "https://github.com/ropensci/nlrx/issues/",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.4.0",
+  "version": "0.4.3",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
+  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
   "author": [
     {
       "@type": "Person",
@@ -37,10 +36,9 @@
   "maintainer": [
     {
       "@type": "Person",
-      "givenName": "Jan",
-      "familyName": "Salecker",
-      "email": "jan.salecker@posteo.de",
-      "@id": "https://orcid.org/0000-0002-9000-4229"
+      "givenName": "Sebastian",
+      "familyName": "Hanss",
+      "email": "nlrx@mailbox.org"
     }
   ],
   "softwareSuggestions": [
@@ -327,6 +325,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "progressr",
+      "name": "progressr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=progressr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "EasyABC",
       "name": "EasyABC",
       "provider": {
@@ -345,11 +355,7 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/java"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libgdal"
+      "identifier": "https://sysreqs.r-hub.io/get/openssl"
     },
     {
       "@type": "SoftwareApplication",
@@ -357,15 +363,11 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libudunits2"
+      "identifier": "https://sysreqs.r-hub.io/get/libgeos"
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libxml2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/openssl"
+      "identifier": "https://sysreqs.r-hub.io/get/java"
     },
     {
       "@type": "SoftwareApplication",
@@ -373,26 +375,30 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libxml2"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "https://sysreqs.r-hub.io/get/libproj"
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libgeos"
+      "identifier": "https://sysreqs.r-hub.io/get/libgdal"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/libudunits2"
     }
   ],
-  "releaseNotes": "https://github.com/nldoc/nlrx/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/ropensci/nlrx/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
-  "fileSize": "480.545KB",
-  "contIntegration": [
-    "https://ci.appveyor.com/project/nldoc/nlrx",
-    "https://travis-ci.org/ropensci/nlrx",
-    "https://codecov.io/gh/ropensci/nlrx?branch=master"
-  ],
-  "developmentStatus": "https://www.tidyverse.org/lifecycle/#experimental",
+  "fileSize": "1321.369KB",
+  "contIntegration": ["https://github.com/ropensci/nlrx/actions", "https://codecov.io/gh/ropensci/nlrx"],
+  "developmentStatus": "https://www.tidyverse.org/lifecycle/#maturing",
   "review": {
     "@type": "Review",
-    "url": "https://github.com/ropensci/onboarding/issues/262",
-    "provider": "http://ropensci.org"
+    "url": "https://github.com/ropensci/software-review/issues/262",
+    "provider": "https://ropensci.org"
   },
   "keywords": [
     "peer-reviewed",
@@ -441,7 +447,7 @@
       "name": "The nlrx r package: A next-generation framework for reproducible NetLogo model analyses",
       "identifier": "10.1111/2041-210X.13286",
       "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13286",
-      "paginiation": "2041--210X",
+      "pagination": "2041--210X",
       "@id": "https://doi.org/10.1111/2041-210X.13286",
       "sameAs": "https://doi.org/10.1111/2041-210X.13286",
       "isPartOf": {
@@ -455,5 +461,5 @@
       }
     }
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=nlrx"
+  "relatedLink": ["https://CRAN.R-project.org/package=nlrx", "https://docs.ropensci.org/nlrx/"]
 }

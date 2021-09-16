@@ -3,7 +3,7 @@
 nlrx version 0.4.3
 
 ## CRAN check error fixes
-* updated maintainer email address (package was archived because of an auto-response from the previous email address)
+* updated maintainer and maintainer email address (package was archived because of an auto-response from the previous email address)
 
 ## Changes in version 0.4.3
 
