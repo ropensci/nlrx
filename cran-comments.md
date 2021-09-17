@@ -1,5 +1,12 @@
 # Resubmission
 
+This is a resubmission. In this version I have:
+
+* Updated the broken URL for the lifecycle badge in the README.md 
+
+
+# Original (Re-) Submission
+
 nlrx version 0.4.3
 
 ## CRAN check error fixes
