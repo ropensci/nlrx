@@ -157,6 +157,13 @@ testthat::test_that("util_runnl", {
   testthat::expect_equal(nrow(results), 2)
 
   testthat::context("Cleanup:")
+
+  if (.Platform$OS.type == "windows") {
+    outfile <- gsub("/", "\\\\", outfile)
+    xmlfile <- gsub("/", "\\\\", xmlfile)
+    batchfile <- gsub("/", "\\\\", batchfile)
+  }
+
   cleanup.files <- list("csv" = outfile,
                         "xml" = xmlfile,
                         "bat" = batchfile)
