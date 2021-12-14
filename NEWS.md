@@ -1,24 +1,27 @@
 
-## nlrx 0.4.3
+# nlrx 0.4.3
 
-#### Functionality
+## Functionality
+
 * added test_nlrx() function to check functionality of the package
 * added support to download_netLogo() for NetLogo version 6.2.0
 
-#### Bugfixes
+## Bugfixes
+
 * changed timestamp for nldoc function from lubridate to base date
 * fixed an error in the function parser of the nldoc procedure
 * fixed bug in calculation of number of computed runs in print_nl()
 
 
-## nlrx 0.4.2
+# nlrx 0.4.2
 
-#### Functionality
+## Functionality
+
 * added option to run_nl_one that allows to store results as rds files
 * added eval_simoutput option to check for missing combinations of siminputrow and random-seeds
 * added support for progressr progress bars for run_nl_all function (details see further notes vignette) and removed the silent parameter of the run_nl_all function
 
-#### Bugfixes
+## Bugfixes
 * hotfix for another dependency on external files in nldoc roxygen examples
 * small bugfix in analyze_morris: A warning is now thrown if NA are present in the simulation data
 * bugfix in random seed generator
@@ -27,12 +30,12 @@
 * updated testdata
 * user rights for temporary sh scripts are now set correctly
 
-## nlrx 0.4.1
+# nlrx 0.4.1
 * fixed dependency on external file source in nldoc automated tests
 * these files are now included in the package
 * added link to documentation website in description
 
-## nlrx 0.4.0
+# nlrx 0.4.0
 
 * Added new simdesigns simdesign_ABCmcmc_Marjoram, simdesign_ABCmcmc_Marjoram_original and simdesign_ABCmcmc_Wegmann to perform approximate bayesian computation
 * Added print function for nl objects
@@ -46,7 +49,7 @@
 * Updated package tests
 
 
-## nlrx 0.3.0
+# nlrx 0.3.0
 
 * Added support for self-defined evaluation functions to optimization functions simdesign_GenAlg and simdesign_GenSA.
 * Added support to simdesign_simple() for models without any GUI parameters
@@ -58,10 +61,10 @@
 * Hotfix for unnest_simoutput(). In the previous package version, under some circumstances an error occured due to NA data.
 * Corrected spelling errors in some vignettes and documentation files.
 
-## nlrx 0.2.0
+# nlrx 0.2.0
 
 * nl_to_raster() hotfix
 
-## nlrx 0.1.0
+# nlrx 0.1.0
 
 * First release to CRAN.
