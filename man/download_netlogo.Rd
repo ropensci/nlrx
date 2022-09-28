@@ -4,12 +4,15 @@
 \alias{download_netlogo}
 \title{Download NetLogo}
 \usage{
-download_netlogo(to, version, extract = FALSE)
+download_netlogo(to, version, os = NA, extract = FALSE)
 }
 \arguments{
 \item{to}{Path to folder where the downloaded file is saved.}
 
 \item{version}{Character string naming which NetLogo Version to download (see Details)}
+
+\item{os}{operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
+If set to NA (default) os will be detcetd automatically (\code{util_get_os()})}
 
 \item{extract}{TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of \code{to} (only unix)}
 }

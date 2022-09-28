@@ -84,7 +84,7 @@ util_print.summary <- function(x, ...)
   cat(style_heading(paste0("\n", "   SUMMARY   ", "\n")))
 
   cat("supported nlversion: ")
-  output <- ifelse(x@nlversion %in% c("5.3.1", "6.0", "6.0.1", "6.0.2", "6.0.3", "6.0.4", "6.1.0", "6.1.1"), style_def("\u2713"), style_na("\u2717"))
+  output <- ifelse(check_netlogo_version(x@nlversion), style_def("\u2713"), style_na("\u2717"))
   cat(paste0(output, "\n"))
 
   cat("nlpath exists on local system: ")
