@@ -55,14 +55,16 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 
   ## Throw error if needed:
   if (isTRUE(throw_error)) {
-    msg <- paste(
-      "Netlogo version",
-      version,
-      "is not supported by nlrx.",
-      "Use one of the supported versions: ",
-      paste(supported_netlogo_versions(), collapse=", ")
-    )
-    stop(msg)
+    if (!isTRUE(supported)) {
+      msg <- paste(
+        "Netlogo version",
+        version,
+        "is not supported by nlrx.",
+        "Use one of the supported versions: ",
+        paste(supported_netlogo_versions(), collapse=", ")
+      )
+      stop(msg)
+    }
   }
 
   return(supported)
@@ -75,6 +77,8 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #'
 #' @param to      Path to folder where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
+#' @param os operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
+#' If set to NA (default) os will be detcetd automatically (`util_get_os()`)
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'
@@ -92,14 +96,17 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @rdname download_netlogo
 #'
 #' @export
-download_netlogo <- function(to, version, extract = FALSE) {
+download_netlogo <- function(to, version, os = NA, extract = FALSE) {
 
   ## Check version support
   check_netlogo_version(version, throw_error = TRUE)
   ## Construct base url
   nl_url <- paste0("https://ccl.northwestern.edu/netlogo/", version, "/")
   ## Get filename depending on os
-  switch(util_get_os(),
+  if (is.na(os)) {
+    os <- util_get_os()
+  }
+  switch(os,
          # nocov start
          "win" = {
            nl_file <- paste0("NetLogo-", version, "-64.msi")
@@ -123,7 +130,7 @@ download_netlogo <- function(to, version, extract = FALSE) {
   utils::download.file(nl_dl, to_file)
 
   ## Extract the archive if os=unix:
-  if (util_get_os() == "unix") {
+  if (os == "unix") {
     system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
 }
