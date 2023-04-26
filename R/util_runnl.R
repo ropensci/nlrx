@@ -517,7 +517,7 @@ util_read_write_batch <- function(nl) {
 
       # Create new batchfile:
       batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".bat")
-      readr::write_lines(batch, path = batchpath_temp)
+      readr::write_lines(batch, file = batchpath_temp)
     }
   }
   # nocov end
