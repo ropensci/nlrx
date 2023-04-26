@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
       </span>
     </div>
 
@@ -59,7 +61,7 @@
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="fa fa-graduation-cap"></span>
      
     More
@@ -149,7 +151,7 @@
   </a>
 </li>
 <li>
-  <a href="https://github.com/ropensci/nlrx">
+  <a href="https://github.com/ropensci/nlrx" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
     github
@@ -165,184 +167,290 @@
 
       
 
-      </header><script src="optimization_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Optimization</h1>
-                        <h4 class="author">Jan Salecker</h4>
+                        <h4 data-toc-skip class="author">Jan
+Salecker</h4>
             
-            <h4 class="date">2021-09-17</h4>
+            <h4 data-toc-skip class="date">2023-04-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/optimization.Rmd"><code>vignettes/optimization.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/HEAD/vignettes/optimization.Rmd" class="external-link"><code>vignettes/optimization.Rmd</code></a></small>
       <div class="hidden name"><code>optimization.Rmd</code></div>
 
     </div>
 
     
     
-<div id="optimization-with-nlrx" class="section level2">
-<h2 class="hasAnchor">
-<a href="#optimization-with-nlrx" class="anchor"></a>Optimization with nlrx</h2>
-<p>Here we present two simple examples for running an optimization algorithm on a NetLogo model with nlrx. In our example, we use the Simulated Annealing simdesign (<code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code>). However, except for the parameter definitions in the simdesign function and the output of the function, the genetic algorithm optimization (<code><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg()</a></code>) works in the same way.</p>
-<p>We use the Wolf Sheep Predation model from the models library to show a basic example of the optimization workflow. Example 1 shows, how a NetLogo reporter can be used as a fitness criterion for optimization. Example 2 uses a self-defined evaluation function that calculates landscape metrics that are then used as fitness criterion.</p>
+<div class="section level2">
+<h2 id="optimization-with-nlrx">Optimization with nlrx<a class="anchor" aria-label="anchor" href="#optimization-with-nlrx"></a>
+</h2>
+<p>Here we present two simple examples for running an optimization
+algorithm on a NetLogo model with nlrx. In our example, we use the
+Simulated Annealing simdesign (<code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code>). However,
+except for the parameter definitions in the simdesign function and the
+output of the function, the genetic algorithm optimization
+(<code><a href="../reference/simdesign_GenAlg.html">simdesign_GenAlg()</a></code>) works in the same way.</p>
+<p>We use the Wolf Sheep Predation model from the models library to show
+a basic example of the optimization workflow. Example 1 shows, how a
+NetLogo reporter can be used as a fitness criterion for optimization.
+Example 2 uses a self-defined evaluation function that calculates
+landscape metrics that are then used as fitness criterion.</p>
 </div>
-<div id="example-1-netlogo-reporter-as-fitness-criterion" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-1-netlogo-reporter-as-fitness-criterion" class="anchor"></a>Example 1: NetLogo reporter as fitness criterion</h2>
-<div id="step-1-create-a-nl-object" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-1-create-a-nl-object" class="anchor"></a>Step 1: Create a nl object:</h4>
+<div class="section level2">
+<h2 id="example-1-netlogo-reporter-as-fitness-criterion">Example 1: NetLogo reporter as fitness criterion<a class="anchor" aria-label="anchor" href="#example-1-netlogo-reporter-as-fitness-criterion"></a>
+</h2>
+<div class="section level4">
+<h4 id="step-1-create-a-nl-object">Step 1: Create a nl object:<a class="anchor" aria-label="anchor" href="#step-1-create-a-nl-object"></a>
+</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
-<span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
-<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span>
-<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
-<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span>
-<span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
-<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span>
-<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
-<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span>
-
-<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,
-         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
-         modelpath <span class="op">=</span> <span class="va">modelpath</span>,
-         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/" class="external-link">nlrx</a></span><span class="op">)</span></span>
+<span><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
+<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span></span>
+<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
+<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span></span>
+<span><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
+<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span></span>
+<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
+<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,</span>
+<span>         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,</span>
+<span>         modelpath <span class="op">=</span> <span class="va">modelpath</span>,</span>
+<span>         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-2-attach-an-experiment" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-2-attach-an-experiment" class="anchor"></a>Step 2: Attach an experiment</h4>
-<p>Because we want to apply an optimization algorithm, we need to define proper variable ranges. The algorithm is allowed to change the values of these parameters within these ranges in order to minimize our fitness criterion. In this example we want to use a reporter from the metrics slot for evaluating our model runs. Here we want to find a parameterization that leads to the maximum number of wolfs after 50 ticks. Because the algorithm automatically searches for minimum values, we add <code>"1 / count wolves"</code> to the metrics vector in order to find the maximum number of wolves.</p>
-<p>It is also important to think about the settings for tickmetrics, runtime and evalticks. Because we only want to consider the last tick of the simulation, we set tickmetrics to “false” and runtime to 50. If more than one tick would be measured, the algorithm automatically calculates the mean value of the selected reporter. If you wish to apply other functions to aggregate temporal information into one value, you can use a self-defined evaluation function (see Example 2).</p>
+<div class="section level4">
+<h4 id="step-2-attach-an-experiment">Step 2: Attach an experiment<a class="anchor" aria-label="anchor" href="#step-2-attach-an-experiment"></a>
+</h4>
+<p>Because we want to apply an optimization algorithm, we need to define
+proper variable ranges. The algorithm is allowed to change the values of
+these parameters within these ranges in order to minimize our fitness
+criterion. In this example we want to use a reporter from the metrics
+slot for evaluating our model runs. Here we want to find a
+parameterization that leads to the maximum number of wolfs after 50
+ticks. Because the algorithm automatically searches for minimum values,
+we add <code>"1 / count wolves"</code> to the metrics vector in order to
+find the maximum number of wolves.</p>
+<p>It is also important to think about the settings for tickmetrics,
+runtime and evalticks. Because we only want to consider the last tick of
+the simulation, we set tickmetrics to “false” and runtime to 50. If more
+than one tick would be measured, the algorithm automatically calculates
+the mean value of the selected reporter. If you wish to apply other
+functions to aggregate temporal information into one value, you can use
+a self-defined evaluation function (see Example 2).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep-GenSA1"</span>,
-                            outpath<span class="op">=</span><span class="va">outpath</span>,
-                            repetition<span class="op">=</span><span class="fl">1</span>,
-                            tickmetrics<span class="op">=</span><span class="st">"false"</span>,
-                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
-                            idgo<span class="op">=</span><span class="st">"go"</span>,
-                            runtime<span class="op">=</span><span class="fl">50</span>,
-                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"(1 / count wolves)"</span><span class="op">)</span>,
-                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,
-                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,
-                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep-GenSA1"</span>,</span>
+<span>                            outpath<span class="op">=</span><span class="va">outpath</span>,</span>
+<span>                            repetition<span class="op">=</span><span class="fl">1</span>,</span>
+<span>                            tickmetrics<span class="op">=</span><span class="st">"false"</span>,</span>
+<span>                            idsetup<span class="op">=</span><span class="st">"setup"</span>,</span>
+<span>                            idgo<span class="op">=</span><span class="st">"go"</span>,</span>
+<span>                            runtime<span class="op">=</span><span class="fl">50</span>,</span>
+<span>                            metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"(1 / count wolves)"</span><span class="op">)</span>,</span>
+<span>                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,</span>
+<span>                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,</span>
+<span>                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-3-attach-a-simulation-design" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-3-attach-a-simulation-design" class="anchor"></a>Step 3: Attach a simulation design</h4>
-<p>We use the <code>simdesgin_GenSA()</code> function to attach a Simulated Annealing simdesign. We select the evaluation criterion (<code>evalcrit</code>) by assigning the position of the reporter that we want to evaluate within the metrics vector of the experiment. In our case, there is only one reporter in the metrics vector thus we set evalcrit to use the first reporter (<code>evalcrit = 1</code>). The control parameter allows us to provide additional parameters for the GenSA function (see ?GenSA for details). For demonstration purposes, we set the maximum number of iterations to 20.</p>
+<div class="section level4">
+<h4 id="step-3-attach-a-simulation-design">Step 3: Attach a simulation design<a class="anchor" aria-label="anchor" href="#step-3-attach-a-simulation-design"></a>
+</h4>
+<p>We use the <code>simdesgin_GenSA()</code> function to attach a
+Simulated Annealing simdesign. We select the evaluation criterion
+(<code>evalcrit</code>) by assigning the position of the reporter that
+we want to evaluate within the metrics vector of the experiment. In our
+case, there is only one reporter in the metrics vector thus we set
+evalcrit to use the first reporter (<code>evalcrit = 1</code>). The
+control parameter allows us to provide additional parameters for the
+GenSA function (see ?GenSA for details). For demonstration purposes, we
+set the maximum number of iterations to 20.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span><span class="op">(</span><span class="va">nl</span>, 
-                                evalcrit <span class="op">=</span> <span class="fl">1</span>, 
-                                nseeds <span class="op">=</span> <span class="fl">1</span>, 
-                                control<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span><span class="op">(</span><span class="va">nl</span>, </span>
+<span>                                evalcrit <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                                nseeds <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                                control<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-4-run-simulations" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-4-run-simulations" class="anchor"></a>Step 4: Run simulations</h4>
-<p>For optimization simdesign, the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function lets you execute the simulations. There are some notable differences between <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code>. First, because parameterizations depend of results from previous runs, <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> can not be parallelized. Second, the procedure does not automatically loop over created random seeds of the simdesign. If you want to repeat the same algorithm several times, just embed the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function in any kind of loop and iterate through the <code>nl@simdesign@simseeds</code> vector. Third, the output of <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> is reported as objects from the specific optimization procedures and not in tibble format. In order to attach these results to the nl object, the output needs to be converted to tibble format first. However, attaching optimization results to the nl does not enable any further post-processing functions of the nlrx package and is only relevant for storing results together with the nl object. This design decision was made in order to allow application of the method specific summary functions to the results of the optimization.</p>
+<div class="section level4">
+<h4 id="step-4-run-simulations">Step 4: Run simulations<a class="anchor" aria-label="anchor" href="#step-4-run-simulations"></a>
+</h4>
+<p>For optimization simdesign, the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function
+lets you execute the simulations. There are some notable differences
+between <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code>. First,
+because parameterizations depend of results from previous runs,
+<code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> can not be parallelized. Second, the procedure
+does not automatically loop over created random seeds of the simdesign.
+If you want to repeat the same algorithm several times, just embed the
+<code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function in any kind of loop and iterate
+through the <code>nl@simdesign@simseeds</code> vector. Third, the output
+of <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> is reported as objects from the specific
+optimization procedures and not in tibble format. In order to attach
+these results to the nl object, the output needs to be converted to
+tibble format first. However, attaching optimization results to the nl
+does not enable any further post-processing functions of the nlrx
+package and is only relevant for storing results together with the nl
+object. This design decision was made in order to allow application of
+the method specific summary functions to the results of the
+optimization.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_dyn.html">run_nl_dyn</a></span><span class="op">(</span><span class="va">nl</span>, seed <span class="op">=</span> <span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_dyn.html">run_nl_dyn</a></span><span class="op">(</span><span class="va">nl</span>, seed <span class="op">=</span> <span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-5-investigate-output" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-5-investigate-output" class="anchor"></a>Step 5: Investigate output</h4>
-<p>The output list of the Simulated Annealing procedure contains four elements: <code>value</code> reports the minimum final value of the evaluation criterion. <code>par</code> reports the parameter settings of the final parameterisation in the same order as defined in the experiment of the nl object. <code>trace.mat</code> gives you detailed information on the optimization process over all iterations. <code>counts</code> indicates how often the optimization procedure was executed in total.</p>
+<div class="section level4">
+<h4 id="step-5-investigate-output">Step 5: Investigate output<a class="anchor" aria-label="anchor" href="#step-5-investigate-output"></a>
+</h4>
+<p>The output list of the Simulated Annealing procedure contains four
+elements: <code>value</code> reports the minimum final value of the
+evaluation criterion. <code>par</code> reports the parameter settings of
+the final parameterisation in the same order as defined in the
+experiment of the nl object. <code>trace.mat</code> gives you detailed
+information on the optimization process over all iterations.
+<code>counts</code> indicates how often the optimization procedure was
+executed in total.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span></code></pre></div>
-<p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
+<code class="sourceCode R"><span><span class="va">results</span></span></code></pre></div>
+<p>In order to store our results together with the nl object we need to
+attach the results to the nl object first. As explained above, we need
+to enframe the results as a tibble.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_1.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/setsim.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_1.rds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-<div id="example-2-evaluation-function-as-fitness-criterion" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-2-evaluation-function-as-fitness-criterion" class="anchor"></a>Example 2: Evaluation function as fitness criterion</h2>
-<div id="step-1-create-a-nl-object-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-1-create-a-nl-object-1" class="anchor"></a>Step 1: Create a nl object:</h4>
+<div class="section level2">
+<h2 id="example-2-evaluation-function-as-fitness-criterion">Example 2: Evaluation function as fitness criterion<a class="anchor" aria-label="anchor" href="#example-2-evaluation-function-as-fitness-criterion"></a>
+</h2>
+<div class="section level4">
+<h4 id="step-1-create-a-nl-object-1">Step 1: Create a nl object:<a class="anchor" aria-label="anchor" href="#step-1-create-a-nl-object-1"></a>
+</h4>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
-<span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span>
-<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span>
-<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
-<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span>
-<span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span>
-<span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span>
-<span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span>
-<span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span>
-
-<span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,
-         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,
-         modelpath <span class="op">=</span> <span class="va">modelpath</span>,
-         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/" class="external-link">nlrx</a></span><span class="op">)</span></span>
+<span><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
+<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span></span>
+<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
+<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span></span>
+<span><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
+<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span></span>
+<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
+<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,</span>
+<span>         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,</span>
+<span>         modelpath <span class="op">=</span> <span class="va">modelpath</span>,</span>
+<span>         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-2-attach-an-experiment-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-2-attach-an-experiment-1" class="anchor"></a>Step 2: Attach an experiment</h4>
-<p>Because we want to apply an optimization algorithm, we need to define proper variable ranges. The algorithm is allowed to change the values of these parameters within these ranges in order to minimize our fitness criterion. In this example we want to use a self-defined evaluation function to calculate a fitness criterion. Thus, we add the patch coordinates and patch color (as a patch class indicator) to the <code>metrics.patches</code> vector. We want to use spatial data to calculate the landscape edge density index of the final tick and find a parameterization that leads to the edge density. Because we only want to consider the last tick of the simulation, we set tickmetrics to “false” and runtime to 50.</p>
+<div class="section level4">
+<h4 id="step-2-attach-an-experiment-1">Step 2: Attach an experiment<a class="anchor" aria-label="anchor" href="#step-2-attach-an-experiment-1"></a>
+</h4>
+<p>Because we want to apply an optimization algorithm, we need to define
+proper variable ranges. The algorithm is allowed to change the values of
+these parameters within these ranges in order to minimize our fitness
+criterion. In this example we want to use a self-defined evaluation
+function to calculate a fitness criterion. Thus, we add the patch
+coordinates and patch color (as a patch class indicator) to the
+<code>metrics.patches</code> vector. We want to use spatial data to
+calculate the landscape edge density index of the final tick and find a
+parameterization that leads to the edge density. Because we only want to
+consider the last tick of the simulation, we set tickmetrics to “false”
+and runtime to 50.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep-GenSA2"</span>,
-                            outpath<span class="op">=</span><span class="va">outpath</span>,
-                            repetition<span class="op">=</span><span class="fl">1</span>,
-                            tickmetrics<span class="op">=</span><span class="st">"false"</span>,
-                            idsetup<span class="op">=</span><span class="st">"setup"</span>,
-                            idgo<span class="op">=</span><span class="st">"go"</span>,
-                            runtime<span class="op">=</span><span class="fl">50</span>,
-                            metrics.patches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span><span class="op">)</span>,
-                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span>,
-                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span>,
-                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,
-                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,
-                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,
-                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,
-                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,
-                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep-GenSA2"</span>,</span>
+<span>                            outpath<span class="op">=</span><span class="va">outpath</span>,</span>
+<span>                            repetition<span class="op">=</span><span class="fl">1</span>,</span>
+<span>                            tickmetrics<span class="op">=</span><span class="st">"false"</span>,</span>
+<span>                            idsetup<span class="op">=</span><span class="st">"setup"</span>,</span>
+<span>                            idgo<span class="op">=</span><span class="st">"go"</span>,</span>
+<span>                            runtime<span class="op">=</span><span class="fl">50</span>,</span>
+<span>                            metrics.patches <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pxcor"</span>, <span class="st">"pycor"</span>, <span class="st">"pcolor"</span><span class="op">)</span>,</span>
+<span>                            variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span>,</span>
+<span>                                             <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                            constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,</span>
+<span>                                             <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>                                             <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                             <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>                                             <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                                             <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                                             <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-3-attach-a-simulation-design-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-3-attach-a-simulation-design-1" class="anchor"></a>Step 3: Attach a simulation design</h4>
-<p>We use the <code>simdesgin_GenSA()</code> function to attach a Simulated Annealing simdesign. Because we want to post-process our simulation results, we need to define an evaluation function. The evaluation function needs to accept the nl object as input and must return a single numeric value. First we load the package landscapemetrics. We then convert the spatial data to a raster format and calculate the landscape edge density index. Finally, we report only the index value of the resulting tibble.</p>
+<div class="section level4">
+<h4 id="step-3-attach-a-simulation-design-1">Step 3: Attach a simulation design<a class="anchor" aria-label="anchor" href="#step-3-attach-a-simulation-design-1"></a>
+</h4>
+<p>We use the <code>simdesgin_GenSA()</code> function to attach a
+Simulated Annealing simdesign. Because we want to post-process our
+simulation results, we need to define an evaluation function. The
+evaluation function needs to accept the nl object as input and must
+return a single numeric value. First we load the package
+landscapemetrics. We then convert the spatial data to a raster format
+and calculate the landscape edge density index. Finally, we report only
+the index value of the resulting tibble.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">critfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nl</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">landscapemetrics</span><span class="op">)</span>
-  <span class="va">res_spat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl_to_raster.html">nl_to_raster</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span>
-  <span class="va">res_spat_raster</span> <span class="op">&lt;-</span> <span class="va">res_spat</span><span class="op">$</span><span class="va">spatial.raster</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-  <span class="va">lsm</span> <span class="op">&lt;-</span> <span class="fu">lsm_l_ed</span><span class="op">(</span><span class="va">res_spat_raster</span><span class="op">)</span>
-  <span class="va">crit</span> <span class="op">&lt;-</span> <span class="va">lsm</span><span class="op">$</span><span class="va">value</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">crit</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
-<p>In the <code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code> function we now provide our evaluation function (<code>critfun</code>) as evaluation criterion (<code>evalcrit</code>). The control parameter allows us to provide additional parameters for the GenSA function (see ?GenSA for details). For demonstration purposes, we set the maximum number of iterations to 20.</p>
+<code class="sourceCode R"><span><span class="va">critfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nl</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatialecology.github.io/landscapemetrics/" class="external-link">landscapemetrics</a></span><span class="op">)</span></span>
+<span>  <span class="va">res_spat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl_to_raster.html">nl_to_raster</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></span>
+<span>  <span class="va">res_spat_raster</span> <span class="op">&lt;-</span> <span class="va">res_spat</span><span class="op">$</span><span class="va">spatial.raster</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="va">lsm</span> <span class="op">&lt;-</span> <span class="fu">lsm_l_ed</span><span class="op">(</span><span class="va">res_spat_raster</span><span class="op">)</span></span>
+<span>  <span class="va">crit</span> <span class="op">&lt;-</span> <span class="va">lsm</span><span class="op">$</span><span class="va">value</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">crit</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>In the <code><a href="../reference/simdesign_GenSA.html">simdesign_GenSA()</a></code> function we now provide our
+evaluation function (<code>critfun</code>) as evaluation criterion
+(<code>evalcrit</code>). The control parameter allows us to provide
+additional parameters for the GenSA function (see ?GenSA for details).
+For demonstration purposes, we set the maximum number of iterations to
+20.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span><span class="op">(</span><span class="va">nl</span>, 
-                                evalcrit <span class="op">=</span> <span class="va">critfun</span>, 
-                                nseeds <span class="op">=</span> <span class="fl">1</span>, 
-                                control<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_GenSA.html">simdesign_GenSA</a></span><span class="op">(</span><span class="va">nl</span>, </span>
+<span>                                evalcrit <span class="op">=</span> <span class="va">critfun</span>, </span>
+<span>                                nseeds <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                                control<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-4-run-simulations-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-4-run-simulations-1" class="anchor"></a>Step 4: Run simulations</h4>
-<p>For optimization simdesign, the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function lets you execute the simulations. There are some notable differences between <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code>. First, because parameterizations depend of results from previous runs, <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> can not be parallelized. Second, the procedure does not automatically loop over created random seeds of the simdesign. If you want to repeat the same algorithm several times, just embed the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function in any kind of loop and iterate through the <code>nl@simdesign@simseeds</code> vector. Third, the output of <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> is reported as objects from the specific optimization procedures and not in tibble format. In order to attach these results to the nl object, the output needs to be converted to tibble format first. However, attaching optimization results to the nl does not enable any further post-processing functions of the nlrx package and is only relevant for storing results together with the nl object. This design decision was made in order to allow application of the method specific summary functions to the results of the optimization.</p>
+<div class="section level4">
+<h4 id="step-4-run-simulations-1">Step 4: Run simulations<a class="anchor" aria-label="anchor" href="#step-4-run-simulations-1"></a>
+</h4>
+<p>For optimization simdesign, the <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function
+lets you execute the simulations. There are some notable differences
+between <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code>. First,
+because parameterizations depend of results from previous runs,
+<code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> can not be parallelized. Second, the procedure
+does not automatically loop over created random seeds of the simdesign.
+If you want to repeat the same algorithm several times, just embed the
+<code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function in any kind of loop and iterate
+through the <code>nl@simdesign@simseeds</code> vector. Third, the output
+of <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> is reported as objects from the specific
+optimization procedures and not in tibble format. In order to attach
+these results to the nl object, the output needs to be converted to
+tibble format first. However, attaching optimization results to the nl
+does not enable any further post-processing functions of the nlrx
+package and is only relevant for storing results together with the nl
+object. This design decision was made in order to allow application of
+the method specific summary functions to the results of the
+optimization.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_dyn.html">run_nl_dyn</a></span><span class="op">(</span><span class="va">nl</span>, seed <span class="op">=</span> <span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_dyn.html">run_nl_dyn</a></span><span class="op">(</span><span class="va">nl</span>, seed <span class="op">=</span> <span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="step-5-investigate-output-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#step-5-investigate-output-1" class="anchor"></a>Step 5: Investigate output</h4>
-<p>The output list of the Simulated Annealing procedure contains four elements: <code>value</code> reports the minimum final value of the evaluation criterion. <code>par</code> reports the parameter settings of the final parameterisation in the same order as defined in the experiment of the nl object. <code>trace.mat</code> gives you detailed information on the optimization process over all iterations. <code>counts</code> indicates how often the optimization procedure was executed in total.</p>
+<div class="section level4">
+<h4 id="step-5-investigate-output-1">Step 5: Investigate output<a class="anchor" aria-label="anchor" href="#step-5-investigate-output-1"></a>
+</h4>
+<p>The output list of the Simulated Annealing procedure contains four
+elements: <code>value</code> reports the minimum final value of the
+evaluation criterion. <code>par</code> reports the parameter settings of
+the final parameterisation in the same order as defined in the
+experiment of the nl object. <code>trace.mat</code> gives you detailed
+information on the optimization process over all iterations.
+<code>counts</code> indicates how often the optimization procedure was
+executed in total.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span></code></pre></div>
-<p>In order to store our results together with the nl object we need to attach the results to the nl object first. As explained above, we need to enframe the results as a tibble.</p>
+<code class="sourceCode R"><span><span class="va">results</span></span></code></pre></div>
+<p>In order to store our results together with the nl object we need to
+attach the results to the nl object first. As explained above, we need
+to enframe the results as a tibble.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/setsim&lt;-.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_2.rds"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/setsim.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/enframe.html" class="external-link">enframe</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">nl</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span><span class="op">@</span><span class="va">outpath</span>, <span class="st">"genSA_2.rds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </div>
@@ -358,11 +466,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jan Salecker, Marco Sciaini, Sebastian Hanss.</p>
+  <p></p>
+<p>Developed by Jan Salecker, Marco Sciaini, Sebastian Hanss.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -370,6 +480,8 @@
 
   
 
+
+  
 
   </body>
 </html>
