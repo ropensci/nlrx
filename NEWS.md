@@ -1,3 +1,13 @@
+# nlrx 0.4.4
+
+## Bugfixes
+
+* updating Java Version Requirement in DESCRIPTION
+* refactoring download_netlogo function
+* Fix readr problems with util_runnl()
+  * deprecated in path argument in write_lines (write batchfile for win)
+  * wrong string escapes for logicals on windows
+
 
 # nlrx 0.4.3
 
