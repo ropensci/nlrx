@@ -129,8 +129,8 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE) {
   to_file <- file.path(to, nl_file)
   utils::download.file(nl_dl, to_file)
 
-  ## Extract the archive if os=unix:
-  if (os == "unix") {
+  ## Extract the archive if os==unix and extract == TRUE:
+  if (os == "unix" & extract == TRUE) {
     system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
 }

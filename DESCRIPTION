@@ -53,6 +53,7 @@ Depends:
     R (>= 3.3)
 Suggests: 
     testthat,
+    mockery,
     knitr,
     rmarkdown,
     covr
