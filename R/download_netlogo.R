@@ -114,11 +114,9 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE) {
          "mac" = {
            nl_file <- paste0("NetLogo-", version, ".dmg")
          },
-         # nocov end
          "unix" = {
            nl_file <- paste0("NetLogo-", version, "-64.tgz")
          },
-         # nocov start
          "Unknown OS" = {
            stop("Unknown OS. OS not supported by NetLogo")
          }
