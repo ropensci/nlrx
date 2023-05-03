@@ -1,10 +1,17 @@
 # nlrx 0.4.4
 
+## Functionality
+
+* added support to download_netLogo() for up to NetLogo version 6.3.0 
+* adjusted test_nlrx() to work with new NetLogo directory structure (6.3.0)
+* added writeRDS parameter to run_nl_all() for storing intermediate results
+
 ## Bugfixes
 
 * updating Java Version Requirement in DESCRIPTION
 * refactoring download_netlogo function
 * Fix readr problems with util_runnl() (deprecated in path argument in write_lines)
+* Fix path problems
 
 
 
