@@ -42,7 +42,7 @@ simdesign_ABCmcmc_Wegmann | min, max, qfun             | numeric
 Additionally, please note the following restrictions in order to define variables and constants correctly:
 
 * Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
-* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. `"\\"string\\""`).
+* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. `"\"string\""`).
 * Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. `"false"`).
 * It is not allowed to list the same variable in the variables and constants list. 
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
@@ -74,6 +74,18 @@ The `run_nl_one()` does not report any progress because it only executes one sim
 In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
 
 Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
+
+## Access to intermediate results
+
+For long-running experiments and simdesigns, it may be beneficial to gain access to intermediate results. 
+This is especially useful to obtain results of successful runs, even if the R session crashes or gets stalled.
+The `run_all_all()` and `run_nl_one()` functions provide a parameter `writeRDS`. If this is set to `TRUE`, a rds file, carrying the current seed and siminputrow will be written to the specified `outpath` of the nl object experiment. Please note, that in case of the `run_all_all()` function, a huge number of rds files may be written to your disk (check `print(nl)` to get an estimated nunmber of runs/files) which may cause other issues.
+
+Another option to get intermediate results, is to split-up the job into smaller chunks.
+E.g. one could create a loop around the `run_nl_all()` and in each iteration only use part of the `nl@simdesign@siminput` tibble (temporary overwrite the `nl@simdesign@siminput` tibble with a copy that only contains a specific slice of the parameter matrix). Then after each iteration, one can write the results of the complete chunk as an rds file to disk.
+Another option would be to create an outer loop around the `run_nl_all()` using the random seeds from the `nl@simdesign@simseeds` slot. Then, within each loop iteration the `nl@simdesign@simseeds` slot would be overwritten with the seed from the current loop iteration before the nl object is passed to `run_nl_all()` (don't forget to adjust the split parameter in case of parallel execution). Then again, after each iteration, one can write the results of the complete chunk as an rds file to disk.
+
+To collect the intermediate results, simply read all rds files from the outpath in a loop and combine the tibbles, for example by using `dplyr::bind_rows()`.
 
 ## Handling NetLogo runtime errors
 

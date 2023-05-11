@@ -9,6 +9,7 @@
 #' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
 #' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
 #' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param writeRDS TRUE/FALSE, if TRUE, for each single simulation an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -74,7 +75,8 @@ run_nl_all <- function(nl,
                        split = 1,
                        cleanup.csv = TRUE,
                        cleanup.xml = TRUE,
-                       cleanup.bat = TRUE) {
+                       cleanup.bat = TRUE,
+                       writeRDS = FALSE) {
   ## Store the number of siminputrows
   siminput_nrow <- nrow(getsim(nl, "siminput"))
   ## Check if split parameter is valid:
@@ -123,7 +125,8 @@ run_nl_all <- function(nl,
               siminputrow = siminputrow,
               cleanup.csv = cleanup.csv,
               cleanup.xml = cleanup.xml,
-              cleanup.bat = cleanup.bat
+              cleanup.bat = cleanup.bat,
+              writeRDS = writeRDS
             )
             return(res_one)
           })

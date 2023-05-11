@@ -22,7 +22,11 @@ test_nlrx <- function(nlpath, nlversion){
     stop("Provided NetLogo path does not exist!")
   }
 
-  modelpath <- file.path(nlpath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+  modelpath <- ifelse(
+    nlversion >= "6.3.0",
+    file.path(nlpath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogo"),
+    file.path(nlpath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+  )
 
   if(!file.exists(modelpath)){
     stop("Provided nlpath deviates from expected NetLogo standard folder structure. Test aborted!")

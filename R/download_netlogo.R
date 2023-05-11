@@ -1,22 +1,90 @@
+#' Report supported NetLogo versions
+#'
+#' @description Auxiliary function to report supported NetLogo version numbers
+#' @return  a vector of supported Versions for Download and Usage (parameter `version`):
+#'
+#' @examples
+#' \dontrun{
+#' supported_netlogo_versions()
+#' }
+#'
+#' @aliases supported_netlogo_versions
+#' @rdname supported_netlogo_versions
+#'
+#' @export
+supported_netlogo_versions <- function() {
+
+  supported_versions <- c(
+    "5.3.1",
+    "6.0.0",
+    "6.0.1",
+    "6.0.2",
+    "6.0.3",
+    "6.0.4",
+    "6.1.0",
+    "6.1.1",
+    "6.2.0",
+    "6.2.1",
+    "6.2.2",
+    "6.3.0"
+  )
+  return(supported_versions)
+}
+
+#' Check supported NetLogo versions
+#'
+#' @description Auxiliary function to check supported NetLogo version numbers
+#' @param version Character string naming which NetLogo Version to check
+#' @param throw_error TRUE/FALSE, if TRUE an error is thrown if the version is not supported
+#' @return logical, if netlogo versions is supported by nlrx
+#'
+#' @examples
+#' \dontrun{
+#' check_netlogo_version("6.2.0")
+#' check_netlogo_version("1.0")
+#' check_netlogo_version("1.0", TRUE)
+#' }
+#'
+#' @aliases check_netlogo_version
+#' @rdname check_netlogo_version
+#'
+#' @export
+check_netlogo_version <- function(version, throw_error=FALSE) {
+
+  ## Check version support
+  supported <- version %in% supported_netlogo_versions()
+
+  ## Throw error if needed:
+  if (isTRUE(throw_error)) {
+    if (!isTRUE(supported)) {
+      msg <- paste(
+        "Netlogo version",
+        version,
+        "is not supported by nlrx.",
+        "Use one of the supported versions: ",
+        paste(supported_netlogo_versions(), collapse=", ")
+      )
+      stop(msg)
+    }
+  }
+
+  return(supported)
+}
+
+
 #' Download NetLogo
 #'
 #' @description Auxiliary function to download NetLogo
 #'
 #' @param to      Path to folder where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
+#' @param os operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
+#' If set to NA (default) os will be detcetd automatically (`util_get_os()`)
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'
-#' Supported Versions for Download and Usage (parameter `version`):
-#' * "6.2.0" = NetLogo Version 6.2.0
-#' * "6.1.1" = NetLogo Version 6.1.1
-#' * "6.1.0" = NetLogo Version 6.1.0
-#' * "6.0.4" = NetLogo Version 6.0.4
-#' * "6.0.3" = NetLogo Version 6.0.3
-#' * "6.0.2" = NetLogo Version 6.0.2
-#' * "6.0.1" = NetLogo Version 6.0.1
-#' * "6.0" = NetLogo Version 6.0
-#' * "5.3.1" = NetLogo Version 5.3.1
+#' Retrieve supported Versions for Download and Usage (parameter `version`):
+#' supported_netlogo_versions()
 #'
 #'
 #' @examples
@@ -29,64 +97,39 @@
 #' @rdname download_netlogo
 #'
 #' @export
+download_netlogo <- function(to, version, os = NA, extract = FALSE) {
 
-
-download_netlogo <- function(to, version, extract = FALSE) {
-  switch(version,
-    "6.2.0" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.2.0/"
-    },
-    "6.1.1" = {
-     nl_url <- "https://ccl.northwestern.edu/netlogo/6.1.1/"
-    },
-    "6.1.0" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.1.0/"
-    },
-    "6.0.4" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.4/"
-    },
-    "6.0.3" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.3/"
-    },
-    "6.0.2" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.2/"
-    },
-    "6.0.1" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.1/"
-    },
-    "6.0" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/6.0.0/"
-    },
-    "5.3.1" = {
-      nl_url <- "https://ccl.northwestern.edu/netlogo/5.3.1/"
-    }
+  ## Check version support
+  check_netlogo_version(version, throw_error = TRUE)
+  ## Construct base url
+  nl_url <- paste0("https://ccl.northwestern.edu/netlogo/", version, "/")
+  ## Get filename depending on os
+  if (is.na(os)) {
+    os <- util_get_os()
+  }
+  switch(os,
+         # nocov start
+         "win" = {
+           nl_file <- paste0("NetLogo-", version, "-64.msi")
+         },
+         "mac" = {
+           nl_file <- paste0("NetLogo-", version, ".dmg")
+         },
+         "unix" = {
+           nl_file <- paste0("NetLogo-", version, "-64.tgz")
+         },
+         "Unknown OS" = {
+           stop("Unknown OS. OS not supported by NetLogo")
+         }
+         # nocov end
   )
-
-  switch(util_get_os(),
-    # nocov start
-    "win" = {
-      nl_file <- paste0("NetLogo-", version, "-64.msi")
-    },
-    "mac" = {
-      nl_file <- paste0("NetLogo-", version, ".dmg")
-    },
-    # nocov end
-    "unix" = {
-      nl_file <- paste0("NetLogo-", version, "-64.tgz")
-    },
-    # nocov start
-    "Unknown OS" = {
-      stop("Unknown OS. OS not supported by NetLogo")
-    }
-    # nocov end
-  )
-
+  ## Download
   nl_dl <- paste0(nl_url, nl_file)
-  to_file <- paste0(to, nl_file)
+  to_file <- file.path(to, nl_file)
   utils::download.file(nl_dl, to_file)
 
-  ## Extract the archive if os=unix:
-  if (util_get_os() == "unix") {
+  ## Extract the archive if os==unix and extract == TRUE:
+  if (os == "unix" & extract == TRUE) {
     system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
 }

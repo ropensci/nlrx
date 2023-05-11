@@ -4,12 +4,15 @@
 \alias{download_netlogo}
 \title{Download NetLogo}
 \usage{
-download_netlogo(to, version, extract = FALSE)
+download_netlogo(to, version, os = NA, extract = FALSE)
 }
 \arguments{
 \item{to}{Path to folder where the downloaded file is saved.}
 
 \item{version}{Character string naming which NetLogo Version to download (see Details)}
+
+\item{os}{operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
+If set to NA (default) os will be detcetd automatically (\code{util_get_os()})}
 
 \item{extract}{TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of \code{to} (only unix)}
 }
@@ -17,18 +20,8 @@ download_netlogo(to, version, extract = FALSE)
 Auxiliary function to download NetLogo
 }
 \details{
-Supported Versions for Download and Usage (parameter \code{version}):
-\itemize{
-\item "6.2.0" = NetLogo Version 6.2.0
-\item "6.1.1" = NetLogo Version 6.1.1
-\item "6.1.0" = NetLogo Version 6.1.0
-\item "6.0.4" = NetLogo Version 6.0.4
-\item "6.0.3" = NetLogo Version 6.0.3
-\item "6.0.2" = NetLogo Version 6.0.2
-\item "6.0.1" = NetLogo Version 6.0.1
-\item "6.0" = NetLogo Version 6.0
-\item "5.3.1" = NetLogo Version 5.3.1
-}
+Retrieve supported Versions for Download and Usage (parameter \code{version}):
+supported_netlogo_versions()
 }
 \examples{
 \dontrun{

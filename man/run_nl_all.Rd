@@ -9,7 +9,8 @@ run_nl_all(
   split = 1,
   cleanup.csv = TRUE,
   cleanup.xml = TRUE,
-  cleanup.bat = TRUE
+  cleanup.bat = TRUE,
+  writeRDS = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ run_nl_all(
 \item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
 
 \item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+
+\item{writeRDS}{TRUE/FALSE, if TRUE, for each single simulation an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.}
 }
 \value{
 tibble with simulation output results

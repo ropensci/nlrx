@@ -491,7 +491,12 @@ util_read_write_batch <- function(nl) {
       batchpath <- file.path(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
       # Extensions Folder:
-      extensionspath <- file.path(getnl(nl, "nlpath"), "app/extensions")
+      extensionspath <- ifelse(
+        getnl(nl, "nlversion") >= "6.3.0",
+        file.path(getnl(nl, "nlpath"), "extensions"),
+        file.path(getnl(nl, "nlpath"), "app/extensions")
+      )
+
       jarpath <- file.path(getnl(nl, "nlpath"), paste0("app/netlogo-",
                                                        getnl(nl, "nlversion"), ".jar"))
 
@@ -517,7 +522,7 @@ util_read_write_batch <- function(nl) {
 
       # Create new batchfile:
       batchpath_temp <- tempfile(pattern = "netlogo-headless", fileext = ".bat")
-      readr::write_lines(batch, path = batchpath_temp)
+      readr::write_lines(batch, file = batchpath_temp)
     }
   }
   # nocov end

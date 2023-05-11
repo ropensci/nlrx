@@ -5,14 +5,13 @@
 
 <!-- old badges: [![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
 ![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) -->
-
 <!-- badges: start -->
 
 [![R build
 status](https://github.com/ropensci/nlrx/workflows/R-CMD-check/badge.svg)](https://github.com/ropensci/nlrx/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg)](https://codecov.io/gh/ropensci/nlrx)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.r-project.org/package=nlrx)
@@ -70,8 +69,8 @@ Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generation
 framework for reproducible NetLogo model analyses. Methods Ecol Evol.
 2019;2041-210X. <https://doi.org/10.1111/2041-210X.13286>.
 
-Get citation information for `nlrx` in R doing `citation(package =
-'nlrx')`.
+Get citation information for `nlrx` in R doing
+`citation(package = 'nlrx')`.
 
 ## Prerequirements
 
@@ -89,15 +88,21 @@ use the Linux tar.gz version of NetLogo (either from the NetLogo
 Homepage or by using the `download_netlogo()` function). The dmg version
 from the NetLogo homepage is not compatible with nlrx.
 
+All code snippets on this homepage should be compatible with Netlogo \<=
+6.2.2. In version 6.3.0, the folder structure of NetLogo was slighlty
+updated, thus the modelpath in the code snippets need to be adjusted
+accordingly (the `"app/"` folder needs to be removed from the
+modelpath).
+
 ### Java
 
 Because NetLogo is executed in a Java virtual machine, Java needs to be
 installed on the local/remote system as well. We recommend the [Oracle
-Java SE Development
-Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
+Java SE Development Kit
+8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
 or the [openjdk](https://github.com/ojdkbuild/ojdkbuild). While the nlrx
 package might work without setting the Java system path explicitly, we
-recommend to make sure that JAVA\_HOME points to the correct Java
+recommend to make sure that JAVA_HOME points to the correct Java
 installation of the system.
 
 ## Installation
@@ -246,7 +251,7 @@ results <- run_nl_all(nl)
 nlrx provides method specific analysis functions for each simulation
 design. Depending on the chosen design, the function reports a tibble
 with aggregated results or sensitivity indices. In order to run the
-analyze\_nl function, the simulation output has to be attached to the nl
+analyze_nl function, the simulation output has to be attached to the nl
 object first. The simdesign class within the nl object provides a slot
 for attaching output results (simoutput). An output results tibble can
 be attached to this slot by using the simdesign setter function
@@ -266,17 +271,16 @@ analyze_nl(nl)
 
 ## Meta
 
-  - Please [report any issues or
-    bugs](https://github.com/ropensci/nlrx/issues/new).
-  - License: GPL3
-  - Get citation information for `nlrx` in R doing `citation(package =
-    'nlrx')`
-  - We are very open to contributions - if you are interested check
-    [Contributing](https://github.com/ropensci/nlrx/blob/master/CONTRIBUTING.md).
-      - Please note that this project is released with a [Contributor
-        Code of
-        Conduct](https://github.com/ropensci/nlrx/blob/master/CODE_OF_CONDUCT.md).
-        By participating in this project you agree to abide by its
-        terms.
+- Please [report any issues or
+  bugs](https://github.com/ropensci/nlrx/issues/new).
+- License: GPL3
+- Get citation information for `nlrx` in R doing
+  `citation(package = 'nlrx')`
+- We are very open to contributions - if you are interested check
+  [Contributing](https://github.com/ropensci/nlrx/blob/master/CONTRIBUTING.md).
+  - Please note that this project is released with a [Contributor Code
+    of
+    Conduct](https://github.com/ropensci/nlrx/blob/master/CODE_OF_CONDUCT.md).
+    By participating in this project you agree to abide by its terms.
 
-[![ropensci\_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
+[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
