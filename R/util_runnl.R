@@ -364,7 +364,8 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
   # split by whitespace outside of brackets:
-  patches_string <- stringr::str_split(patches_string$metrics.patches, "\\s+(?=[^\\])}]*([\\[({]|$))")
+  patches_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", patches_string$metrics.patches, perl=TRUE)
+  patches_string <- stringr::str_split(patches_string, ";;split;;")
 
   patches_string <- purrr::map(patches_string, function(x) {
     patches_owns <- tibble::as_tibble(x = x)
@@ -389,7 +390,8 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
   # split by whitespace outside of brackets:
-  turtles_string <- stringr::str_split(dplyr::pull(turtles_string, col.name), "\\s+(?=[^\\])}]*([\\[({]|$))")
+  turtles_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", dplyr::pull(turtles_string, col.name), perl=TRUE)
+  turtles_string <- stringr::str_split(turtles_string, ";;split;;")
 
   turtles_string <- purrr::map(turtles_string, function(x) {
     turtles_owns <- tibble::as_tibble(x = x)
@@ -415,7 +417,8 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
   # split by whitespace outside of brackets:
-  links_string <- stringr::str_split(dplyr::pull(links_string, col.name), "\\s+(?=[^\\])}]*([\\[({]|$))")
+  links_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", dplyr::pull(links_string, col.name), perl=TRUE)
+  links_string <- stringr::str_split(links_string, ";;split;;")
 
   links_string <- purrr::map(links_string, function(x) {
     links_owns <- tibble::as_tibble(x = x)
