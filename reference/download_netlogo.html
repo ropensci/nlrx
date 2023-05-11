@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -148,7 +148,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">download_netlogo</span><span class="op">(</span><span class="va">to</span>, <span class="va">version</span>, extract <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">download_netlogo</span><span class="op">(</span><span class="va">to</span>, <span class="va">version</span>, os <span class="op">=</span> <span class="cn">NA</span>, extract <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -161,22 +161,20 @@
 <dd><p>Character string naming which NetLogo Version to download (see Details)</p></dd>
 
 
+<dt>os</dt>
+<dd><p>operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
+If set to NA (default) os will be detcetd automatically (<code><a href="util_get_os.html">util_get_os()</a></code>)</p></dd>
+
+
 <dt>extract</dt>
 <dd><p>TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of <code>to</code> (only unix)</p></dd>
 
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>Supported Versions for Download and Usage (parameter <code>version</code>):</p><ul><li><p>"6.2.0" = NetLogo Version 6.2.0</p></li>
-<li><p>"6.1.1" = NetLogo Version 6.1.1</p></li>
-<li><p>"6.1.0" = NetLogo Version 6.1.0</p></li>
-<li><p>"6.0.4" = NetLogo Version 6.0.4</p></li>
-<li><p>"6.0.3" = NetLogo Version 6.0.3</p></li>
-<li><p>"6.0.2" = NetLogo Version 6.0.2</p></li>
-<li><p>"6.0.1" = NetLogo Version 6.0.1</p></li>
-<li><p>"6.0" = NetLogo Version 6.0</p></li>
-<li><p>"5.3.1" = NetLogo Version 5.3.1</p></li>
-</ul></div>
+    <p>Retrieve supported Versions for Download and Usage (parameter <code>version</code>):
+supported_netlogo_versions()</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>

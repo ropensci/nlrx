@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -200,6 +200,7 @@
 <h3 id="netlogo">NetLogo<a class="anchor" aria-label="anchor" href="#netlogo"></a>
 </h3>
 <p>In order to use the nlrx package, <a href="http://netlogoweb.org/" class="external-link">NetLogo</a> (&gt;=5.3.1) needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (<code><a href="reference/download_netlogo.html">download_netlogo()</a></code>) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system. If you are running MacOS, please use the Linux tar.gz version of NetLogo (either from the NetLogo Homepage or by using the <code><a href="reference/download_netlogo.html">download_netlogo()</a></code> function). The dmg version from the NetLogo homepage is not compatible with nlrx.</p>
+<p>All code snippets on this homepage should be compatible with Netlogo &lt;= 6.2.2. In version 6.3.0, the folder structure of NetLogo was slighlty updated, thus the modelpath in the code snippets need to be adjusted accordingly (the <code>"app/"</code> folder needs to be removed from the modelpath).</p>
 </div>
 <div class="section level3">
 <h3 id="java">Java<a class="anchor" aria-label="anchor" href="#java"></a>
@@ -314,7 +315,7 @@
 <ul>
 <li>Please <a href="https://github.com/ropensci/nlrx/issues/new" class="external-link">report any issues or bugs</a>.</li>
 <li>License: GPL3</li>
-<li>Get citation information for <code>nlrx</code> in R doing <code>citation(package =     'nlrx')</code>
+<li>Get citation information for <code>nlrx</code> in R doing <code>citation(package = 'nlrx')</code>
 </li>
 <li>We are very open to contributions - if you are interested check <a href="https://github.com/ropensci/nlrx/blob/master/CONTRIBUTING.md" class="external-link">Contributing</a>.
 <ul>
@@ -375,7 +376,7 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/ropensci/nlrx/actions" class="external-link"><img src="https://github.com/ropensci/nlrx/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://codecov.io/gh/ropensci/nlrx" class="external-link"><img src="https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#maturing" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
 <li><a href="https://cran.r-project.org/package=nlrx" class="external-link"><img src="https://www.r-pkg.org/badges/version/nlrx" alt="CRAN status"></a></li>
 <li><a href="https://cran.r-project.org/package=nlrx" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/nlrx"></a></li>
 <li><a href="https://github.com/ropensci/software-review/issues/262" class="external-link"><img src="https://badges.ropensci.org/262_status.svg" alt="ropensci"></a></li>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -153,7 +153,8 @@
 <span>  split <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  cleanup.csv <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cleanup.xml <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  cleanup.bat <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  cleanup.bat <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  writeRDS <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -177,6 +178,10 @@
 
 <dt>cleanup.bat</dt>
 <dd><p>TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.</p></dd>
+
+
+<dt>writeRDS</dt>
+<dd><p>TRUE/FALSE, if TRUE, for each single simulation an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.</p></dd>
 
 </dl></div>
     <div id="value">

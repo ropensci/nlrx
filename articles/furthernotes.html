@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -174,7 +174,7 @@
                         <h4 data-toc-skip class="author">Jan
 Salecker</h4>
             
-            <h4 data-toc-skip class="date">2023-04-26</h4>
+            <h4 data-toc-skip class="date">2023-05-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/HEAD/vignettes/furthernotes.Rmd" class="external-link"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
@@ -280,7 +280,7 @@ define variables and constants correctly:</p>
 simdesign_simple, simdesign_distinct and simdesign_ff.</li>
 <li>Variable values that should be recognized by NetLogo as strings need
 to be nested inside escaped quotes
-(e.g. <code>"\\"string\\""</code>).</li>
+(e.g. <code>"\"string\""</code>).</li>
 <li>Variable values that should be recognized by NetLogo as logical need
 to be entered as strings (e.g. <code>"false"</code>).</li>
 <li>It is not allowed to list the same variable in the variables and
@@ -346,6 +346,40 @@ directly from NetLogo (for example using the idrunnum functionality of
 nlrx, see section “Notes on self-written output”). These output files
 can then be monitored to capture the progress of the parallelized model
 executions.</p>
+</div>
+<div class="section level2">
+<h2 id="access-to-intermediate-results">Access to intermediate results<a class="anchor" aria-label="anchor" href="#access-to-intermediate-results"></a>
+</h2>
+<p>For long-running experiments and simdesigns, it may be beneficial to
+gain access to intermediate results. This is especially useful to obtain
+results of successful runs, even if the R session crashes or gets
+stalled. The <code>run_all_all()</code> and <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>
+functions provide a parameter <code>writeRDS</code>. If this is set to
+<code>TRUE</code>, a rds file, carrying the current seed and siminputrow
+will be written to the specified <code>outpath</code> of the nl object
+experiment. Please note, that in case of the <code>run_all_all()</code>
+function, a huge number of rds files may be written to your disk (check
+<code>print(nl)</code> to get an estimated nunmber of runs/files) which
+may cause other issues.</p>
+<p>Another option to get intermediate results, is to split-up the job
+into smaller chunks. E.g. one could create a loop around the
+<code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and in each iteration only use part of the
+<code>nl@simdesign@siminput</code> tibble (temporary overwrite the
+<code>nl@simdesign@siminput</code> tibble with a copy that only contains
+a specific slice of the parameter matrix). Then after each iteration,
+one can write the results of the complete chunk as an rds file to disk.
+Another option would be to create an outer loop around the
+<code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> using the random seeds from the
+<code>nl@simdesign@simseeds</code> slot. Then, within each loop
+iteration the <code>nl@simdesign@simseeds</code> slot would be
+overwritten with the seed from the current loop iteration before the nl
+object is passed to <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> (don’t forget to adjust
+the split parameter in case of parallel execution). Then again, after
+each iteration, one can write the results of the complete chunk as an
+rds file to disk.</p>
+<p>To collect the intermediate results, simply read all rds files from
+the outpath in a loop and combine the tibbles, for example by using
+<code><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">dplyr::bind_rows()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="handling-netlogo-runtime-errors">Handling NetLogo runtime errors<a class="anchor" aria-label="anchor" href="#handling-netlogo-runtime-errors"></a>

@@ -85,6 +85,9 @@
     <loc>/reference/analyze_soboljansen.html</loc>
   </url>
   <url>
+    <loc>/reference/check_netlogo_version.html</loc>
+  </url>
+  <url>
     <loc>/reference/download_netlogo.html</loc>
   </url>
   <url>
@@ -260,6 +263,9 @@
   </url>
   <url>
     <loc>/reference/simdesign_soboljansen.html</loc>
+  </url>
+  <url>
+    <loc>/reference/supported_netlogo_versions.html</loc>
   </url>
   <url>
     <loc>/reference/test_nlrx.html</loc>

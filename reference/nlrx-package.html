@@ -18,7 +18,7 @@ It uses a similar structure as NetLogos Behavior Space but offers more flexibili
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -163,69 +163,69 @@ Additionally, different simdesign helper functions can be applied to the same <c
 <p>The "Wolf Sheep Predation" model from the NetLogo models library is used to present a basic example on how to setup and run NetLogo model simulations from R.</p>
 <p>Step 1: Create a nl object:</p>
 <p>The nl object holds all information on the NetLogo version, a path to the NetLogo directory with the defined version, a path to the model file, and the desired memory for the java virtual machine.
-Depending on the operation system, paths to NetLogo and the model need to be adjusted.</p><div class="sourceCode"><pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/" class="external-link">nlrx</a></span><span class="op">)</span></span>
-<span><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
-<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/Program Files/NetLogo 6.0.3"</span><span class="op">)</span></span>
-<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
-<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"C:/out"</span><span class="op">)</span></span>
-<span><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
-<span><span class="va">netlogopath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/NetLogo 6.0.3"</span><span class="op">)</span></span>
-<span><span class="va">modelpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">netlogopath</span>, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span><span class="op">)</span></span>
-<span><span class="va">outpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"/home/out"</span><span class="op">)</span></span>
-<span><span class="va">nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nl.html">nl</a></span><span class="op">(</span>nlversion <span class="op">=</span> <span class="st">"6.0.3"</span>,</span>
-<span>         nlpath <span class="op">=</span> <span class="va">netlogopath</span>,</span>
-<span>         modelpath <span class="op">=</span> <span class="va">modelpath</span>,</span>
-<span>         jvmmem <span class="op">=</span> <span class="fl">1024</span><span class="op">)</span></span></code></pre></div>
-
+Depending on the operation system, paths to NetLogo and the model need to be adjusted.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlrx)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>netlogopath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"C:/Program Files/NetLogo 6.0.3"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>modelpath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>outpath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"C:/out"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Unix default NetLogo installation path (adjust to your needs!):</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>netlogopath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"/home/NetLogo 6.0.3"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>modelpath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(netlogopath, <span class="st">"app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>outpath <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"/home/out"</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>nl <span class="ot">&lt;-</span> <span class="fu">nl</span>(<span class="at">nlversion =</span> <span class="st">"6.0.3"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">nlpath =</span> netlogopath,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">modelpath =</span> modelpath,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">jvmmem =</span> <span class="dv">1024</span>)</span></code></pre><p></p></div>
 <p>Step 2: Attach an experiment</p>
 <p>The experiment object is organized in a similar fashion as NetLogo Behavior Space experiments.
 It contains all information that is needed to generate a simulation parameter matrix and to execute the NetLogo simulations.
-Details on the specific slots of the experiment class can be found in the package documentation (<code><a href="experiment.html">?experiment</a></code>) and the "Advanced configuration" vignette.</p><div class="sourceCode"><pre><code><span><span class="va">nl</span><span class="op">@</span><span class="va">experiment</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/experiment.html">experiment</a></span><span class="op">(</span>expname<span class="op">=</span><span class="st">"wolf-sheep"</span>,</span>
-<span>                             outpath<span class="op">=</span><span class="va">outpath</span>,</span>
-<span>                             repetition<span class="op">=</span><span class="fl">1</span>,</span>
-<span>                             tickmetrics<span class="op">=</span><span class="st">"true"</span>,</span>
-<span>                             idsetup<span class="op">=</span><span class="st">"setup"</span>,</span>
-<span>                             idgo<span class="op">=</span><span class="st">"go"</span>,</span>
-<span>                             runtime<span class="op">=</span><span class="fl">50</span>,</span>
-<span>                             evalticks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">40</span>,<span class="fl">50</span><span class="op">)</span>,</span>
-<span>                             metrics<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span><span class="op">)</span>,</span>
-<span>                             variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'initial-number-sheep'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span>,</span>
-<span>                                              <span class="st">'initial-number-wolves'</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>min<span class="op">=</span><span class="fl">50</span>, max<span class="op">=</span><span class="fl">150</span>, qfun<span class="op">=</span><span class="st">"qunif"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                             constants <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"model-version"</span> <span class="op">=</span> <span class="st">"\"sheep-wolves-grass\""</span>,</span>
-<span>                                              <span class="st">"grass-regrowth-time"</span> <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>                                              <span class="st">"sheep-gain-from-food"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>                                              <span class="st">"wolf-gain-from-food"</span> <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                              <span class="st">"sheep-reproduce"</span> <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>                                              <span class="st">"wolf-reproduce"</span> <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>                                              <span class="st">"show-energy?"</span> <span class="op">=</span> <span class="st">"false"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-
+Details on the specific slots of the experiment class can be found in the package documentation (<code><a href="experiment.html">?experiment</a></code>) and the "Advanced configuration" vignette.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nl<span class="sc">@</span>experiment <span class="ot">&lt;-</span> <span class="fu">experiment</span>(<span class="at">expname=</span><span class="st">"wolf-sheep"</span>,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">outpath=</span>outpath,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">repetition=</span><span class="dv">1</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">tickmetrics=</span><span class="st">"true"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">idsetup=</span><span class="st">"setup"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">idgo=</span><span class="st">"go"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">runtime=</span><span class="dv">50</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">evalticks=</span><span class="fu">seq</span>(<span class="dv">40</span>,<span class="dv">50</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">metrics=</span><span class="fu">c</span>(<span class="st">"count sheep"</span>, <span class="st">"count wolves"</span>, <span class="st">"count patches with [pcolor = green]"</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">variables =</span> <span class="fu">list</span>(<span class="st">'initial-number-sheep'</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">min=</span><span class="dv">50</span>, <span class="at">max=</span><span class="dv">150</span>, <span class="at">qfun=</span><span class="st">"qunif"</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">'initial-number-wolves'</span> <span class="ot">=</span> <span class="fu">list</span>(<span class="at">min=</span><span class="dv">50</span>, <span class="at">max=</span><span class="dv">150</span>, <span class="at">qfun=</span><span class="st">"qunif"</span>)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">constants =</span> <span class="fu">list</span>(<span class="st">"model-version"</span> <span class="ot">=</span> <span class="st">"</span><span class="sc">\"</span><span class="st">sheep-wolves-grass</span><span class="sc">\"</span><span class="st">"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"grass-regrowth-time"</span> <span class="ot">=</span> <span class="dv">30</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"sheep-gain-from-food"</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"wolf-gain-from-food"</span> <span class="ot">=</span> <span class="dv">20</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"sheep-reproduce"</span> <span class="ot">=</span> <span class="dv">4</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"wolf-reproduce"</span> <span class="ot">=</span> <span class="dv">5</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"show-energy?"</span> <span class="ot">=</span> <span class="st">"false"</span>))</span></code></pre><p></p></div>
 <p>Step 3: Attach a simulation design</p>
 <p>While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns).
 All simdesign helper functions need a properly defined nl object with a valid experiment design.
 Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
-A simulation design is attached to a nl object by using one of the simdesign helper functions:</p><div class="sourceCode"><pre><code><span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simdesign_lhs.html">simdesign_lhs</a></span><span class="op">(</span>nl<span class="op">=</span><span class="va">nl</span>,</span>
-<span>                               samples<span class="op">=</span><span class="fl">100</span>,</span>
-<span>                               nseeds<span class="op">=</span><span class="fl">3</span>,</span>
-<span>                               precision<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-
+A simulation design is attached to a nl object by using one of the simdesign helper functions:</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nl<span class="sc">@</span>simdesign <span class="ot">&lt;-</span> <span class="fu">simdesign_lhs</span>(<span class="at">nl=</span>nl,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">samples=</span><span class="dv">100</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">nseeds=</span><span class="dv">3</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">precision=</span><span class="dv">3</span>)</span></code></pre><p></p></div>
 <p>Step 4: Run simulations</p>
 <p>All information that is needed to run the simulations is now stored within the nl object.
 The <code><a href="run_nl_one.html">run_nl_one()</a></code> function allows to run one specific simulation from the siminput parameter table.
 The <code><a href="run_nl_all.html">run_nl_all()</a></code> function runs a loop over all simseeds and rows of the parameter input table siminput.
-The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).</p><div class="sourceCode"><pre><code><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></span></code></pre></div>
-
+The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">run_nl_all</span>(<span class="at">nl =</span> nl)</span></code></pre><p></p></div>
 <p>Step 5: Attach results to nl and run analysis</p>
 <p>nlrx provides method specific analysis functions for each simulation design.
 Depending on the chosen design, the function reports a tibble with aggregated results or sensitivity indices.
 In order to run the <code><a href="analyze_nl.html">analyze_nl()</a></code> function, the simulation output has to be attached to the nl object first.
-After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p><div class="sourceCode"><pre><code><span><span class="co"># Attach results to nl object:</span></span>
-<span><span class="fu"><a href="../reference/setsim.html">setsim</a></span><span class="op">(</span><span class="va">nl</span>, <span class="st">"simoutput"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">results</span></span>
-<span><span class="co"># Write output to outpath of experiment within nl</span></span>
-<span><span class="fu"><a href="../reference/write_simoutput.html">write_simoutput</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></span>
-<span><span class="co"># Do further analysis:</span></span>
-<span><span class="fu"><a href="../reference/analyze_nl.html">analyze_nl</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span></span></code></pre></div>
-
+After attaching the simulation results, these can also be written to the defined outpath of the experiment object.</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Attach results to nl object:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setsim</span>(nl, <span class="st">"simoutput"</span>) <span class="ot">&lt;-</span> results</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Write output to outpath of experiment within nl</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write_simoutput</span>(nl)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Do further analysis:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">analyze_nl</span>(nl)</span></code></pre><p></p></div>
     </div>
     <div id="see-also">
     <h2>See also</h2>
