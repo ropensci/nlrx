@@ -1,6 +1,12 @@
 testthat::context("util_runnl tests")
 testthat::test_that("util_runnl", {
 
+  # Test util_create_agentset_reporter
+  testthat::expect_equal(
+    util_create_agentset_reporter("pxcor", "patches"),
+    "but-first but-last (word [(word pxcor)] of patches)"
+  )
+
   # Run these tests only on Github actions:
   testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
 
