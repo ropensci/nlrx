@@ -2,35 +2,41 @@
 
 This is a resubmission. In this version I have:
 
-* Updated the broken URL for the lifecycle badge in the README.md 
+* Adjusted java system dependency in DESCRIPTION according to standard form
+* added new functionality and bugfixes (see details below)
 
 
 # Original (Re-) Submission
 
-nlrx version 0.4.3
+nlrx version 0.4.4
 
 ## CRAN check error fixes
-* updated maintainer and maintainer email address (package was archived because of an auto-response from the previous email address)
 
-## Changes in version 0.4.3
+* Adjusted java system dependency in DESCRIPTION according to standard form
+
+## Changes in version 0.4.4
 
 #### Functionality
-* added test_nlrx() function to check functionality of the package
-* added support to download_netLogo() for NetLogo version 6.2.0
+
+* added support to download_netLogo() for up to NetLogo version 6.3.0 
+* adjusted test_nlrx() to work with new NetLogo directory structure (6.3.0)
+* added writeRDS parameter to run_nl_all() for storing intermediate results
 
 #### Bugfixes
-* changed timestamp for nldoc function from lubridate to base date
-* fixed an error in the function parser of the nldoc procedure
-* fixed bug in calculation of number of computed runs in print_nl()
+
+* refactoring download_netlogo function
+* Fix readr problems with util_runnl() (deprecated in path argument in write_lines)
+* Fix path problems
+* Fix to allow for list output in agent variables (metrics.turtles, metrics.patches, metrics.links)
 
 ## Test environments
 * win-builder (release and devel)
-* Windows 10, R 4.1.0
-* macOS 11.3 (Big Sur), R 4.1.0
-* macOS 10.14 (Mojave), R 4.1.0
-* macOS 10.15 (Catalina), R 4.1.0 (github actions)
-* Windows Server 2019 x64, R 4.1.0 (github actions)
-* Ubuntu 20.04, R 4.1.0 (github actions)
+* Windows 10, R 4.3.0
+* macOS 13.3.1 (Ventura), R 4.3.0
+* macOS 13.3.1 (Ventura), R 4.3.0 (github actions)
+* Windows Server 2022, R 4.3.0 (github actions)
+* Ubuntu 20.04, R 4.3.0 (github actions)
+* Ubuntu 22.04, R 4.3.0 (github actions)
 
 ## R CMD check results
 
