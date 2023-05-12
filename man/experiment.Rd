@@ -158,8 +158,8 @@ Please note that NetLogo models may contain a huge number of patches and output 
 The metrics.turtles slot accepts a list with named vectors of valid turtle breed metrics.
 Each name of a vector in this list defines a specified breed of the NetLogo model, whereas the vector defines the variables that are measured for this breed.
 For example metrics.turtles = list("sheep"=c("color"), "wolves"=c("who")) - would measure the color of each sheep and the who number of each wolf agent.
-To measure \if{html}{\out{<turtles-own>}} variables for all turtles, use "turtles" = c(...).
-Be aware, that NetLogo will produce runtime errors if you measure \if{html}{\out{<breed-own>}} variables for agents that do not belong to this breed.
+To measure turtles-own variables for all turtles, use "turtles" = c(...).
+Be aware, that NetLogo will produce runtime errors if you measure breed-own variables for agents that do not belong to this breed.
 Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
 
 \emph{metrics.links}
@@ -167,8 +167,8 @@ Please note that NetLogo models may contain a huge number of turtles and output 
 The metrics.links slot accepts a list with named vectors of valid link breed metrics.
 Each name of a vector in this list defines a specified link breed of the NetLogo model, whereas the vector defines the variables that are measured for this link breed.
 For example metrics.links = list("linktype-a"=c("end1"), "linktype-b"=c("end2")) - would measure the start agent of each linktype-a link and the end agent of each linktype-b link.
-To measure \if{html}{\out{<links-own>}} variables for all links, use "links" = c(...).
-Be aware, that NetLogo will produce runtime errors if you measure \if{html}{\out{<link-breed-own>}} variables for agents that do not belong to this breed.
+To measure links-own variables for all links, use "links" = c(...).
+Be aware, that NetLogo will produce runtime errors if you measure link-breed-own variables for agents that do not belong to this breed.
 Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
 }
 \examples{

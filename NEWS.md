@@ -12,6 +12,7 @@
 * refactoring download_netlogo function
 * Fix readr problems with util_runnl() (deprecated in path argument in write_lines)
 * Fix path problems
+* Fix to allow for list output in agent variables (metrics.turtles, metrics.patches, metrics.links)
 
 
 

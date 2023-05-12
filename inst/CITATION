@@ -1,16 +1,16 @@
 citHeader("To cite nlrx in publications use:")
 
-citEntry(entry = "Article",
+bibentry(bibtype = "Article",
          title        = "The nlrx r package: A next-generation framework for reproducible NetLogo model analyses",
-         author       = personList(as.person("Jan Salecker"),
-                                   as.person("Marco Sciaini"),
-                                   as.person("Katrin M. Meyer"),
-                                   as.person("Kerstin Wiegand")),
+         author       = c(as.person("Jan Salecker"),
+                          as.person("Marco Sciaini"),
+                          as.person("Katrin M. Meyer"),
+                          as.person("Kerstin Wiegand")),
          journal = "Methods in Ecololgy and Evolution",
          volume = "00",
          pages = "2041--210X",
          year         = "2019",
-         url          = "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13286",
+         url          = "https://doi.org/10.1111/2041-210X.13286",
          doi          = "10.1111/2041-210X.13286",
 
          textVersion  =

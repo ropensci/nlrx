@@ -84,7 +84,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
       if (!"breed" %in% x.metrics) {
         x.metrics <- c("breed", x.metrics)
       }
-      turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      turtles.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
       return(turtles.reporter)
     })
     metrics <- c(metrics, turtles.reporter)
@@ -92,7 +92,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
 
   # add patch metrics if defined
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    patches.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)")
+    patches.reporter <- util_create_agentset_reporter(getexp(nl, "metrics.patches"), "patches")
     metrics <- c(metrics, patches.reporter)
   }
 
@@ -106,7 +106,7 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
       if (!"breed" %in% x.metrics) {
         x.metrics <- c("breed", x.metrics)
       }
-      links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      links.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
       return(links.reporter)
     })
     metrics <- c(metrics, links.reporter)
@@ -158,6 +158,23 @@ util_create_sim_XML <- function(nl, seed, siminputrow, xmlfile) {
   # SAVE XML TO FILE
   cat(XML::saveXML(nlXML, prefix = prefix), file = xmlfile)
 }
+
+
+#' Create turtle/patches/links owns reporter
+#'
+#' @description The reporter is used to measure agent variables in NetLogo and parse them to a readable format
+#'
+#' @param metrics character vector, the names of variables to measure
+#' @param breed character, the corresponding breed/agentset (e.g. "turtles", "patches", "links", "wolves", ...)
+#' @aliases util_create_agentset_reporter
+#' @rdname util_create_agentset_reporter
+#' @keywords internal
+util_create_agentset_reporter <- function(metrics, breed) {
+  #reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(metrics, collapse = paste0("\",\"")), ")] of ", breed, ")")
+  reporter <- paste0("but-first but-last (word [(word ", paste(metrics, collapse = paste0("\",\"")), ")] of ", breed, ")")
+  return(reporter)
+}
+
 
 #' Setup and execute NetLogo via command line
 #'
@@ -299,7 +316,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
         x.metrics <- c("breed", x.metrics)
       }
       col.name <- paste0("metrics.", x.breed)
-      turtles.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      turtles.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
       names(NLtable)[names(NLtable) == turtles.reporter] <- col.name
       NLtable[, grepl(col.name, names(NLtable))] <-
         list(.util_clean_metrics_turtles(NLtable, nl, col.name, x.metrics))
@@ -309,8 +326,9 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
 
   if (all(!is.na(getexp(nl, "metrics.patches")))) {
     ## Rename column and clean patch metrics
-    NLtable <- NLtable %>% dplyr::rename(metrics.patches =
-                                           paste0("but-first but-last (word [remove \" \" (word ", paste(getexp(nl, "metrics.patches"), collapse = paste0("\",\"")), ")] of patches)"))
+    NLtable <- NLtable %>% dplyr::rename(
+      metrics.patches = util_create_agentset_reporter(getexp(nl, "metrics.patches"), "patches")
+    )
     NLtable$metrics.patches <-
       .util_clean_metrics_patches(NLtable, nl)
   }
@@ -326,7 +344,7 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
         x.metrics <- c("breed", x.metrics)
       }
       col.name <- paste0("metrics.", x.breed)
-      links.reporter <- paste0("but-first but-last (word [remove \" \" (word ", paste(x.metrics, collapse = paste0("\",\"")), ")] of ", x.breed, ")")
+      links.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
       names(NLtable)[names(NLtable) == links.reporter] <- col.name
       NLtable[, grepl(col.name, names(NLtable))] <-
         list(.util_clean_metrics_links(NLtable, nl, col.name, x.metrics))
@@ -345,7 +363,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   patches_string <- NLtable[, grepl(c("metrics.patches"), names(NLtable))]  %>%
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
-  patches_string <- stringr::str_split(patches_string$metrics.patches, " ")
+  # split by whitespace outside of brackets:
+  patches_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", patches_string$metrics.patches, perl=TRUE)
+  patches_string <- stringr::str_split(patches_string, ";;split;;")
+
   patches_string <- purrr::map(patches_string, function(x) {
     patches_owns <- tibble::as_tibble(x = x)
     patches_owns <- tidyr::separate(patches_owns, value,
@@ -368,7 +389,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   turtles_string <- NLtable[, grepl(col.name, names(NLtable))]  %>%
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
-  turtles_string <- stringr::str_split(dplyr::pull(turtles_string, col.name), " ")
+  # split by whitespace outside of brackets:
+  turtles_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", dplyr::pull(turtles_string, col.name), perl=TRUE)
+  turtles_string <- stringr::str_split(turtles_string, ";;split;;")
+
   turtles_string <- purrr::map(turtles_string, function(x) {
     turtles_owns <- tibble::as_tibble(x = x)
     turtles_owns <- tidyr::separate(turtles_owns,
@@ -392,7 +416,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
   links_string <- NLtable[, grepl(col.name, names(NLtable))]  %>%
     dplyr::mutate_all(function(x) gsub('[\"]', '',x))
 
-  links_string <- stringr::str_split(dplyr::pull(links_string, col.name), " ")
+  # split by whitespace outside of brackets:
+  links_string <- gsub("\\[[^\\[\\]]*\\](*SKIP)(*F)|\\s+", ";;split;;", dplyr::pull(links_string, col.name), perl=TRUE)
+  links_string <- stringr::str_split(links_string, ";;split;;")
+
   links_string <- purrr::map(links_string, function(x) {
     links_owns <- tibble::as_tibble(x = x)
     links_owns <- tidyr::separate(links_owns,
