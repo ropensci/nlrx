@@ -79,7 +79,7 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @param to      Path to folder where the downloaded file is saved.
 #' @param version Character string naming which NetLogo Version to download (see Details)
 #' @param os operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
-#' If set to NA (default) os will be detcetd automatically (`util_get_os()`)
+#' If set to NA (default) os will be detected automatically (`util_get_os()`)
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'

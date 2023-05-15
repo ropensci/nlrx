@@ -40,7 +40,7 @@ simdesign_ABCmcmc_Wegmann(
 
 \item{use_seed}{if TRUE, seeds will be automatically created for each new model run}
 
-\item{dist_weights}{a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.}
+\item{dist_weights}{a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.}
 
 \item{n_calibration}{a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.}
 

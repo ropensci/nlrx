@@ -1005,14 +1005,14 @@ simdesign_GenAlg <- function(nl,
 #' @description Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object
 #'
 #' @param nl nl object with a defined experiment
-#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.
+#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in length and order to the specified summary_stat_target.
 #' @param summary_stat_target a vector of target values in the same order as the defined metrics of the experiment
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
 #' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
-#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
+#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
 #' @param tolerance_quantile a positive number between 0 and 1 (strictly). This is the percentage of simulations retained during the calibration step to determine the tolerance threshold to be used during the MCMC. Default value is 0.01.
 #' @param proposal_phi a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.
@@ -1143,7 +1143,7 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
 #' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
-#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
+#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param dist_max a positive number. This is the tolerance threshold used during the MCMC. If not provided by the user, it is automatically computed as half the distance between the first simulation and the target summary statistics and a warning is printed.
 #' @param tab_normalization a vector of the same length as summary_stat_target. Each element contains a positive number by which each summary statistics must be divided before the computation of the Euclidean distance between simulations and data. If not provided by the user, the simulated summary statistics are divided by the target summary statistics and a warning is printed.
 #' @param proposal_range a vector of the same length as the number of model parameters, used when method is "Marjoram_original". Each element contains a positive number defining the range of MCMC jumps for each model parameter. If not provided by the user, a default value is used for each parameter and a warning is printed. The default value is 1/50 of the prior range for uniform distributions, 1/20 of the standard deviation of the prior distribution for normal distributions, 1/20 * exp ( sigma * sigma
@@ -1268,7 +1268,7 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
 #' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
-#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.
+#' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
 #' @param tolerance_quantile a positive number between 0 and 1 (strictly). This is the percentage of simulations retained during the calibration step to determine the tolerance threshold to be used during the MCMC. Default value is 0.01.
 #' @param proposal_phi a positive number. This is a scaling factor defining the range of MCMC jumps. Default value is 1.
