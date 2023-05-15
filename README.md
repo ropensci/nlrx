@@ -21,12 +21,12 @@ status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/p
 
 The nlrx package provides tools to setup and execute NetLogo simulations
 from R. NetLogo is a free, open-source and cross-platform modelling
-environment for simulating natural and social phenomena. NetLogo
-focusses on implementation of agent-based and spatially explicit
-simulation models, although system dynamics models are supported as
-well. NetLogo is developed and maintained at the Center for Connected
-Learning and Computer-Based Modeling, Northwestern University, Evanston,
-IL. More details on NetLogo itself are available online: [NetLogo online
+environment for simulating natural and social phenomena. NetLogo focuses
+on implementation of agent-based and spatially explicit simulation
+models, although system dynamics models are supported as well. NetLogo
+is developed and maintained at the Center for Connected Learning and
+Computer-Based Modeling, Northwestern University, Evanston, IL. More
+details on NetLogo itself are available online: [NetLogo online
 documentation](https://ccl.northwestern.edu/netlogo/docs/)
 
 NetLogo comes with the built-in experiment tool [Behavior
@@ -89,7 +89,7 @@ Homepage or by using the `download_netlogo()` function). The dmg version
 from the NetLogo homepage is not compatible with nlrx.
 
 All code snippets on this homepage should be compatible with Netlogo \<=
-6.2.2. In version 6.3.0, the folder structure of NetLogo was slighlty
+6.2.2. In version 6.3.0, the folder structure of NetLogo was slightly
 updated, thus the modelpath in the code snippets need to be adjusted
 accordingly (the `"app/"` folder needs to be removed from the
 modelpath).

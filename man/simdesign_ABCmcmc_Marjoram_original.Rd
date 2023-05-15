@@ -39,7 +39,7 @@ simdesign_ABCmcmc_Marjoram_original(
 
 \item{use_seed}{if TRUE, seeds will be automatically created for each new model run}
 
-\item{dist_weights}{a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistisc for example. The weights will be normalized before applying them. Set to NULL to disable.}
+\item{dist_weights}{a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.}
 
 \item{dist_max}{a positive number. This is the tolerance threshold used during the MCMC. If not provided by the user, it is automatically computed as half the distance between the first simulation and the target summary statistics and a warning is printed.}
 

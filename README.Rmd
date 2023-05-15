@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 
 The nlrx package provides tools to setup and execute NetLogo simulations from R.
 NetLogo is a free, open-source and cross-platform modelling environment for simulating natural and social phenomena.
-NetLogo focusses on implementation of agent-based and spatially explicit simulation models, although system dynamics models are supported as well.
+NetLogo focuses on implementation of agent-based and spatially explicit simulation models, although system dynamics models are supported as well.
 NetLogo is developed and maintained at the Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 More details on NetLogo itself are available online: [NetLogo online documentation](https://ccl.northwestern.edu/netlogo/docs/)
 
@@ -56,7 +56,7 @@ Get citation information for `nlrx` in R doing `citation(package = 'nlrx')`.
 ### NetLogo
 In order to use the nlrx package, [NetLogo](http://netlogoweb.org/) (>=5.3.1) needs to be installed on the system that is used to execute model simulations (local/remote). For remote execution, NetLogo needs to be installed on remote machines as well. The nlrx package provides a utility function (`download_netlogo()`) that can be used to download and unzip (only unix systems) a specified NetLogo version to a local folder. For windows machines, the downloaded file needs to be executed in order to install NetLogo on the local system. If you are running MacOS, please use the Linux tar.gz version of NetLogo (either from the NetLogo Homepage or by using the `download_netlogo()` function). The dmg version from the NetLogo homepage is not compatible with nlrx.
 
-All code snippets on this homepage should be compatible with Netlogo <= 6.2.2. In version 6.3.0, the folder structure of NetLogo was slighlty updated, thus the modelpath in the code snippets need to be adjusted accordingly (the `"app/"` folder needs to be removed from the modelpath).
+All code snippets on this homepage should be compatible with Netlogo <= 6.2.2. In version 6.3.0, the folder structure of NetLogo was slightly updated, thus the modelpath in the code snippets need to be adjusted accordingly (the `"app/"` folder needs to be removed from the modelpath).
 
 ### Java
 Because NetLogo is executed in a Java virtual machine, Java needs to be installed on the local/remote system as well. We recommend the [Oracle Java SE Development Kit 8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html) or the [openjdk](https://github.com/ojdkbuild/ojdkbuild).

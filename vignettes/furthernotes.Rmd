@@ -48,7 +48,7 @@ Additionally, please note the following restrictions in order to define variable
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
 * simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.
 
-A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
+A complete list of all valid NetLogo parameters can be loaded by committing a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
 After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_variables_constants()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
 ## Print functions
@@ -79,7 +79,7 @@ Capturing output from multiple processes in parallelized environments to one R c
 
 For long-running experiments and simdesigns, it may be beneficial to gain access to intermediate results. 
 This is especially useful to obtain results of successful runs, even if the R session crashes or gets stalled.
-The `run_all_all()` and `run_nl_one()` functions provide a parameter `writeRDS`. If this is set to `TRUE`, a rds file, carrying the current seed and siminputrow will be written to the specified `outpath` of the nl object experiment. Please note, that in case of the `run_all_all()` function, a huge number of rds files may be written to your disk (check `print(nl)` to get an estimated nunmber of runs/files) which may cause other issues.
+The `run_all_all()` and `run_nl_one()` functions provide a parameter `writeRDS`. If this is set to `TRUE`, a rds file, carrying the current seed and siminputrow will be written to the specified `outpath` of the nl object experiment. Please note, that in case of the `run_all_all()` function, a huge number of rds files may be written to your disk (check `print(nl)` to get an estimated number of runs/files) which may cause other issues.
 
 Another option to get intermediate results, is to split-up the job into smaller chunks.
 E.g. one could create a loop around the `run_nl_all()` and in each iteration only use part of the `nl@simdesign@siminput` tibble (temporary overwrite the `nl@simdesign@siminput` tibble with a copy that only contains a specific slice of the parameter matrix). Then after each iteration, one can write the results of the complete chunk as an rds file to disk.
@@ -90,7 +90,7 @@ To collect the intermediate results, simply read all rds files from the outpath 
 ## Handling NetLogo runtime errors
 
 Usually, runtime errors of NetLogo model simulations are printed to the R console and the current execution of `run_nl_all()`, `run_nl_one()` or `run_nl_dyn()` breaks. However, it can happen that a model simulation freezes due to Java runtime errors. Unfortunately it is not possible to terminate the Java virtual machine or print an error message to the console after such a runtime error occurred.
-The current R session and the freezed Java Virtual Machine need to be terminated manually.
+The current R session and the frozen Java Virtual Machine need to be terminated manually.
 Thus, NetLogo models should be debugged in NetLogo prior to execution of large experiments with nlrx.
 Capturing progress of model simulations (see section "Capturing progress of model simulations") might help in debugging runtime errors that freeze the Java Virtual Machine.
 
@@ -215,7 +215,7 @@ In order to run NetLogo models on remote HPCs, required software needs to be ins
 #### Using the future framework
 
 For sending jobs to the remote HPC under the future framework, we need to install and load additional R packages and adjust the future plan before executing `run_nl_all()`.
-You need to define a path to your ssh key, a server adress for the HPC, a user name for the HPC and a path to the slurm template file on the HPC.
+You need to define a path to your ssh key, a server address for the HPC, a user name for the HPC and a path to the slurm template file on the HPC.
 Please also make sure that the `nlpath`, `modelpath` and `outpath` variables within your nl object point to locations on the filesystem of the HPC and not your local filesystem.
 
 ```{r eval=FALSE}

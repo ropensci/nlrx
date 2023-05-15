@@ -202,7 +202,7 @@ g1 <- gganimate::animate(p1, nframes = n, width=800, height=800, duration = 6)
 
 The Ants model is another typical example for displaying patches and moving turtles. 
 Ants move across the lattice in order to gather food from food sources and returning food to their nest in the center.
-Ants carrying food leave a trail of chemicals on cells they move over. These chemicals also diffuse to neighboring cells over time. Displaying the patches output from the model is not straightforward because three different groups of patches exist: food sources, ants nest and all other patches which are coloured depending on the amount of chemicals that the patch contains.
+Ants carrying food leave a trail of chemicals on cells they move over. These chemicals also diffuse to neighboring cells over time. Displaying the patches output from the model is not straightforward because three different groups of patches exist: food sources, ants nest and all other patches which are colored depending on the amount of chemicals that the patch contains.
 
 In order to transfer the spatial information from NetLogo to R, we measure the who number, coordinates and breed for all turtles (metrics.turtles) and coordinates, patch color, amount of chemicals, presence of food and the food source number of all patches (metrics.patches).
 
