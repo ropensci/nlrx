@@ -1,22 +1,26 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "nlrx",
-  "description": "Setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/netlogo/>) model simulations in 'R'.\n    'nlrx' experiments use a similar structure as 'NetLogos' Behavior Space experiments. \n    However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.\n    The user defines all information that is needed in an intuitive framework, using class objects.\n    Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user.\n    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.\n    This also enables simulating 'NetLogo' experiments on remote high performance computing machines.\n    In order to use this package, 'Java' and 'NetLogo' (>= 5.3.1) need to be available on the executing system.",
+  "description": "Setup, run and analyze 'NetLogo' (<https://ccl.northwestern.edu/netlogo/>) model simulations in 'R'. 'nlrx' experiments use a similar structure as 'NetLogos' Behavior Space experiments. However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses. The user defines all information that is needed in an intuitive framework, using class objects. Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user. By nesting model calls in future environments, large simulation design with many runs can be executed in parallel. This also enables simulating 'NetLogo' experiments on remote high performance computing machines. In order to use this package, 'Java' and 'NetLogo' (>= 5.3.1) need to be available on the executing system.",
   "name": "nlrx: Setup, Run and Analyze 'NetLogo' Model Simulations from 'R' via 'XML'",
+  "relatedLink": ["https://docs.ropensci.org/nlrx/", "https://CRAN.R-project.org/package=nlrx"],
   "codeRepository": "https://github.com/ropensci/nlrx/",
   "issueTracker": "https://github.com/ropensci/nlrx/issues/",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
+  "runtimePlatform": "R version 4.3.0 (2023-04-21)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
     {
       "@type": "Person",
@@ -56,6 +60,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "mockery",
+      "name": "mockery",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mockery"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
       "provider": {
@@ -91,8 +107,8 @@
       "sameAs": "https://CRAN.R-project.org/package=covr"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "XML",
       "name": "XML",
@@ -104,7 +120,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=XML"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "lhs",
       "name": "lhs",
@@ -116,7 +132,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lhs"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "sensitivity",
       "name": "sensitivity",
@@ -128,7 +144,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sensitivity"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -140,7 +156,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
@@ -152,7 +168,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -164,7 +180,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "furrr",
       "name": "furrr",
@@ -176,7 +192,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=furrr"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "magrittr",
       "name": "magrittr",
@@ -188,17 +204,17 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
-    {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "stats",
       "name": "stats"
     },
-    {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
     },
-    {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "GenSA",
       "name": "GenSA",
@@ -210,7 +226,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=GenSA"
     },
-    {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "genalg",
       "name": "genalg",
@@ -222,7 +238,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=genalg"
     },
-    {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "raster",
       "name": "raster",
@@ -234,7 +250,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=raster"
     },
-    {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "rstudioapi",
       "name": "rstudioapi",
@@ -246,7 +262,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rstudioapi"
     },
-    {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
@@ -258,7 +274,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    {
+    "16": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
@@ -270,12 +286,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
     },
-    {
+    "17": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    {
+    "18": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -287,7 +303,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    {
+    "19": {
       "@type": "SoftwareApplication",
       "identifier": "crayon",
       "name": "crayon",
@@ -299,7 +315,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=crayon"
     },
-    {
+    "20": {
       "@type": "SoftwareApplication",
       "identifier": "igraph",
       "name": "igraph",
@@ -311,7 +327,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=igraph"
     },
-    {
+    "21": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -323,7 +339,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    {
+    "22": {
       "@type": "SoftwareApplication",
       "identifier": "progressr",
       "name": "progressr",
@@ -335,7 +351,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=progressr"
     },
-    {
+    "23": {
       "@type": "SoftwareApplication",
       "identifier": "EasyABC",
       "name": "EasyABC",
@@ -347,77 +363,15 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=EasyABC"
     },
-    {
+    "24": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.3"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/openssl"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/pandoc"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libgeos"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/java"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/gdal"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libxml2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libproj"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libgdal"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/libudunits2"
-    }
-  ],
-  "releaseNotes": "https://github.com/ropensci/nlrx/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
-  "fileSize": "1321.369KB",
-  "contIntegration": ["https://github.com/ropensci/nlrx/actions", "https://codecov.io/gh/ropensci/nlrx"],
-  "developmentStatus": "https://www.tidyverse.org/lifecycle/#maturing",
-  "review": {
-    "@type": "Review",
-    "url": "https://github.com/ropensci/software-review/issues/262",
-    "provider": "https://ropensci.org"
+    "SystemRequirements": "\n    NetLogo (>= 5.3.1), Java (>= 11), pandoc, OpenSSL, udunits-2, PROJ.4, GEOS, GDAL, libxml2"
   },
-  "keywords": [
-    "peer-reviewed",
-    "netlogo",
-    "individual-based-modelling",
-    "agent-based-modeling",
-    "r",
-    "r-package",
-    "rstats"
-  ],
-  "provider": {
-    "@id": "https://cran.r-project.org",
-    "@type": "Organization",
-    "name": "Comprehensive R Archive Network (CRAN)",
-    "url": "https://cran.r-project.org"
-  },
-  "contributor": {},
-  "copyrightHolder": {},
-  "funder": {},
+  "fileSize": "1313.759KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -446,7 +400,7 @@
       ],
       "name": "The nlrx r package: A next-generation framework for reproducible NetLogo model analyses",
       "identifier": "10.1111/2041-210X.13286",
-      "url": "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.13286",
+      "url": "https://doi.org/10.1111/2041-210X.13286",
       "pagination": "2041--210X",
       "@id": "https://doi.org/10.1111/2041-210X.13286",
       "sameAs": "https://doi.org/10.1111/2041-210X.13286",
@@ -461,5 +415,14 @@
       }
     }
   ],
-  "relatedLink": ["https://CRAN.R-project.org/package=nlrx", "https://docs.ropensci.org/nlrx/"]
+  "releaseNotes": "https://github.com/ropensci/nlrx/blob/master/NEWS.md",
+  "readme": "https://github.com/ropensci/nlrx/blob/master/README.md",
+  "contIntegration": ["https://github.com/ropensci/nlrx/actions", "https://app.codecov.io/gh/ropensci/nlrx"],
+  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#maturing",
+  "review": {
+    "@type": "Review",
+    "url": "https://github.com/ropensci/software-review/issues/262",
+    "provider": "https://ropensci.org"
+  },
+  "keywords": ["peer-reviewed", "netlogo", "individual-based-modelling", "agent-based-modeling", "r", "r-package", "rstats"]
 }
