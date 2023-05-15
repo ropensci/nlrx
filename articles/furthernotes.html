@@ -295,7 +295,7 @@ or add a dummy variable to the globals[] code section) for your model
 and put it in the constants list with an appropriate value.</li>
 </ul>
 <p>A complete list of all valid NetLogo parameters can be loaded by
-commiting a nl object with a valid modelpath to the function
+committing a nl object with a valid modelpath to the function
 <code><a href="../reference/report_model_parameters.html">report_model_parameters()</a></code>. This function reads all GUI
 elements of the NetLogo model that can be set by nlrx. After attaching
 an experiment to an nl object, validity of defined experiment variables
@@ -359,7 +359,7 @@ functions provide a parameter <code>writeRDS</code>. If this is set to
 will be written to the specified <code>outpath</code> of the nl object
 experiment. Please note, that in case of the <code>run_all_all()</code>
 function, a huge number of rds files may be written to your disk (check
-<code>print(nl)</code> to get an estimated nunmber of runs/files) which
+<code>print(nl)</code> to get an estimated number of runs/files) which
 may cause other issues.</p>
 <p>Another option to get intermediate results, is to split-up the job
 into smaller chunks. E.g. one could create a loop around the
@@ -390,7 +390,7 @@ the R console and the current execution of <code><a href="../reference/run_nl_al
 it can happen that a model simulation freezes due to Java runtime
 errors. Unfortunately it is not possible to terminate the Java virtual
 machine or print an error message to the console after such a runtime
-error occurred. The current R session and the freezed Java Virtual
+error occurred. The current R session and the frozen Java Virtual
 Machine need to be terminated manually. Thus, NetLogo models should be
 debugged in NetLogo prior to execution of large experiments with nlrx.
 Capturing progress of model simulations (see section “Capturing progress
@@ -604,7 +604,7 @@ well.</p>
 <p>For sending jobs to the remote HPC under the future framework, we
 need to install and load additional R packages and adjust the future
 plan before executing <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. You need to define a
-path to your ssh key, a server adress for the HPC, a user name for the
+path to your ssh key, a server address for the HPC, a user name for the
 HPC and a path to the slurm template file on the HPC. Please also make
 sure that the <code>nlpath</code>, <code>modelpath</code> and
 <code>outpath</code> variables within your nl object point to locations
