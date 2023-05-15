@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">nlrx | NetLogo from R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.4</span>
       </span>
     </div>
 
@@ -46,21 +48,21 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../articles/getstarted.html">
-    <span class="fa fa fa fa-magic"></span>
+    <span class="fa fa-magic"></span>
      
     Get Started
   </a>
 </li>
 <li>
   <a href="../articles/furthernotes.html">
-    <span class="fas fa-book"></span>
+    <span class="fa fa-book"></span>
      
     Advanced configuration
   </a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-graduation-cap"></span>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="fa fa-graduation-cap"></span>
      
     More
      
@@ -69,63 +71,63 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/articles/spatial-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing spatial NetLogo output
       </a>
     </li>
     <li>
       <a href="../articles/articles/manual-output.html">
-        <span class="fas fa-book"></span>
+        <span class="fa fa-book"></span>
          
         Capturing NetLogo output manually
       </a>
     </li>
     <li>
       <a href="../articles/sensitivity.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Sensitivity Analysis with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/optimization.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Optimization with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/abc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Approximate Bayesian Computation (ABC) with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/simdesign-examples.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Simdesign examples
       </a>
     </li>
     <li>
       <a href="../articles/articles/interfacing-different-models.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         Interfacing a variety of different NetLogo models
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_nldoc.html">
-        <span class="fas fa-wrench"></span>
+        <span class="fa fa-wrench"></span>
          
         NetLogo documentation with nlrx
       </a>
     </li>
     <li>
       <a href="../articles/articles/nlrx_papers.html">
-        <span class="fas fa-bookmark"></span>
+        <span class="fa fa-bookmark"></span>
          
         Publication record
       </a>
@@ -136,20 +138,20 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="../news/index.html">
-    <span class="fas fa-newspaper"></span>
+    <span class="fa fa-newspaper"></span>
      
     news
   </a>
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fas fa-cogs"></span>
+    <span class="fa fa-cogs"></span>
      
     functions
   </a>
 </li>
 <li>
-  <a href="https://github.com/ropensci/nlrx">
+  <a href="https://github.com/ropensci/nlrx" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
     github
@@ -165,26 +167,34 @@
 
       
 
-      </header><script src="furthernotes_files/header-attrs-2.6/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Advanced configuration</h1>
-                        <h4 class="author">Jan Salecker</h4>
+                        <h4 data-toc-skip class="author">Jan
+Salecker</h4>
             
-            <h4 class="date">2021-06-08</h4>
+            <h4 data-toc-skip class="date">2023-05-15</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/master/vignettes/furthernotes.Rmd"><code>vignettes/furthernotes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/nlrx/blob/HEAD/vignettes/furthernotes.Rmd" class="external-link"><code>vignettes/furthernotes.Rmd</code></a></small>
       <div class="hidden name"><code>furthernotes.Rmd</code></div>
 
     </div>
 
     
     
-<div id="variables-and-constants-definitions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#variables-and-constants-definitions" class="anchor"></a>Variables and constants definitions</h2>
-<p>Correctly defining variables within the experiment class object is crucial for creating simdesigns. The implemented simdesigns have different requirements for variable definitions:</p>
+<div class="section level2">
+<h2 id="variables-and-constants-definitions">Variables and constants definitions<a class="anchor" aria-label="anchor" href="#variables-and-constants-definitions"></a>
+</h2>
+<p>Correctly defining variables within the experiment class object is
+crucial for creating simdesigns. The implemented simdesigns have
+different requirements for variable definitions:</p>
 <table class="table">
+<colgroup>
+<col width="28%">
+<col width="53%">
+<col width="17%">
+</colgroup>
 <thead><tr class="header">
 <th>Simdesign</th>
 <th>Variable requirements</th>
@@ -263,127 +273,342 @@
 </tr>
 </tbody>
 </table>
-<p>Additionally, please note the following restrictions in order to define variables and constants correctly:</p>
+<p>Additionally, please note the following restrictions in order to
+define variables and constants correctly:</p>
 <ul>
-<li>Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.</li>
-<li>Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. <code>"\\"string\\""</code>).</li>
-<li>Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. <code>"false"</code>).</li>
-<li>It is not allowed to list the same variable in the variables and constants list.</li>
-<li>NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.</li>
-<li>simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.</li>
+<li>Categorical variable values are currently only allowed for
+simdesign_simple, simdesign_distinct and simdesign_ff.</li>
+<li>Variable values that should be recognized by NetLogo as strings need
+to be nested inside escaped quotes
+(e.g. <code>"\"string\""</code>).</li>
+<li>Variable values that should be recognized by NetLogo as logical need
+to be entered as strings (e.g. <code>"false"</code>).</li>
+<li>It is not allowed to list the same variable in the variables and
+constants list.</li>
+<li>NetLogo model parameters that are not listed in any of these two
+lists will be set with their default value from the NetLogo model
+interface.</li>
+<li>simdesign_simple() requires at least one defined constant within the
+constants list. If your model does not have any globals (GUI and code),
+please create a dummy global (either create a global widget on the GUI
+or add a dummy variable to the globals[] code section) for your model
+and put it in the constants list with an appropriate value.</li>
 </ul>
-<p>A complete list of all valid NetLogo parameters can be loaded by commiting a nl object with a valid modelpath to the function <code><a href="../reference/report_model_parameters.html">report_model_parameters()</a></code>. This function reads all GUI elements of the NetLogo model that can be set by nlrx. After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function <code><a href="../reference/eval_variables_constants.html">eval_variables_constants()</a></code>. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.</p>
+<p>A complete list of all valid NetLogo parameters can be loaded by
+committing a nl object with a valid modelpath to the function
+<code><a href="../reference/report_model_parameters.html">report_model_parameters()</a></code>. This function reads all GUI
+elements of the NetLogo model that can be set by nlrx. After attaching
+an experiment to an nl object, validity of defined experiment variables
+and constants can be checked by commiting the nl object to the function
+<code><a href="../reference/eval_variables_constants.html">eval_variables_constants()</a></code>. The function will report
+detailed warnings or error messages, if definitions of variables or
+constants are invalid.</p>
 </div>
-<div id="print-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#print-functions" class="anchor"></a>Print functions</h2>
-<p><code><a href="https://rdrr.io/r/base/print.html">print(nl)</a></code> can be used with any nl class object. The function will print a formatted overview of class contents to the console. The function will also print a short summary checklist that may be helpful for debugging certain issues. Depending on the simdesign, the summary table also prints the estimated number of runs.</p>
+<div class="section level2">
+<h2 id="print-functions">Print functions<a class="anchor" aria-label="anchor" href="#print-functions"></a>
+</h2>
+<p><code>print(nl)</code> can be used with any nl class object. The
+function will print a formatted overview of class contents to the
+console. The function will also print a short summary checklist that may
+be helpful for debugging certain issues. Depending on the simdesign, the
+summary table also prints the estimated number of runs.</p>
 </div>
-<div id="capturing-progress-of-model-simulations" class="section level2">
-<h2 class="hasAnchor">
-<a href="#capturing-progress-of-model-simulations" class="anchor"></a>Capturing progress of model simulations</h2>
-<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr">progressr</a> framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a <code><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">progressr::with_progress()</a></code> call. By using different handlers, the layout of the progress bar is different. For example, installing the package <a href="https://github.com/r-lib/progress">progress</a> and using the handler <code><a href="https://rdrr.io/pkg/progressr/man/handlers.html">progressr::handlers("progress")</a></code> will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:</p>
+<div class="section level2">
+<h2 id="capturing-progress-of-model-simulations">Capturing progress of model simulations<a class="anchor" aria-label="anchor" href="#capturing-progress-of-model-simulations"></a>
+</h2>
+<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr" class="external-link">progressr</a>
+framework for capturing progress of simulations. Following this logic,
+the function itself will be silent unless it is wrapped within a
+<code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code> call. By using different
+handlers, the layout of the progress bar is different. For example,
+installing the package <a href="https://github.com/r-lib/progress" class="external-link">progress</a> and using the
+handler <code>progressr::handlers("progress")</code> will additionally
+print the current row and seed of the parameter matrix. For example, to
+run a nl parameter matrix with progress bar one can do:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/handlers.html">handlers</a></span><span class="op">(</span><span class="st">"progress"</span><span class="op">)</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/progressr/man/with_progress.html">with_progress</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>The <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function might provide progress output depending on the chosen method (for example ABC offers a progress bar). However, dynamic experiments are difficult to track because it is not clear how long the complete experiment will take from the beginning.</p>
-<p>The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> does not report any progress because it only executes one simulation.</p>
-<p>In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot “idfinal” that is executed at the end of each simulation.</p>
-<p>Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section “Notes on self-written output”). These output files can then be monitored to capture the progress of the parallelized model executions.</p>
+<code class="sourceCode R"><span><span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/handlers.html" class="external-link">handlers</a></span><span class="op">(</span><span class="st">"progress"</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">progressr</span><span class="fu">::</span><span class="fu"><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">with_progress</a></span><span class="op">(</span><span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span><span class="va">nl</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> function might provide progress output
+depending on the chosen method (for example ABC offers a progress bar).
+However, dynamic experiments are difficult to track because it is not
+clear how long the complete experiment will take from the beginning.</p>
+<p>The <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> does not report any progress because it
+only executes one simulation.</p>
+<p>In addition, NetLogo print commands are redirected to the R console.
+Thus, print commands can be used within the NetLogo model code to
+display the current progress of simulations in the R console. Another
+possibility is, to define a print reporter procedure in the experiment
+slot “idfinal” that is executed at the end of each simulation.</p>
+<p>Capturing output from multiple processes in parallelized environments
+to one R console is not straightforward. If such functionality is
+needed, we suggest to write the current progress to an output file
+directly from NetLogo (for example using the idrunnum functionality of
+nlrx, see section “Notes on self-written output”). These output files
+can then be monitored to capture the progress of the parallelized model
+executions.</p>
 </div>
-<div id="handling-netlogo-runtime-errors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#handling-netlogo-runtime-errors" class="anchor"></a>Handling NetLogo runtime errors</h2>
-<p>Usually, runtime errors of NetLogo model simulations are printed to the R console and the current execution of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>, <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> or <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> breaks. However, it can happen that a model simulation freezes due to Java runtime errors. Unfortunately it is not possible to terminate the Java virtual machine or print an error message to the console after such a runtime error occurred. The current R session and the freezed Java Virtual Machine need to be terminated manually. Thus, NetLogo models should be debugged in NetLogo prior to execution of large experiments with nlrx. Capturing progress of model simulations (see section “Capturing progress of model simulations”) might help in debugging runtime errors that freeze the Java Virtual Machine.</p>
+<div class="section level2">
+<h2 id="access-to-intermediate-results">Access to intermediate results<a class="anchor" aria-label="anchor" href="#access-to-intermediate-results"></a>
+</h2>
+<p>For long-running experiments and simdesigns, it may be beneficial to
+gain access to intermediate results. This is especially useful to obtain
+results of successful runs, even if the R session crashes or gets
+stalled. The <code>run_all_all()</code> and <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code>
+functions provide a parameter <code>writeRDS</code>. If this is set to
+<code>TRUE</code>, a rds file, carrying the current seed and siminputrow
+will be written to the specified <code>outpath</code> of the nl object
+experiment. Please note, that in case of the <code>run_all_all()</code>
+function, a huge number of rds files may be written to your disk (check
+<code>print(nl)</code> to get an estimated number of runs/files) which
+may cause other issues.</p>
+<p>Another option to get intermediate results, is to split-up the job
+into smaller chunks. E.g. one could create a loop around the
+<code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> and in each iteration only use part of the
+<code>nl@simdesign@siminput</code> tibble (temporary overwrite the
+<code>nl@simdesign@siminput</code> tibble with a copy that only contains
+a specific slice of the parameter matrix). Then after each iteration,
+one can write the results of the complete chunk as an rds file to disk.
+Another option would be to create an outer loop around the
+<code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> using the random seeds from the
+<code>nl@simdesign@simseeds</code> slot. Then, within each loop
+iteration the <code>nl@simdesign@simseeds</code> slot would be
+overwritten with the seed from the current loop iteration before the nl
+object is passed to <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> (don’t forget to adjust
+the split parameter in case of parallel execution). Then again, after
+each iteration, one can write the results of the complete chunk as an
+rds file to disk.</p>
+<p>To collect the intermediate results, simply read all rds files from
+the outpath in a loop and combine the tibbles, for example by using
+<code><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">dplyr::bind_rows()</a></code>.</p>
 </div>
-<div id="self-written-netlogo-output" class="section level2">
-<h2 class="hasAnchor">
-<a href="#self-written-netlogo-output" class="anchor"></a>Self-written NetLogo output</h2>
-<p>The experiment provides a slot called “idrunnum”. This slot can be used to transfer the current nlrx experiment name, random seed and runnumber (siminputrow) to NetLogo. To use this functionality, a string input field widget needs to be created on the GUI of your NetLogo model. The name of this widget can be entered into the “idrunnum” field of the experiment. During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow (“expname_seed_siminputrow”). For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.</p>
+<div class="section level2">
+<h2 id="handling-netlogo-runtime-errors">Handling NetLogo runtime errors<a class="anchor" aria-label="anchor" href="#handling-netlogo-runtime-errors"></a>
+</h2>
+<p>Usually, runtime errors of NetLogo model simulations are printed to
+the R console and the current execution of <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>,
+<code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> or <code><a href="../reference/run_nl_dyn.html">run_nl_dyn()</a></code> breaks. However,
+it can happen that a model simulation freezes due to Java runtime
+errors. Unfortunately it is not possible to terminate the Java virtual
+machine or print an error message to the console after such a runtime
+error occurred. The current R session and the frozen Java Virtual
+Machine need to be terminated manually. Thus, NetLogo models should be
+debugged in NetLogo prior to execution of large experiments with nlrx.
+Capturing progress of model simulations (see section “Capturing progress
+of model simulations”) might help in debugging runtime errors that
+freeze the Java Virtual Machine.</p>
 </div>
-<div id="temporary-files-management" class="section level2">
-<h2 class="hasAnchor">
-<a href="#temporary-files-management" class="anchor"></a>Temporary files management</h2>
-<p>nlrx uses temporary files to store experiment xml files, commandline batch files to start NetLogo simulations and csv output files. These temporary files are stored in the default temporary files directory of the R session. By default, these files are deleted after each simulation run. However, if it is needed to look at this files, automatic deletion of temporary files can be disabled by setting the corresponding cleanup parameters in the <code>run_nl</code> functions (cleanup.csv, cleanup.xml, cleanup.bat function parameters).</p>
-<p>On unix systems, it can happen that system processes delete files in the default temporary files folder. Thus, we recommend to reassign the temporary files folder for the R-session to another folder. The R-package <a href="https://www.rforge.net/unixtools/">unixtools</a> provides a function to reassign the temporary files folder for the current R-session:</p>
+<div class="section level2">
+<h2 id="self-written-netlogo-output">Self-written NetLogo output<a class="anchor" aria-label="anchor" href="#self-written-netlogo-output"></a>
+</h2>
+<p>The experiment provides a slot called “idrunnum”. This slot can be
+used to transfer the current nlrx experiment name, random seed and
+runnumber (siminputrow) to NetLogo. To use this functionality, a string
+input field widget needs to be created on the GUI of your NetLogo model.
+The name of this widget can be entered into the “idrunnum” field of the
+experiment. During simulations, the value of this widget is
+automatically updated with a generated string that contains the current
+nlrx experiment name, random seed and siminputrow
+(“expname_seed_siminputrow”). For self-written output In NetLogo, we
+suggest to include this global variable which allows referencing the
+self-written output files to the collected output of the nlrx
+simulations in R.</p>
+</div>
+<div class="section level2">
+<h2 id="temporary-files-management">Temporary files management<a class="anchor" aria-label="anchor" href="#temporary-files-management"></a>
+</h2>
+<p>nlrx uses temporary files to store experiment xml files, commandline
+batch files to start NetLogo simulations and csv output files. These
+temporary files are stored in the default temporary files directory of
+the R session. By default, these files are deleted after each simulation
+run. However, if it is needed to look at this files, automatic deletion
+of temporary files can be disabled by setting the corresponding cleanup
+parameters in the <code>run_nl</code> functions (cleanup.csv,
+cleanup.xml, cleanup.bat function parameters).</p>
+<p>On unix systems, it can happen that system processes delete files in
+the default temporary files folder. Thus, we recommend to reassign the
+temporary files folder for the R-session to another folder. The
+R-package <a href="https://www.rforge.net/unixtools/" class="external-link">unixtools</a>
+provides a function to reassign the temporary files folder for the
+current R-session:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'unixtools'</span>, repos <span class="op">=</span> <span class="st">'http://www.rforge.net/'</span><span class="op">)</span>
-<span class="fu">unixtools</span><span class="fu">::</span><span class="fu">set.tempdir</span><span class="op">(</span><span class="st">"&lt;path-to-temp-dir&gt;"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'unixtools'</span>, repos <span class="op">=</span> <span class="st">'http://www.rforge.net/'</span><span class="op">)</span></span>
+<span><span class="fu">unixtools</span><span class="fu">::</span><span class="fu">set.tempdir</span><span class="op">(</span><span class="st">"&lt;path-to-temp-dir&gt;"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="random-seed-and-repetitions-management" class="section level2">
-<h2 class="hasAnchor">
-<a href="#random-seed-and-repetitions-management" class="anchor"></a>random-seed and repetitions management</h2>
-<p>The experiment provides a slot called “repetition” which allows to run multiple simulations of one parameterization. This is only useful if you manually generate a new random-seed during the setup of your model. By default, the NetLogo random-seed is set by the simdesign that is attached to your nl object. If your model does not reset the random seed manually, the seed will always be the same for each repetition.</p>
-<p>However, the concept of nlrx is based on sensitivity analyses. Here, you may want to exclude stochasticity from your output and instead do multiple sensitivity analyses with the same parameter matrix but different random seeds. You can then observe the effect of stochasticity on the level of your final output, the sensitivity indices. Thus we suggest to set the experiment repetition to 1 and instead use the nseeds variable of the desired simdesign to run multiple simulations with different random seeds.</p>
-<p>In summary, if you set the random-seed of your NetLogo model manually, you can increase the repitition of the experiment to run several simulations with equal parameterization and different random seeds. Otherwise, set the experiment repetition to 1 and increase the nseeds variable of your desired simdesign.</p>
+<div class="section level2">
+<h2 id="random-seed-and-repetitions-management">random-seed and repetitions management<a class="anchor" aria-label="anchor" href="#random-seed-and-repetitions-management"></a>
+</h2>
+<p>The experiment provides a slot called “repetition” which allows to
+run multiple simulations of one parameterization. This is only useful if
+you manually generate a new random-seed during the setup of your model.
+By default, the NetLogo random-seed is set by the simdesign that is
+attached to your nl object. If your model does not reset the random seed
+manually, the seed will always be the same for each repetition.</p>
+<p>However, the concept of nlrx is based on sensitivity analyses. Here,
+you may want to exclude stochasticity from your output and instead do
+multiple sensitivity analyses with the same parameter matrix but
+different random seeds. You can then observe the effect of stochasticity
+on the level of your final output, the sensitivity indices. Thus we
+suggest to set the experiment repetition to 1 and instead use the nseeds
+variable of the desired simdesign to run multiple simulations with
+different random seeds.</p>
+<p>In summary, if you set the random-seed of your NetLogo model
+manually, you can increase the repitition of the experiment to run
+several simulations with equal parameterization and different random
+seeds. Otherwise, set the experiment repetition to 1 and increase the
+nseeds variable of your desired simdesign.</p>
 </div>
-<div id="runtime-and-measurements" class="section level2">
-<h2 class="hasAnchor">
-<a href="#runtime-and-measurements" class="anchor"></a>Runtime and measurements</h2>
-<p>The runtime of NetLogo model simulations can be controlled with two slots of the experiment class:</p>
+<div class="section level2">
+<h2 id="runtime-and-measurements">Runtime and measurements<a class="anchor" aria-label="anchor" href="#runtime-and-measurements"></a>
+</h2>
+<p>The runtime of NetLogo model simulations can be controlled with two
+slots of the experiment class:</p>
 <ul>
-<li>runtime - an integer that defines the maximum number of ticks that are simulated</li>
-<li>stopcond - a NetLogo reporter that reports true/false. Simulations are automatically stopped if TRUE is reported. Defaults to NA_character_ which means, no stop condition is applied.</li>
+<li>runtime - an integer that defines the maximum number of ticks that
+are simulated</li>
+<li>stopcond - a NetLogo reporter that reports true/false. Simulations
+are automatically stopped if TRUE is reported. Defaults to NA_character_
+which means, no stop condition is applied.</li>
 </ul>
-<p>Runtime can be set to 0 or NA_integer_ to allow for simulations without a pre-defined maximum runtime. However, this should only be done in combination with a proper stop condition (stopcond) or with NetLogo models that have a built-in stop condition. Otherwise, simulations might get stuck in endless loops.</p>
-<p>Two slots of the experiment class further define when measurements are taken:</p>
+<p>Runtime can be set to 0 or NA_integer_ to allow for simulations
+without a pre-defined maximum runtime. However, this should only be done
+in combination with a proper stop condition (stopcond) or with NetLogo
+models that have a built-in stop condition. Otherwise, simulations might
+get stuck in endless loops.</p>
+<p>Two slots of the experiment class further define when measurements
+are taken:</p>
 <ul>
-<li>tickmetrics - defines if measurements are taken at the end of the simulation (final tick) or on each tick</li>
-<li>evalticks - only applied when tickmetrics = “true”; defines a vector of ticks for which output metrics are reported. Set to NA_integer_ to report all collected output.</li>
+<li>tickmetrics - defines if measurements are taken at the end of the
+simulation (final tick) or on each tick</li>
+<li>evalticks - only applied when tickmetrics = “true”; defines a vector
+of ticks for which output metrics are reported. Set to NA_integer_ to
+report all collected output.</li>
 </ul>
-<p>Depending on the evalticks definition, it might happen, that a simulation stops before any output has been collected. In such cases, output is still reported but all metrics that could not be collected for any defined evalticks will be filled up with NA.</p>
-<p>Four slots of the experiment class further define which measurements are taken:</p>
+<p>Depending on the evalticks definition, it might happen, that a
+simulation stops before any output has been collected. In such cases,
+output is still reported but all metrics that could not be collected for
+any defined evalticks will be filled up with NA.</p>
+<p>Four slots of the experiment class further define which measurements
+are taken:</p>
 <ul>
-<li>metrics - vector of valid NetLogo reporters that are used to collect data (e.g. c(“count turtles”))</li>
-<li>metrics.turtles - a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list(“turtles” = c(“who”, “pxcor”, “pycor”, “color”))</li>
-<li>metrics.patches - vector of valid patches-own variables that are used to collect patches data (e.g. c(“pxcor”, “pycor”, “pcolor”))</li>
-<li>metrics.links - a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list(“links” = c(“[who] of end1”, “[who] of end2”)))</li>
+<li>metrics - vector of valid NetLogo reporters that are used to collect
+data (e.g. c(“count turtles”))</li>
+<li>metrics.turtles - a list with named vectors of strings defining
+valid turtles-own variables that are taken as output measurements
+(e.g. list(“turtles” = c(“who”, “pxcor”, “pycor”, “color”))</li>
+<li>metrics.patches - vector of valid patches-own variables that are
+used to collect patches data (e.g. c(“pxcor”, “pycor”, “pcolor”))</li>
+<li>metrics.links - a list with named vectors of strings defining valid
+links-own variables that are taken as output measurements
+(e.g. list(“links” = c(“[who] of end1”, “[who] of end2”)))</li>
 </ul>
-<p>Although the metrics slot accepts any valid NetLogo reporter, such as “count patches”, reporter strings can become quite long and confusing. We suggest to create NetLogo reporter procedures for complex reporters in order to get a nice and clean results data frame. For example, the NetLogo reporter “count patches with [pcolor = green]” could be written as a NetLogo reporter function:</p>
+<p>Although the metrics slot accepts any valid NetLogo reporter, such as
+“count patches”, reporter strings can become quite long and confusing.
+We suggest to create NetLogo reporter procedures for complex reporters
+in order to get a nice and clean results data frame. For example, the
+NetLogo reporter “count patches with [pcolor = green]” could be written
+as a NetLogo reporter function:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>to<span class="sc">-</span>report green.patches</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  report count patches with [pcolor <span class="ot">=</span> green]</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>end</span></code></pre></div>
-<p>In your nlrx experiment metrics field you can then enter “green.patches” which is way more intuitive then “count patches with [pcolor = green]”.</p>
+<p>In your nlrx experiment metrics field you can then enter
+“green.patches” which is way more intuitive then “count patches with
+[pcolor = green]”.</p>
 </div>
-<div id="netlogo-extensions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#netlogo-extensions" class="anchor"></a>NetLogo extensions</h2>
-<p>Usually, all NetLogo extensions that are shipped with NetLogo should also work with nlrx. However, depending on the system it can happen that NetLogo extensions are not found properly. To solve such problems we advise to put your <code>.nlogo model</code> file in the <code>app/models</code> subdirectory of the NetLogo installation path. A special case is the NetLogo r-extension because it needs to be stopped manually in between model runs. To achieve that, simply put the <code>r:stop</code> command in the <code>idfinal</code> slot of your experiment: <code>idfinal = "r:stop"</code>.</p>
+<div class="section level2">
+<h2 id="netlogo-extensions">NetLogo extensions<a class="anchor" aria-label="anchor" href="#netlogo-extensions"></a>
+</h2>
+<p>Usually, all NetLogo extensions that are shipped with NetLogo should
+also work with nlrx. However, depending on the system it can happen that
+NetLogo extensions are not found properly. To solve such problems we
+advise to put your <code>.nlogo model</code> file in the
+<code>app/models</code> subdirectory of the NetLogo installation path. A
+special case is the NetLogo r-extension because it needs to be stopped
+manually in between model runs. To achieve that, simply put the
+<code>r:stop</code> command in the <code>idfinal</code> slot of your
+experiment: <code>idfinal = "r:stop"</code>.</p>
 </div>
-<div id="parallelisation-and-the-future-concept" class="section level2">
-<h2 class="hasAnchor">
-<a href="#parallelisation-and-the-future-concept" class="anchor"></a>Parallelisation and the future concept</h2>
-<p>The run_nl_all function uses the <code>future_map_dfr()</code> function from the <a href="https://github.com/DavisVaughan/furrr">furrr package</a>. The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the <a href="https://github.com/HenrikBengtsson/future">future package</a>. See examples below for more details on parallelisation on local machines and remote HPC clusters.</p>
-<div id="parallelisation-on-local-machine" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parallelisation-on-local-machine" class="anchor"></a>Parallelisation on local machine</h3>
-<p>Model simulations can be distributed to each logical processor on the local machine in parallel. The future package provides two options for parallelization, explicit futures and implicit futures which are executed in the background and do not block the console while running.</p>
+<div class="section level2">
+<h2 id="parallelisation-and-the-future-concept">Parallelisation and the future concept<a class="anchor" aria-label="anchor" href="#parallelisation-and-the-future-concept"></a>
+</h2>
+<p>The run_nl_all function uses the <code>future_map_dfr()</code>
+function from the <a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr
+package</a>. The simulations are executed in a nested loop where the
+outer loop iterates over the random seeds of your simdesign, and the
+inner loop iterates over the rows of the siminput parameter matrix of
+your simdesign. These loops can be executed in parallel by setting up an
+appropriate plan from the <a href="https://github.com/HenrikBengtsson/future" class="external-link">future package</a>. See
+examples below for more details on parallelisation on local machines and
+remote HPC clusters.</p>
+<div class="section level3">
+<h3 id="parallelisation-on-local-machine">Parallelisation on local machine<a class="anchor" aria-label="anchor" href="#parallelisation-on-local-machine"></a>
+</h3>
+<p>Model simulations can be distributed to each logical processor on the
+local machine in parallel. The future package provides two options for
+parallelization, explicit futures and implicit futures which are
+executed in the background and do not block the console while
+running.</p>
 <p>Running parallel simulations with an explicit future command:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multiprocess</span><span class="op">)</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></code></pre></div>
-<p>For running parallel simulations with an implicit future command we need to define the type of parallelisation for each level of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> function individually. Because we want to parallelize the actual simulations, we need to use the multiprocess plan on the inner level. Note, that we use the assignment operator for implicit futures (<code><a href="https://rdrr.io/pkg/future/man/future.html">%&lt;-%</a></code>):</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multiprocess</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></span></code></pre></div>
+<p>For running parallel simulations with an implicit future command we
+need to define the type of parallelisation for each level of the nested
+<code><a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map_dfr()</a></code> function individually. Because we
+want to parallelize the actual simulations, we need to use the
+multiprocess plan on the inner level. Note, that we use the assignment
+operator for implicit futures (<code>%&lt;-%</code>):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="va">multiprocess</span><span class="op">)</span><span class="op">)</span>
-<span class="va">results</span> <span class="op">%&lt;-%</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></code></pre></div>
-<p>In cases, where the number of random seeds is lower than the available processor cores, parallelisation may not be completely efficient. To allow efficient parallelisation, even for a small number of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function can be used to split the parameter matrix into smaller chunks, which can be distributed to separate processor cores. For example, a simulation with 1000 runs (rows of the siminput matrix) and 2 random seeds should be distributed to 8 processor cores. By default, the parallelisation loop would consist of two jobs (one for each random seed) with 1000 simulation runs each. This experiment would only utilize 2 of the 8 available processor cores. By setting the split parameter to 4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4 parameter matrix chunks). Each job runs 1/4th of the parameter input matrix (250 rows) using one of the 2 defined random seeds.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sequential</span>, <span class="va">multiprocess</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op"><a href="https://future.futureverse.org/reference/future.html" class="external-link">%&lt;-%</a></span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span><span class="op">)</span></span></code></pre></div>
+<p>In cases, where the number of random seeds is lower than the
+available processor cores, parallelisation may not be completely
+efficient. To allow efficient parallelisation, even for a small number
+of random seeds the split parameter of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>
+function can be used to split the parameter matrix into smaller chunks,
+which can be distributed to separate processor cores. For example, a
+simulation with 1000 runs (rows of the siminput matrix) and 2 random
+seeds should be distributed to 8 processor cores. By default, the
+parallelisation loop would consist of two jobs (one for each random
+seed) with 1000 simulation runs each. This experiment would only utilize
+2 of the 8 available processor cores. By setting the split parameter to
+4, we increase the total number of jobs from 2 to 8 (2 random-seeds * 4
+parameter matrix chunks). Each job runs 1/4th of the parameter input
+matrix (250 rows) using one of the 2 defined random seeds.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/future">future</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/future/man/plan.html">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>, split <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_all.html">run_nl_all</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>, split <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="parallelisation-on-remote-hpc-cluster" class="section level3">
-<h3 class="hasAnchor">
-<a href="#parallelisation-on-remote-hpc-cluster" class="anchor"></a>Parallelisation on remote HPC cluster</h3>
-<p>This option requires access to a remote HPC cluster. This example gives you some guidance and examples for sending jobs from an R session on your local machine to an HPC running slurm. Details might be different depending on the HPC setup.</p>
-<p>Some settings, such as ssh access and slurm templates need to be defined to access remote HPC clusters from your local R session. Please check out this <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/">detailed HPC setup manual</a> for examples on required settings for an HPC running slurm.</p>
-<p>In order to run NetLogo models on remote HPCs, required software needs to be installed on the remote system as well: java, Netlogo, R, nlrx and further required R-packages (future/clusterMQ, …). Of course the NetLogo model files need to be available on the remote machine as well.</p>
-<div id="using-the-future-framework" class="section level4">
-<h4 class="hasAnchor">
-<a href="#using-the-future-framework" class="anchor"></a>Using the future framework</h4>
-<p>For sending jobs to the remote HPC under the future framework, we need to install and load additional R packages and adjust the future plan before executing <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. You need to define a path to your ssh key, a server adress for the HPC, a user name for the HPC and a path to the slurm template file on the HPC. Please also make sure that the <code>nlpath</code>, <code>modelpath</code> and <code>outpath</code> variables within your nl object point to locations on the filesystem of the HPC and not your local filesystem.</p>
+<div class="section level3">
+<h3 id="parallelisation-on-remote-hpc-cluster">Parallelisation on remote HPC cluster<a class="anchor" aria-label="anchor" href="#parallelisation-on-remote-hpc-cluster"></a>
+</h3>
+<p>This option requires access to a remote HPC cluster. This example
+gives you some guidance and examples for sending jobs from an R session
+on your local machine to an HPC running slurm. Details might be
+different depending on the HPC setup.</p>
+<p>Some settings, such as ssh access and slurm templates need to be
+defined to access remote HPC clusters from your local R session. Please
+check out this <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/" class="external-link">detailed HPC
+setup manual</a> for examples on required settings for an HPC running
+slurm.</p>
+<p>In order to run NetLogo models on remote HPCs, required software
+needs to be installed on the remote system as well: java, Netlogo, R,
+nlrx and further required R-packages (future/clusterMQ, …). Of course
+the NetLogo model files need to be available on the remote machine as
+well.</p>
+<div class="section level4">
+<h4 id="using-the-future-framework">Using the future framework<a class="anchor" aria-label="anchor" href="#using-the-future-framework"></a>
+</h4>
+<p>For sending jobs to the remote HPC under the future framework, we
+need to install and load additional R packages and adjust the future
+plan before executing <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code>. You need to define a
+path to your ssh key, a server address for the HPC, a user name for the
+HPC and a path to the slurm template file on the HPC. Please also make
+sure that the <code>nlpath</code>, <code>modelpath</code> and
+<code>outpath</code> variables within your nl object point to locations
+on the filesystem of the HPC and not your local filesystem.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load required packages</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(future.batchtools)</span>
@@ -414,61 +639,69 @@
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute simulations</span></span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">run_nl_all</span>(<span class="at">nl =</span> nl)</span></code></pre></div>
 </div>
-<div id="using-the-clustermq-framework" class="section level4">
-<h4 class="hasAnchor">
-<a href="#using-the-clustermq-framework" class="anchor"></a>Using the clusterMQ framework</h4>
-<p>The clusterMQ framework is somewhat different from the future framework. However, in our experience it worked more reliable in combination with a slurm HPC. For installation of clustermq and .Rprofile settings see also the <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/">detailed HPC setup manual</a>.</p>
-<p>clusterMQ does not directly support parallelisation of the nested <code><a href="https://rdrr.io/pkg/furrr/man/future_map.html">furrr::future_map_dfr()</a></code> loops of the <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function. We need to define our own parallel simulation function, using the <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function of the nlrx package:</p>
+<div class="section level4">
+<h4 id="using-the-clustermq-framework">Using the clusterMQ framework<a class="anchor" aria-label="anchor" href="#using-the-clustermq-framework"></a>
+</h4>
+<p>The clusterMQ framework is somewhat different from the future
+framework. However, in our experience it worked more reliable in
+combination with a slurm HPC. For installation of clustermq and
+.Rprofile settings see also the <a href="https://r-spatialecology.github.io/gwdg_hpc_guide/" class="external-link">detailed HPC
+setup manual</a>.</p>
+<p>clusterMQ does not directly support parallelisation of the nested
+<code><a href="https://furrr.futureverse.org/reference/future_map.html" class="external-link">furrr::future_map_dfr()</a></code> loops of the
+<code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function. We need to define our own parallel
+simulation function, using the <code><a href="../reference/run_nl_one.html">run_nl_one()</a></code> function of the
+nlrx package:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">clustermq</span><span class="op">)</span>
-
-<span class="co"># First, we set the total number of jobs for the HPC</span>
-<span class="co"># In this example we run each simulation as an individual job (recommended).</span>
-<span class="co"># Thus to calculate the number of jobs we just multiply the number of parameterizations of the simdesign with the number of random seeds.</span>
-<span class="co"># If you want to group several runs into the same job you can adjust this line and choose a lower number.</span>
-<span class="co"># However, the number must be chosen that nrow(nl@simdesign@siminput)/njobs results in an integer value</span>
-<span class="va">njobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">)</span>
-
-<span class="co"># Second, we generate vectors for looping trough model runs.</span>
-<span class="co"># We generate a vector for simpinputrows by repeating the sequence of parameterisations for each seed.</span>
-<span class="co"># Then, we generate a vector of random-seeds by repeating each seed for n times, where n is the number of siminputrows.</span>
-<span class="va">siminputrows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">)</span><span class="op">)</span>
-<span class="va">rndseeds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span>, each<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/raster/man/ncell.html">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Third, we define our simulation function</span>
-<span class="co"># Please adjust the path to the temporary file directory</span>
-<span class="va">simfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nl</span>, <span class="va">siminputrow</span>, <span class="va">rndseed</span>, <span class="va">writeRDS</span><span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
-<span class="op">{</span>
-  <span class="fu">unixtools</span><span class="fu">::</span><span class="fu">set.tempdir</span><span class="op">(</span><span class="st">"/hpath/to/temp/dir"</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/">nlrx</a></span><span class="op">)</span>
-  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_one.html">run_nl_one</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>, siminputrow <span class="op">=</span> <span class="va">siminputrow</span>, seed <span class="op">=</span> <span class="va">rndseed</span>, writeRDS <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span>
-<span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span>
-<span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span>
-<span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span>
-<span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span>
-<span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">clustermq</span><span class="fu">::</span><span class="fu">Q</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">simfun</span>, 
-                        siminputrow <span class="op">=</span> <span class="va">siminputrows</span>,
-                        rndseed <span class="op">=</span> <span class="va">rndseeds</span>,
-                        const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,
-                                     writeRDS <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                        export <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>, 
-                        seed <span class="op">=</span> <span class="fl">42</span>, 
-                        n_jobs <span class="op">=</span> <span class="va">njobs</span>, 
-                        template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>job_name <span class="op">=</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span>
-                                        log.file <span class="op">=</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span>
-                                        queue <span class="op">=</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span>
-                                        service <span class="op">=</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span>
-                                        walltime <span class="op">=</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span>
-                                        mem_cpu <span class="op">=</span> <span class="st">"4000"</span><span class="op">)</span><span class="op">)</span> <span class="co"># define memory per cpu   </span>
-
-<span class="co"># The Q function reports the individual results of each job as a list</span>
-<span class="co"># Thus, we convert the list results to tibble format:</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mschubert.github.io/clustermq/" class="external-link">clustermq</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># First, we set the total number of jobs for the HPC</span></span>
+<span><span class="co"># In this example we run each simulation as an individual job (recommended).</span></span>
+<span><span class="co"># Thus to calculate the number of jobs we just multiply the number of parameterizations of the simdesign with the number of random seeds.</span></span>
+<span><span class="co"># If you want to group several runs into the same job you can adjust this line and choose a lower number.</span></span>
+<span><span class="co"># However, the number must be chosen that nrow(nl@simdesign@siminput)/njobs results in an integer value</span></span>
+<span><span class="va">njobs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Second, we generate vectors for looping trough model runs.</span></span>
+<span><span class="co"># We generate a vector for simpinputrows by repeating the sequence of parameterisations for each seed.</span></span>
+<span><span class="co"># Then, we generate a vector of random-seeds by repeating each seed for n times, where n is the number of siminputrows.</span></span>
+<span><span class="va">siminputrows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">rndseeds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">simseeds</span>, each<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">nl</span><span class="op">@</span><span class="va">simdesign</span><span class="op">@</span><span class="va">siminput</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Third, we define our simulation function</span></span>
+<span><span class="co"># Please adjust the path to the temporary file directory</span></span>
+<span><span class="va">simfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">nl</span>, <span class="va">siminputrow</span>, <span class="va">rndseed</span>, <span class="va">writeRDS</span><span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">{</span></span>
+<span>  <span class="fu">unixtools</span><span class="fu">::</span><span class="fu">set.tempdir</span><span class="op">(</span><span class="st">"/hpath/to/temp/dir"</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/nlrx/" class="external-link">nlrx</a></span><span class="op">)</span></span>
+<span>  <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_nl_one.html">run_nl_one</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>, siminputrow <span class="op">=</span> <span class="va">siminputrow</span>, seed <span class="op">=</span> <span class="va">rndseed</span>, writeRDS <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># Fourth, use the Q function from the clustermq package to run the jobs on the HPC:</span></span>
+<span><span class="co"># The q function loops through our siminputrows and rndseeds vectors.</span></span>
+<span><span class="co"># The function creates njobs jobs and distributes corresponding chunks of the input vectors to these jobs for executing the simulation function simfun.</span></span>
+<span><span class="co"># As constants we provide our nl object and the function parameter writeRDS. </span></span>
+<span><span class="co"># If write RDS is true, an *.rds file will be written on the HPC after each jobs has finished.</span></span>
+<span><span class="co"># This can be useful to gain results from completed runs after a crash has occured.</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">clustermq</span><span class="fu">::</span><span class="fu">Q</span><span class="op">(</span>fun <span class="op">=</span> <span class="va">simfun</span>, </span>
+<span>                        siminputrow <span class="op">=</span> <span class="va">siminputrows</span>,</span>
+<span>                        rndseed <span class="op">=</span> <span class="va">rndseeds</span>,</span>
+<span>                        const <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nl <span class="op">=</span> <span class="va">nl</span>,</span>
+<span>                                     writeRDS <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>                        export <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, </span>
+<span>                        seed <span class="op">=</span> <span class="fl">42</span>, </span>
+<span>                        n_jobs <span class="op">=</span> <span class="va">njobs</span>, </span>
+<span>                        template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>job_name <span class="op">=</span> <span class="st">"jobname"</span>, <span class="co"># define jobname</span></span>
+<span>                                        log.file <span class="op">=</span> <span class="st">"jobname.log"</span>, <span class="co"># define logfile name</span></span>
+<span>                                        queue <span class="op">=</span> <span class="st">"medium"</span>,  <span class="co"># define HPC queue</span></span>
+<span>                                        service <span class="op">=</span> <span class="st">"normal"</span>, <span class="co"># define HPC service</span></span>
+<span>                                        walltime <span class="op">=</span> <span class="st">"00:30:00"</span>, <span class="co"># define walltime</span></span>
+<span>                                        mem_cpu <span class="op">=</span> <span class="st">"4000"</span><span class="op">)</span><span class="op">)</span> <span class="co"># define memory per cpu   </span></span>
+<span></span>
+<span><span class="co"># The Q function reports the individual results of each job as a list</span></span>
+<span><span class="co"># Thus, we convert the list results to tibble format:</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -485,11 +718,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jan Salecker, Marco Sciaini.</p>
+  <p></p>
+<p>Developed by Jan Salecker, Marco Sciaini, Sebastian Hanss.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -497,6 +732,8 @@
 
   
 
+
+  
 
   </body>
 </html>
