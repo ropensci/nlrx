@@ -330,7 +330,7 @@ experiment <- function(expname = "defaultexp",
 #'
 #' The latin hypercube simdesign creates a Latin Hypercube sampling parameter matrix.
 #' The method can be used to generate a near-random sample of parameter values from the defined parameter distributions.
-#' More Details on Latin Hypercube Sampling can be found in [McKay 1979](https://doi.org/10.1080/00401706.1979.10489755).
+#' More Details on Latin Hypercube Sampling can be found in McKay (1979) \doi{10.1080/00401706.1979.10489755}.
 #' nlrx uses the [lhs](https://CRAN.R-project.org/package=lhs/index.html) package to generate the Latin Hypercube parameter matrix.
 #' To setup a latin hypercube sampling simdesign, variable distributions need to be defined (min, max, qfun).
 #'
