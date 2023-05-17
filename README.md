@@ -283,4 +283,4 @@ analyze_nl(nl)
     Conduct](https://github.com/ropensci/nlrx/blob/master/CODE_OF_CONDUCT.md).
     By participating in this project you agree to abide by its terms.
 
-[![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)
+
