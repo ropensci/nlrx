@@ -17,3 +17,4 @@ vignettes/articles
 ^CONTRIBUTING\.md$
 ^data_raw$
 ^\.github$
+^CRAN-SUBMISSION$

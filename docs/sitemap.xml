@@ -1,396 +1,396 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/404.html</loc>
   </url>
   <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>/CONTRIBUTING.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/README.knit.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/README.knit.html</loc>
   </url>
   <url>
-    <loc>/README.utf8.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/README.utf8.html</loc>
   </url>
   <url>
-    <loc>/articles/abc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/abc.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/interfacing-different-models.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/interfacing-different-models.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/manual-output.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/manual-output.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/nldoc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/nldoc.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/nlrx_nldoc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/nlrx_nldoc.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/nlrx_nldocumentation.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/nlrx_nldocumentation.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/nlrx_papers.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/nlrx_papers.html</loc>
   </url>
   <url>
-    <loc>/articles/articles/spatial-output.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/articles/spatial-output.html</loc>
   </url>
   <url>
-    <loc>/articles/calibration.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/calibration.html</loc>
   </url>
   <url>
-    <loc>/articles/furthernotes.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/furthernotes.html</loc>
   </url>
   <url>
-    <loc>/articles/getstarted.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/getstarted.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/interfacing-different-models.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/interfacing-different-models.html</loc>
   </url>
   <url>
-    <loc>/articles/manual-output.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/manual-output.html</loc>
   </url>
   <url>
-    <loc>/articles/nlrx_nldoc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/nlrx_nldoc.html</loc>
   </url>
   <url>
-    <loc>/articles/nlrx_papers.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/nlrx_papers.html</loc>
   </url>
   <url>
-    <loc>/articles/optimization.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/optimization.html</loc>
   </url>
   <url>
-    <loc>/articles/sensitivity.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/sensitivity.html</loc>
   </url>
   <url>
-    <loc>/articles/simdesign-examples.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/simdesign-examples.html</loc>
   </url>
   <url>
-    <loc>/articles/spatial-output.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/articles/spatial-output.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_eFast.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_eFast.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_ff.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_ff.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_lhs.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_lhs.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_morris.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_morris.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_nl.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_simple.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_simple.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_sobol.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_sobol.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_sobol2007.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_sobol2007.html</loc>
   </url>
   <url>
-    <loc>/reference/analyze_soboljansen.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/analyze_soboljansen.html</loc>
   </url>
   <url>
-    <loc>/reference/check_netlogo_version.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/check_netlogo_version.html</loc>
   </url>
   <url>
-    <loc>/reference/download_netlogo.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/download_netlogo.html</loc>
   </url>
   <url>
-    <loc>/reference/eval_simoutput.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/eval_simoutput.html</loc>
   </url>
   <url>
-    <loc>/reference/eval_variables_constants.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/eval_variables_constants.html</loc>
   </url>
   <url>
-    <loc>/reference/experiment.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/experiment.html</loc>
   </url>
   <url>
-    <loc>/reference/export_nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/export_nl.html</loc>
   </url>
   <url>
-    <loc>/reference/get_nl_spatial.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/get_nl_spatial.html</loc>
   </url>
   <url>
-    <loc>/reference/getexp.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/getexp.html</loc>
   </url>
   <url>
-    <loc>/reference/getnl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/getnl.html</loc>
   </url>
   <url>
-    <loc>/reference/getsim.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/getsim.html</loc>
   </url>
   <url>
-    <loc>/reference/import_nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/import_nl.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/init-classes.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/init-classes.html</loc>
   </url>
   <url>
-    <loc>/reference/load_model_parameters.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/load_model_parameters.html</loc>
   </url>
   <url>
-    <loc>/reference/nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_distinct.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_distinct.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_eFast.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_eFast.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_ff.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_ff.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_gensa.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_gensa.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_lhs.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_lhs.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_morris.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_morris.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_simple.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_simple.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_sobol.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_sobol.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_sobol2007.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_sobol2007.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_soboljansen.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_soboljansen.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_spatial.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_spatial.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_to_graph.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_to_graph.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_to_points.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_to_points.html</loc>
   </url>
   <url>
-    <loc>/reference/nl_to_raster.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nl_to_raster.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_find_procedure_calls.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_find_procedure_calls.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_network.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_network.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_parse_modelcode.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_parse_modelcode.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_read_nlogo.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_read_nlogo.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_table_bs.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_table_bs.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_table_gui.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_table_gui.html</loc>
   </url>
   <url>
-    <loc>/reference/nldoc_write_nldoc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nldoc_write_nldoc.html</loc>
   </url>
   <url>
-    <loc>/reference/nlrx-package.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/nlrx-package.html</loc>
   </url>
   <url>
-    <loc>/reference/pipe.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/pipe.html</loc>
   </url>
   <url>
-    <loc>/reference/print.nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/print.nl.html</loc>
   </url>
   <url>
-    <loc>/reference/report_model_parameters.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/report_model_parameters.html</loc>
   </url>
   <url>
-    <loc>/reference/run_nl_all.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/run_nl_all.html</loc>
   </url>
   <url>
-    <loc>/reference/run_nl_dyn.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/run_nl_dyn.html</loc>
   </url>
   <url>
-    <loc>/reference/run_nl_one.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/run_nl_one.html</loc>
   </url>
   <url>
-    <loc>/reference/setexp.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/setexp.html</loc>
   </url>
   <url>
-    <loc>/reference/setnl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/setnl.html</loc>
   </url>
   <url>
-    <loc>/reference/setsim.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/setsim.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign-class.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign-class.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_ABCmcmc_Marjoram_original.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram_original.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_ABCmcmc_Wegmann.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Wegmann.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_ABCmcmc_marjoram.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_marjoram.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_GenAlg.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_GenAlg.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_GenSA.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_GenSA.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_distinct.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_distinct.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_eFast.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_eFast.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_ff.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_ff.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_lhs.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_lhs.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_morris.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_morris.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_simple.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_simple.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_sobol.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_sobol.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_sobol2007.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_sobol2007.html</loc>
   </url>
   <url>
-    <loc>/reference/simdesign_soboljansen.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/simdesign_soboljansen.html</loc>
   </url>
   <url>
-    <loc>/reference/supported_netlogo_versions.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/supported_netlogo_versions.html</loc>
   </url>
   <url>
-    <loc>/reference/test_nlrx.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/test_nlrx.html</loc>
   </url>
   <url>
-    <loc>/reference/unnest_simoutput.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/unnest_simoutput.html</loc>
   </url>
   <url>
-    <loc>/reference/util_call_nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_call_nl.html</loc>
   </url>
   <url>
-    <loc>/reference/util_cleanup.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_cleanup.html</loc>
   </url>
   <url>
-    <loc>/reference/util_create_agentset_reporter.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_create_agentset_reporter.html</loc>
   </url>
   <url>
-    <loc>/reference/util_create_lhs.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_create_lhs.html</loc>
   </url>
   <url>
-    <loc>/reference/util_create_sim_XML.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_create_sim_XML.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_constants.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_constants.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_experiment.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_experiment.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_simdesign.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_simdesign.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_variables.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_variables.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_variables_distinct.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_variables_distinct.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_variables_ff.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_variables_ff.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_variables_op.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_variables_op.html</loc>
   </url>
   <url>
-    <loc>/reference/util_eval_variables_sa.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_eval_variables_sa.html</loc>
   </url>
   <url>
-    <loc>/reference/util_gather_results.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_gather_results.html</loc>
   </url>
   <url>
-    <loc>/reference/util_generate_seeds.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_generate_seeds.html</loc>
   </url>
   <url>
-    <loc>/reference/util_get_os.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_get_os.html</loc>
   </url>
   <url>
-    <loc>/reference/util_print.experiment.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_print.experiment.html</loc>
   </url>
   <url>
-    <loc>/reference/util_print.nl.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_print.nl.html</loc>
   </url>
   <url>
-    <loc>/reference/util_print.simdesign.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_print.simdesign.html</loc>
   </url>
   <url>
-    <loc>/reference/util_print.summary.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_print.summary.html</loc>
   </url>
   <url>
-    <loc>/reference/util_read_write_batch.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_read_write_batch.html</loc>
   </url>
   <url>
-    <loc>/reference/util_run_nl_dyn_ABCmcmc.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_run_nl_dyn_ABCmcmc.html</loc>
   </url>
   <url>
-    <loc>/reference/util_run_nl_dyn_GenAlg.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_run_nl_dyn_GenAlg.html</loc>
   </url>
   <url>
-    <loc>/reference/util_run_nl_dyn_GenAlg_fn.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_run_nl_dyn_GenAlg_fn.html</loc>
   </url>
   <url>
-    <loc>/reference/util_run_nl_dyn_GenSA.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_run_nl_dyn_GenSA.html</loc>
   </url>
   <url>
-    <loc>/reference/util_run_nl_dyn_GenSA_fn.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/util_run_nl_dyn_GenSA_fn.html</loc>
   </url>
   <url>
-    <loc>/reference/write_simoutput.html</loc>
+    <loc>https://docs.ropensci.org/nlrx/reference/write_simoutput.html</loc>
   </url>
 </urlset>

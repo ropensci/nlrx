@@ -7,49 +7,45 @@ template:
 navbar:
   title: nlrx
   left:
-    - text: "Get Started"
-      icon: fa fa-magic
+    - icon: fa fa-magic
+      text: "Get Started"
       href: articles/getstarted.html
-    - text: "Advanced configuration"
-      icon: fa-book
+    - icon: fa-book
+      text: "Advanced configuration"
       href: articles/furthernotes.html
     - text: "More"
-      icon: fa-graduation-cap
       menu:
        - text: "Capturing spatial NetLogo output"
-         icon: fa-book
+         icon: fa-location-arrow
          href: articles/articles/spatial-output.html
        - text: "Capturing NetLogo output manually"
-         icon: fa-book
+         icon: fa-location-arrow
          href: articles/articles/manual-output.html
        - text: "Sensitivity Analysis with nlrx"
-         icon: fa-wrench
+         icon: fa-gear
          href: articles/sensitivity.html
        - text: "Optimization with nlrx"
-         icon: fa-wrench
+         icon: fa-gear
          href: articles/optimization.html
        - text: "Approximate Bayesian Computation (ABC) with nlrx"
-         icon: fa-wrench
+         icon: fa-gear
          href: articles/abc.html
        - text: "Simdesign examples"
-         icon: fa-wrench
+         icon: fa-gear
          href: articles/simdesign-examples.html
        - text: "Interfacing a variety of different NetLogo models"
-         icon: fa-wrench
+         icon: fa-image
          href: articles/articles/interfacing-different-models.html
        - text: "NetLogo documentation with nlrx"
-         icon: fa-wrench
+         icon: fa-book
          href: articles/articles/nlrx_nldoc.html
        - text: "Publication record"
          icon: fa-bookmark
          href: articles/articles/nlrx_papers.html
   right:
-    - icon: fa-newspaper
-      text: "news"
+    - text: "News"
       href: news/index.html
-    - icon: fa-cogs
-      text: "functions"
+    - text: "Reference"
       href: reference/index.html
     - icon: "fab fa-github fa-lg"
-      text: "github"
       href: https://github.com/ropensci/nlrx
