@@ -97,7 +97,7 @@ run_nl_all <- function(nl,
   p <- progressr::progressor(steps = total_steps)
 
   ## Execute on remote location
-  nl_results <- furrr::future_map_dfr(
+  nl_results <- furrr::future_map(
       seq_along(jobs[[1]]),
       function(job) {
         ## Extract current seed and part from job id:
@@ -110,7 +110,7 @@ run_nl_all <- function(nl,
           (job_part - 1) * n_per_part
 
         ## Start inner loop to run model simulations:
-        res_job <- furrr::future_map_dfr(
+        res_job <- furrr::future_map(
           rowids,
           function(siminputrow) {
 
@@ -130,8 +130,12 @@ run_nl_all <- function(nl,
             )
             return(res_one)
           })
+        
+        res_job <- res_job |> list_to_tibble()
         return(res_job)
       })
+  
+  nl_results <- nl_results |> list_to_tibble()
   return(nl_results)
 }
 
