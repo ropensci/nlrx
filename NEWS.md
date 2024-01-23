@@ -1,3 +1,14 @@
+
+# nlrx 0.4.5
+
+## Functionality
+
+* No functionality updates
+
+## Bugfixes
+
+* documentation update to fix CRAN check notes
+
 # nlrx 0.4.4
 
 ## Functionality

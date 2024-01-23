@@ -30,13 +30,13 @@ nldoc_write_nldoc(
 
 \item{output_format}{either "html", "pdf" or "docx"}
 
+\item{number_sections}{TRUE/FALSE, if TRUE sections in the documentation will be numbered}
+
 \item{theme}{markdown theme, supported themes are "journal", "cerulean", "flatly", "readable", "spacelab", "united", "cosmo"}
 
 \item{date}{date that is printed in the documentation header}
 
 \item{toc}{TRUE/FALSE, if TRUE the documentation contains a table of contents - only for html and pdf output format}
-
-\item{number_ections}{TRUE/FALSE, if TRUE sections in the documentation will be numbered}
 }
 \value{
 list containing NetLogo GUI elements
