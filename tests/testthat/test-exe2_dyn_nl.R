@@ -64,8 +64,11 @@ testthat::test_that("run_nl_dyn", {
                                   nseeds=1)
 
   results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+
+  expected_size <- ifelse("trace.mat" %in% names(results.dyn), 4, 3)
+
   testthat::expect_match(class(results.dyn), "list")
-  testthat::expect_equal(length(results.dyn), 4)
+  testthat::expect_equal(length(results.dyn), expected_size)
 
   testthat::context("Run optimization with run_nl_dyn() GenAlg")
   nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,

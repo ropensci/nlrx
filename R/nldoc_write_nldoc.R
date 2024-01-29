@@ -8,7 +8,7 @@
 #' @param noxygen_bs list with parsed and processed noxygen tags from NetLogo behavior space experiments
 #' @param outpath Path to folder where rendered documentation should be created
 #' @param output_format either "html", "pdf" or "docx"
-#' @param number_ections TRUE/FALSE, if TRUE sections in the documentation will be numbered
+#' @param number_sections TRUE/FALSE, if TRUE sections in the documentation will be numbered
 #' @param theme markdown theme, supported themes are "journal", "cerulean", "flatly", "readable", "spacelab", "united", "cosmo"
 #' @param date date that is printed in the documentation header
 #' @param toc TRUE/FALSE, if TRUE the documentation contains a table of contents - only for html and pdf output format
