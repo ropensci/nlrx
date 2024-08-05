@@ -3,17 +3,21 @@ title: nlrx | NetLogo from R
 template:
   params:
    bootswatch: sandstone
-
 navbar:
-  title: nlrx
-  left:
-    - icon: fa fa-magic
+  structure:
+    left:  [intro, advanced, more, articles, tutorials]
+    right: [reference, news, search, github, lightswitch]
+  components:
+    intro:
+      icon: fa fa-magic
       text: "Get Started"
       href: articles/getstarted.html
-    - icon: fa-book
+    advanced:
+      icon: fa-book
       text: "Advanced configuration"
       href: articles/furthernotes.html
-    - text: "More"
+    more:
+      text: "More"
       menu:
        - text: "Capturing spatial NetLogo output"
          icon: fa-location-arrow
@@ -42,8 +46,6 @@ navbar:
        - text: "Publication record"
          icon: fa-bookmark
          href: articles/articles/nlrx_papers.html
-  right:
-    - text: "News"
       href: news/index.html
     - text: "Reference"
       href: reference/index.html
