@@ -1,4 +1,5 @@
 title: nlrx | NetLogo from R
+url: https://docs.ropensci.org/nlrx
 
 template:
   params:
@@ -47,7 +48,3 @@ navbar:
          icon: fa-bookmark
          href: articles/articles/nlrx_papers.html
       href: news/index.html
-    - text: "Reference"
-      href: reference/index.html
-    - icon: "fab fa-github fa-lg"
-      href: https://github.com/ropensci/nlrx
