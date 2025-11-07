@@ -562,6 +562,7 @@ simdesign_soboljansen <- function(nl,
 #' @param morrisr morris r value
 #' @param morrisgridjump morris grid jump value
 #' @param nseeds number of seeds for this simulation design
+#' @param scale logical, whether to scale the input factors to [0,1]
 #' @return simdesign S4 class object
 #' @details
 #'
@@ -600,7 +601,8 @@ simdesign_morris <- function(nl,
                              morrislevels,
                              morrisr,
                              morrisgridjump,
-                             nseeds) {
+                             nseeds,
+                             scale = TRUE) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
@@ -627,7 +629,7 @@ simdesign_morris <- function(nl,
                             design = morrisdesign,
                             binf = mins,
                             bsup = maxs,
-                            scale=TRUE)
+                            scale = scale)
 
   # Export parameter matrix:
   moX <- tibble::as_tibble(mo$X)

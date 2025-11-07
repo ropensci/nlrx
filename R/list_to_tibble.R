@@ -6,8 +6,6 @@
 #'
 #' @return a combined tibble
 #' @export
-#'
-#' @examples
 list_to_tibble <- function(data_list) {
   col_classes <- data_list |> purrr::map_dfr(function(x) {
     x |> dplyr::summarise_all(class)

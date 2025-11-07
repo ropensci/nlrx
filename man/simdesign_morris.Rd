@@ -4,7 +4,15 @@
 \alias{simdesign_morris}
 \title{Add a morris elementary effects simdesign to a nl object}
 \usage{
-simdesign_morris(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds)
+simdesign_morris(
+  nl,
+  morristype,
+  morrislevels,
+  morrisr,
+  morrisgridjump,
+  nseeds,
+  scale = TRUE
+)
 }
 \arguments{
 \item{nl}{nl object with a defined experiment}
@@ -18,6 +26,8 @@ simdesign_morris(nl, morristype, morrislevels, morrisr, morrisgridjump, nseeds)
 \item{morrisgridjump}{morris grid jump value}
 
 \item{nseeds}{number of seeds for this simulation design}
+
+\item{scale}{logical, whether to scale the input factors to \link{0,1}}
 }
 \value{
 simdesign S4 class object
