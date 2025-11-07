@@ -26,7 +26,7 @@ supported_netlogo_versions <- function() {
     "6.2.0",
     "6.2.1",
     "6.2.2",
-    "6.3.0"
+    "6.4.0"
   )
   return(supported_versions)
 }
