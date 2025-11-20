@@ -27,10 +27,7 @@ supported_netlogo_versions <- function() {
     "6.2.1",
     "6.2.2",
     "6.3.0",
-    "6.4.0",
-    "7.0.0",
-    "7.0.1",
-    "7.0.2"
+    "6.4.0"
   )
   return(supported_versions)
 }
@@ -84,18 +81,6 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @param version Character string naming which NetLogo Version to download (see Details)
 #' @param os operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
 #' If set to NA (default) os will be detected automatically (`util_get_os()`)
-#' @param arch Character string defining the system architecture.
-#'   Valid values depend on the operating system:
-#'   * **Windows / Unix**:
-#'     Must be `"32"` or `"64"`.
-#'     If omitted, defaults to `"64"`.
-#'   * **macOS**:
-#'     - For NetLogo versions **≤ 6.4.0**, no architecture is used in the filename.
-#'       In this case, `arch` must be `NULL` (the default).
-#'     - For NetLogo versions **≥ 7.0.0**, the architecture is **mandatory** and must be
-#'       either `"intel"` (resulting in a `-x86_64.dmg` installer) or
-#'       `"silicon"` (resulting in a `-aarch64.dmg` installer).
-#'   An error is raised if an invalid architecture is provided for the selected OS or version.
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'
@@ -113,74 +98,39 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @rdname download_netlogo
 #'
 #' @export
-download_netlogo <- function(to, version, os = NA, arch = NULL, extract = FALSE) {
+download_netlogo <- function(to, version, os = NA, extract = FALSE) {
 
   ## Check version support
   check_netlogo_version(version, throw_error = TRUE)
-
-  ## Parse version for comparisons
-  version_numeric <- numeric_version(version)
-
   ## Construct base url
   nl_url <- paste0("https://ccl.northwestern.edu/netlogo/", version, "/")
-
-  ## Determine OS
+  ## Get filename depending on os
   if (is.na(os)) {
     os <- util_get_os()
   }
-
-  ## -----------------------------
-  ## OS-SPECIFIC FILENAME LOGIC
-  ## -----------------------------
-
-  if (os == "win") {
-
-    ## Windows logic
-    if (is.null(arch)) arch <- "64"
-    if (!arch %in% c("32", "64"))
-      stop("For Windows, `arch` must be '32' or '64'.")
-
-    nl_file <- paste0("NetLogo-", version, "-", arch, ".msi")
-
-  } else if (os == "mac") {
-
-    ## macOS logic based on version
-    if (version_numeric <= numeric_version("6.4.0")) {
-      nl_file <- paste0("NetLogo-", version, ".dmg")
-    } else if (version_numeric >= numeric_version("7.0.0")) {
-      if (is.null(arch))
-        stop("For NetLogo ≥ 7.0.0 on mac, `arch` must be 'intel' or 'silicon'.")
-      if (arch == "intel") {
-        nl_file <- paste0("NetLogo-", version, "-x86_64.dmg")
-      } else if (arch == "silicon") {
-        nl_file <- paste0("NetLogo-", version, "-aarch64.dmg")
-      } else {
-        stop("For macOS (NetLogo ≥ 7.0.0), `arch` must be 'intel' or 'silicon'.")
-      }
-    } else {
-      stop("Unsupported Mac version logic encountered.")
-    }
-  } else if (os == "unix") {
-    if (is.null(arch)) arch <- "64"
-    if (!arch %in% c("32", "64"))
-      stop("For Unix, `arch` must be '32' or '64'.")
-    nl_file <- paste0("NetLogo-", version, "-", arch, ".tgz")
-
-  } else if (os == "Unknown OS") {
-
-    stop("Unknown OS. OS not supported by NetLogo.")
-
-  } else {
-    stop("Invalid `os` value provided.")
-  }
-  ## DOWNLOAD
+  switch(os,
+         # nocov start
+         "win" = {
+           nl_file <- paste0("NetLogo-", version, "-64.msi")
+         },
+         "mac" = {
+           nl_file <- paste0("NetLogo-", version, ".dmg")
+         },
+         "unix" = {
+           nl_file <- paste0("NetLogo-", version, "-64.tgz")
+         },
+         "Unknown OS" = {
+           stop("Unknown OS. OS not supported by NetLogo")
+         }
+         # nocov end
+  )
+  ## Download
   nl_dl <- paste0(nl_url, nl_file)
   to_file <- file.path(to, nl_file)
   utils::download.file(nl_dl, to_file)
 
-  ## Extract for unix if requested:
-  if (os == "unix" && extract) {
-    system(paste0("tar xvzf ", shQuote(to_file), " --directory ", shQuote(to)))
+  ## Extract the archive if os==unix and extract == TRUE:
+  if (os == "unix" & extract == TRUE) {
+    system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
 }
-

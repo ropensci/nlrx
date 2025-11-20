@@ -20,34 +20,4 @@ testthat::test_that("supported_netlogo_versions", {
                                          version = nlversion,
                                          extract = TRUE))
 
-  ## corrupt version
-  testthat::expect_error(download_netlogo(to = nlpath,
-                                         os = os,
-                                         version = "1",
-                                         extract = TRUE))
-
-  ## corrupt os
-  testthat::expect_error(download_netlogo(to = nlpath,
-                                          os = "unknown",
-                                          version = nlversion,
-                                          extract = TRUE))
-
-  ## non-matching arch
-  testthat::expect_error(download_netlogo(to = nlpath,
-                                          os = "mac",
-                                          version = "7.0.0",
-                                          arch = "64",
-                                          extract = TRUE))
-  testthat::expect_error(download_netlogo(to = nlpath,
-                                          os = "win",
-                                          version = "6.4.0",
-                                          arch = "fail",
-                                          extract = TRUE))
-  testthat::expect_error(download_netlogo(to = nlpath,
-                                          os = "unix",
-                                          version = "6.4.0",
-                                          arch = "fail",
-                                          extract = TRUE))
-
-
 })
