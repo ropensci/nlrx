@@ -2,20 +2,20 @@
 
 This is a resubmission. In this version I have:
 
-* Fixed a typo in the package documentation to resolve CRAN check Notes
+* Updated readr::file_write function to avoid pkg break due to deprecation
 
 
 # Original (Re-) Submission
 
-nlrx version 0.4.5
+nlrx version 0.4.6
 
 ## CRAN check error fixes
 
-* Fixed a typo in the package documentation (nldoc_write_nldoc)
-
-## Changes in version 0.4.5
-
 * None
+
+## Changes in version 0.4.6
+
+* Updated readr::file_write function to avoid pkg break due to deprecation
 
 ## R CMD check results
 
