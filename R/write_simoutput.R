@@ -52,6 +52,6 @@ setsim(nl, \"simoutput\") <- results")
            ".csv"))
 
   # Write output
-  readr::write_csv(x = getsim(nl, "simoutput"), path = outfilename)
+  readr::write_csv(x = getsim(nl, "simoutput"), file = outfilename)
 }
 
