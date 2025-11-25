@@ -1,4 +1,11 @@
 
+# nlrx 0.4.6
+
+## Functionality
+
+* Updated readr::file_write function to avoid pkg break due to deprecation
+* added support to download_netLogo() for up to NetLogo version 6.4.0 
+
 # nlrx 0.4.5
 
 ## Functionality
