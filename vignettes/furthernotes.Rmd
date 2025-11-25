@@ -60,7 +60,7 @@ Depending on the simdesign, the summary table also prints the estimated number o
 
 ## Capturing progress of model simulations
 
-The `run_nl_all()` function supports the [progressr](https://github.com/HenrikBengtsson/progressr) framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a `progressr::with_progress()` call. By using different handlers, the layout of the progress bar is different. For example, installing the package [progress](https://github.com/r-lib/progress) and using the handler `progressr::handlers("progress")` will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:
+The `run_nl_all()` function supports the [progressr](https://github.com/futureverse/progressr) framework for capturing progress of simulations. Following this logic, the function itself will be silent unless it is wrapped within a `progressr::with_progress()` call. By using different handlers, the layout of the progress bar is different. For example, installing the package [progress](https://github.com/r-lib/progress) and using the handler `progressr::handlers("progress")` will additionally print the current row and seed of the parameter matrix. For example, to run a nl parameter matrix with progress bar one can do:
 
 ```{r progress, eval=FALSE}
 progressr::handlers("progress")
@@ -173,7 +173,7 @@ To achieve that, simply put the `r:stop` command in the `idfinal` slot of your e
 
 ## Parallelisation and the future concept
 
-The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/DavisVaughan/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/HenrikBengtsson/future). See examples below for more details on parallelisation on local machines and remote HPC clusters.
+The run_nl_all function uses the `future_map_dfr()` function from the [furrr package](https://github.com/futureverse/furrr). The simulations are executed in a nested loop where the outer loop iterates over the random seeds of your simdesign, and the inner loop iterates over the rows of the siminput parameter matrix of your simdesign. These loops can be executed in parallel by setting up an appropriate plan from the [future package](https://github.com/futureverse/future). See examples below for more details on parallelisation on local machines and remote HPC clusters.
 
 ### Parallelisation on local machine
 
