@@ -1,0 +1,12 @@
+{
+  "commit": {
+    "commit": "b0eb5e907f816f2f12642e71285ff825091d3697",
+    "author": "GitHub Actions <actions@github.com>",
+    "time": "2025-11-25 13:26:36",
+    "files": 1,
+    "merge": false,
+    "message": "Re-build README.Rmd\n"
+  },
+  "repo": "https://github.com/ropensci/nlrx.git",
+  "pkg": "nlrx"
+}
