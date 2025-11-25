@@ -27,22 +27,21 @@ models, although system dynamics models are supported as well. NetLogo
 is developed and maintained at the Center for Connected Learning and
 Computer-Based Modeling, Northwestern University, Evanston, IL. More
 details on NetLogo itself are available online: [NetLogo online
-documentation](https://ccl.northwestern.edu/netlogo/docs/)
+documentation](https://docs.netlogo.org)
 
 NetLogo comes with the built-in experiment tool [Behavior
-Space](https://ccl.northwestern.edu/netlogo/docs/behaviorspace.html)
-that allows to setup and execute model simulations with different
-settings and parameter variations and to collect model output. This
-experiment tool can be executed via command line in combination with an
-XML file that contains the experiment specifications, such as runtime,
-variables, output measurements, stop conditions, and more. One
-limitation of Behavior Space is, that it only supports full-factorial
-parameter designs, which may not be appropriate for complex model
-analyses. Furthermore, Behavior Space experiment specifications are
-stored within the NetLogo file and are not easily accessible from R.
-However, in many cases it is useful to store such specifications along
-with the model output and analyses results in order to enable fully
-reproducible model analyses.
+Space](https://docs.netlogo.org/behaviorspace.html) that allows to setup
+and execute model simulations with different settings and parameter
+variations and to collect model output. This experiment tool can be
+executed via command line in combination with an XML file that contains
+the experiment specifications, such as runtime, variables, output
+measurements, stop conditions, and more. One limitation of Behavior
+Space is, that it only supports full-factorial parameter designs, which
+may not be appropriate for complex model analyses. Furthermore, Behavior
+Space experiment specifications are stored within the NetLogo file and
+are not easily accessible from R. However, in many cases it is useful to
+store such specifications along with the model output and analyses
+results in order to enable fully reproducible model analyses.
 
 The nlrx package utilizes the commandline functionality of Behavior
 Space to execute NetLogo simulations directly from R. Instead of
