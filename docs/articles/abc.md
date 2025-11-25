@@ -1,0 +1,390 @@
+# Approximate Bayesian Computation (ABC)
+
+## Approximate bayesian computation (ABC) with nlrx
+
+Approximate bayesian computation (ABC) algorithms have been increasingly
+used for calibration of agent-based simulation models. The nlrx package
+provides different algorithms from the [EasyABC
+package](https://cran.r-project.org/package=EasyABC). These algorithms
+can be used by attaching the corresponding simdesigns
+([`simdesign_ABCmcmc_Marjoram()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram.md),
+[`simdesign_ABCmcmc_Marjoram_original()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram_original.md),
+[`simdesign_ABCmcmc_Wegmann()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Wegmann.md)).
+Example 1 shows the process of how to use ABC with nlrx. Additionally,
+Latin Hypercube Sampling output can be used to calculate parameter
+distributions based on rejection sampling and local linear regression.
+Example 2 shows, how the
+[`simdesign_lhs()`](https://docs.ropensci.org/nlrx/reference/simdesign_lhs.md)
+can be used in combination with the [abc
+package](https://cran.r-project.org/package=abc).
+
+### Example 1: Approximate bayesian computation with Monte-Carlo Markov-Chain
+
+Here we present one example for the widely used Marjoram algorithm which
+combines ABC with a Markov-Chain Monte-Carlo parameter sampling scheme.
+However, the other two ABCmcmc simdesigns work in a very similar way
+except for the parameter definitions within the simdesigns (see
+respective documentation pages for help).
+
+We use the Wolf Sheep Predation model from the models library to show a
+basic example of the calibration workflow.
+
+##### Step 1: Create a nl object:
+
+``` r
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+##### Step 2: Attach an experiment
+
+Because we want to apply a calibration algorithm, we need to define
+proper variable ranges. The algorithm is allowed to change the values of
+these parameters within these ranges in order to reach our specified
+target values. Possible choices for the distribution type are qunif,
+qnorm, qlnorm and qexp. Each model run is evaluated for each specified
+metric within the metrics slot. When the simdesign is attached (see step
+3) we will define target values for each metric. Thus, we should only
+enter metrics and reporters that should be used for calibrating the
+model.
+
+For this simple example, we just want to check if we can find a
+parameterization that leads to a specific number of wolves and sheep
+after a runtime of 100 ticks. Thus, we define `count sheep` and
+`count wolves` as metrics, set the runtime to 100 and set tickmetrics to
+`false` (because we only want to measure the last simulation tick).
+
+If more than one tick would be measured, the algorithm automatically
+calculates the mean value of the selected reporter over all measured
+ticks. If you wish to apply other functions to aggregate temporal
+information into one value, you can use a self-defined post-processing
+function when attaching the simdesign (see step 3).
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath=outpath,
+                            repetition=1,
+                            tickmetrics="false",
+                            idsetup="setup",
+                            idgo="go",
+                            runtime=100,
+                            metrics=c("count sheep", "count wolves"),
+                            variables = list("sheep-gain-from-food" = list(min=2, max=6, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=10, max=30, qfun="qunif")),
+                            constants = list('initial-number-sheep' = 100,
+                                             'initial-number-wolves' = 50,
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+```
+
+##### Step 3: Attach a simulation design
+
+We use the
+[`simdesign_ABCmcmc_Marjoram()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram.md)
+function to attach a calibration simdesign. The `summary_stat_target`
+represents the vector of our target values that we want to reach. These
+values corresponds to the defined metrics of the experiment and should
+have the same length and order. `n_rec` defines the number of samples
+and `n_calibration` defines the number of calibration runs. If this
+value is too low, a subscript out of bounds error message might appear.
+If `use_seed` is set to `TRUE`, the algorithm will automatically use a
+newly generated seed for each model run. If it is set to false, a
+user-specified seed (set in the
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+function) will be used instead. The `progress_bar` gives you expected
+runtime information during the execution of the algorithm. The nseeds
+command allows to generate a vector of random-seeds that may be used for
+setting model seeds.
+
+``` r
+nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 100, 
+                                           n_calibration=200,
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+```
+
+These are the most important simdesign parameters, but there are many
+more to fine control the behavior of the algorithm. Check out the
+simdesign help page for more information. As already mentioned before,
+it is also possible to define a custom post-processing function. To
+apply this function for model output, the function name needs to be
+entered as `postpro_function` within the simdesign. For example, we
+might want to use the maximum value of some measured metrics to
+calibrate our model. Or maybe we want to run some tests and use the test
+statistics as calibration criterion. In such cases, we can define a
+function that accepts the nl object (with simulation results attached)
+as function input and returns a vector of numerics. This vector needs to
+represent the values that we defined as `sumary_stat_target` and thus
+should have the same length and order. Below is an example of a custom
+post-processing function that calculates the maximum value of selected
+metrics over all simulation ticks.
+
+``` r
+post <- function(nl){
+  res <- getsim(nl, "simoutput") %>% 
+    dplyr::select(getexp(nl, "metrics")) %>% 
+    dplyr::summarise_each(list(max=max))
+  return(as.numeric(res))
+}
+
+nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
+                                           postpro_function = post,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 100, 
+                                           n_calibration=200,
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+```
+
+##### Step 4: Run simulations
+
+For calibration simdesigns, the
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+function lets you execute the simulations. There are some notable
+differences between
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md)
+and
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md).
+First, because parameterizations depend of results from previous runs,
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+can not be parallelized. Second, the procedure does not automatically
+loop over created random seeds of the simdesign. If you want to repeat
+the same algorithm several times, just embed the
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+function in any kind of loop and iterate through the
+`nl@simdesign@simseeds` vector. We set the `use_seed` parameter of the
+simdesign to true, however we still need to define a random-seed in
+run_nl_dyn although it will be overwritten by the EasyABC functions.
+
+``` r
+results <- run_nl_dyn(nl, seed = nl@simdesign@simseeds[1])
+```
+
+##### Step 5: Investigate output
+
+The output is reported as nested tibble which can be attached to the nl
+object. There are many possible ways to inspect the simulation output of
+the `ABCmcmc` functions. Below you find some guidance on how to
+summarize the output for calculating parameter statistics, sampling
+distributions, sampling density and exporting the best parameter
+combination.
+
+``` r
+setsim(nl, "simoutput") <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "ABCmcmc.rds"))
+
+## Calculate descriptive statistics
+getsim(nl, "simoutput") %>% # get simulation results from nl object
+  dplyr::select(param) %>% # select param column
+  tidyr::unnest(cols=param) %>%  # unnest param column
+  dplyr::summarise_each(list(min=min, max=max, mean=mean, median=median)) %>% # calculate statistics
+  tidyr::gather(parameter, value) %>% # convert to long format
+  tidyr::separate(parameter, into = c("parameter", "stat"), sep = "_") %>% # seperate parameter name and statistic
+  tidyr::spread(stat, value) # convert back to wide format
+
+## Plot histogram of parameter sampling distribution:
+getsim(nl, "simoutput") %>% # get simulation results from nl object
+  dplyr::select(param) %>% # select param column
+  tidyr::unnest(cols=param) %>%  # unnest param column
+  tidyr::gather(parameter, value) %>% # convert to long format
+  ggplot2::ggplot() + # plot histogram with a facet for each parameter
+  ggplot2::facet_wrap(~parameter, scales="free") +
+  ggplot2::geom_histogram(ggplot2::aes(x=value), bins = 40)
+
+## Plot density of parameter sampling distribution:
+getsim(nl, "simoutput") %>% # get simulation results from nl object
+  dplyr::select(param) %>% # select param column
+  tidyr::unnest(cols=param) %>% # unnest param column
+  tidyr::gather(parameter, value) %>% # convert to long format
+  ggplot2::ggplot() + # plot density with a facet for each parameter
+  ggplot2::facet_wrap(~parameter, scales="free") +
+  ggplot2::geom_density(ggplot2::aes(x=value, fill=parameter))
+
+## Get best parameter combinations and corresponding function values
+getsim(nl, "simoutput") %>%  # get simulation results from nl object
+  dplyr::select(dist,epsilon) %>%  # select dist and epsilon columns
+  tidyr::unnest(cols=c(dist,epsilon)) %>%  # unnest dist and epsilon columns
+  dplyr::mutate(runID=dplyr::row_number()) %>% # add row ID column
+  dplyr::filter(dist == epsilon) %>% # only keep runs with dist=epsilon
+  dplyr::left_join(getsim(nl, "simoutput") %>% # join parameter values of best runs
+                     dplyr::select(param) %>%
+                     tidyr::unnest(cols=param) %>% 
+                     dplyr::mutate(runID=dplyr::row_number())) %>% 
+  dplyr::left_join(getsim(nl, "simoutput") %>% # join output values best runs
+                     dplyr::select(stats) %>%
+                     tidyr::unnest(cols=stats) %>% 
+                     dplyr::mutate(runID=dplyr::row_number())) %>% 
+  dplyr::select(runID, dist, epsilon, dplyr::everything()) # update order of columns
+
+## Analyse mcmc using coda summary and plot functions:
+summary(coda::as.mcmc(getsim(nl, "simoutput") %>%
+                        dplyr::select(param) %>%
+                        tidyr::unnest(cols=param)), quantiles =c(0.05,0.95,0.5))
+
+plot(coda::as.mcmc(getsim(nl, "simoutput") %>%
+                        dplyr::select(param) %>%
+                        tidyr::unnest(cols=param)))
+```
+
+### Example 2: Using Latin Hypercube Sampling for Approximate bayesian computation
+
+##### Step 1: Create a nl object:
+
+``` r
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+##### Step 2: Attach an experiment
+
+We want to run a Latin Hypercube sampling, thus we need to define proper
+variable ranges. We also need to define our output metrics. These
+metrics are also used for the rejection sampling later on.
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath=outpath,
+                            repetition=1,
+                            tickmetrics="false",
+                            idsetup="setup",
+                            idgo="go",
+                            runtime=100,
+                            metrics=c("count sheep", "count wolves"),
+                            variables = list("sheep-gain-from-food" = list(min=2, max=6, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=10, max=30, qfun="qunif")),
+                            constants = list('initial-number-sheep' = 100,
+                                             'initial-number-wolves' = 50,
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+```
+
+##### Step 3: Attach a simulation design
+
+We use the
+[`simdesign_lhs()`](https://docs.ropensci.org/nlrx/reference/simdesign_lhs.md)
+helper function to generate a Latin Hypercube Sampling with 500 samples
+
+``` r
+nl@simdesign <- simdesign_lhs(nl, 
+                              samples=500, 
+                              nseeds=1, 
+                              precision=3)
+```
+
+##### Step 4: Run simulations
+
+We can simply use
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md)
+to execute our simulations.
+
+``` r
+results <- run_nl_all(nl)
+```
+
+##### Step 5: Investigate output
+
+We first attach the output results to our nl object and store a copy of
+the nl object on disk.
+
+``` r
+setsim(nl, "simoutput") <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "ABClhs.rds"))
+```
+
+For post-processing, we need a tibble with input parameter
+distributions. This can be easily extracted from the `siminput` slot of
+the `simdesign` by selecting only the columns with variable
+(non-constant) parameters. Next, we need corresponding outputs for these
+parameters. In this example we just take the measured output tibble
+(`simoutput`) and only select the columns with our metrics. Of course,
+you can also perform additional post-processing of these outputs if
+desired. Third, we need to define expected values for our outputs. In
+our case, we just assume that `count sheep` should have a value of 100,
+whereas `count wolves` should have a value of 80.
+
+``` r
+input <- getsim(nl, "siminput") %>% 
+  dplyr::select(names(getexp(nl, "variables")))
+output <- getsim(nl, "simoutput") %>% 
+  dplyr::select(getexp(nl, "metrics"))
+target <- c("count sheep"=100, "count wolves"=80)
+```
+
+We use the `abc` function of the [abc
+package](https://cran.r-project.org/package=abc) to perform the
+rejection sampling. For this example, we perform both algorithms
+provided by this function (“rejection” and “loclinear”).
+
+``` r
+results.abc.reject <- abc::abc(target=target, 
+                        param=input,
+                        sumstat=output,
+                        tol=0.3, 
+                        method="rejection")
+
+results.abc.loclin <- abc::abc(target=target, 
+                               param=input,
+                               sumstat=output,
+                               tol=0.3, 
+                               method="loclinear")
+```
+
+Finally, we might want to compare the accepted parameter distributions
+of both algorithms and the initial distribution of the Latin Hypercube
+sampling. Thus, we reformat the results to a tidy data format and attach
+the initial parameter distributions. This dataset can now be used for
+displaying the parameter distributions with ggplot.
+
+``` r
+results.abc.all <- tibble::as_tibble(results.abc.reject$unadj.values) %>% # results from rejection method
+  tidyr::gather(parameter, value) %>% 
+  dplyr::mutate(method="rejection") %>% 
+  dplyr::bind_rows(tibble::as_tibble(results.abc.loclin$adj.values) %>% # results from local linear regression method
+                     tidyr::gather(parameter, value) %>% 
+                     dplyr::mutate(method="loclinear")) %>% 
+  dplyr::bind_rows(input %>%                # initial parameter distribution (lhs)
+                     tidyr::gather(parameter, value) %>% 
+                     dplyr::mutate(method="lhs"))
+
+ggplot2::ggplot(results.abc.all) +
+  ggplot2::facet_grid(method~parameter, scales="free") +
+  ggplot2::geom_histogram(ggplot2::aes(x=value))
+
+ggplot2::ggplot(results.abc.all) +
+  ggplot2::facet_wrap(~parameter, scales="free") +
+  ggplot2::geom_density(ggplot2::aes(x=value, fill=method), alpha=0.1)
+```

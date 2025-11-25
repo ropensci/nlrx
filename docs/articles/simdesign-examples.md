@@ -1,0 +1,379 @@
+# Simdesign examples
+
+nlrx provides a variety of different simdesigns that generate parameter
+input matrices from valid experiment variable definitions. These
+simdesigns represent different techniques of parameter space
+explorations. This is not a technical guide on parameter space
+exploration but rather a collection of code examples on how to setup
+these different approaches with nlrx. Details on the sensitivity
+analysis methods can be found in the documentation of the [sensitivity
+package](https://CRAN.R-project.org/package=sensitivity). Details on the
+optimization methods can be found in the documentation of the [genalg
+package](https://CRAN.R-project.org/package=genalg) and the [GenSA
+package](https://CRAN.R-project.org/package=GenSA). Details on the
+approximate bayesian computation (ABC) methods can be found in the
+documentation of the [EasyABC
+package](https://cran.r-project.org/package=EasyABC)
+
+## Simdesign examples for the Wolf Sheep Predation model
+
+The following section provides valid experiment setups for all supported
+simdesigns using the Wolf Sheep Model from the NetLogo models library.
+
+First we set up a nl object. We use this nl object for all simdesigns:
+
+``` r
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+## Simple simulation using constants (simdesign_simple)
+
+The simple simdesign only uses defined constants and reports a parameter
+matrix with only one parameterization. To setup a simple simdesign, no
+variables have to be defined. The simple simdesign can be used to test a
+specific parameterisation of the model. It is also useful to for
+creating animated output of one specific parameterisation (see
+“Capturing Spatial NetLogo Output” vignette).
+
+`simdesign_simple` is most useful, if you want to imitate pressing the
+*go* button in your model in NetLogo - just a single run, with a defined
+parameterisation.
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list(),
+                            constants = list("initial-number-sheep" = 20,
+                                             "initial-number-wolves" = 20,
+                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_simple(nl=nl,
+                                 nseeds=3)
+```
+
+## Distinct parameter combinations (simdesign_distinct)
+
+The distinct simdesign can be used to run distinct parameter
+combinations. To setup a distinct simdesign, vectors of values need to
+be defined for each variable. These vectors must have the same number of
+elements across all variables. The first simulation run consist of all
+1st elements of these variable vectors; the second run uses all 2nd
+values, and so on.
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
+                                             'initial-number-wolves' = list(values=c(30, 40, 50, 60))),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_distinct(nl=nl,
+                                   nseeds=3)
+```
+
+## Full-factorial simulation (simdesign_ff)
+
+The full factorial simdesign creates a full-factorial parameter matrix
+with all possible combinations of parameter values. To setup a
+full-factorial simdesign, vectors of values need to be defined for each
+variable. Alternatively, a sequence can be defined by setting min, max
+and step. However, if both (values and min, max, step) are defined, the
+values vector is prioritized.
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
+                                             'initial-number-wolves' = list(min=0, max=50, step=10)),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_ff(nl=nl,
+                             nseeds=3)
+```
+
+## Latin Hypercube Sampling (simdesign_lhs)
+
+The latin hypercube simdesign creates a Latin Hypercube sampling
+parameter matrix. The method can be used to generate a near-random
+sample of parameter values from the defined parameter distributions.
+More Details on Latin Hypercube Sampling can be found in (McKay 1979) .
+nlrx uses the [lhs](https://CRAN.R-project.org/package=lhs/index.html)
+package to generate the Latin Hypercube parameter matrix. To setup a
+latin hypercube sampling simdesign, variable distributions need to be
+defined (min, max, qfun).
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
+                                             'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_lhs(nl=nl,
+                               samples=100,
+                               nseeds=3,
+                               precision=3)
+```
+
+## Sensitivity Analyses (simdesign_sobol, \_sobol2007, \_soboljansen, \_morris, \_eFast)
+
+Sensitivity analyses are useful to estimate the importance of model
+parameters and to scan the parameter space in an efficient way. nlrx
+uses the
+[sensitivity](https://CRAN.R-project.org/package=sensitivity/index.html)
+package to setup sensitivity analysis parameter matrices. All supported
+sensitivity analysis simdesigns can be used to calculate sensitivity
+indices for each parameter-output combination. These indices can be
+calculated by using the
+[`analyze_nl()`](https://docs.ropensci.org/nlrx/reference/analyze_nl.md)
+function after attaching the simulation results to the nl object. To
+setup sensitivity analysis simdesigns, variable distributions (min, max,
+qfun) need to be defined.
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
+                                             'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_lhs(nl=nl,
+                               samples=100,
+                               nseeds=3,
+                               precision=3)
+
+
+nl@simdesign <- simdesign_sobol(nl=nl,
+                                 samples=200,
+                                 sobolorder=2,
+                                 sobolnboot=20,
+                                 sobolconf=0.95,
+                                 nseeds=3,
+                                 precision=3)
+
+nl@simdesign <- simdesign_sobol2007(nl=nl,
+                                     samples=200,
+                                     sobolnboot=20,
+                                     sobolconf=0.95,
+                                     nseeds=3,
+                                     precision=3)
+
+nl@simdesign <- simdesign_soboljansen(nl=nl,
+                                       samples=200,
+                                       sobolnboot=20,
+                                       sobolconf=0.95,
+                                       nseeds=3,
+                                       precision=3)
+
+
+nl@simdesign <- simdesign_morris(nl=nl,
+                                  morristype="oat",
+                                  morrislevels=4,
+                                  morrisr=100,
+                                  morrisgridjump=2,
+                                  nseeds=3)
+
+nl@simdesign <- simdesign_eFast(nl=nl,
+                                 samples=100,
+                                 nseeds=3)
+```
+
+## Optimization techniques (simdesign_GenSA, \_GenAlg)
+
+Optimization techniques are a powerful tool to search the parameter
+space for specific solutions. Both approaches try to minimize a
+specified model output reporter by systematically (genetic algorithm,
+utilizing the
+[genalg](https://CRAN.R-project.org/package=genalg/index.html) package)
+or randomly (simulated annealing, utilizing the
+[genSA](https://CRAN.R-project.org/package=GenSA/index.html) package)
+changing the model parameters within the allowed ranges. To setup
+optimization simdesigns, variable ranges (min, max) need to be defined.
+Optimization simdesigns can only be executed using the
+[`run_nl_dyn()`](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+function - instead of
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md)
+or
+[`run_nl_one()`](https://docs.ropensci.org/nlrx/reference/run_nl_one.md).
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(min=50, max=150),
+                                             'initial-number-wolves' = list(min=50, max=150)),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_GenAlg(nl=nl, 
+                                 popSize = 200, 
+                                 iters = 100, 
+                                 evalcrit = 1,
+                                 elitism = NA, 
+                                 mutationChance = NA, 
+                                 nseeds = 1)
+
+nl@simdesign <- simdesign_GenSA(nl=nl,
+                                par=NULL,
+                                evalcrit=1,
+                                control=list(max.time = 600),
+                                nseeds=1)
+```
+
+## Calibration simdesigns (Approximate Bayesian Computation (ABC))
+
+Approximate bayesian computation (ABC) algorithms have been increasingly
+used for calibration of agent-based simulation models. The nlrx package
+provides different algorithms from the [EasyABC
+package](https://cran.r-project.org/package=EasyABC). These algorithms
+can be used by attaching the corresponding simdesigns
+([`simdesign_ABCmcmc_Marjoram()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram.md),
+[`simdesign_ABCmcmc_Marjoram_original()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Marjoram_original.md),
+[`simdesign_ABCmcmc_Wegmann()`](https://docs.ropensci.org/nlrx/reference/simdesign_ABCmcmc_Wegmann.md)).
+
+``` r
+nl@experiment <- experiment(expname="wolf-sheep",
+                            outpath="C:/out/",
+                            repetition=1,
+                            tickmetrics="true",
+                            idsetup="setup",
+                            idgo="go",
+                            idfinal=NA_character_,
+                            idrunnum=NA_character_,
+                            runtime=50,
+                            evalticks=seq(40,50),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list('initial-number-sheep' = list(min=50, max=150),
+                                             'initial-number-wolves' = list(min=50, max=150)),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "grass-regrowth-time" = 30,
+                                             "sheep-gain-from-food" = 4,
+                                             "wolf-gain-from-food" = 20,
+                                             "sheep-reproduce" = 4,
+                                             "wolf-reproduce" = 5,
+                                             "show-energy?" = "false"))
+
+nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 100, 
+                                           n_calibration=200,
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+
+nl@simdesign <- simdesign_ABCmcmc_Marjoram_original(nl=nl,
+                                           summary_stat_target = c(100, 80),
+                                           n_rec = 10, 
+                                           use_seed = TRUE,
+                                           progress_bar = TRUE,
+                                           nseeds = 1)
+
+nl@simdesign <- simdesign_ABCmcmc_Wegmann(nl=nl,
+                                          summary_stat_target = c(100, 80),
+                                          n_rec = 10, 
+                                          n_calibration=200,
+                                          use_seed = TRUE,
+                                          progress_bar = TRUE,
+                                          nseeds = 1)
+```
