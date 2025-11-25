@@ -1,0 +1,41 @@
+# Get spatial data from metrics.patches output
+
+Turn patch metrics from NetLogo in spatial data objects
+
+## Usage
+
+``` r
+nl_to_raster(nl)
+```
+
+## Arguments
+
+- nl:
+
+  nl object
+
+## Value
+
+tibble with spatial data objects
+
+## Details
+
+Converts measured metrics.patches into spatial raster objects. In order
+to so, a patch coordinates needs to be measured (pxcor/pycor). For each
+additional patch metric, a raster will be created using the measured
+coordinates as x and y and the additional metric as z dimension. In case
+of multiple measured metrics, a raster stack with one raster for each
+metric will be reported.
+
+In order to use this function, simulation results need to be attached to
+the nl object first.
+
+## Examples
+
+``` r
+# Load nl object (with spatial output data already attached) from test data:
+nl <- nl_spatial
+
+# Convert patch metrics to spatial raster objects:
+results.raster <- nl_to_raster(nl)
+```

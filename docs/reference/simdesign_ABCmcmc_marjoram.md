@@ -1,0 +1,158 @@
+# Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram algorithm to a nl object
+
+Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain)
+simdesign using the Majoram algorithm to a nl object
+
+## Usage
+
+``` r
+simdesign_ABCmcmc_Marjoram(
+  nl,
+  postpro_function = NULL,
+  summary_stat_target,
+  prior_test = NULL,
+  n_rec,
+  n_between_sampling = 10,
+  n_cluster = 1,
+  use_seed = FALSE,
+  dist_weights = NULL,
+  n_calibration = 10000,
+  tolerance_quantile = 0.01,
+  proposal_phi = 1,
+  seed_count = 0,
+  progress_bar = FALSE,
+  nseeds
+)
+```
+
+## Arguments
+
+- nl:
+
+  nl object with a defined experiment
+
+- postpro_function:
+
+  default is NULL. Allows to provide a function that is called to
+  post-process the output Tibble of the NetLogo simulations. The
+  function must accept the nl object with attached results as input
+  argument. The function must return a one-dimensional vector of output
+  metrics that corresponds in length and order to the specified
+  summary_stat_target.
+
+- summary_stat_target:
+
+  a vector of target values in the same order as the defined metrics of
+  the experiment
+
+- prior_test:
+
+  a string expressing the constraints between model parameters. This
+  expression will be evaluated as a logical expression, you can use all
+  the logical operators including "\<", "\>", ... Each parameter should
+  be designated with "X1", "X2", ... in the same order as in the prior
+  definition. Set to NULL to disable.
+
+- n_rec:
+
+  Number of samples along the MCMC
+
+- n_between_sampling:
+
+  a positive integer equal to the desired spacing between sampled points
+  along the MCMC.
+
+- n_cluster:
+
+  number of cores to parallelize simulations. Due to the design of the
+  EasyABC parallelization it is currently not possible to use this
+  feature with cores \> 1.
+
+- use_seed:
+
+  if TRUE, seeds will be automatically created for each new model run
+
+- dist_weights:
+
+  a vector containing the weights to apply to the distance between the
+  computed and the targeted statistics. These weights can be used to
+  give more importance to a summary statistic for example. The weights
+  will be normalized before applying them. Set to NULL to disable.
+
+- n_calibration:
+
+  a positive integer. This is the number of simulations performed during
+  the calibration step. Default value is 10000.
+
+- tolerance_quantile:
+
+  a positive number between 0 and 1 (strictly). This is the percentage
+  of simulations retained during the calibration step to determine the
+  tolerance threshold to be used during the MCMC. Default value is 0.01.
+
+- proposal_phi:
+
+  a positive number. This is a scaling factor defining the range of MCMC
+  jumps. Default value is 1.
+
+- seed_count:
+
+  a positive integer, the initial seed value provided to the function
+  model (if use_seed=TRUE). This value is incremented by 1 at each call
+  of the function model.
+
+- progress_bar:
+
+  logical, FALSE by default. If TRUE, ABC_mcmc will output a bar of
+  progression with the estimated remaining computing time. Option not
+  available with multiple cores.
+
+- nseeds:
+
+  number of seeds for this simulation design
+
+## Value
+
+simdesign S4 class object
+
+## Details
+
+This function creates a simdesign S4 class which can be added to a nl
+object.
+
+Variables in the experiment variable list need to provide a numeric
+distribution with min, max and a shape of the distribution (qunif,
+qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
+
+The function uses the EasyABC package to set up the ABC_mcmc function.
+For details on the ABC_mcmc function parameters see ?EasyABC::ABC_mcmc
+Finally, the function reports a simdesign object.
+
+Approximate Bayesian Computation simdesigns can only be executed using
+the [run_nl_dyn](https://docs.ropensci.org/nlrx/reference/run_nl_dyn.md)
+function instead of
+[run_nl_all](https://docs.ropensci.org/nlrx/reference/run_nl_all.md) or
+[run_nl_one](https://docs.ropensci.org/nlrx/reference/run_nl_one.md).
+
+## Examples
+
+``` r
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_lhs
+
+# Attach the simdesign to the nl object
+nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
+                                            summary_stat_target = c(100, 80),
+                                            n_rec = 100,
+                                            n_between_sampling = 10,
+                                            n_cluster = 1,
+                                            use_seed = FALSE,
+                                            n_calibration = 10000,
+                                            tolerance_quantile = 0.01,
+                                            proposal_phi = 1,
+                                            progress_bar = FALSE,
+                                            nseeds = 1)
+#> Creating ABC Monte-Carlo Markov-Chain simulation design
+```

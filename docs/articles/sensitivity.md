@@ -1,0 +1,311 @@
+# Sensitivity Analysis
+
+## Sensitivity Analysis with nlrx
+
+Different types of sensitivity analyses can be conducted using the nlrx
+package. To perform a local sensitivity analysis, we recommend using the
+[`simdesign_distinct()`](https://docs.ropensci.org/nlrx/reference/simdesign_distinct.md)
+to specify local changes of parameters. Afterwards the proportion of
+output change can be easily calculated from the simulation results. The
+nlrx package also provides simdesign helper functions to conduct more
+sophisticated methods such as Morris Elementary Effects Screening
+([`simdesign_morris()`](https://docs.ropensci.org/nlrx/reference/simdesign_morris.md)),
+Sobol variance decomposition
+([`simdesign_sobol()`](https://docs.ropensci.org/nlrx/reference/simdesign_sobol.md),
+[`simdesign_sobol2007()`](https://docs.ropensci.org/nlrx/reference/simdesign_sobol2007.md),
+[`simdesign_soboljansen()`](https://docs.ropensci.org/nlrx/reference/simdesign_soboljansen.md))
+and Extended Fourier amplitude sensitivity test (`simdesign_eFAST`).
+Additionally, output of Latin Hypercube Sampling designs
+([`simdesign_lhs()`](https://docs.ropensci.org/nlrx/reference/simdesign_lhs.md))
+can be used to calculate parameter effects based on Partial (rank)
+correlation coefficients or Standardised (rank) regression coefficients.
+
+In this vignette, we present an example of the Morris Elementary Effects
+screening. Other sensitivity analyses simdesigns work in a quite similar
+way. Details on the specific methods can be found in the corresponding
+simdesign help pages and the documentation of the [sensitivity
+package](https://cran.r-project.org/package=sensitivity). The second
+example shows how Latin Hypercube Sampling can be used to calculate
+Partial (rank) correlation coefficients and Standardised (rank)
+regression coefficients.
+
+### Example 1: Morris elementary effects screening
+
+Here we present a simple example for running a Morris Sensitivity
+Analysis with nlrx. We use the Wolf Sheep Predation model from the
+models library for this example.
+
+##### Step 1: Create a nl object:
+
+``` r
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+##### Step 2: Attach an experiment
+
+In this example, we want to calculate sensitivity for 3 outputs (number
+of sheep, number of wolves, number of grass patches). We vary all
+numeric model parameters to estimate their sensitivity on the three
+defined output metrics. Thus, we define parameter ranges and
+distribution functions for all our numeric model parameters. We set the
+runtime of the model to 500 ticks and measure our metrics on each tick
+(`tickmetrics = "true"`). However, for calculation of sensitivity
+indices, we only want to consider the last 200 ticks. Thus, we set
+evalticks to `seq(300,500)`.
+
+``` r
+nl@experiment <- experiment(expname = "wolf-sheep-morris",
+                            outpath = outpath,
+                            repetition = 1,   
+                            tickmetrics = "true",
+                            idsetup = "setup",  
+                            idgo = "go",        
+                            runtime = 500,
+                            evalticks = seq(300,500),
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list("initial-number-sheep" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "initial-number-wolves" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "grass-regrowth-time" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-gain-from-food" = list(min=0, max=50, step=10, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
+                                             "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+```
+
+##### Step 3: Attach a simulation design
+
+We use the `simdesgin_morris()` function to attach a Morris Sensitivity
+Analysis design. The `morrislevels` parameter sets the number of
+different values for each parameter (sampling density). The `morrisr`
+paramater sets the number of repeated samplings (sampling size). The
+`morrisgridjump` parameter sets the number of levels that are
+increased/decreased for computing the elementary effects. Morris
+recommendation is to set this value to `levels / 2`. We can increase the
+`nseeds` parameter in order to perform multiple runs of the same
+parameter matrix with different random seeds. The variation between
+those repetitions is an indicator of the stochasticity effects within
+the model. More information on the Morris specific parameters can be
+found in the description of the morris function in the sensitivity
+package (`?morris`).
+
+``` r
+nl@simdesign <- simdesign_morris(nl=nl,
+                                 morristype="oat",
+                                 morrislevels=4,
+                                 morrisr=1000,
+                                 morrisgridjump=2,
+                                 nseeds=5)
+```
+
+##### Step 4: Run simulations
+
+To execute the simulations, we can use the function
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md).
+Sensitivity analyses typically have many runs that need to be simulated,
+thus we recommend to parallelize model runs by adjusting the future plan
+(more details on parallelization can be found in the “Advanced
+configuration” vignette).
+
+``` r
+library(future)
+plan(multisession)
+results <- run_nl_all(nl)
+```
+
+##### Step 5: Investigate output
+
+First, we need to attach the results to the nl object.
+
+``` r
+setsim(nl, "simoutput") <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "morris.rds"))
+```
+
+After results have been attached, we can use the
+[`analyze_nl()`](https://docs.ropensci.org/nlrx/reference/analyze_nl.md)
+function to calculate morris sensetivity indices.
+
+``` r
+morris <- analyze_nl(nl)
+```
+
+### Example 2: Latin Hypercube Sampling
+
+Here we perform a Latin Hypercube Sampling to calculate Partial (rank)
+correlation coefficients and Standardised (rank) regression
+coefficients.
+
+##### Step 1: Create a nl object:
+
+``` r
+library(nlrx)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.3")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.3",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+```
+
+##### Step 2: Attach an experiment
+
+In this example, we want to calculate sensitivity for 3 outputs (number
+of sheep, number of wolves, number of grass patches). We vary all
+numeric model parameters to estimate their sensitivity on the three
+defined output metrics. Thus, we define parameter ranges and
+distribution functions for all our numeric model parameters. We set the
+runtime of the model to 500 ticks and measure our metrics on each tick
+(`evalticks = "true"`).
+
+``` r
+nl@experiment <- experiment(expname = "wolf-sheep-morris",
+                            outpath = outpath,
+                            repetition = 1,   
+                            tickmetrics = "true",
+                            idsetup = "setup",  
+                            idgo = "go",        
+                            runtime = 500,
+                            metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                            variables = list("initial-number-sheep" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "initial-number-wolves" = list(min=50, max=150, step=10, qfun="qunif"),
+                                             "grass-regrowth-time" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-gain-from-food" = list(min=0, max=50, step=10, qfun="qunif"),
+                                             "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
+                                             "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
+                                             "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
+                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                             "show-energy?" = "false"))
+```
+
+##### Step 3: Attach a simulation design
+
+Here we want to run a Latin Hypercube Sampling, thus we use the
+[`simdesign_lhs()`](https://docs.ropensci.org/nlrx/reference/simdesign_lhs.md)
+function.
+
+``` r
+nl@simdesign <- simdesign_lhs(nl, samples=500, nseeds=1, precision=3)
+```
+
+##### Step 4: Run simulations
+
+To execute the simulations, we can use the function
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md).
+Sensitivity analyses typically have many runs that need to be simulated,
+thus we recommend to parallelize model runs by adjusting the future plan
+(more details on parallelization can be found in the “Advanced
+configuration” vignette).
+
+``` r
+library(future)
+plan(multisession)
+results <- run_nl_all(nl, split=10)
+```
+
+##### Step 5: Investigate output
+
+First, we need to attach the results to the nl object.
+
+``` r
+setsim(nl, "simoutput") <- results
+saveRDS(nl, file.path(nl@experiment@outpath, "lhs.rds"))
+```
+
+After results have been attached, we need to post-process our data to
+run the `pcc` and `src` function of the sensitivity package. We first
+take our parameter matrix (`siminput`) and select only columns with
+variable parameters and drop all other columns. We also need to rename
+the columns because `pcc` and `src` do not support special characters
+(-) in column names.
+
+Our simulation results are measured for each tick, thus we first need to
+aggregate our output. Here we just calculate the mean and standard
+deviation of outputs for each random-seed and siminputrow combination.
+Afterwards, we drop the random seed and siminputrow columns and rename
+the columns to remove special characters.
+
+Finally, we use both datasets to run the `pcc` and `src` functions.
+These functions can only compute coefficients for one output at a time.
+Thus, we nested the function call inside a
+[`purrr::map()`](https://purrr.tidyverse.org/reference/map.html)
+function that iterates over the column names of our output tibble.
+
+``` r
+library(tidyverse)
+input <- getsim(nl, "siminput") %>%    # Take input parameter matrix
+  dplyr::select(names(getexp(nl, "variables"))) %>%  # Select variable parameters only
+  dplyr::rename_all(~str_replace_all(., c("-" = "_", "\\s+" = "_"))) # Remove - and space characters.
+
+output <- getsim(nl, "simoutput") %>%   # Take simulation output
+  dplyr::group_by(`random-seed`, siminputrow) %>% # Group by random seed and siminputrow
+  dplyr::summarise_at(getexp(nl, "metrics"), list(mean=mean, sd=sd)) %>% # Aggregate output
+  dplyr::ungroup() %>%  # Ungroup
+  dplyr::select(-`random-seed`, -siminputrow) %>%  # Only select metrics
+  dplyr::rename_all(~str_replace_all(., c("-" = "_", "\\s+" = "_", "\\[" = "_", "\\]" = "_", "=" = ""))) # Remove - and space characters.
+
+# Perform pcc and src for each output separately (map)
+pcc.result <- purrr::map(names(output), function(x) sensitivity::pcc(X=input, y=output[,x], nboot = 100, rank = FALSE)) 
+src.result <- purrr::map(names(output), function(x) sensitivity::src(X=input, y=output[,x], nboot = 100, rank = FALSE)) 
+```
+
+The results are reported as a nested list, where each outer element
+represents one of the calculated model outputs. The inner list items
+represent the different outputs from the `pcc` and `src` functions.
+
+We can for example look at the `pcc` results of one specific output by
+using the basic `plot` function:
+
+``` r
+plot(pcc.result[[1]])
+```
+
+We can also extract all the data to a tidy data format and create nice
+plots with the ggplot package:
+
+``` r
+pcc.result.tidy <- purrr::map_dfr(seq_along(pcc.result), function(x) {
+  pcc.result[[x]]$PCC %>% 
+    tibble::rownames_to_column(var="parameter") %>% 
+    dplyr::mutate(metric = names(output)[x])
+})
+
+ggplot(pcc.result.tidy) +
+  coord_flip() +
+  facet_wrap(~metric) +
+  geom_point(aes(x=parameter, y=original, color=metric)) +
+  geom_errorbar(aes(x=parameter, ymin=`min. c.i.`, ymax=`max. c.i.`, color=metric), width=0.1)
+
+src.result.tidy <- purrr::map_dfr(seq_along(src.result), function(x) {
+  src.result[[x]]$SRC %>% 
+    tibble::rownames_to_column(var="parameter") %>% 
+    dplyr::mutate(metric = names(output)[x])
+})
+
+ggplot(src.result.tidy) +
+  coord_flip() +
+  facet_wrap(~metric) +
+  geom_point(aes(x=parameter, y=original, color=metric)) +
+  geom_errorbar(aes(x=parameter, ymin=`min. c.i.`, ymax=`max. c.i.`, color=metric), width=0.1)
+```

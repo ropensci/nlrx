@@ -1,0 +1,128 @@
+# Execute all NetLogo simulations from a nl object
+
+Execute all NetLogo simulations from a nl object with a defined
+experiment and simdesign
+
+## Usage
+
+``` r
+run_nl_all(
+  nl,
+  split = 1,
+  cleanup.csv = TRUE,
+  cleanup.xml = TRUE,
+  cleanup.bat = TRUE,
+  writeRDS = FALSE
+)
+```
+
+## Arguments
+
+- nl:
+
+  nl object
+
+- split:
+
+  number of parts the job should be split into
+
+- cleanup.csv:
+
+  TRUE/FALSE, if TRUE temporary created csv output files will be deleted
+  after gathering results.
+
+- cleanup.xml:
+
+  TRUE/FALSE, if TRUE temporary created xml output files will be deleted
+  after gathering results.
+
+- cleanup.bat:
+
+  TRUE/FALSE, if TRUE temporary created bat/sh output files will be
+  deleted after gathering results.
+
+- writeRDS:
+
+  TRUE/FALSE, if TRUE, for each single simulation an rds file with the
+  simulation results will be written to the defined outpath folder of
+  the experiment within the nl object.
+
+## Value
+
+tibble with simulation output results
+
+## Details
+
+run_nl_all executes all simulations of the specified NetLogo model
+within the provided nl object. The function loops over all random seeds
+and all rows of the siminput table of the simdesign of nl. The loops are
+created by calling
+[future_map_dfr](https://furrr.futureverse.org/reference/future_map.html),
+which allows running the function either locally or on remote HPC
+machines. The logical cleanup variables can be set to FALSE to preserve
+temporary generated output files (e.g. for debugging). cleanup.csv
+deletes/keeps the temporary generated model output files from each run.
+cleanup.xml deletes/keeps the temporary generated experiment xml files
+from each run. cleanup.bat deletes/keeps the temporary generated
+batch/sh commandline files from each run.
+
+When using run_nl_all in a parallelized environment (e.g. by setting up
+a future plan using the future package), the outer loop of this function
+(random seeds) creates jobs that are distributed to available cores of
+the current machine. The inner loop (siminputrows) distributes
+simulation tasks to these cores. However, it might be advantageous to
+split up large jobs into smaller jobs for example to reduce the total
+runtime of each job. This can be done using the split parameter. If
+split is \> 1 the siminput matrix is split into smaller parts. Jobs are
+created for each combination of part and random seed. If the split
+parameter is set such that the siminput matrix can not be splitted into
+equal parts, the procedure will stop and throw an error message.
+
+### Debugging "Temporary simulation output file not found" error message:
+
+Whenever this error message appears it means that the simulation did not
+produce any output. Two main reasons can lead to this problem, either
+the simulation did not even start or the simulation crashed during
+runtime. Both can happen for several reasons and here are some hints for
+debugging this:
+
+1.  Missing software: Make sure that java is installed and available
+    from the terminal (java -version). Make sure that NetLogo is
+    installed and available from the terminal.
+
+2.  Wrong path definitions: Make sure your nlpath points to a folder
+    containing NetLogo. Make sure your modelpath points to a \*.nlogo
+    model file. Make sure that the nlversion within your nl object
+    matches the NetLogo version of your nlpath. Use the convenience
+    function of nlrx for checking your nl object (print(nl),
+    eval_variables_constants(nl)).
+
+3.  Temporary files cleanup: Due to automatic temp file cleanup on unix
+    systems temporary output might be deleted. Try reassigning the
+    default temp folder for this R session (the unixtools package has a
+    neat function).
+
+4.  NetLogo runtime crashes: It can happen that your NetLogo model
+    started but failed to produce output because of a NetLogo runtime
+    error. Make sure your model is working correctly or track progress
+    using print statements. Sometimes the java virtual machine crashes
+    due to memory constraints.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+
+# Load nl object from test data:
+nl <- nl_lhs
+
+# Execute all simulations from an nl object with properly attached simdesign.
+results <- run_nl_all(nl)
+
+# Run in parallel on local machine:
+library(future)
+plan(multisession)
+results <- run_nl_all(nl)
+
+} # }
+```

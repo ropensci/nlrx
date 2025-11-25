@@ -1,0 +1,151 @@
+# nlrx: A package for running NetLogo simulations from R.
+
+The nlrx package provides tools to setup NetLogo simulations in R. It
+uses a similar structure as NetLogos Behavior Space but offers more
+flexibility and additional tools for running sensitivity analyses.
+
+## Details
+
+Get started:
+
+General information that is needed to run NetLogo simulations remotely,
+such as path to the NetLogo installation folder is stored within a `nl`
+class object. Nested within this `nl` class are the classes `experiment`
+and `simdesign`. The `experiment` class stores all experiment
+specifications. After attaching a valid experiment, a `simdesign` class
+object can be attached to the `nl` class object, by using one of the
+simdesign helper functions. These helper functions create different
+parameter input matrices from the experiment variable definitions that
+can then be executed by the
+[`run_nl_one()`](https://docs.ropensci.org/nlrx/reference/run_nl_one.md)
+and
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md)
+functions. The nested design allows to store everything related to the
+experiment within one R object. Additionally, different simdesign helper
+functions can be applied to the same `nl` object in order to repeat the
+same experiment with different parameter exploration methods
+(simdesigns).
+
+Step by step application example
+
+The "Wolf Sheep Predation" model from the NetLogo models library is used
+to present a basic example on how to setup and run NetLogo model
+simulations from R.
+
+Step 1: Create a nl object:
+
+The nl object holds all information on the NetLogo version, a path to
+the NetLogo directory with the defined version, a path to the model
+file, and the desired memory for the java virtual machine. Depending on
+the operation system, paths to NetLogo and the model need to be
+adjusted.
+
+    library(nlrx)
+    # Windows default NetLogo installation path (adjust to your needs!):
+    netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
+    modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+    outpath <- file.path("C:/out")
+    # Unix default NetLogo installation path (adjust to your needs!):
+    netlogopath <- file.path("/home/NetLogo 6.0.3")
+    modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+    outpath <- file.path("/home/out")
+    nl <- nl(nlversion = "6.0.3",
+             nlpath = netlogopath,
+             modelpath = modelpath,
+             jvmmem = 1024)
+
+Step 2: Attach an experiment
+
+The experiment object is organized in a similar fashion as NetLogo
+Behavior Space experiments. It contains all information that is needed
+to generate a simulation parameter matrix and to execute the NetLogo
+simulations. Details on the specific slots of the experiment class can
+be found in the package documentation
+([`?experiment`](https://docs.ropensci.org/nlrx/reference/experiment.md))
+and the "Advanced configuration" vignette.
+
+    nl@experiment <- experiment(expname="wolf-sheep",
+                                 outpath=outpath,
+                                 repetition=1,
+                                 tickmetrics="true",
+                                 idsetup="setup",
+                                 idgo="go",
+                                 runtime=50,
+                                 evalticks=seq(40,50),
+                                 metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
+                                 variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
+                                                  'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
+                                 constants = list("model-version" = "\"sheep-wolves-grass\"",
+                                                  "grass-regrowth-time" = 30,
+                                                  "sheep-gain-from-food" = 4,
+                                                  "wolf-gain-from-food" = 20,
+                                                  "sheep-reproduce" = 4,
+                                                  "wolf-reproduce" = 5,
+                                                  "show-energy?" = "false"))
+
+Step 3: Attach a simulation design
+
+While the experiment defines the variables and specifications of the
+model, the simulation design creates a parameter input table based on
+these model specifications and the chosen simulation design method. nlrx
+provides a bunch of different simulation designs, such as
+full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign
+Examples" vignette for more information on simdesigns). All simdesign
+helper functions need a properly defined nl object with a valid
+experiment design. Each simdesign helper also allows to define a number
+of random seeds that are randomly generated and can be used to execute
+repeated simulations of the same parameter matrix with different
+random-seeds (see "Advanced configuration" vignette for more information
+on random-seed and repetition management). A simulation design is
+attached to a nl object by using one of the simdesign helper functions:
+
+    nl@simdesign <- simdesign_lhs(nl=nl,
+                                   samples=100,
+                                   nseeds=3,
+                                   precision=3)
+
+Step 4: Run simulations
+
+All information that is needed to run the simulations is now stored
+within the nl object. The
+[`run_nl_one()`](https://docs.ropensci.org/nlrx/reference/run_nl_one.md)
+function allows to run one specific simulation from the siminput
+parameter table. The
+[`run_nl_all()`](https://docs.ropensci.org/nlrx/reference/run_nl_all.md)
+function runs a loop over all simseeds and rows of the parameter input
+table siminput. The loops are constructed in a way that allows easy
+parallelisation, either locally or on remote HPC machines (see "Advanced
+configuration" vignette for more information on parallelisation).
+
+    results <- run_nl_all(nl = nl)
+
+Step 5: Attach results to nl and run analysis
+
+nlrx provides method specific analysis functions for each simulation
+design. Depending on the chosen design, the function reports a tibble
+with aggregated results or sensitivity indices. In order to run the
+[`analyze_nl()`](https://docs.ropensci.org/nlrx/reference/analyze_nl.md)
+function, the simulation output has to be attached to the nl object
+first. After attaching the simulation results, these can also be written
+to the defined outpath of the experiment object.
+
+    # Attach results to nl object:
+    setsim(nl, "simoutput") <- results
+    # Write output to outpath of experiment within nl
+    write_simoutput(nl)
+    # Do further analysis:
+    analyze_nl(nl)
+
+## See also
+
+Useful links:
+
+- <https://docs.ropensci.org/nlrx/>
+
+- <https://github.com/ropensci/nlrx/>
+
+- Report bugs at <https://github.com/ropensci/nlrx/issues/>
+
+## Author
+
+Jan Salecker <jan.salecker@posteo.de>

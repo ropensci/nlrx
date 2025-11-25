@@ -1,0 +1,51 @@
+# Add a full-factorial simdesign to a nl object
+
+Add a full-factorial simdesign to a nl object
+
+## Usage
+
+``` r
+simdesign_ff(nl, nseeds)
+```
+
+## Arguments
+
+- nl:
+
+  nl object with a defined experiment
+
+- nseeds:
+
+  number of seeds for this simulation design
+
+## Value
+
+simdesign S4 class object
+
+## Details
+
+This function creates a simdesign S4 class which can be added to a nl
+object.
+
+Variables in the experiment variable list need to provide a vector of
+distinct values (e.g. list(values=c(1,2,3,4)). Or a sequence definition
+with min, max and step (e.g. list=(min=1, max=4, step=1)). If both
+(values and sequence) are defined, the full-factorial design gives
+priority to the values.
+
+The full-factorial simdesign uses these defined parameter ranges within
+the nl object. A full-factorial matrix of all parameter combinations is
+created as input tibble for the simdesign. Finally, the function reports
+a simdesign object.
+
+## Examples
+
+``` r
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_ff
+nl@simdesign <- simdesign_ff(nl = nl, nseeds = 3)
+#> Creating full factorial simulation design
+
+```
