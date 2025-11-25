@@ -344,9 +344,9 @@ summary table also prints the estimated number of runs.</p>
 <div class="section level2">
 <h2 id="capturing-progress-of-model-simulations">Capturing progress of model simulations<a class="anchor" aria-label="anchor" href="#capturing-progress-of-model-simulations"></a>
 </h2>
-<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/HenrikBengtsson/progressr" class="external-link">progressr</a>
-framework for capturing progress of simulations. Following this logic,
-the function itself will be silent unless it is wrapped within a
+<p>The <code><a href="../reference/run_nl_all.html">run_nl_all()</a></code> function supports the <a href="https://github.com/futureverse/progressr" class="external-link">progressr</a> framework
+for capturing progress of simulations. Following this logic, the
+function itself will be silent unless it is wrapped within a
 <code><a href="https://progressr.futureverse.org/reference/with_progress.html" class="external-link">progressr::with_progress()</a></code> call. By using different
 handlers, the layout of the progress bar is different. For example,
 installing the package <a href="https://github.com/r-lib/progress" class="external-link">progress</a> and using the
@@ -559,12 +559,12 @@ experiment: <code>idfinal = "r:stop"</code>.</p>
 <h2 id="parallelisation-and-the-future-concept">Parallelisation and the future concept<a class="anchor" aria-label="anchor" href="#parallelisation-and-the-future-concept"></a>
 </h2>
 <p>The run_nl_all function uses the <code>future_map_dfr()</code>
-function from the <a href="https://github.com/DavisVaughan/furrr" class="external-link">furrr
+function from the <a href="https://github.com/futureverse/furrr" class="external-link">furrr
 package</a>. The simulations are executed in a nested loop where the
 outer loop iterates over the random seeds of your simdesign, and the
 inner loop iterates over the rows of the siminput parameter matrix of
 your simdesign. These loops can be executed in parallel by setting up an
-appropriate plan from the <a href="https://github.com/HenrikBengtsson/future" class="external-link">future package</a>. See
+appropriate plan from the <a href="https://github.com/futureverse/future" class="external-link">future package</a>. See
 examples below for more details on parallelisation on local machines and
 remote HPC clusters.</p>
 <div class="section level3">
