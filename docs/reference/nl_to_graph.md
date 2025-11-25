@@ -1,0 +1,80 @@
+# Generate igraph objects from measured turtles and links metrics
+
+Generate igraph objects from measured turtles and links metrics
+
+## Usage
+
+``` r
+nl_to_graph(nl)
+```
+
+## Arguments
+
+- nl:
+
+  nl object
+
+  Generate igraph objects from measured turtles and links metrics.
+  Output has to be attached to the simdesign first with simoutput(nl)
+  \<- results I graph objects are created automatically for each
+  combination of random-seed, siminputrow and step. An additional column
+  with igraph objects is attached to the original output results tibble
+  of the nl object. In order to generate igraph objects some metrics are
+  mandatory: The metrics.turtles slot of the experiment must contain
+  "who" numbers (see example experiment). Additional turtle metrics will
+  be stored as properties of the igraph vertices. The metrics.links slot
+  of the experiment must contain "who" numbers of link end1 and end2
+  (see example experiment). Additional link metrics will be stored as
+  properties of the igraph edges.
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+## Example running the Giant Component model from the NetLogo models library:
+library(nlrx)
+library(igraph)
+# Windows default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+outpath <- file.path("C:/out")
+# Unix default NetLogo installation path (adjust to your needs!):
+netlogopath <- file.path("/home/NetLogo 6.0.4")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+outpath <- file.path("/home/out")
+
+nl <- nl(nlversion = "6.0.4",
+         nlpath = netlogopath,
+         modelpath = modelpath,
+         jvmmem = 1024)
+
+nl@experiment <- experiment(expname="networks",
+                            outpath=outpath,
+                            repetition=1,
+                            tickmetrics="false",
+                            idsetup="setup",
+                            idgo="go",
+                            runtime=50,
+                            metrics.turtles = list("turtles" = c("who", "color")),
+                            metrics.links = list("links" = c("[who] of end1", "[who] of end2")),
+                            constants = list("num-nodes" = 80,
+                                             "layout?" = "true"))
+
+nl@simdesign <- simdesign_simple(nl, 1)
+nl@simdesign@simoutput <- run_nl_all(nl)
+nl.graph <- nl_to_graph(nl)
+
+## Extract graph of tick 1:
+nl.graph.i <- nl.graph$spatial.links[[1]]
+## Set vertex colors by measured color variable:
+vcols <- c("7" = "grey", "15" = "red")
+V(nl.graph.i)$color <- vcols[as.character(V(nl.graph.i)$color)]
+## Set edge colors by measured link breed:
+ecols <- c("links" = "black")
+E(nl.graph.i)$color <- ecols[E(nl.graph.i)$breed]
+
+## Plot:
+plot.igraph(nl.graph.i, vertex.size=8, vertex.label=NA, edge.arrow.size=0.2)
+
+} # }
+```

@@ -1,0 +1,71 @@
+# Add a soboljansen simdesign to a nl object
+
+Add a soboljansen simdesign to a nl object
+
+## Usage
+
+``` r
+simdesign_soboljansen(nl, samples, sobolnboot, sobolconf, nseeds, precision)
+```
+
+## Arguments
+
+- nl:
+
+  nl object with a defined experiment
+
+- samples:
+
+  number of samples for the sobol sensitivity analysis
+
+- sobolnboot:
+
+  number of bootstrap replicates of the sobol sensitivity analysis
+
+- sobolconf:
+
+  the confidence level for bootstrap confidence intervals
+
+- nseeds:
+
+  number of seeds for this simulation design
+
+- precision:
+
+  number of digits for the decimal fraction of parameter values
+
+## Value
+
+simdesign S4 class object
+
+## Details
+
+This function creates a simdesign S4 class which can be added to a nl
+object.
+
+Variables in the experiment variable list need to provide a numeric
+distribution with min, max and qfun (e.g. list(min=1, max=4,
+qfun="qunif")).
+
+The soboljansen simdesign uses the sensitivity package to set up a
+soboljansen sensitivity analysis, including a simobject of class sobol
+and a input tibble for simulations. For details on method specific
+sensitivity analysis function parameters see ?soboljansen Finally, the
+function reports a simdesign object.
+
+## Examples
+
+``` r
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_soboljansen
+nl@simdesign <- simdesign_soboljansen(nl=nl,
+samples=1000,
+sobolnboot=100,
+sobolconf=0.95,
+nseeds=3,
+precision=3)
+#> Creating soboljansen simulation design
+
+```

@@ -1,0 +1,45 @@
+# Add a simple simdesign to a nl object
+
+Add a simple simdesign to a nl object
+
+## Usage
+
+``` r
+simdesign_simple(nl, nseeds)
+```
+
+## Arguments
+
+- nl:
+
+  nl object with a defined experiment
+
+- nseeds:
+
+  number of seeds for this simulation design
+
+## Value
+
+simdesign S4 class object
+
+## Details
+
+This function creates a simdesign S4 class which can be added to a nl
+object. The simple simdesign only uses model parameters that are defined
+in the constants field of the experiment object within the nl object.
+Thus, the resulting input tibble of the simdesign has only one run with
+constant parameterisations. This can be useful to run one simulation
+with a specific parameterset. Finally, the function reports a simdesign
+object.
+
+## Examples
+
+``` r
+# To attach a simdesign, a nl object needs to be created first (see ?nl).
+# For this example, we load a nl object from test data.
+
+nl <- nl_simple
+nl@simdesign <- simdesign_simple(nl = nl, nseeds = 3)
+#> Creating simple simulation design
+
+```
