@@ -4,7 +4,7 @@
 #'  object
 #'
 #' @param nl nl object with a defined modelpath that points to a NetLogo model
-#'  (*.nlogo)
+#'  (.nlogo or .nlogox)
 #'
 #' @details
 #'
@@ -33,6 +33,127 @@ report_model_parameters <- function(nl) {
     stop("nl@modelpath does not exist on local file system. Cannot report model parameters!")
   }
 
+  file_type <- tools::file_ext(nl@modelpath) # detect file type (.nlogo for NetLogo <7.0 or .nlogox for NetLogo >=7.0)
+
+  if (file_type == "nlogo") {
+    if (getnl(nl, "nlversion") >= "7.0.0") {warning("You are using Netlogo > 7, which expects .nlogox and not .nlogo")}
+    modelparam <- nlogo_parser(nl)
+    return(modelparam)
+  } else if (file_type == "nlogox") {
+    if (getnl(nl, "nlversion") < "7.0.0") {warning("You are using Netlogo < 7, which uses .nlogo and not .nlogox. The model may still run.")}
+    modelparam <- nlogox_parser(nl)
+    return(modelparam)
+  } else {
+    stop("Extension: ", file_type, " is not supported (ensure .nlogo or .nlogox is used)")
+  }
+}
+
+
+#' Backend function for report_model_parameters (NetLogo 7+)
+#' @description Report globals from a .nlogox file that is defined in the nl object.
+#' @param nl see \code{report_model_parameters()}
+#' @details
+#' reads .nlogox files for \code{report_model_parameters()}
+
+nlogox_parser <- function(nl) {
+
+  model.code <- xml2::read_xml(getnl(nl, "modelpath")) # Open model as XML
+  widgets <- xml2::xml_find_first(model.code, ".//widgets") # Find widgets block
+
+  if (inherits(widgets, "xml_missing")) {
+    stop("No <widgets> block found in .nlogox model file")
+  }
+
+  widget_nodes <- xml2::xml_children(widgets) # Get all widgets
+
+  # Loop over widgets
+  modelparam <- list()
+  for (node in widget_nodes) {
+
+    widget_type <- xml2::xml_name(node)
+
+    # SLIDER
+    if (widget_type == "slider") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "SLIDER",
+        value = as.numeric(xml2::xml_attr(node, "default")),
+        min = as.numeric(xml2::xml_attr(node, "min")),
+        max = as.numeric(xml2::xml_attr(node, "max")),
+        incr = as.numeric(xml2::xml_attr(node, "step"))
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # SWITCH
+    if (widget_type == "switch") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "SWITCH",
+        value = tolower(xml2::xml_attr(node, "on")) == "true"
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # INPUTBOX
+    if (widget_type == "inputBox") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "INPUTBOX",
+        value = xml2::xml_text(node),
+        entrytype = xml2::xml_attr(node, "type")
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # CHOOSER
+    if (widget_type == "chooser") {
+      name <- xml2::xml_attr(node, "variable")
+
+      choice_nodes <- xml2::xml_find_all(node, "./choice")
+      # Different .xml syntax for text content vs attributes:
+      choice_value <- function(x) {
+        if (!is.na(xml2::xml_attr(x, "value"))) {
+          xml2::xml_attr(x, "value")
+        } else {
+          xml2::xml_text(x)
+        }
+      }
+      validvalues <- vapply(choice_nodes, choice_value, character(1))
+
+      select_id <- as.numeric(xml2::xml_attr(node, "current")) + 1
+      selectedvalue <- validvalues[select_id]
+
+      entry <- list(
+        type = "CHOOSER",
+        value = selectedvalue,
+        validvalues = validvalues
+      )
+
+      modelparam[[name]] <- entry
+    }
+  }
+
+  return(modelparam)
+}
+
+
+
+
+
+#' Backend function for report_model_parameters (NetLogo <7)
+#' @description Report globals from a .nlogo file that is defined in the nl object.
+#' @param nl see \code{report_model_parameters()}
+#' @details
+#' reads .nlogo files for \code{report_model_parameters()}
+
+nlogo_parser <- function(nl) {
   ## Open the model as string
   model.code <- readLines(getnl(nl, "modelpath"))
 
