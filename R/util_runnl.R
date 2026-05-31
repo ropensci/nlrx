@@ -294,6 +294,10 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     # Create an na line:
     NArow <- tibble::tibble(`[run number]` = NA)
     NArow <- cbind(NArow, getsim(nl, "siminput")[siminputrow, ])
+    # while this is now legacy code (NetLogo < 7), this is not an optimal solution,
+    # as it will assume that the simulation that ran actually ran with the seed given by NLRX.
+    # But the NLRX-generated-seed is not passed to NetLogo if repetition > 1, as NetLogo then has to choose seeds itself.
+    # Simdesign analysis depends on this `random-seed` though, hence changing this quirk would require effort.
     NArow <- cbind(NArow, tibble::tibble(`random-seed` = seed))
     NArow <- cbind(NArow, tibble::tibble(`[step]` = NA))
 
@@ -307,50 +311,11 @@ util_gather_results <- function(nl, outfile, seed, siminputrow) {
     NLtable <- NArow
   }
 
-  if (length(nl@experiment@metrics.turtles) > 0) {
-
-    for(x in seq_along(nl@experiment@metrics.turtles)) {
-      x.breed <- names(nl@experiment@metrics.turtles)[[x]]
-      x.metrics <- nl@experiment@metrics.turtles[[x]]
-      if (!"breed" %in% x.metrics) {
-        x.metrics <- c("breed", x.metrics)
-      }
-      col.name <- paste0("metrics.", x.breed)
-      turtles.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
-      names(NLtable)[names(NLtable) == turtles.reporter] <- col.name
-      NLtable[, grepl(col.name, names(NLtable))] <-
-        list(.util_clean_metrics_turtles(NLtable, nl, col.name, x.metrics))
-    }
-
-  }
-
-  if (all(!is.na(getexp(nl, "metrics.patches")))) {
-    ## Rename column and clean patch metrics
-    NLtable <- NLtable %>% dplyr::rename(
-      metrics.patches = util_create_agentset_reporter(getexp(nl, "metrics.patches"), "patches")
-    )
-    NLtable$metrics.patches <-
-      .util_clean_metrics_patches(NLtable, nl)
-  }
-
-  # nocov start
-  if (length(nl@experiment@metrics.links) > 0) {
-
-    ## Rename column and clean link metrics
-    for(x in seq_along(nl@experiment@metrics.links)) {
-      x.breed <- names(nl@experiment@metrics.links)[[x]]
-      x.metrics <- nl@experiment@metrics.links[[x]]
-      if (!"breed" %in% x.metrics) {
-        x.metrics <- c("breed", x.metrics)
-      }
-      col.name <- paste0("metrics.", x.breed)
-      links.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
-      names(NLtable)[names(NLtable) == links.reporter] <- col.name
-      NLtable[, grepl(col.name, names(NLtable))] <-
-        list(.util_clean_metrics_links(NLtable, nl, col.name, x.metrics))
-    }
-  }
-  # nocov end
+  # Format special metrics (metrics.turtles/patches/links)
+  NLtable <- util_clean_agent_metrics(
+    NLtable = NLtable,
+    nl = nl
+  )
 
   return(NLtable)
 }
@@ -656,4 +621,194 @@ util_detect_nl_extensions_path <- function(nl) {
   }
 
   return(valid_candidates[1])
+}
+
+
+
+
+
+#' Backend function for collecting experiment metrics
+#'
+#' @description Internal helper for combining regular metrics with turtle, patch and link metrics.
+#'
+#' @param nl nl object
+#' @return character vector of NetLogo reporter metrics
+#' @details
+#' Used only in NetLogo 7+ (via Logolink)
+#' Combines regular experiment metrics with additional agent metrics defined in
+#' \code{metrics.turtles}, \code{metrics.patches} and \code{metrics.links}.
+#' @keywords internal
+util_collect_experiment_metrics <- function(nl) {
+  metrics <- getexp(nl, "metrics")
+
+  # Add turtle metrics if defined
+  if (length(getexp(nl, "metrics.turtles")) > 0) {
+    turtles_reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.turtles), function(x) {
+      x_breed <- names(nl@experiment@metrics.turtles)[[x]]
+      x_metrics <- nl@experiment@metrics.turtles[[x]]
+
+      if (!"breed" %in% x_metrics) {
+        x_metrics <- c("breed", x_metrics)
+      }
+
+      util_create_agentset_reporter(x_metrics, x_breed)
+    })
+
+    metrics <- c(metrics, turtles_reporter)
+  }
+
+  # Add patch metrics if defined
+  if (all(!is.na(getexp(nl, "metrics.patches")))) {
+    patches_reporter <- util_create_agentset_reporter(
+      getexp(nl, "metrics.patches"),
+      "patches"
+    )
+
+    metrics <- c(metrics, patches_reporter)
+  }
+
+  # Add link metrics if defined
+  if (length(getexp(nl, "metrics.links")) > 0) {
+    links_reporter <- purrr::map_chr(seq_along(nl@experiment@metrics.links), function(x) {
+      x_breed <- names(nl@experiment@metrics.links)[[x]]
+      x_metrics <- nl@experiment@metrics.links[[x]]
+
+      if (!"breed" %in% x_metrics) {
+        x_metrics <- c("breed", x_metrics)
+      }
+
+      util_create_agentset_reporter(x_metrics, x_breed)
+    })
+
+    metrics <- c(metrics, links_reporter)
+  }
+
+  metrics
+}
+
+
+
+
+#' Backend function for cleaning agent metrics
+#'
+#' @description Internal helper for formatting turtle, patch and link metrics in simulation output.
+#'
+#' @param NLtable simulation output table
+#' @param nl nl object
+#' @param expect_cleaned_names TRUE/FALSE, if TRUE reporter column names are expected to be cleaned by \code{janitor::make_clean_names()}.
+#' @return simulation output table with cleaned agent metrics
+#' @details
+#' Helper function used by the legacy and Logolink execution paths.
+#' Converts raw turtle, patch and link metric reporter output into nested output columns.
+#' @keywords internal
+util_clean_agent_metrics <- function(NLtable, nl, expect_cleaned_names = FALSE) {
+
+  # Helper function used to identify the reporter column in the simulation output.
+  # Legacy output keeps the original NetLogo reporter string as column name.
+  # Logolink output currently applies janitor::make_clean_names(), so cleaned names
+  # are checked optionally as well.
+  find_reporter_col <- function(NLtable, reporter) {
+    candidates <- if (expect_cleaned_names) {
+      c(reporter, janitor::make_clean_names(reporter))
+    } else {
+      reporter
+    }
+    candidates[candidates %in% names(NLtable)][1]
+  }
+
+  # Clean turtle metrics if defined
+  if (length(nl@experiment@metrics.turtles) > 0) {
+
+    for (x in seq_along(nl@experiment@metrics.turtles)) {
+      x.breed <- names(nl@experiment@metrics.turtles)[[x]]
+      x.metrics <- nl@experiment@metrics.turtles[[x]]
+
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
+
+      col.name <- paste0("metrics.", x.breed)
+      turtles.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
+      reporter_col <- find_reporter_col(NLtable, turtles.reporter)
+
+      if (is.na(reporter_col)) {
+        warning(
+          paste0("Could not find turtle metrics column for reporter: ", turtles.reporter),
+          call. = FALSE
+        )
+        next
+      }
+
+      names(NLtable)[names(NLtable) == reporter_col] <- col.name
+
+      NLtable[[col.name]] <- .util_clean_metrics_turtles(
+        NLtable,
+        nl,
+        col.name,
+        x.metrics
+      )
+    }
+  }
+
+  # Clean patch metrics if defined
+  if (all(!is.na(getexp(nl, "metrics.patches")))) {
+
+    col.name <- "metrics.patches"
+    patches.reporter <- util_create_agentset_reporter(
+      getexp(nl, "metrics.patches"),
+      "patches"
+    )
+
+    reporter_col <- find_reporter_col(NLtable, patches.reporter)
+
+    if (is.na(reporter_col)) {
+      warning(
+        paste0("Could not find patch metrics column for reporter: ", patches.reporter),
+        call. = FALSE
+      )
+    } else {
+      names(NLtable)[names(NLtable) == reporter_col] <- col.name
+
+      NLtable[[col.name]] <- .util_clean_metrics_patches(
+        NLtable,
+        nl
+      )
+    }
+  }
+
+  # Clean link metrics if defined
+  if (length(nl@experiment@metrics.links) > 0) {
+
+    for (x in seq_along(nl@experiment@metrics.links)) {
+      x.breed <- names(nl@experiment@metrics.links)[[x]]
+      x.metrics <- nl@experiment@metrics.links[[x]]
+
+      if (!"breed" %in% x.metrics) {
+        x.metrics <- c("breed", x.metrics)
+      }
+
+      col.name <- paste0("metrics.", x.breed)
+      links.reporter <- util_create_agentset_reporter(x.metrics, x.breed)
+      reporter_col <- find_reporter_col(NLtable, links.reporter)
+
+      if (is.na(reporter_col)) {
+        warning(
+          paste0("Could not find link metrics column for reporter: ", links.reporter),
+          call. = FALSE
+        )
+        next
+      }
+
+      names(NLtable)[names(NLtable) == reporter_col] <- col.name
+
+      NLtable[[col.name]] <- .util_clean_metrics_links(
+        NLtable,
+        nl,
+        col.name,
+        x.metrics
+      )
+    }
+  }
+
+  return(NLtable)
 }
