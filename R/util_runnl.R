@@ -514,15 +514,11 @@ util_read_write_batch <- function(nl) {
     } else {
       ## For all other NetLogo versions we can just copy the headless bat from
       ## the installation folder:
-      # Prepare pathes:
+      # Prepare paths:
       batchpath <- file.path(getnl(nl, "nlpath"), "netlogo-headless.bat")
 
-      # Extensions Folder:
-      extensionspath <- ifelse(
-        getnl(nl, "nlversion") >= "6.3.0",
-        file.path(getnl(nl, "nlpath"), "extensions"),
-        file.path(getnl(nl, "nlpath"), "app/extensions")
-      )
+      # Extensions Folder Detection:
+      extensionspath <- util_detect_nl_extensions_path(nl)
 
       jarpath <- file.path(getnl(nl, "nlpath"), paste0("app/netlogo-",
                                                        getnl(nl, "nlversion"), ".jar"))
@@ -539,9 +535,24 @@ util_read_write_batch <- function(nl) {
       # mac nlpath\netlogo-headless.sh)
       batch <- readr::read_lines(batchpath)
 
-      # Get position index of jvmopts and jarpath line
-      pos_jvmopts <- which(grepl("SET \"JVM_OPTS=-Xmx", batch))
-      pos_jarpath <- which(grepl("SET \"ABSOLUTE_CLASSPATH=", batch))
+      # Detect Java options and classpath
+      pos_jvmopts <- which(grepl('^SET "JVM_OPTS=', batch, ignore.case = TRUE))
+      pos_jarpath <- which(grepl('^SET "ABSOLUTE_CLASSPATH=', batch, ignore.case = TRUE))
+
+      if (length(pos_jvmopts) != 1 || length(pos_jarpath) != 1) {
+        warning(
+          paste0(
+            "Could not reliably identify JVM_OPTS and/or ABSOLUTE_CLASSPATH in netlogo-headless.bat. ",
+            "This indicates that the NetLogo version or launcher format may not be supported. ",
+            "NetLogo execution or extension loading might be broken.\n",
+            "batch_path: ", batchpath, "\n",
+            "pos_jvmopts: ", paste(pos_jvmopts, collapse = ", "), "\n",
+            "pos_jarpath: ", paste(pos_jarpath, collapse = ", "), "\n",
+            "matching JVM_OPTS lines: ", paste(batch[grepl("JVM_OPTS", batch)], collapse = " | "), "\n",
+            "matching ABSOLUTE_CLASSPATH lines: ", paste(batch[grepl("ABSOLUTE_CLASSPATH", batch)], collapse = " | ")
+          )
+        )
+      }
 
       # Replace lines in batch with updated versions
       batch[pos_jvmopts] <- jvmoptsline
@@ -612,4 +623,37 @@ util_read_write_batch <- function(nl) {
 
 
   return(batchpath_temp)
+}
+
+
+#' Backend function for detecting the NetLogo extensions directory
+#'
+#' @description Internal helper for locating the NetLogo (< 7) extensions directory.
+#'
+#' @param nl nl object
+#' @return path to the detected NetLogo extensions directory
+#' @details
+#' Checks NetLogo extensions directory locations and returns the first detection.
+#' Searches for the default \code{csv} extension to identify that folder.
+#' @keywords internal
+util_detect_nl_extensions_path <- function(nl) {
+  nlpath <- getnl(nl, "nlpath")
+
+  ext_candidates <- c(
+    file.path(nlpath, "app", "extensions"),
+    file.path(nlpath, "extensions", ".bundled"),
+    file.path(nlpath, "extensions")
+  )
+
+  has_csv_extension <- function(path) {
+    dir.exists(path) && dir.exists(file.path(path, "csv")) # default extension, expected to be in the correct extensions folder.
+  }
+
+  valid_candidates <- ext_candidates[vapply(ext_candidates, has_csv_extension, logical(1))]
+
+  if (length(valid_candidates) == 0) {
+    stop("Could not locate a valid NetLogo extensions directory. Detection requires the csv extension to be installed. ", nlpath)
+  }
+
+  return(valid_candidates[1])
 }
