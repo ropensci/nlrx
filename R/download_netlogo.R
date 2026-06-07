@@ -27,7 +27,11 @@ supported_netlogo_versions <- function() {
     "6.2.1",
     "6.2.2",
     "6.3.0",
-    "6.4.0"
+    "6.4.0",
+    "7.0.0",
+    "7.0.1",
+    "7.0.2",
+    "7.0.4"
   )
   return(supported_versions)
 }
@@ -58,14 +62,30 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
   ## Throw error if needed:
   if (isTRUE(throw_error)) {
     if (!isTRUE(supported)) {
-      msg <- paste(
-        "Netlogo version",
-        version,
-        "is not supported by nlrx.",
-        "Use one of the supported versions: ",
-        paste(supported_netlogo_versions(), collapse=", ")
-      )
-      stop(msg)
+
+      # For above 7+
+      if (numeric_version(version) >= numeric_version("7.0.0")) {
+        warning(
+          paste(
+            "NetLogo version", version,
+            "is not officially supported by nlrx.",
+            "NetLogo 7+ support is handled through logolink and execution may therefore still succeed.",
+            "These versions are officially supported: ",
+            paste(supported_netlogo_versions(), collapse=", ")
+          ),
+          call. = FALSE
+        )
+        # For below 7+
+      } else {
+        msg <- paste(
+          "NetLogo version",
+          version,
+          "is not supported by nlrx.",
+          "These versions are officially supported: ",
+          paste(supported_netlogo_versions(), collapse=", ")
+        )
+        stop(msg)
+      }
     }
   }
 

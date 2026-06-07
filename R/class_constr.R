@@ -4,7 +4,7 @@
 #'
 #' @param nlversion A character string defining the NetLogo version that is used
 #' @param nlpath Path to the NetLogo main directory matching the defined version
-#' @param modelpath Path to the NetLogo model file (*.nlogo) that is used for simulations
+#' @param modelpath Path to the NetLogo model file (.nlogo or .nlogox) that is used for simulations
 #' @param jvmmem Java virtual machine memory capacity in megabytes
 #' @param experiment Holds a experiment S4 class object
 #' @param simdesign Holds a simdesign S4 class object
@@ -52,6 +52,15 @@ nl <- function(nlversion = "6.0.2",
                simdesign = methods::new("simdesign"),
                ...) {
 
+  # Ensure Logolink is installed for NetLogo 7+
+  if (numeric_version(nlversion) >= numeric_version("7.0.0") &&
+      !isTRUE(requireNamespace("logolink", quietly = TRUE))) {
+    stop(
+      "NetLogo 7+ execution requires the package 'logolink'. Please install it before running simulations.",
+      call. = FALSE
+    )
+  }
+
   methods::new("nl",
                nlversion = nlversion,
                nlpath = path.expand(nlpath),
@@ -72,12 +81,13 @@ nl <- function(nlversion = "6.0.2",
 #' @param outpath Path to a directory where experiment output will be stored
 #' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
+#' @param run_metrics_condition Character string defining condition for NetLogo to record metrics (e.g "ticks mod 2 = 0" to record every second tick). Has no effect when tickmetrics is "true". 🔵
+#' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
 #' @param idgo character string or vector of character strings, defining the name of the NetLogo go procedure
 #' @param idfinal character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick
 #' @param idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
 #' @param runtime number of model ticks that should be run for each simulation
-#' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
 #' @param metrics.turtles a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))
@@ -105,6 +115,18 @@ nl <- function(nlversion = "6.0.2",
 #' \emph{tickmetrics}
 #'
 #' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
+#'
+#' \emph{run_metrics_condition}
+#'
+#' Only applied if tickmetrics = TRUE and evalticks = NA.
+#' Character string controlling when NetLogo records metrics. Requires tickmetrics to be "true", and evalticks to be undefined. Works from NetLogo 7+ onwards. 🔵
+#' Set evalticks to NA_integer_ to measure on every tick.
+#'
+#' \emph{evalticks}
+#'
+#' Only applied if tickmetrics = TRUE and run_metrics_condition = NA.
+#' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+#' Set evalticks to NA_integer_ to measure on every tick.
 #'
 #' \emph{idsetup, idgo}
 #'
@@ -156,13 +178,6 @@ nl <- function(nlversion = "6.0.2",
 #' During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 #' For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 #'
-#' \emph{evalticks}
-#'
-#' Only applied if tickmetrics = TRUE.
-#' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
-#' Set evalticks to NA_integer_ to measure on every tick.
-#'
-#'
 #' \emph{stopcond}
 #'
 #' The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
@@ -206,12 +221,13 @@ nl <- function(nlversion = "6.0.2",
 #'                              outpath="C:/out/",
 #'                              repetition=1,
 #'                              tickmetrics="true",
+#'                              run_metrics_condition="ticks mod 2 = 0",
+#'                              evalticks=seq(40,50),
 #'                              idsetup="setup",
 #'                              idgo="go",
 #'                              idfinal=NA_character_,
 #'                              idrunnum=NA_character_,
 #'                              runtime=50,
-#'                              evalticks=seq(40,50),
 #'                              stopcond="not any? turtles",
 #'                              metrics=c("count sheep",
 #'                                        "count wolves",
@@ -242,12 +258,13 @@ experiment <- function(expname = "defaultexp",
                        outpath = NA_character_,
                        repetition = 1,
                        tickmetrics = "true",
+                       run_metrics_condition = NA_character_,
+                       evalticks = NA_integer_,
                        idsetup = "setup",
                        idgo = "go",
                        idfinal = NA_character_,
                        idrunnum = NA_character_,
                        runtime = 1,
-                       evalticks = NA_integer_,
                        stopcond= NA_character_,
                        metrics = c("count turtles"),
                        metrics.turtles = list(),
@@ -262,12 +279,13 @@ experiment <- function(expname = "defaultexp",
                outpath=path.expand(outpath),
                repetition=repetition,
                tickmetrics=tickmetrics,
+               run_metrics_condition=run_metrics_condition,
+               evalticks=evalticks,
                idsetup=idsetup,
                idgo=idgo,
                idfinal=idfinal,
                idrunnum=idrunnum,
                runtime=runtime,
-               evalticks=evalticks,
                stopcond=stopcond,
                metrics=metrics,
                metrics.turtles=metrics.turtles,
