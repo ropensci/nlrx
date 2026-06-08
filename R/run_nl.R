@@ -219,7 +219,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     }
   }
 
-  # Handle idrunnum (add it to the parameterizations if given)
+  # Handle idrunnum (add it to the parameterizations if given) # 🔴
   if (!is.na(nl@experiment@idrunnum)) {
     seed_part <- if ("random-seed" %in% names(block_df)) {
       block_df$`random-seed`
@@ -258,7 +258,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   if (nl@experiment@tickmetrics != "true") {
     if (!is.null(unified_run_metrics_condition)) {
       warning(
-        "'evalticks' and 'run_metrics_condition' are ignored when tickmetrics isn't 'true'.",
+        "'evalticks' and 'run_metrics_condition' are ignored when 'tickmetrics' isn't 'true'.",
         call. = FALSE
       )
     }
@@ -317,6 +317,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   # 🔴 NetLogo returns the end-of-simulation record. Always.
   # THis is an issue for record rules (evalticks, run_metrics_condition) as the last tick will always be returned
   # .. even when the record condition isn't applying.
+  # 🔵 Consider removing this feature (run_metrics_condition)
   # Fix for evalticks:
   if (nl@experiment@tickmetrics == "true" && # ensure evalticks was actually applied x1
       all(!is.na(nl@experiment@evalticks)) && # ensure evalticks was actually applied x2
