@@ -1,79 +1,40 @@
-
-
 #' Execute all NetLogo simulations from a nl object
 #'
 #' @description Execute all NetLogo simulations from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
-#' @param block_size number of simulations bundled into one execution block (NetLogo 7+).
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param split number of parts the job should be split into (NetLogo < 7).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results (NetLogo < 7).
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results (NetLogo < 7).
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results (NetLogo < 7).
-#' @param writeRDS TRUE/FALSE, if TRUE, for each single simulation an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object (NetLogo < 7).
+#' @param block_size number of simulations bundled into one execution block (one NetLogo instance can only receive one block).
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @return tibble with simulation output results
 #' @details
 #'
 #' run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
 #'
-#' ## Logolink mode (NetLogo >= 7.0)
-#' Uses internal function \code{run_nl_all_logolink(nl, block_size, threads)}.
 #' The function structures the simdesign table into blocks, sized via \code{block_size}.
-#' Blocks are passed to the logolink package, which writes a Behaviorspace XML for the passed block. The XML file is then executed via logolink.
-#' Multithreading is supported via NetLogo natively, and controlled using \code{threads}. See how many threads you can assign using \code{parallel::detectCores()}.
-#' For HPC usage, custom functions can be built 🔵 (SEE HPC VIGNETTE - TODO)
+#' Each block is passed to \code{logolink}, which writes a BehaviorSpace XML file and executes it.
 #'
-#' Progress can be shown by wrapping run_nl_all() with progressr (see examples).
+#' Multithreading is supported via NetLogo natively, and controlled using \code{threads}. See how many threads you can assign using \code{parallel::detectCores()}.
+#'
+#' Progress can be shown by wrapping run_nl_all() with \code{progressr} (see examples).
 #' Progress updates on completion of one block.
 #'
-#' Small \code{block_size results} in frequent updates of simulation status, but causes simulations to take longer, as NetLogo has to restart after every block.
-#' Large \code{block_size results} results in infrequent updates but will generally be faster (although with rapidly diminishing returns).
+#' Small \code{block_size} results in frequent updates of simulation status, but causes simulations to take longer, as NetLogo has to restart after every block.
+#' Large \code{block_size} results in infrequent updates but will generally be faster (although with rapidly diminishing returns).
 #'
 #' ### Debugging:
 #' Make sure you can run your NetLogo model on your machine.
 #' Make sure that Java is installed and available from the terminal (java -version).
-#' Use eval_variables_constants(nl) to check the validity of model settings.
-#' Lastly, the R console outputs XML filepaths. These XML files are Behaviorspace definitions. Run these manually via NetLogo Behaviorspace to exclude issues with the experiment and simdesign setup.
+#' Use \code{eval_variables_constants(nl)} to check the validity of model settings.
+#' Lastly, the R console outputs XML filepaths. These XML files are \code{BehaviorSpace} definitions. Run these manually via NetLogo \code{BehaviorSpace} to diagnose issues with the experiment and simdesign setup.
 #'
-#' ## Legacy mode (NetLogo < 7.0)
-#' Uses internal function \code{run_nl_all_legacy(nl, split, cleanup.csv, cleanup.xml, cleanup.bat, writeRDS)}
-#' The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-#' The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
-#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
-#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-#' cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
+#' @section Reproducibility and Seeds:
+#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
+#' NetLogo will generate its own seeds for repetitions, which limits reproducibility and prevents control over sampling stochasticity.
+#' For fully reproducible results, set \code{repetition = 1} and use \code{nseeds} in the simdesign instead.
 #'
-#' When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
-#' the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
-#' The inner loop (siminputrows) distributes simulation tasks to these cores.
-#' However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
-#' This can be done using the split parameter. If split is > 1 the siminput matrix is split into smaller parts.
-#' Jobs are created for each combination of part and random seed.
-#' If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.
-#'
-#' ### Debugging "Temporary simulation output file not found" error message:
-#'
-#' Whenever this error message appears it means that the simulation did not produce any output.
-#' Two main reasons can lead to this problem, either the simulation did not even start or the simulation crashed during runtime.
-#' Both can happen for several reasons and here are some hints for debugging this:
-#' 1. Missing software:
-#' Make sure that java is installed and available from the terminal (java -version).
-#' Make sure that NetLogo is installed and available from the terminal.
-#' 2. Wrong path definitions:
-#' Make sure your nlpath points to a folder containing NetLogo.
-#' Make sure your modelpath points to a *.nlogo model file.
-#' Make sure that the nlversion within your nl object matches the NetLogo version of your nlpath.
-#' Use the convenience function of nlrx for checking your nl object (print(nl), eval_variables_constants(nl)).
-#' 3. Temporary files cleanup:
-#' Due to automatic temp file cleanup on unix systems temporary output might be deleted.
-#' Try reassigning the default temp folder for this R session (the unixtools package has a neat function).
-#' 4. NetLogo runtime crashes:
-#' It can happen that your NetLogo model started but failed to produce output because of a NetLogo runtime error.
-#' Make sure your model is working correctly or track progress using print statements.
-#' Sometimes the java virtual machine crashes due to memory constraints.
-#'
+#' @section Suppressing Messages:
+#' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+#' \code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_all(nl))}.
 #'
 #' @examples
 #' \dontrun{
@@ -87,14 +48,11 @@
 #' # Run in parallel on local machine (NetLogo 7+):
 #' library(progressr)
 #' with_progress({ # progress bar
-#' results <- run_nl_all(threads = 10, nl = nl) # 10 threads
+#' results <- run_nl_all(nl, threads = 10) # 10 threads
 #' })
 #'
-#' # Run in parallel on local machine (NetLogo < 7):
-#' library(future)
-#' plan(multisession)
-#' results <- run_nl_all(nl)
-#'
+#' # Adjust block size for performance tuning:
+#' results <- run_nl_all(nl, block_size = 500, threads = 10) # NetLogo gets re-initialized once every 500 simulations
 #' }
 #' @aliases run_nl_all
 #' @rdname run_nl_all
@@ -104,54 +62,16 @@
 run_nl_all <- function(nl,
                        block_size = 100,
                        threads = 1,
-                       split = 1,
-                       cleanup.csv = TRUE,
-                       cleanup.xml = TRUE,
-                       cleanup.bat = TRUE,
-                       writeRDS = FALSE) {
+                       ...) {
 
-  if (getnl(nl, "nlversion") >= "7.0.0") {
-    nl_results <- run_nl_all_logolink(nl, block_size, threads) # NetLogo 7.0 upwards
-    return(nl_results)
-  } else {
-    nl_results <- run_nl_all_legacy(nl, split, cleanup.csv, cleanup.xml, cleanup.bat, writeRDS) # NetLogo < 7.0
-    return(nl_results)
-  }
-}
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("split", "cleanup.csv", "cleanup.xml", "cleanup.bat", "writeRDS")
+  )
 
 
-
-
-#' Backend function for run_nl_all using the logolink execution path (supported for NetLogo 7+)
-#'
-#' @description Internal backend used by \code{run_nl_all()} for NetLogo 7+.
-#'
-#' @param nl nl object
-#' @param block_size see \code{run_nl_all()}
-#' @param threads see \code{run_nl_all()}
-#' @return tibble with simulation output results
-#' @details
-#' Internal helper function wrapped by \code{run_nl_all()}.
-#' The defined \code{nl@simdesign} is split into parameterization blocks.
-#' Blocks are written to single BehaviorSpace XML files and executed afterwards via Logolink.
-#' @keywords internal # 🟡 ????????????????
-
-run_nl_all_logolink <- function(nl, block_size = 100, threads = 1) {
-  # 🔵 Sebastian Example:
-  # nl <- nl(tolles experiment).
-  # jobs_list <- job_split(nl = nl, blocks = 100)
-  # rslurm(fun = run_nl_block, data_var = jobs_list, data_fix = nl)
-
-  # Settings check for run_metrics_condition and tickmetrics (conflict when both are used at the same time)
-  if (!is.na(nl@experiment@run_metrics_condition) && nl@experiment@tickmetrics == "true") {
-    warning(
-      "Both tickmetrics and run_metrics_condition are set. As tickmetrics causes metrics to be recorded every tick, record_metrics_condition will have no effect.",
-      call. = FALSE
-    )
-  }
-
-  # Warn user, regarding repetition setting
-  if (nl@experiment@repetition > 1 & getnl(nl, "nlversion") >= "7.0.0") {
+  # Warn user regarding repetition setting
+  if (nl@experiment@repetition > 1) {
     warning(
       paste0(
         "Experiment with repetition > 1 detected: Simdesign seeds won't be passed to NetLogo.\n",
@@ -184,90 +104,97 @@ run_nl_all_logolink <- function(nl, block_size = 100, threads = 1) {
   }
 
   # Bind result-blocks into one and fix formatting issues.
-  # 🟡 nl is required for detecting formatting issues right now, it can be left out once logolink stops using janitor on column names
+  # nl is required for detecting formatting issues right now, it can be left out once logolink stops using janitor on column names
   nl_results <- merge_result_blocks(nl, results_list)
+
+  # Catch issues with model not running, as often NetLogo silently fails and returns no results.
+  if (nrow(nl_results) == 0 || all(vapply(results_list, is.null, logical(1)))) {
+    warning(
+      paste0(
+        "No simulation results were returned. See ?run_nl_all for debugging guidance.\n",
+        "NLRX will now run eval_variables_constants(nl) to check for easily detectable issues."
+      ),
+      call. = FALSE
+    )
+
+    eval_variables_constants(nl)
+
+    stop("No simulation results returned.", call. = FALSE)
+  }
 
   return(nl_results)
 }
 
 
-#' Backend function used by run_nl_all_logolink and run_nl_one_logolink to run simulations (NetLogo 7+)
+
+
+#' Backend function used by \code{run_nl_all()} and \code{run_nl_one()} to run simulations (NetLogo 7+)
 #'
-#' @description Creates XML file for all simulations defined in \code{block_df} and executes these simulations using the logolink package
+#' @description Creates a BehaviorSpace XML file for simulations defined in \code{block_df} and executes them via \code{logolink}
 #'
-#' @param nl see \code{run_nl_all()}
-#' @param block_df dataframe of simulations definition, with one row being one run
-#' @param block_number assigned by \code{run_nl_all_logolink()} and only used for naming.
-#' @return tibble with simulation output results
+#' @param nl See \code{run_nl_all()}
+#' @param block_df Data frame of simulation definitions, with one row being one run
+#' @param block_number Assigned by \code{run_nl_all()}, used for naming the XML file.
+#' @return Tibble with simulation output results
 #' @details
-#' Runs a single block "\code{block_df}" by writing a single BehaviorSpace XML file, executing it afterwards.
-#' Relies on the logolink package.
-#' @keywords internal # 🟡 ????????????????
+#' Runs a single block (\code{block_df}) by writing a single BehaviorSpace XML file and executing it via \code{logolink}.
+#' @keywords internal
 
 run_nl_block <- function(nl, block_df, block_number, threads) {
-  checkmate::assert_int(threads, lower = 1)
-  checkmate::assert_int(block_number, lower = 0)
-
+  stopifnot(length(threads) == 1, !is.na(threads), threads >= 1, threads == as.integer(threads))
+  stopifnot(length(block_number) == 1, !is.na(block_number), block_number >= 0, block_number == as.integer(block_number))
 
   # 1. BEHAVIORSPACE DEFINITION PREPARATION
   # Handling NLRX features, ensuring correct formatting of settings and simulation input
 
-  # Ensure boolean formatting # 🔴 or just leave it at a warning? otherwise, could also clean double quotes.
-  for (col in names(block_df)) { # convert to logical, as NetLogo expects logical!
+  # Ensure boolean formatting
+  for (col in names(block_df)) { # convert to logical, as Logolink expects logical
     if (is.character(block_df[[col]]) && all(block_df[[col]] %in% c("true", "false"))) { # all instances of "true" and "false"
       block_df[[col]] <- block_df[[col]] == "true" # "true" = TRUE, "false" = FALSE
     }
   }
 
-  # Handle idrunnum (add it to the parameterizations if given) # 🔴
+  # Handle idrunnum (add it to the parameterizations if given)
   if (!is.na(nl@experiment@idrunnum)) {
-    seed_part <- if ("random-seed" %in% names(block_df)) {
-      block_df$`random-seed`
+    if (nl@experiment@repetition > 1) {
+      warning("`idrunnum` cannot be used when `repetition` > 1, because seeds of repeated runs are handled by NetLogo and are therefore unknown before execution. Recommendation: use `repetition = 1` with `nseeds`.", call. = FALSE)
     } else {
-      rep(NA, nrow(block_df))
+      seed_part <- if ("random-seed" %in% names(block_df)) {
+        block_df$`random-seed`
+      } else {
+        rep(NA, nrow(block_df))
+      }
+
+      block_df[[nl@experiment@idrunnum]] <- paste0(
+        nl@experiment@expname, "_", seed_part, "_", block_df$siminputrow
+      )
     }
-
-    block_df[[nl@experiment@idrunnum]] <- paste0(
-      nl@experiment@expname, "_", seed_part, "_", block_df$siminputrow
-    )
   }
 
+  # Generate a NetLogo run_metrics_condition from 'evalticks'
+  has_evalticks <- all(!is.na(nl@experiment@evalticks))
 
-  # Merge legacy 'evalticks' and 'run_metrics_condition' into 'unified_run_metrics_condition'
-  # And handle cases of both or none being defined.
-  has_run_metrics_condition <- !is.na(nl@experiment@run_metrics_condition)
-  has_evalticks <- any(!is.na(nl@experiment@evalticks)) # any, because it can be a vector
-
-  if (has_run_metrics_condition && has_evalticks) { # both are defined:
-    warning(
-      "Both run_metrics_condition and evalticks are set. Ignoring evalticks.",
-      call. = FALSE
-    )
-    unified_run_metrics_condition <- nl@experiment@run_metrics_condition
-  } else if (has_run_metrics_condition) {
-    unified_run_metrics_condition <- nl@experiment@run_metrics_condition
-  } else if (has_evalticks) { # handle evalticks when given as vector:
-    unified_run_metrics_condition <- paste0("member? ticks [",  paste(nl@experiment@evalticks, collapse = " "), "]"
-    )
+  if (has_evalticks) {
+    run_metrics_condition <- paste0("member? ticks [",  paste(nl@experiment@evalticks, collapse = " "), "]")
   } else {
-    unified_run_metrics_condition <- NULL
+    run_metrics_condition <- NULL
   }
 
-  # Make 'evalticks', 'run_metrics_condition' and 'tickmetrics' adhere to legacy logic.
+  # Make 'evalticks' and 'tickmetrics' adhere to legacy nlrx logic.
   # -> tickmetrics = 'true' in order for recording conditions to apply
   if (nl@experiment@tickmetrics != "true") {
-    if (!is.null(unified_run_metrics_condition)) {
+    if (!is.null(run_metrics_condition)) {
       warning(
-        "'evalticks' and 'run_metrics_condition' are ignored when 'tickmetrics' isn't 'true'.",
+        "'evalticks' is ignored when 'tickmetrics' isn't 'true'.",
         call. = FALSE
       )
     }
-    unified_run_metrics_condition <- NULL
+    run_metrics_condition  <- NULL
   }
+
   # Only pass tickmetrics when it is the only recording rule defined
   # Otherwise it would override other recording conditions
-  run_metrics_every_step <- nl@experiment@tickmetrics == "true" && is.null(unified_run_metrics_condition)
-
+  run_metrics_every_step <- nl@experiment@tickmetrics == "true" && is.null(run_metrics_condition)
 
   # Format the job configuration (NetLogo variables) in a way that can be passed as sub_experiments (nested list instead of df)
   # "siminputrow" column has to be left out, as its not a variable within NetLogo.
@@ -283,9 +210,9 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   }
 
   # 2. BEHAVIORSPACE FILE CREATION
-  # Use Logolink to translate the simulation-parametersets (siminput) and NLRX user settings into a Behaviorspace XML that can be ran by NetLogo:
+  # Use Logolink to translate the simulation-parametersets (siminput) and NLRX user settings into a BehaviorSpace XML that can be ran by NetLogo:
   xml_path <- suppressWarnings(logolink::create_experiment(
-    name = paste0("NLRX Experiment", nl@experiment@expname, ". Job ID ", block_number),
+    name = paste0("NLRX Experiment ", nl@experiment@expname, ". Job ID ", block_number),
     repetitions = nl@experiment@repetition,
     run_metrics_every_step = run_metrics_every_step,
     time_limit = nl@experiment@runtime,
@@ -293,13 +220,13 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     go = if (!is.na(nl@experiment@idgo)) nl@experiment@idgo else NULL, # .. and go buttons
     post_experiment = if (!is.na(nl@experiment@idfinal)) nl@experiment@idfinal else NULL,
     exit_condition = if (!is.na(nl@experiment@stopcond)) nl@experiment@stopcond else NULL,
-    run_metrics_condition = unified_run_metrics_condition, # when measurements are recorded
+    run_metrics_condition = run_metrics_condition, # when measurements are recorded
     metrics = util_collect_experiment_metrics(nl), # packages nl@experiment@metrics with nl@experiment@metrics.turtles/patches/links.
     constants = nl@experiment@constants,
     sub_experiments = jobs_formatted # specific parameter configurations
   ))
 
-  cat("\n Model running via: ", xml_path, "\n")
+  cli::cli_inform("Model running via: {.file {xml_path}}")
 
   # 3. BEHAVIORSPACE FILE EXECUTION
   # Use logolink to execute the previously created XML file.
@@ -314,27 +241,14 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   results_final <- res$table
 
   # 4. BEHAVIORSPACE RESULTS FORMATTING
-  # 🔴 NetLogo returns the end-of-simulation record. Always.
-  # THis is an issue for record rules (evalticks, run_metrics_condition) as the last tick will always be returned
-  # .. even when the record condition isn't applying.
-  # 🔵 Consider removing this feature (run_metrics_condition)
+
+  # NetLogo returns the end-of-simulation record. Always.
   # Fix for evalticks:
-  if (nl@experiment@tickmetrics == "true" && # ensure evalticks was actually applied x1
-      all(!is.na(nl@experiment@evalticks)) && # ensure evalticks was actually applied x2
-      is.na(nl@experiment@run_metrics_condition)) { # ensure evalticks was actually applied x3
+  if (nl@experiment@tickmetrics == "true" && # ensure evalticks was actually applied
+      all(!is.na(nl@experiment@evalticks))) { # ensure evalticks is defined
     results_final <- results_final |>
       dplyr::filter(step %in% nl@experiment@evalticks) # filter out any records not adhering to the rule.
   }
-
-  # 🟡 IDEAS
-  # in case of evalticks its easy: simply filter(step %in% evalticks) like in the legacy script
-  # in case of run_metrics_condition, automatically filtering is close to impossible
-  # 1) instruct users to set the stop condition in a way where it only stops if it coincides with run_metrics_condition
-  #     --> eg. no sheep + tick as a multiple of 10.
-  #    ... or simply accept the extra data point
-  # 2) ... could also solve it with specific exit conditions, where values are set to something specific when they dont coincide
-  # with the record ticks condition. But that is finnicky and no one will use it anyways.
-
 
   # infer relation of resulting run_numbers and original siminputrow from block_df
   lookup <- block_df |>
@@ -346,7 +260,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     # random-seed won't be returned when repetition > 1
     # but later analysis will expect this seed.
     # even though the simulation didn't run with this seed, it is reattached.
-    # this was handled the same way pre NetLogo 7, see util_gather_results()
+    # this was handled the same way pre NetLogo 7, see util_gather_results() in older nlrx versions
     lookup <- dplyr::select(lookup, run_number, siminputrow, `random-seed`)
   }
 
@@ -362,21 +276,21 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
 }
 
 
-#' Backend function for run_nl_all_logolink (NetLogo 7+)
+#' Backend function for \code{run_nl_all()} (NetLogo 7+)
 #'
-#' @description Splits \code{nl@simdesign} into parameterization blocks, to be later executed with function \code{run_nl_block()}
+#' @description Splits \code{nl@simdesign@siminput} into blocks of size \code{block_size}, to be executed by \code{run_nl_block()}
 #'
-#' @param nl see \code{run_nl_all()}
-#' @param block_size see \code{run_nl_all()}
-#' @return a list of dataframes, each representing one bundle of simulations
-#' @keywords internal # 🟡 ????????????????
+#' @param nl See \code{run_nl_all()}
+#' @param block_size See \code{run_nl_all()}
+#' @return A list of data frames, each representing one bundle of simulations
+#' @keywords internal
 
 create_simulation_blocks <- function(nl, block_size){
   siminput <- getsim(nl, "siminput")
   simseeds <- getsim(nl, "simseeds")
 
   # Ensure block_size is formatted correctly.
-  checkmate::assert_int(block_size, lower = 1)
+  stopifnot(length(block_size) == 1, !is.na(block_size), block_size >= 1, block_size == as.integer(block_size))
 
   # Construct blocks of simulation parameterizations ("jobs")
   siminput <- siminput |> dplyr::mutate(siminputrow = dplyr::row_number()) # required for mapping, later on.
@@ -389,21 +303,21 @@ create_simulation_blocks <- function(nl, block_size){
 }
 
 
-#' Backend function for run_nl_all_logolink (NetLogo 7+)
+#' Backend function for \code{run_nl_all()}
 #'
-#' @description Merges results produced in \code{run_nl_all_logolink} by \code{run_nl_block} into one dataframe, which is returned as final result of \code{run_nl_all}
+#' @description Merges results produced by \code{run_nl_block()} into one tibble. Temporarily handles column name restoration until \code{logolink} supports preserving original column names.
 #'
-#' @param nl see \code{run_nl_all()}
-#' @param block_size see \code{run_nl_all()}
-#' @return  tibble with simulation output results
-#' @keywords internal # 🟡 ????????????????
+#' @param nl See \code{run_nl_all()}
+#' @param results_list List of result tibbles returned by \code{run_nl_block()}
+#' @return Tibble with simulation output results
+#' @keywords internal
 
 merge_result_blocks <- function(nl, results_list){
   nl_results <- dplyr::bind_rows(results_list)
 
   ## logolink (used in run_nl_block() ) renames outputs, but NLRX expects the original names downstream
   # rename back via explicit name mappings
-  #🟡 logolink will offer a feature to preserve names, as of now this feature is not there, so it uses janitor::make_clean_names forcibly.
+  # logolink will offer a feature to preserve names, as of now this feature is not there, so it uses janitor::make_clean_names forcibly.
   # there are multiple of these sections (one before this, when metrics are merged, and one in run_nl_one_logolink.
   # -> ctrl + shift + f -> "janitor::make_clean_names" to find all instances.
 
@@ -433,114 +347,28 @@ merge_result_blocks <- function(nl, results_list){
 }
 
 
-
-
-
-
-#' Backend function for \code{run_nl_all()} using the legacy execution path (supported for NetLogo < 7.0)
-#'
-#' @description Internal backend used by \code{run_nl_all()} for legacy NetLogo versions.
-#'
-#' @param nl nl object
-#' @param split see \code{run_nl_all()}
-#' @param cleanup.csv see \code{run_nl_all()}
-#' @param cleanup.xml see \code{run_nl_all()}
-#' @param cleanup.bat see \code{run_nl_all()}
-#' @param writeRDS see \code{run_nl_all()}
-#' @return tibble with simulation output results
-#' @details
-#' Helper function wrapped by \code{run_nl_all()}.
-#' Allows for parallelization via \code{split} by using the future package.
-#' Executes one simulation at a time, causing NetLogo to restart for every simulation.
-#' @keywords internal
-
-run_nl_all_legacy <- function(nl, split, cleanup.csv, cleanup.xml, cleanup.bat, writeRDS){
-  ## Store the number of siminputrows
-  siminput_nrow <- nrow(getsim(nl, "siminput"))
-  ## Check if split parameter is valid:
-  if (siminput_nrow %% split != 0) {
-    stop(
-      "Modulo of split parameter and number of rows of the siminput matrix is
-      not 0. Please adjust split parameter to a valid value!",
-      call. = FALSE
-    )
-  }
-
-  ## Calculate size of one part:
-  n_per_part <- siminput_nrow / split
-  ## Generate job ids from seeds and parts:
-  jobs <- as.list(expand.grid(getsim(nl, "simseeds"), seq(1:split)))
-
-  ## Setup progress bar:
-  total_steps <- siminput_nrow * length(getsim(nl, "simseeds"))
-  p <- progressr::progressor(steps = total_steps)
-
-  ## Execute on remote location
-  nl_results <- furrr::future_map_dfr(
-    seq_along(jobs[[1]]),
-    function(job) {
-      ## Extract current seed and part from job id:
-      job_seed <- jobs[[1]][[job]]
-      job_part <- jobs[[2]][[job]]
-
-      ## Calculate rowids of the current part:
-      rowids <-
-        seq(1:n_per_part) +
-        (job_part - 1) * n_per_part
-
-      ## Start inner loop to run model simulations:
-      res_job <- furrr::future_map_dfr(
-        rowids,
-        function(siminputrow) {
-
-          # Update progress bar:
-          p(sprintf("row %d/%d seed %d",
-                    siminputrow, nrow(getsim(nl, "siminput")),
-                    job_seed))
-          # Run simulation
-          res_one <- run_nl_one(
-            nl = nl,
-            seed = job_seed,
-            siminputrow = siminputrow,
-            cleanup.csv = cleanup.csv,
-            cleanup.xml = cleanup.xml,
-            cleanup.bat = cleanup.bat,
-            writeRDS = writeRDS
-          )
-          return(res_one)
-        })
-      return(res_job)
-    })
-  return(nl_results)
-}
-
-
-
 #' Execute one NetLogo simulation from a nl object
 #'
 #' @description Execute one NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
-#' @param seed a random seed for the NetLogo simulation (ignored when repetitions > 1)
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
+#' @param seed a random seed for the NetLogo simulation (ignored when \code{repetition > 1})
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results (NetLogo < 7).
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results (NetLogo < 7).
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results (NetLogo < 7).
-#' @param writeRDS TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object (NetLogo < 7).
 #' @return tibble with simulation output results
 #' @details
-#'
-#' run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
-#' The random seed is set within the NetLogo model to control stochasticity.
+#' Uses the \code{logolink} backend for NetLogo 7+.
+#' \code{run_nl_one()} executes one simulation of the specified NetLogo model within the provided nl object.
+#' The random seed is set within the NetLogo model to control stochasticity. For further information, see the Reproducibility section in \code{run_nl_all()}.
 #' The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
-#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-#' cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
 #'
-#' This function can be used to run single simulations of a NetLogo model.
+#' The \code{threads} argument controls NetLogo's native multithreading.
+#' This is relevant when \code{repetition > 1}, as multiple repetitions can be parallelized within one NetLogo instance.
+#' For single runs (\code{repetition = 1}), \code{threads} has no effect.
 #'
+#' @section Suppressing Messages:
+#' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+#' \code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_one(nl, 123, 1))}.
 #'
 #' @examples
 #' \dontrun{
@@ -563,46 +391,17 @@ run_nl_one <- function(nl,
                        seed,
                        threads = 1,
                        siminputrow,
-                       cleanup.csv = TRUE,
-                       cleanup.xml = TRUE,
-                       cleanup.bat = TRUE,
-                       writeRDS = FALSE) {
+                       ...) {
 
-  if (getnl(nl, "nlversion") >= "7.0.0") {
-    nl_results <- run_nl_one_logolink(nl, seed, threads, siminputrow)# NetLogo 7.0+
-    return(nl_results)
-  } else {
-    nl_results <- run_nl_one_legacy(nl, seed, siminputrow, cleanup.csv, cleanup.xml, cleanup.bat, writeRDS) # NetLogo < 7.0
-    return(nl_results)
-  }
-}
-
-
-
-#' Backend function for run_nl_one using the logolink execution path (supported for NetLogo 7+)
-#'
-#' @description Internal backend used by \code{run_nl_one()} for NetLogo 7+.
-#'
-#' @param nl nl object
-#' @param seed random seed passed to NetLogo if defined
-#' @param threads see \code{run_nl_all()}
-#' @param siminputrow row of the siminput table to be executed
-#' @return tibble with simulation output results
-#' @details
-#' Internal helper function wrapped by \code{run_nl_one()}.
-#' The defined \code{siminputrow} is transformed into a single-row parameterization block.
-#' This block is then passed to \code{run_nl_block()} for Logolink execution.
-#' @keywords internal
-
-run_nl_one_logolink <- function(nl,
-                                seed = NA,
-                                threads = 1,
-                                siminputrow) {
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat", "writeRDS")
+  )
 
   # Get the parameterization
   block_df <- getsim(nl, "siminput")[siminputrow, , drop = FALSE]
 
-  # That one parameterization will be the whole block.
+  # Wrap the single parameterization as a block of size 1
   block_df$siminputrow <- siminputrow
 
   # Add the seed
@@ -628,103 +427,31 @@ run_nl_one_logolink <- function(nl,
 }
 
 
-
-#' Backend function for \code{run_nl_one()} using the legacy execution path (supported for NetLogo < 7.0)
-#'
-#' @description Internal backend used by \code{run_nl_one()} for legacy NetLogo versions.
-#'
-#' @param nl nl object
-#' @param seed random seed passed to NetLogo
-#' @param siminputrow row of the siminput table to be executed
-#' @param cleanup.csv see \code{run_nl_one()}
-#' @param cleanup.xml see \code{run_nl_one()}
-#' @param cleanup.bat see \code{run_nl_one()}
-#' @param writeRDS see \code{run_nl_one()}
-#' @return tibble with simulation output results
-#' @details
-#' Helper function wrapped by \code{run_nl_one()}.
-#' Executes a single simulation by writing a temporary BehaviorSpace XML file,
-#' running NetLogo, and gathering the generated output.
-#' @keywords internal
-
-run_nl_one_legacy <- function(nl,
-                              seed,
-                              siminputrow,
-                              cleanup.csv,
-                              cleanup.xml,
-                              cleanup.bat,
-                              writeRDS) {
-
-  util_eval_simdesign(nl)
-
-  ## Write XML File:
-  xmlfile <-
-    tempfile(
-      pattern = paste0("nlrx_seed_", seed, "_row_", siminputrow, "_"),
-      fileext = ".xml"
-    )
-
-  util_create_sim_XML(nl, seed, siminputrow, xmlfile)
-
-  ## Execute:
-  outfile <-
-    tempfile(
-      pattern = paste0("nlrx_seed_", seed, "_row_", siminputrow, "_"),
-      fileext = ".csv"
-    )
-
-  batchpath <- util_read_write_batch(nl)
-
-  util_call_nl(nl, xmlfile, outfile, batchpath)
-
-  ## Read results
-  nl_results <- util_gather_results(nl, outfile, seed, siminputrow)
-
-  ## Delete temporary files:
-  cleanup.files <- list("csv" = outfile,
-                        "xml" = xmlfile,
-                        "bat" = batchpath)
-
-  util_cleanup(nl, cleanup.csv, cleanup.xml, cleanup.bat, cleanup.files)
-
-
-  if (isTRUE(writeRDS))
-  {
-    if(dir.exists(nl@experiment@outpath))
-    {
-      filename <- paste0("nlrx_seed_", seed, "_row_", siminputrow, ".rds")
-      saveRDS(nl_results, file=file.path(nl@experiment@outpath, filename))
-    } else
-    {
-      warning(paste0("Outpath of nl object does not exist on remote file system: ", nl@experiment@outpath, ". Cannot write rds file!"))
-    }
-  }
-
-  return(nl_results)
-}
-
-
-
-
 #' Execute NetLogo simulation without pregenerated parametersets
 #'
 #' @description Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets
 #'
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
-#' @return simulation output results can be tibble, list, ...
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
+#' @return simulation output results can be tibble, list, ... (structure depends on simdesign method)
 #' @details
 #'
 #' run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
 #' This is the case for dynamic designs, such as Simulated Annealing and Genetic Algorithms, where parametersets are dynamically generated, based on the output of previous simulations.
-#' The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-#' cleanup.csv deletes/keeps the temporary generated model output files from each run.
-#' cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-#' cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
+#'
+#' Simulations are executed sequentially, one parameterization at a time, as each new parameterization depends on the results of the previous simulation.
+#' Internally, each simulation step is executed via \code{run_nl_one()}.
+#'
+#' @section Reproducibility and Seeds:
+#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
+#' NetLogo will generate its own seeds for repetitions, which limits reproducibility.
+#' This is a known limitation of dynamic designs. For full seed control, set \code{repetition = 1}
+#' and run multiple independent dynamic designs with different seeds via the simdesign.
+#'
+#' @section Suppressing Messages:
+#' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+#' \code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_dyn(nl))}.
 #'
 #' @examples
 #' \dontrun{
@@ -751,19 +478,34 @@ run_nl_one_legacy <- function(nl,
 run_nl_dyn <- function(nl,
                        seed,
                        threads = 1,
-                       cleanup.csv = TRUE,
-                       cleanup.xml = TRUE,
-                       cleanup.bat = TRUE) {
+                       ...) {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
+
+  if (nl@experiment@repetition > 1) {
+    warning(
+      paste0(
+        "Experiment with repetition > 1 detected: Simdesign seeds won't be passed to NetLogo.\n",
+        "Repeated runs will therefore not use nl@simdesign@simseeds as explicit random-seed values.\n",
+        "Seeds will instead be chosen by NetLogo.\n",
+        "This is a known limitation of dynamic designs. For full seed control, set repetition = 1 ",
+        "and run multiple independent dynamic designs with different seeds via the simdesign.",
+        "This limitation may be addressed in future versions."
+      ),
+      call. = FALSE
+    )
+  }
+
   nl_results <- NULL
 
   if (getsim(nl, "simmethod") == "GenSA") {
     nl_results <- util_run_nl_dyn_GenSA(
       nl = nl,
       seed = seed,
-      threads = threads,
-      cleanup.csv = cleanup.csv,
-      cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat
+      threads = threads
     )
   }
 
@@ -771,10 +513,7 @@ run_nl_dyn <- function(nl,
     nl_results <- util_run_nl_dyn_GenAlg(
       nl = nl,
       seed = seed,
-      threads = threads,
-      cleanup.csv = cleanup.csv,
-      cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat
+      threads = threads
     )
   }
 
@@ -782,10 +521,7 @@ run_nl_dyn <- function(nl,
     nl_results <- util_run_nl_dyn_ABCmcmc(
       nl = nl,
       seed = seed,
-      threads = threads,
-      cleanup.csv = cleanup.csv,
-      cleanup.xml = cleanup.xml,
-      cleanup.bat = cleanup.bat
+      threads = threads
     )
   }
 

@@ -31,7 +31,6 @@
       outpath = "character",
       repetition = "numeric",
       tickmetrics = "character",
-      run_metrics_condition = "character",
       idsetup = "character",
       idgo = "character",
       idfinal = "character",

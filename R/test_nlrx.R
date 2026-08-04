@@ -2,13 +2,13 @@
 #'
 #' @description Runs a short test if nlrx runs on the local system
 #' @param nlpath Provide a path to a netlogo folder
-#' @param nlversion Matching version string of the provided NetLogo folder (e.g. "6.1.1")
+#' @param nlversion Matching version string of the provided NetLogo folder (e.g. "7.0.4")
 #' @details
 #' Runs a short test if nlrx runs on the local system. Reports TRUE if successful!
 #'
 #' @examples
 #' \dontrun{
-#' test_nlrx(nlpath="/Users/xyz/netlogo/NetLogo 6.1.1", nlversion="6.1.1")
+#' test_nlrx(nlpath="/Users/xyz/netlogo/NetLogo 7.0.4", nlversion="7.0.4")
 #' }
 #'
 #' @aliases test_nlrx
@@ -24,8 +24,8 @@ test_nlrx <- function(nlpath, nlversion){
 
   modelpath <- ifelse(
     nlversion >= "6.3.0",
-    file.path(nlpath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogo"),
-    file.path(nlpath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+    file.path(nlpath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox"),
+    file.path(nlpath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
   )
 
   if(!file.exists(modelpath)){
@@ -50,13 +50,13 @@ test_nlrx <- function(nlpath, nlversion){
                               metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                               variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                                'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                              constants = list("model-version" = "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   # Attach simdesign
   nl@simdesign <- simdesign_simple(nl=nl, nseeds=1)

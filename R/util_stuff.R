@@ -74,3 +74,43 @@ util_generate_seeds <- function(nseeds) {
   return(seeds)
 }
 
+
+#' Utility function for checking for deprecated or unsupported arguments
+#'
+#' @param dots Named list of arguments captured from \code{...}
+#' @param deprecated_args Character vector of deprecated argument names that should trigger depreciation warnings (and not errors)
+#' @keywords internal
+
+util_check_deprecated_args <- function(dots, deprecated_args) {
+
+  # Check if there is something to check
+  if (length(dots) == 0) {
+    return(invisible(NULL))
+  }
+
+  # Warn when depreciated arguments are detected
+  deprecated_found <- intersect(names(dots), deprecated_args)
+
+  if (length(deprecated_found) > 0) {
+    for (arg in deprecated_found) {
+      warning(
+        "Argument '", arg, "' is deprecated.",
+        call. = FALSE
+      )
+    }
+  }
+
+  # Error when unknown arguments are detected
+  unsupported_found <- setdiff(names(dots), deprecated_args)
+
+  if (length(unsupported_found) > 0) {
+    stop(
+      "Unsupported argument(s): ",
+      paste("'", unsupported_found, "'", sep = "", collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  return(invisible(NULL))
+}
+

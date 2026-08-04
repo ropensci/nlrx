@@ -8,31 +8,31 @@ testthat::test_that("Run nl", {
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
+  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4",
                                  "FAILED")))
 
   testthat::expect_true(nlpath != "FAILED")
   testthat::expect_true(dir.exists(nlpath))
 
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
                                  "FAILED")))
 
   testthat::expect_true(jarpath != "FAILED")
   testthat::expect_true(file.exists(jarpath))
 
   ## Check the test_nlrx() function:
-  testthat::expect_true(test_nlrx(nlpath=nlpath, nlversion="6.1.1"))
+  testthat::expect_true(test_nlrx(nlpath=nlpath, nlversion="7.0.4"))
 
 
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = "6.1.1",
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -57,13 +57,13 @@ testthat::test_that("Run nl", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -74,10 +74,11 @@ testthat::test_that("Run nl", {
 
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
+  threads <- 1
 
 
   testthat::context("Run one simulation with run_nl_one()")
-  results <- run_nl_one(nl, seed, siminputrow)
+  results <- run_nl_one(nl, seed, threads, siminputrow)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
@@ -85,9 +86,6 @@ testthat::test_that("Run nl", {
   results <- run_nl_all(nl)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
-
-  testthat::context("Run all simulations with run_nl_all() and wrong split parameter")
-  testthat::expect_error(run_nl_all(nl, split=4))
 
   ## Step3: Test tickmetrics = false
   nl@experiment <- experiment(expname = "nlrx_test",
@@ -107,13 +105,13 @@ testthat::test_that("Run nl", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -124,10 +122,16 @@ testthat::test_that("Run nl", {
 
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
+  threads <- 1
 
   testthat::context("Run one simulation with run_nl_one()
                     and tickmetrics false")
-  results <- run_nl_one(nl, seed, siminputrow)
+
+  expect_warning(
+    results <- run_nl_one(nl, seed, threads, siminputrow),
+    "'evalticks' is ignored when 'tickmetrics' isn't 'true'"
+  )
+
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 1)
 
@@ -150,13 +154,13 @@ testthat::test_that("Run nl", {
                                                  list(min=400, max=500,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 1,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -167,10 +171,11 @@ testthat::test_that("Run nl", {
 
   seed <- nl@simdesign@simseeds[1]
   siminputrow <- 1
+  threads <- 1
 
   testthat::context("Run one simulation with run_nl_one()
                     and tickmetrics false")
-  results <- run_nl_one(nl, seed, siminputrow)
+  results <- run_nl_one(nl, seed, threads, siminputrow)
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 1)
 

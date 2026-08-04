@@ -44,33 +44,45 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     output_format <- "word_document"
   }
 
+  # Handle empty header (fallback values)
+  if (nrow(noxygen$header) == 0) {
+    noxygen$header$model <- "Untitled Model"
+    noxygen$header$author <- "Unknown"
+  }
+
+  # Handle NA values
+  if (is.na(noxygen$header$model) || noxygen$header$model == "") {
+    noxygen$header$model <- "Untitled Model"
+  }
+  if (is.na(noxygen$header$author) || noxygen$header$author == "") {
+    noxygen$header$author <- "Unknown"
+  }
+
   # write preambel for the markdown file (define format, style, ...)
-  preambel <- paste("---\r\n",
-                    "title: \"", noxygen$header$model, "\"\r\n",
-                    "author: \"", noxygen$header$author, "\"\r\n",
-                    "date: \"", date, "\"\r\n",
-                    "output: \r\n",
-                    "  ", output_format, ":\r\n",
-                    "    toc: ", toc, "\r\n", sep = '')
+  # Common lines:
+  preambel <- c(
+    "---",
+    paste0("title: \"", noxygen$header$model, "\""),
+    paste0("author: \"", noxygen$header$author, "\""),
+    paste0("date: \"", date, "\""),
+    "output:",
+    paste0("  ", output_format, ":")
+  )
 
-  # if PDF is chosen, add section numbering definition to the preambel
-  if (output_format == "pdf")
-  {
-    preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r\n", sep = '')
+  # Format-specific options:
+  if (output_format == "html_document") {
+    preambel <- c(preambel,
+                  paste0("    toc: ", toc),
+                  paste0("    number_sections: ", number_sections),
+                  paste0("    theme: ", theme))
+  } else if (output_format == "pdf") {
+    preambel <- c(preambel,
+                  paste0("    toc: ", toc),
+                  paste0("    number_sections: ", number_sections))
   }
 
-  # if HTML is chosen add section numbering and theme definition to the preambel
-  if (output_format == "html_document")
-  {
-    preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r\n",
-                      "    theme: ", theme, "\r\n", sep = '')
-  }
-
-  # Add end of preambel!
-  preambel <- paste(preambel,
-                    "---", sep='')
+  # Close preamble:
+  preambel <- c(preambel, "---", "")
 
 
   # Initialize string
@@ -135,7 +147,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   }
 
   ## Add gui elements if wanted:
-  if (!is.na(noxygen_gui[1]))
+  if (length(noxygen_gui) > 0 && !is.na(noxygen_gui[1]))
   {
     noxygencode <- c(noxygencode, "# GUI elements")
     # Table header:
@@ -159,7 +171,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     }
   }
 
-  if (!is.na(noxygen_it[1]))
+  if (length(noxygen_it) > 0 && !is.na(noxygen_it[1]))
   {
     noxygencode <- c(noxygencode, "# Info Tab")
 
@@ -172,7 +184,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
 
 
   ## Add bs elements if wanted:
-  if (!is.na(noxygen_bs[1]))
+  if (length(noxygen_bs) > 0 && !is.na(noxygen_bs[1]))
   {
     noxygencode <- c(noxygencode, "# Behavior Space Experiments")
 

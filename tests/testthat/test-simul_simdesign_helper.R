@@ -2,9 +2,9 @@ testthat::context("Simdesign Helper")
 testthat::test_that("Simdesign objects are created properly", {
 
   nl <- nl(
-    nlversion = "6.0.3",
-    nlpath = "/home/travis/netlogo/NetLogo 6.0.3",
-    modelpath = "/home/travis/netlogo/NetLogo 6.0.3/app/models/Wolf Sheep Predation.nlogo",
+    nlversion = "7.0.4",
+    nlpath = "/home/travis/netlogo/NetLogo 7.0.4",
+    modelpath = "/home/travis/netlogo/NetLogo 7.0.4/app/models/Wolf Sheep Predation.nlogox",
     jvmmem = 1024
   )
 
@@ -26,13 +26,13 @@ testthat::test_that("Simdesign objects are created properly", {
                                      qfun = "qunif", values=c(10, 20, 30))
     ),
     constants = list(
-      "model-version" = "\"sheep-wolves-grass\"",
+      "model-version" = "sheep-wolves-grass",
       "grass-regrowth-time" = 30,
       "sheep-gain-from-food" = 4,
       "wolf-gain-from-food" = 20,
       "sheep-reproduce" = 4,
       "wolf-reproduce" = 5,
-      "show-energy?" = "false"
+      "show-energy?" = FALSE
     )
   )
 

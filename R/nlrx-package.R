@@ -27,14 +27,14 @@
 #' ```
 #' library(nlrx)
 #' # Windows default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("C:/out")
 #' # Unix default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("/home/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("/home/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("/home/out")
-#' nl <- nl(nlversion = "6.0.3",
+#' nl <- nl(nlversion = "7.0.4",
 #'          nlpath = netlogopath,
 #'          modelpath = modelpath,
 #'          jvmmem = 1024)
@@ -58,13 +58,13 @@
 #'                              metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
 #'                              variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
 #'                                               'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-#'                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+#'                              constants = list("model-version" = "sheep-wolves-grass",
 #'                                               "grass-regrowth-time" = 30,
 #'                                               "sheep-gain-from-food" = 4,
 #'                                               "wolf-gain-from-food" = 20,
 #'                                               "sheep-reproduce" = 4,
 #'                                               "wolf-reproduce" = 5,
-#'                                               "show-energy?" = "false"))
+#'                                               "show-energy?" = FALSE))
 #' ```
 #'
 #' Step 3: Attach a simulation design

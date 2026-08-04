@@ -11,7 +11,7 @@ testthat::test_that("supported_netlogo_versions", {
 
   mockery::stub(download_netlogo, "utils::download.file", NULL)
   mockery::stub(download_netlogo, "system", NULL)
-  nlversion <- "5.3.1"
+  nlversion <- "7.0.0"
   nlpath <- tempdir()
   os <- NA
 

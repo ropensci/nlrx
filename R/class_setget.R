@@ -7,12 +7,12 @@
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' nl <- nl(
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # set NetLogo version
-#' setnl(nl, "nlversion") <- "6.0.3"
+#' setnl(nl, "nlversion") <- "7.0.4"
 #'
 #' @aliases setnl
 #' @rdname setnl
@@ -32,9 +32,9 @@
 #' @examples
 #'
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nl <- nl(nlversion = "7.0.4",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # get NetLogo version
@@ -59,9 +59,9 @@ getnl <- function(nl, var) {
 #' @examples
 #'
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nl <- nl(nlversion = "7.0.4",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # Set experiment name
@@ -84,9 +84,9 @@ getnl <- function(nl, var) {
 #' @param var valid experiment variable string
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nl <- nl(nlversion = "7.0.4",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # Set experiment name
@@ -113,9 +113,9 @@ getexp <- function(nl, var) {
 #' @param value valid value for the specified variable
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nl <- nl(nlversion = "7.0.4",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # Set simulation seeds
@@ -138,9 +138,9 @@ getexp <- function(nl, var) {
 #' @param var valid simdesign variable string
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
-#' nl <- nl(nlversion = "6.0.3",
-#' nlpath = "/home/user/NetLogo 6.0.3/",
-#' modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+#' nl <- nl(nlversion = "7.0.4",
+#' nlpath = "/home/user/NetLogo 7.0.4/",
+#' modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 #' jvmmem = 1024)
 #'
 #' # Set simulation seeds

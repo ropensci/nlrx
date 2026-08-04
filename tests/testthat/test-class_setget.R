@@ -2,15 +2,15 @@ testthat::context("Class setter and getter")
 testthat::test_that("Class setter and getter", {
 
 
-  nl <- nl(nlversion = "6.0.3",
+  nl <- nl(nlversion = "7.0.4",
            nlpath = "test",
            modelpath = "test",
            jvmmem = 1024)
 
   ## Check setnl and getnl:
-  setnl(nl, "nlversion") <- "6.0.4"
+  setnl(nl, "nlversion") <- "7.0.4"
 
-  testthat::expect_match(getnl(nl, "nlversion"), "6.0.4")
+  testthat::expect_match(getnl(nl, "nlversion"), "7.0.4")
 
   ## Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
@@ -34,13 +34,13 @@ testthat::test_that("Class setter and getter", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   ## Check setexp and getexp:
   setexp(nl, "expname") <- "newexpname"

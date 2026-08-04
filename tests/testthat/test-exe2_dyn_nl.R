@@ -8,17 +8,17 @@ testthat::test_that("run_nl_dyn", {
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
+  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4",
                                  "FAILED")))
 
   testthat::expect_true(nlpath != "FAILED")
   testthat::expect_true(dir.exists(nlpath))
 
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
                                   "FAILED")))
 
 
@@ -28,9 +28,9 @@ testthat::test_that("run_nl_dyn", {
 
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = "6.1.1",
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -53,8 +53,8 @@ testthat::test_that("run_nl_dyn", {
                                                "grass-regrowth-time" = 30,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "model-version" = "\"sheep-wolves-grass\"",
-                                               "show-energy?" = "false"))
+                                               "model-version" = "sheep-wolves-grass",
+                                               "show-energy?" = FALSE))
 
   testthat::context("Run optimization with run_nl_dyn() GenSA")
   nl@simdesign <- simdesign_GenSA(nl,

@@ -134,7 +134,7 @@ unnest_simoutput <- function(nl){
   # unnest patches data
   if (pmet_exist) {
     patches <- getsim(nl, "simoutput") %>%
-      dplyr::select(-dplyr::one_of(turtles.cols),-dplyr::one_of(links.cols)) %>%
+      dplyr::select(-dplyr::any_of(turtles.cols),-dplyr::any_of(links.cols)) %>%
       tidyr::unnest(cols = patches.cols)
   } else {
     patches <- getsim(nl, "simoutput")[common_names]

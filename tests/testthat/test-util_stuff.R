@@ -9,17 +9,17 @@ testthat::test_that("Util stuff", {
   testthat::expect_true(system('java -version') == 0)
 
   ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
+  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4",
+                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4",
+                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4",
                                  "FAILED")))
 
   testthat::expect_true(nlpath != "FAILED")
   testthat::expect_true(dir.exists(nlpath))
 
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
+  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
+                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
                                   "FAILED")))
 
   testthat::expect_true(jarpath != "FAILED")
@@ -27,10 +27,10 @@ testthat::test_that("Util stuff", {
 
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
 
-  nl <- nl(nlversion = "6.1.1",
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)

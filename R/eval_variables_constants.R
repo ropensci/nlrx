@@ -77,18 +77,26 @@ eval_variables_constants <- function(nl) {
     ), call. = FALSE)
   }
 
-  # Check if NetLogo parameters have been defined in variables AND constants:
-  # Check if a NetLogo parameter has been defined in variables AND constants:
-  if (any(names(getexp(nl, "variables")) %in% names(getexp(nl, "constants")))) {
-    stop(paste0(
-      "Same netlogo parameter present in variables AND constants:\n",
-      paste(names(getexp(nl, "variables"))[names(getexp(nl, "variables")) %in%
-                                             names(getexp(nl, "constants"))],
-            collapse = "\n")), call. = FALSE)
+  # Check if a NetLogo parameter has been defined in variables AND constants, or is duplicated:
+  parameter_names <- c(
+    names(getexp(nl, "variables")),
+    names(getexp(nl, "constants"))
+  )
+
+  duplicated_parameters <- unique(parameter_names[duplicated(parameter_names)])
+
+  if (length(duplicated_parameters) > 0) {
+    stop(
+      paste0(
+        "Duplicated NetLogo parameter definitions detected:\n",
+        paste(duplicated_parameters, collapse = "\n"),
+        "\nEach NetLogo parameter should only be defined once, either in variables or constants."
+      ),
+      call. = FALSE
+    )
   }
 
-
-  if (getnl(nl, "nlversion") >= "7.0.0") {
+  if (numeric_version(getnl(nl, "nlversion")) >= numeric_version("7.0.0")) {
     check_constants_and_variables_logolink(nl)
   }
 
@@ -150,7 +158,7 @@ check_constants_and_variables_logolink <- function(nl) {
         c(
           "Potential NetLogo 7+ formatting issues detected:",
           paste0("- ", issues),
-          "Strings should be plain character values, booleans should be TRUE/FALSE."
+          "Strings should be plain character values. Booleans should be given as logical values, not as strings; NLRX converts string booleans automatically."
         ),
         collapse = "\n"
       ),
@@ -182,7 +190,7 @@ check_value_format <- function(x, name = NULL) {
         issues,
         paste0(
           if (!is.null(name)) paste0("'", name, "': ") else "",
-          "Boolean is given as character ('", x, "'). Confirm that this is intended."
+          "Boolean is given as character ('", x, "'). NLRX will automatically convert these to logical."
         )
       )
     }

@@ -5,19 +5,19 @@
 #'
 #' @param nl nl object
 #' @param seed current model seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_GenSA
 #' @rdname util_run_nl_dyn_GenSA
 #' @keywords internal
 util_run_nl_dyn_GenSA <- function(nl,
                                   seed,
                                   threads = 1,
-                                  cleanup.csv,
-                                  cleanup.xml,
-                                  cleanup.bat) {
+                                  ...) {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
 
   # Get GenSA object from simdesign:
   gensa <- getsim(nl, "simobject")
@@ -32,9 +32,6 @@ util_run_nl_dyn_GenSA <- function(nl,
         evalcrit = gensa$evalcrit,
         seed = seed,
         threads = threads,
-        cleanup.csv = cleanup.csv,
-        cleanup.xml = cleanup.xml,
-        cleanup.bat = cleanup.bat,
         ...
       )
     },
@@ -55,10 +52,7 @@ util_run_nl_dyn_GenSA <- function(nl,
 #' @param nl nl object
 #' @param evalcrit evaluation criterion for simulated annealing
 #' @param seed current model seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_GenSA_fn
 #' @rdname util_run_nl_dyn_GenSA_fn
 #' @keywords internal
@@ -67,9 +61,12 @@ util_run_nl_dyn_GenSA_fn <- function(param,
                                      evalcrit,
                                      seed,
                                      threads = 1,
-                                     cleanup.csv,
-                                     cleanup.xml,
-                                     cleanup.bat) {
+                                     ...) {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -93,10 +90,7 @@ util_run_nl_dyn_GenSA_fn <- function(param,
     nl = nl,
     siminputrow = 1,
     seed = seed,
-    threads = threads,
-    cleanup.csv = cleanup.csv,
-    cleanup.xml = cleanup.xml,
-    cleanup.bat = cleanup.bat
+    threads = threads
   )
 
   # Select metric for gensa:
@@ -124,19 +118,19 @@ util_run_nl_dyn_GenSA_fn <- function(param,
 #'
 #' @param nl nl object
 #' @param seed current model seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_GenAlg
 #' @rdname util_run_nl_dyn_GenAlg
 #' @keywords internal
 util_run_nl_dyn_GenAlg <- function(nl,
                                    seed,
                                    threads = 1,
-                                   cleanup.csv,
-                                   cleanup.xml,
-                                   cleanup.bat) {
+                                   ...) {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
 
   # Get GenSA object from simdesign:
   galg <- getsim(nl, "simobject")
@@ -156,9 +150,6 @@ util_run_nl_dyn_GenAlg <- function(nl,
         evalcrit = galg$evalcrit,
         seed = seed,
         threads = threads,
-        cleanup.csv = cleanup.csv,
-        cleanup.xml = cleanup.xml,
-        cleanup.bat = cleanup.bat,
         ...
       )
     }
@@ -176,10 +167,7 @@ util_run_nl_dyn_GenAlg <- function(nl,
 #' @param nl nl object
 #' @param evalcrit evaluation criterion for simulated annealing
 #' @param seed current model seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_GenAlg_fn
 #' @rdname util_run_nl_dyn_GenAlg_fn
 #' @keywords internal
@@ -188,9 +176,12 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
                                       evalcrit,
                                       seed,
                                       threads = 1,
-                                      cleanup.csv,
-                                      cleanup.xml,
-                                      cleanup.bat) {
+                                      ...) {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
 
   # Generate a parameterset:
   names(param) <- names(getexp(nl, "variables"))
@@ -214,10 +205,7 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
     nl = nl,
     siminputrow = 1,
     seed = seed,
-    threads = threads,
-    cleanup.csv = cleanup.csv,
-    cleanup.xml = cleanup.xml,
-    cleanup.bat = cleanup.bat
+    threads = threads
   )
 
   # Select metric for gensa:
@@ -244,24 +232,24 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
 #'
 #' @param nl nl object
 #' @param seed current model seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
-#' @param cleanup.csv TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.
-#' @param cleanup.xml TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.
-#' @param cleanup.bat TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_ABCmcmc
 #' @rdname util_run_nl_dyn_ABCmcmc
 #' @keywords internal
-util_run_nl_dyn_ABCmcmc <- function(nl, seed, threads = 1, cleanup.csv=TRUE, cleanup.xml=TRUE, cleanup.bat=TRUE)
+util_run_nl_dyn_ABCmcmc <- function(nl, seed, threads = 1, ...)
 {
+
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
+  )
+
   abcmcmc <- getsim(nl, "simobject")
 
   globals <- list(nl=nl,
                   postpro_function=abcmcmc$postpro_function,
                   seed=seed,
                   threads=threads,
-                  cleanup.csv=cleanup.csv,
-                  cleanup.xml=cleanup.xml,
-                  cleanup.bat=cleanup.bat,
                   use_seed=abcmcmc$use_seed)
 
   # The ABC_mcmc function does not allow to pass additional arguments for the simulation function
@@ -322,7 +310,7 @@ util_run_nl_dyn_ABCmcmc <- function(nl, seed, threads = 1, cleanup.csv=TRUE, cle
 #' @description Genetic Algorithm run simulation function
 #'
 #' @param param vector of model parameters passed from ABC_mcmc function. If use_seeds = TRUE, the first element of this vector is a random seed
-#' @param threads number of NetLogo threads used for execution (NetLogo 7+).
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @aliases util_run_nl_dyn_GenAlg_fn
 #' @rdname util_run_nl_dyn_GenAlg_fn
 #' @keywords internal
@@ -335,9 +323,6 @@ util_run_nl_dyn_ABCmcmc_fn <- function(param, threads = 1)
   nl <- globals$nl
   postpro_function <- globals$postpro_function
   seed <- globals$seed
-  cleanup.csv <- globals$cleanup.csv
-  cleanup.xml <- globals$cleanup.xml
-  cleanup.bat <- globals$cleanup.bat
   use_seed <- globals$use_seed
 
   # Check if use_seed was used and overwrite the global random seed
@@ -366,10 +351,7 @@ util_run_nl_dyn_ABCmcmc_fn <- function(param, threads = 1)
     nl = nl,
     siminputrow = 1,
     seed = seed,
-    threads = threads,
-    cleanup.csv = cleanup.csv,
-    cleanup.xml = cleanup.xml,
-    cleanup.bat = cleanup.bat
+    threads = threads
   )
 
   # Check if a postpro function is provided

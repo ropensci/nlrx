@@ -15,22 +15,10 @@
 supported_netlogo_versions <- function() {
 
   supported_versions <- c(
-    "5.3.1",
-    "6.0.0",
-    "6.0.1",
-    "6.0.2",
-    "6.0.3",
-    "6.0.4",
-    "6.1.0",
-    "6.1.1",
-    "6.2.0",
-    "6.2.1",
-    "6.2.2",
-    "6.3.0",
-    "6.4.0",
     "7.0.0",
     "7.0.1",
     "7.0.2",
+    "7.0.3",
     "7.0.4"
   )
   return(supported_versions)
@@ -45,7 +33,7 @@ supported_netlogo_versions <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' check_netlogo_version("6.2.0")
+#' check_netlogo_version("7.0.0")
 #' check_netlogo_version("1.0")
 #' check_netlogo_version("1.0", TRUE)
 #' }
@@ -63,28 +51,30 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
   if (isTRUE(throw_error)) {
     if (!isTRUE(supported)) {
 
-      # For above 7+
+      # For NetLogo 7+
       if (numeric_version(version) >= numeric_version("7.0.0")) {
-        warning(
-          paste(
-            "NetLogo version", version,
-            "is not officially supported by nlrx.",
-            "NetLogo 7+ support is handled through logolink and execution may therefore still succeed.",
-            "These versions are officially supported: ",
-            paste(supported_netlogo_versions(), collapse=", ")
-          ),
-          call. = FALSE
+        msg <- paste(
+          "NetLogo version", version,
+          "is not officially tested with nlrx.",
+          "NetLogo 7+ support is handled through logolink and execution may therefore still succeed.",
+          "To bypass this check, set check_version = FALSE in nl().",
+          "Officially tested versions are:",
+          paste(supported_netlogo_versions(), collapse = ", ")
         )
-        # For below 7+
+        stop(msg, call. = FALSE)
+        # For NetLogo below 7 (deprecated support)
       } else {
         msg <- paste(
           "NetLogo version",
           version,
-          "is not supported by nlrx.",
-          "These versions are officially supported: ",
-          paste(supported_netlogo_versions(), collapse=", ")
+          "is no longer supported by nlrx.",
+          "Support for NetLogo versions below 7.0.0 has been deprecated.",
+          "Please upgrade to NetLogo 7.0.0 or newer.",
+          "To bypass this check (not recommended), set check_version = FALSE in nl().",
+          "Officially supported versions are:",
+          paste(supported_netlogo_versions(), collapse = ", ")
         )
-        stop(msg)
+        stop(msg, call. = FALSE)
       }
     }
   }
@@ -111,7 +101,7 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @examples
 #' \dontrun{
 #' dlpath <- tempdir()  # adjust path to your needs
-#' try(download_netlogo(dlpath, "6.0.3"))
+#' try(download_netlogo(dlpath, "7.0.4"))
 #' }
 #'
 #' @aliases download_netlogo

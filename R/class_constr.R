@@ -4,10 +4,11 @@
 #'
 #' @param nlversion A character string defining the NetLogo version that is used
 #' @param nlpath Path to the NetLogo main directory matching the defined version
-#' @param modelpath Path to the NetLogo model file (.nlogo or .nlogox) that is used for simulations
+#' @param modelpath Path to the NetLogo model file (.nlogox) that is used for simulations
 #' @param jvmmem Java virtual machine memory capacity in megabytes
 #' @param experiment Holds a experiment S4 class object
 #' @param simdesign Holds a simdesign S4 class object
+#' @param check_version Logical. If TRUE, check if the NetLogo version is officially supported. Set to FALSE to bypass version checks (e.g., for testing untested NetLogo 7.x versions).
 #' @param ... ...
 #' @return nl S4 class object
 #' @details
@@ -28,15 +29,15 @@
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' # Windows default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("C:/out")
 #' # Unix default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("/home/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("/home/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("/home/out")
 #'
-#' nl <- nl(nlversion = "6.0.3",
+#' nl <- nl(nlversion = "7.0.4",
 #'          nlpath = netlogopath,
 #'          modelpath = modelpath,
 #'          jvmmem = 1024)
@@ -44,21 +45,18 @@
 #' @name nl
 #' @rdname nl
 #' @export
-nl <- function(nlversion = "6.0.2",
+nl <- function(nlversion = "7.0.4",
                nlpath = character(),
                modelpath = character(),
                jvmmem = 1024,
                experiment = methods::new("experiment"),
                simdesign = methods::new("simdesign"),
+               check_version = TRUE,
                ...) {
 
-  # Ensure Logolink is installed for NetLogo 7+
-  if (numeric_version(nlversion) >= numeric_version("7.0.0") &&
-      !isTRUE(requireNamespace("logolink", quietly = TRUE))) {
-    stop(
-      "NetLogo 7+ execution requires the package 'logolink'. Please install it before running simulations.",
-      call. = FALSE
-    )
+  # Check NetLogo version support
+  if (isTRUE(check_version)) {
+    check_netlogo_version(nlversion, throw_error = TRUE)
   }
 
   methods::new("nl",
@@ -66,8 +64,8 @@ nl <- function(nlversion = "6.0.2",
                nlpath = path.expand(nlpath),
                modelpath = path.expand(modelpath),
                jvmmem = jvmmem,
-               experiment = methods::new("experiment"),
-               simdesign = methods::new("simdesign"),
+               experiment = experiment,
+               simdesign = simdesign,
                ...)
 }
 
@@ -81,7 +79,6 @@ nl <- function(nlversion = "6.0.2",
 #' @param outpath Path to a directory where experiment output will be stored
 #' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
-#' @param run_metrics_condition Character string defining condition for NetLogo to record metrics (e.g "ticks mod 2 = 0" to record every second tick). Has no effect when tickmetrics is "true". 🔵
 #' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
 #' @param idgo character string or vector of character strings, defining the name of the NetLogo go procedure
@@ -116,15 +113,9 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
 #'
-#' \emph{run_metrics_condition}
-#'
-#' Only applied if tickmetrics = TRUE and evalticks = NA.
-#' Character string controlling when NetLogo records metrics. Requires tickmetrics to be "true", and evalticks to be undefined. Works from NetLogo 7+ onwards. 🔵
-#' Set evalticks to NA_integer_ to measure on every tick.
-#'
 #' \emph{evalticks}
 #'
-#' Only applied if tickmetrics = TRUE and run_metrics_condition = NA.
+#' Only applied if tickmetrics = TRUE.
 #' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
 #' Set evalticks to NA_integer_ to measure on every tick.
 #'
@@ -220,8 +211,7 @@ nl <- function(nlversion = "6.0.2",
 #' nl@@experiment <- experiment(expname="wolf-sheep",
 #'                              outpath="C:/out/",
 #'                              repetition=1,
-#'                              tickmetrics="true",
-#'                              run_metrics_condition="ticks mod 2 = 0",
+#'                              tickmetrics="true"
 #'                              evalticks=seq(40,50),
 #'                              idsetup="setup",
 #'                              idgo="go",
@@ -242,13 +232,13 @@ nl <- function(nlversion = "6.0.2",
 #'                                               'initial-number-wolves' =
 #'                              list(min=50, max=150, step=10, qfun="qunif")),
 #'                              constants = list("model-version" =
-#'                                               "\"sheep-wolves-grass\"",
+#'                                               "sheep-wolves-grass",
 #'                                               "grass-regrowth-time" = 30,
 #'                                               "sheep-gain-from-food" = 4,
 #'                                               "wolf-gain-from-food" = 20,
 #'                                               "sheep-reproduce" = 4,
 #'                                               "wolf-reproduce" = 5,
-#'                                               "show-energy?" = "false"))
+#'                                               "show-energy?" = FALSE))
 #'
 #'
 #' @name experiment
@@ -258,7 +248,6 @@ experiment <- function(expname = "defaultexp",
                        outpath = NA_character_,
                        repetition = 1,
                        tickmetrics = "true",
-                       run_metrics_condition = NA_character_,
                        evalticks = NA_integer_,
                        idsetup = "setup",
                        idgo = "go",
@@ -279,7 +268,6 @@ experiment <- function(expname = "defaultexp",
                outpath=path.expand(outpath),
                repetition=repetition,
                tickmetrics=tickmetrics,
-               run_metrics_condition=run_metrics_condition,
                evalticks=evalticks,
                idsetup=idsetup,
                idgo=idgo,
