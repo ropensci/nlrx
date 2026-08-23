@@ -14,14 +14,6 @@ run_nl_one(nl, seed, threads = 1, siminputrow, ...)
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
 \item{siminputrow}{rownumber of the input tibble within the attached simdesign object that should be executed}
-
-\item{cleanup.csv}{Deprecated. No longer has any effect.}
-
-\item{cleanup.xml}{Deprecated. No longer has any effect.}
-
-\item{cleanup.bat}{Deprecated. No longer has any effect.}
-
-\item{writeRDS}{Deprecated. No longer has any effect.}
 }
 \value{
 tibble with simulation output results

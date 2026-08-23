@@ -2,7 +2,7 @@
 % Please edit documentation in R/util_stuff.R
 \name{util_check_deprecated_args}
 \alias{util_check_deprecated_args}
-\title{Utility function that can be used to check for deprecated and unsupported arguments}
+\title{Utility function for checking for deprecated or unsupported arguments}
 \usage{
 util_check_deprecated_args(dots, deprecated_args)
 }
@@ -12,6 +12,6 @@ util_check_deprecated_args(dots, deprecated_args)
 \item{deprecated_args}{Character vector of deprecated argument names that should trigger depreciation warnings (and not errors)}
 }
 \description{
-Utility function that can be used to check for deprecated and unsupported arguments
+Utility function for checking for deprecated or unsupported arguments
 }
 \keyword{internal}

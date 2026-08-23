@@ -12,12 +12,6 @@ util_run_nl_dyn_GenSA(nl, seed, threads = 1, ...)
 \item{seed}{current model seed}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
-
-\item{cleanup.csv}{Deprecated. No longer has any effect.}
-
-\item{cleanup.xml}{Deprecated. No longer has any effect.}
-
-\item{cleanup.bat}{Deprecated. No longer has any effect.}
 }
 \description{
 Simulated Annealing call simulations function

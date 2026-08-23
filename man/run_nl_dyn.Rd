@@ -12,12 +12,6 @@ run_nl_dyn(nl, seed, threads = 1, ...)
 \item{seed}{a random seed for the NetLogo simulation}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
-
-\item{cleanup.csv}{Deprecated. No longer has any effect.}
-
-\item{cleanup.xml}{Deprecated. No longer has any effect.}
-
-\item{cleanup.bat}{Deprecated. No longer has any effect.}
 }
 \value{
 simulation output results can be tibble, list, ... (structure depends on simdesign method)

@@ -12,16 +12,6 @@ run_nl_all(nl, block_size = 100, threads = 1, ...)
 \item{block_size}{number of simulations bundled into one execution block (one NetLogo instance can only receive one block).}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
-
-\item{split}{Deprecated. No longer has any effect.}
-
-\item{cleanup.csv}{Deprecated. No longer has any effect.}
-
-\item{cleanup.xml}{Deprecated. No longer has any effect.}
-
-\item{cleanup.bat}{Deprecated. No longer has any effect.}
-
-\item{writeRDS}{Deprecated. No longer has any effect.}
 }
 \value{
 tibble with simulation output results

@@ -226,7 +226,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     sub_experiments = jobs_formatted # specific parameter configurations
   ))
 
-  cli::cli_inform("Model running via: {.file {xml_path}}")
+  cli::cli_alert_info("Model running via: {.file {xml_path}}")
 
   # 3. BEHAVIORSPACE FILE EXECUTION
   # Use logolink to execute the previously created XML file.
