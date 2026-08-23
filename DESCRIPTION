@@ -53,7 +53,7 @@ Imports:
     logolink,
     cli
 Depends:
-    R (>= 3.3)
+    R (>= 4.1.0)
 Suggests: 
     testthat,
     mockery,
