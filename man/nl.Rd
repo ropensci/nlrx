@@ -5,12 +5,13 @@
 \title{Construct a new nl object}
 \usage{
 nl(
-  nlversion = "6.0.2",
+  nlversion = "7.0.4",
   nlpath = character(),
   modelpath = character(),
   jvmmem = 1024,
   experiment = methods::new("experiment"),
   simdesign = methods::new("simdesign"),
+  check_version = TRUE,
   ...
 )
 }
@@ -19,13 +20,15 @@ nl(
 
 \item{nlpath}{Path to the NetLogo main directory matching the defined version}
 
-\item{modelpath}{Path to the NetLogo model file (*.nlogo) that is used for simulations}
+\item{modelpath}{Path to the NetLogo model file (.nlogox) that is used for simulations}
 
 \item{jvmmem}{Java virtual machine memory capacity in megabytes}
 
 \item{experiment}{Holds a experiment S4 class object}
 
 \item{simdesign}{Holds a simdesign S4 class object}
+
+\item{check_version}{Logical. If TRUE, check if the NetLogo version is officially supported. Set to FALSE to bypass version checks (e.g., for testing untested NetLogo 7.x versions).}
 
 \item{...}{...}
 }
@@ -50,15 +53,15 @@ The simdesign helper functions use the variable definitions from the experiment 
 \examples{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)

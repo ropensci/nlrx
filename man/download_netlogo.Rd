@@ -26,7 +26,7 @@ supported_netlogo_versions()
 \examples{
 \dontrun{
 dlpath <- tempdir()  # adjust path to your needs
-try(download_netlogo(dlpath, "6.0.3"))
+try(download_netlogo(dlpath, "7.0.4"))
 }
 
 }

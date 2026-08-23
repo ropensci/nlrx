@@ -5,17 +5,9 @@
 \alias{util_run_nl_dyn_ABCmcmc_fn}
 \title{Genetic Algorithm run simulation function}
 \usage{
-util_run_nl_dyn_GenAlg_fn(
-  param,
-  nl,
-  evalcrit,
-  seed,
-  cleanup.csv,
-  cleanup.xml,
-  cleanup.bat
-)
+util_run_nl_dyn_GenAlg_fn(param, nl, evalcrit, seed, threads = 1, ...)
 
-util_run_nl_dyn_ABCmcmc_fn(param)
+util_run_nl_dyn_ABCmcmc_fn(param, threads = 1)
 }
 \arguments{
 \item{param}{vector of model parameters passed from ABC_mcmc function. If use_seeds = TRUE, the first element of this vector is a random seed}
@@ -26,11 +18,13 @@ util_run_nl_dyn_ABCmcmc_fn(param)
 
 \item{seed}{current model seed}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+\item{cleanup.csv}{Deprecated. No longer has any effect.}
 
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{cleanup.xml}{Deprecated. No longer has any effect.}
+
+\item{cleanup.bat}{Deprecated. No longer has any effect.}
 }
 \description{
 Genetic Algorithm run simulation function

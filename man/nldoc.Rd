@@ -54,7 +54,7 @@ Finally, the document is rendered in the specified format.
 \dontrun{
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 # Define output directory:

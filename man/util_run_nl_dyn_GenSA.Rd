@@ -4,18 +4,20 @@
 \alias{util_run_nl_dyn_GenSA}
 \title{Simulated Annealing call simulations function}
 \usage{
-util_run_nl_dyn_GenSA(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat)
+util_run_nl_dyn_GenSA(nl, seed, threads = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{current model seed}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+\item{cleanup.csv}{Deprecated. No longer has any effect.}
 
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{cleanup.xml}{Deprecated. No longer has any effect.}
+
+\item{cleanup.bat}{Deprecated. No longer has any effect.}
 }
 \description{
 Simulated Annealing call simulations function

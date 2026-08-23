@@ -16,9 +16,9 @@ Getter function to get a variable of a simdesign object
 }
 \examples{
 # Example for Wolf Sheep Predation model from NetLogo models library:
-nl <- nl(nlversion = "6.0.3",
-nlpath = "/home/user/NetLogo 6.0.3/",
-modelpath = "/home/user/NetLogo 6.0.3/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo",
+nl <- nl(nlversion = "7.0.4",
+nlpath = "/home/user/NetLogo 7.0.4/",
+modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 jvmmem = 1024)
 
 # Set simulation seeds

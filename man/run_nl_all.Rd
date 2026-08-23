@@ -4,27 +4,24 @@
 \alias{run_nl_all}
 \title{Execute all NetLogo simulations from a nl object}
 \usage{
-run_nl_all(
-  nl,
-  split = 1,
-  cleanup.csv = TRUE,
-  cleanup.xml = TRUE,
-  cleanup.bat = TRUE,
-  writeRDS = FALSE
-)
+run_nl_all(nl, block_size = 100, threads = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
-\item{split}{number of parts the job should be split into}
+\item{block_size}{number of simulations bundled into one execution block (one NetLogo instance can only receive one block).}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+\item{split}{Deprecated. No longer has any effect.}
 
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{cleanup.csv}{Deprecated. No longer has any effect.}
 
-\item{writeRDS}{TRUE/FALSE, if TRUE, for each single simulation an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.}
+\item{cleanup.xml}{Deprecated. No longer has any effect.}
+
+\item{cleanup.bat}{Deprecated. No longer has any effect.}
+
+\item{writeRDS}{Deprecated. No longer has any effect.}
 }
 \value{
 tibble with simulation output results
@@ -34,44 +31,38 @@ Execute all NetLogo simulations from a nl object with a defined experiment and s
 }
 \details{
 run_nl_all executes all simulations of the specified NetLogo model within the provided nl object.
-The function loops over all random seeds and all rows of the siminput table of the simdesign of nl.
-The loops are created by calling \link[furrr]{future_map_dfr}, which allows running the function either locally or on remote HPC machines.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
 
-When using run_nl_all in a parallelized environment (e.g. by setting up a future plan using the future package),
-the outer loop of this function (random seeds) creates jobs that are distributed to available cores of the current machine.
-The inner loop (siminputrows) distributes simulation tasks to these cores.
-However, it might be advantageous to split up large jobs into smaller jobs for example to reduce the total runtime of each job.
-This can be done using the split parameter. If split is > 1 the siminput matrix is split into smaller parts.
-Jobs are created for each combination of part and random seed.
-If the split parameter is set such that the siminput matrix can not be splitted into equal parts, the procedure will stop and throw an error message.
-\subsection{Debugging "Temporary simulation output file not found" error message:}{
+The function structures the simdesign table into blocks, sized via \code{block_size}.
+Each block is passed to \code{logolink}, which writes a BehaviorSpace XML file and executes it.
 
-Whenever this error message appears it means that the simulation did not produce any output.
-Two main reasons can lead to this problem, either the simulation did not even start or the simulation crashed during runtime.
-Both can happen for several reasons and here are some hints for debugging this:
-\enumerate{
-\item Missing software:
-Make sure that java is installed and available from the terminal (java -version).
-Make sure that NetLogo is installed and available from the terminal.
-\item Wrong path definitions:
-Make sure your nlpath points to a folder containing NetLogo.
-Make sure your modelpath points to a *.nlogo model file.
-Make sure that the nlversion within your nl object matches the NetLogo version of your nlpath.
-Use the convenience function of nlrx for checking your nl object (print(nl), eval_variables_constants(nl)).
-\item Temporary files cleanup:
-Due to automatic temp file cleanup on unix systems temporary output might be deleted.
-Try reassigning the default temp folder for this R session (the unixtools package has a neat function).
-\item NetLogo runtime crashes:
-It can happen that your NetLogo model started but failed to produce output because of a NetLogo runtime error.
-Make sure your model is working correctly or track progress using print statements.
-Sometimes the java virtual machine crashes due to memory constraints.
+Multithreading is supported via NetLogo natively, and controlled using \code{threads}. See how many threads you can assign using \code{parallel::detectCores()}.
+
+Progress can be shown by wrapping run_nl_all() with \code{progressr} (see examples).
+Progress updates on completion of one block.
+
+Small \code{block_size} results in frequent updates of simulation status, but causes simulations to take longer, as NetLogo has to restart after every block.
+Large \code{block_size} results in infrequent updates but will generally be faster (although with rapidly diminishing returns).
+\subsection{Debugging:}{
+
+Make sure you can run your NetLogo model on your machine.
+Make sure that Java is installed and available from the terminal (java -version).
+Use \code{eval_variables_constants(nl)} to check the validity of model settings.
+Lastly, the R console outputs XML filepaths. These XML files are \code{BehaviorSpace} definitions. Run these manually via NetLogo \code{BehaviorSpace} to diagnose issues with the experiment and simdesign setup.
 }
 }
+\section{Reproducibility and Seeds}{
+
+When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
+NetLogo will generate its own seeds for repetitions, which limits reproducibility and prevents control over sampling stochasticity.
+For fully reproducible results, set \code{repetition = 1} and use \code{nseeds} in the simdesign instead.
 }
+
+\section{Suppressing Messages}{
+
+Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+\code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_all(nl))}.
+}
+
 \examples{
 \dontrun{
 
@@ -81,10 +72,13 @@ nl <- nl_lhs
 # Execute all simulations from an nl object with properly attached simdesign.
 results <- run_nl_all(nl)
 
-# Run in parallel on local machine:
-library(future)
-plan(multisession)
-results <- run_nl_all(nl)
+# Run in parallel on local machine (NetLogo 7+):
+library(progressr)
+with_progress({ # progress bar
+results <- run_nl_all(nl, threads = 10) # 10 threads
+})
 
+# Adjust block size for performance tuning:
+results <- run_nl_all(nl, block_size = 500, threads = 10) # NetLogo gets re-initialized once every 500 simulations
 }
 }

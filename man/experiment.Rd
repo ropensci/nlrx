@@ -9,12 +9,12 @@ experiment(
   outpath = NA_character_,
   repetition = 1,
   tickmetrics = "true",
+  evalticks = NA_integer_,
   idsetup = "setup",
   idgo = "go",
   idfinal = NA_character_,
   idrunnum = NA_character_,
   runtime = 1,
-  evalticks = NA_integer_,
   stopcond = NA_character_,
   metrics = c("count turtles"),
   metrics.turtles = list(),
@@ -34,6 +34,8 @@ experiment(
 
 \item{tickmetrics}{Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
 
+\item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
+
 \item{idsetup}{character string or vector of character strings, defining the name of the NetLogo setup procedure}
 
 \item{idgo}{character string or vector of character strings, defining the name of the NetLogo go procedure}
@@ -43,8 +45,6 @@ experiment(
 \item{idrunnum}{character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.}
 
 \item{runtime}{number of model ticks that should be run for each simulation}
-
-\item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
 
 \item{stopcond}{a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")}
 
@@ -85,6 +85,12 @@ In cases, where the random seed is set within the NetLogo model, repitition can 
 \emph{tickmetrics}
 
 If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
+
+\emph{evalticks}
+
+Only applied if tickmetrics = TRUE.
+Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+Set evalticks to NA_integer_ to measure on every tick.
 
 \emph{idsetup, idgo}
 
@@ -135,12 +141,6 @@ The name of this widget can be entered into the "idrunnum" field of the experime
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
-\emph{evalticks}
-
-Only applied if tickmetrics = TRUE.
-Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
-Set evalticks to NA_integer_ to measure on every tick.
-
 \emph{stopcond}
 
 The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
@@ -181,13 +181,13 @@ nl <- nl_simple
 nl@experiment <- experiment(expname="wolf-sheep",
                              outpath="C:/out/",
                              repetition=1,
-                             tickmetrics="true",
+                             tickmetrics="true"
+                             evalticks=seq(40,50),
                              idsetup="setup",
                              idgo="go",
                              idfinal=NA_character_,
                              idrunnum=NA_character_,
                              runtime=50,
-                             evalticks=seq(40,50),
                              stopcond="not any? turtles",
                              metrics=c("count sheep",
                                        "count wolves",
@@ -202,13 +202,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                               'initial-number-wolves' =
                              list(min=50, max=150, step=10, qfun="qunif")),
                              constants = list("model-version" =
-                                              "\"sheep-wolves-grass\"",
+                                              "sheep-wolves-grass",
                                               "grass-regrowth-time" = 30,
                                               "sheep-gain-from-food" = 4,
                                               "wolf-gain-from-food" = 20,
                                               "sheep-reproduce" = 4,
                                               "wolf-reproduce" = 5,
-                                              "show-energy?" = "false"))
+                                              "show-energy?" = FALSE))
 
 
 }

@@ -4,30 +4,24 @@
 \alias{run_nl_one}
 \title{Execute one NetLogo simulation from a nl object}
 \usage{
-run_nl_one(
-  nl,
-  seed,
-  siminputrow,
-  cleanup.csv = TRUE,
-  cleanup.xml = TRUE,
-  cleanup.bat = TRUE,
-  writeRDS = FALSE
-)
+run_nl_one(nl, seed, threads = 1, siminputrow, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
-\item{seed}{a random seed for the NetLogo simulation}
+\item{seed}{a random seed for the NetLogo simulation (ignored when \code{repetition > 1})}
+
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
 \item{siminputrow}{rownumber of the input tibble within the attached simdesign object that should be executed}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{cleanup.csv}{Deprecated. No longer has any effect.}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+\item{cleanup.xml}{Deprecated. No longer has any effect.}
 
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{cleanup.bat}{Deprecated. No longer has any effect.}
 
-\item{writeRDS}{TRUE/FALSE, if TRUE an rds file with the simulation results will be written to the defined outpath folder of the experiment within the nl object.}
+\item{writeRDS}{Deprecated. No longer has any effect.}
 }
 \value{
 tibble with simulation output results
@@ -36,16 +30,21 @@ tibble with simulation output results
 Execute one NetLogo simulation from a nl object with a defined experiment and simdesign
 }
 \details{
-run_nl_one executes one simulation of the specified NetLogo model within the provided nl object.
-The random seed is set within the NetLogo model to control stochasticity.
+Uses the \code{logolink} backend for NetLogo 7+.
+\code{run_nl_one()} executes one simulation of the specified NetLogo model within the provided nl object.
+The random seed is set within the NetLogo model to control stochasticity. For further information, see the Reproducibility section in \code{run_nl_all()}.
 The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
 
-This function can be used to run single simulations of a NetLogo model.
+The \code{threads} argument controls NetLogo's native multithreading.
+This is relevant when \code{repetition > 1}, as multiple repetitions can be parallelized within one NetLogo instance.
+For single runs (\code{repetition = 1}), \code{threads} has no effect.
 }
+\section{Suppressing Messages}{
+
+Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+\code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_one(nl, 123, 1))}.
+}
+
 \examples{
 \dontrun{
 

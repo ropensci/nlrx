@@ -4,27 +4,23 @@
 \alias{run_nl_dyn}
 \title{Execute NetLogo simulation without pregenerated parametersets}
 \usage{
-run_nl_dyn(
-  nl,
-  seed,
-  cleanup.csv = TRUE,
-  cleanup.xml = TRUE,
-  cleanup.bat = TRUE
-)
+run_nl_dyn(nl, seed, threads = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{a random seed for the NetLogo simulation}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
+\item{cleanup.csv}{Deprecated. No longer has any effect.}
 
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{cleanup.xml}{Deprecated. No longer has any effect.}
+
+\item{cleanup.bat}{Deprecated. No longer has any effect.}
 }
 \value{
-simulation output results can be tibble, list, ...
+simulation output results can be tibble, list, ... (structure depends on simdesign method)
 }
 \description{
 Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets
@@ -32,11 +28,24 @@ Execute NetLogo simulation from a nl object with a defined experiment and simdes
 \details{
 run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
 This is the case for dynamic designs, such as Simulated Annealing and Genetic Algorithms, where parametersets are dynamically generated, based on the output of previous simulations.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
+
+Simulations are executed sequentially, one parameterization at a time, as each new parameterization depends on the results of the previous simulation.
+Internally, each simulation step is executed via \code{run_nl_one()}.
 }
+\section{Reproducibility and Seeds}{
+
+When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
+NetLogo will generate its own seeds for repetitions, which limits reproducibility.
+This is a known limitation of dynamic designs. For full seed control, set \code{repetition = 1}
+and run multiple independent dynamic designs with different seeds via the simdesign.
+}
+
+\section{Suppressing Messages}{
+
+Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+\code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_dyn(nl))}.
+}
+
 \examples{
 \dontrun{
 

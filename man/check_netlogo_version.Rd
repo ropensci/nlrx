@@ -19,7 +19,7 @@ Auxiliary function to check supported NetLogo version numbers
 }
 \examples{
 \dontrun{
-check_netlogo_version("6.2.0")
+check_netlogo_version("7.0.0")
 check_netlogo_version("1.0")
 check_netlogo_version("1.0", TRUE)
 }
