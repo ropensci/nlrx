@@ -75,34 +75,33 @@ Get citation information for `nlrx` in R doing
 
 ### NetLogo
 
-In order to use the nlrx package, [NetLogo](http://netlogoweb.org/)
-(\>=5.3.1) needs to be installed on the system that is used to execute
+In order to use the nlrx package, [NetLogo](https://www.netlogo.org/)
+(\>= 7.0.0) needs to be installed on the system that is used to execute
 model simulations (local/remote). For remote execution, NetLogo needs to
-be installed on remote machines as well. The nlrx package provides a
-utility function (`download_netlogo()`) that can be used to download and
-unzip (only unix systems) a specified NetLogo version to a local folder.
-For windows machines, the downloaded file needs to be executed in order
-to install NetLogo on the local system. If you are running MacOS, please
-use the Linux tar.gz version of NetLogo (either from the NetLogo
-Homepage or by using the `download_netlogo()` function). The dmg version
-from the NetLogo homepage is not compatible with nlrx.
+be installed on remote machines as well. Starting with nlrx 0.5.0, model
+execution is delegated to the
+[logolink](https://cran.r-project.org/package=logolink) package, which
+locates the NetLogo installation via the `NETLOGO_HOME` environment
+variable (or common install locations). The nlrx package provides a
+utility function (`download_netlogo()`) that downloads a specified
+NetLogo version from the official NetLogo GitHub releases and, on unix
+systems, unzips it to a local folder.
 
-All code snippets on this homepage should be compatible with Netlogo \<=
-6.2.2. In version 6.3.0, the folder structure of NetLogo was slightly
-updated, thus the modelpath in the code snippets need to be adjusted
-accordingly (the `"app/"` folder needs to be removed from the
-modelpath).
+**NetLogo 7 required.** nlrx 0.5.0 dropped support for NetLogo versions
+below 7.0.0. NetLogo 7 introduced a new model file format (`.nlogox`);
+models created in older NetLogo versions must be opened and re-saved in
+NetLogo 7 before they can be used with nlrx (see the [NetLogo transition
+guide](https://docs.netlogo.org/transition)). Note that NetLogo model
+paths no longer contain the `app/` subfolder used by NetLogo 6.0–6.2.
 
 ### Java
 
-Because NetLogo is executed in a Java virtual machine, Java needs to be
-installed on the local/remote system as well. We recommend the [Oracle
-Java SE Development Kit
-8](https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html)
-or the [openjdk](https://github.com/ojdkbuild/ojdkbuild). While the nlrx
-package might work without setting the Java system path explicitly, we
-recommend to make sure that JAVA_HOME points to the correct Java
-installation of the system.
+Because NetLogo is executed in a Java virtual machine, a Java runtime
+(\>= 11) needs to be available on the local/remote system. We recommend
+a recent [OpenJDK](https://adoptium.net/). While the nlrx package might
+work without setting the Java system path explicitly, we recommend to
+make sure that JAVA_HOME points to the correct Java installation of the
+system.
 
 ## Installation
 
@@ -153,15 +152,15 @@ adjusted.
 ``` r
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -225,16 +224,17 @@ nl@simdesign <- simdesign_lhs(nl=nl,
 All information that is needed to run the simulations is now stored
 within the nl object. The `run_nl_one()` function allows to run one
 specific simulation from the siminput parameter table. The
-`run_nl_all()` function runs a loop over all simseeds and rows of the
-parameter input table siminput. The loops are constructed in a way that
-allows easy parallelisation, either locally or on remote HPC machines
-(see “Advanced configuration” vignette for more information on
-parallelisation). Before running your simulations you might want to
-check your current nl object setup. `eval_variables_constants(nl)`
-evaluates if the defined variables and constants are correctly defined
-and are consistent with the attached model. `print(nl)` prints a
-complete summary of the provided nl object including checkmarks that
-might help to indicate potential problems.
+`run_nl_all()` function runs all simulations defined by the simdesign
+(all rows of the parameter input table siminput and all simseeds).
+Simulations are bundled into blocks (see the `block_size` argument) that
+are executed within a single NetLogo instance, and NetLogo’s native
+multithreading can be enabled via the `threads` argument (see “Advanced
+configuration” vignette for more information). Before running your
+simulations you might want to check your current nl object setup.
+`eval_variables_constants(nl)` evaluates if the defined variables and
+constants are correctly defined and are consistent with the attached
+model. `print(nl)` prints a complete summary of the provided nl object
+including checkmarks that might help to indicate potential problems.
 
 ``` r
 # Evaluate nl object:

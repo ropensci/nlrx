@@ -50,16 +50,16 @@ library(ggplot2)
 library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency
 
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
 # Define nl object
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -214,15 +214,15 @@ library(nlrx)
 library(igraph)
 
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)

@@ -33,10 +33,10 @@ Depending on the operation system, the NetLogo and output paths need to be adjus
 
 ```{r eval = FALSE}
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.4")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
 outpath <- file.path("/home/out")
 ```
 
@@ -56,9 +56,9 @@ The plot consist of a geom_tile layer, which displays the amount of heat in each
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Art/Diffusion Graphics.nlogo"),
+         modelpath = file.path(netlogopath, "models/Sample Models/Art/Diffusion Graphics.nlogox"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -128,9 +128,9 @@ Before plotting we split up the turtle data into two tibbles, one for each breed
 
 ```{r  eval = FALSE}
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Earth Science/Fire.nlogo"),
+         modelpath = file.path(netlogopath, "models/Sample Models/Earth Science/Fire.nlogox"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -220,9 +220,9 @@ Otherwise, gganimate may interpolate between measured steps, which may lead to i
 
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Ants.nlogo"),
+         modelpath = file.path(netlogopath, "models/Sample Models/Biology/Ants.nlogox"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -305,12 +305,12 @@ Instead of a simple simdesign with only one parameterization, this example uses 
 ## The models library filepath pointing to the waves model contains an ampersand which needs to be escaped on Windows but not on Linux.
 ## Choose the filepath according to your OS:
 ## Windows:
-modelpath <- "app/models/Sample Models/Chemistry ^& Physics/Waves/Wave Machine.nlogo"
+modelpath <- "models/Sample Models/Chemistry ^& Physics/Waves/Wave Machine.nlogox"
 ## Linux:
-modelpath <- "app/models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogo"
+modelpath <- "models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogox"
 
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, modelpath),
          jvmmem = 1024)
@@ -387,9 +387,9 @@ We present two examples for heading conversion:
 
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Biology/Flocking.nlogo"),
+         modelpath = file.path(netlogopath, "models/Sample Models/Biology/Flocking.nlogox"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -484,9 +484,9 @@ Finally, we need to reference the who number start and end points of the links t
 
 ```{r eval = FALSE}
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
-         modelpath = file.path(netlogopath, "app/models/Sample Models/Networks/Preferential Attachment.nlogo"),
+         modelpath = file.path(netlogopath, "models/Sample Models/Networks/Preferential Attachment.nlogox"),
          jvmmem = 1024)
 
 ## Step2: Add Experiment

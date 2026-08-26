@@ -37,15 +37,15 @@ We use the Wolf Sheep Predation model from the models library to show a basic ex
 ```{r eval=FALSE}
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -203,15 +203,15 @@ plot(coda::as.mcmc(getsim(nl, "simoutput") %>%
 ```{r eval=FALSE}
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)

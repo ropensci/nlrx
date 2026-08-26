@@ -89,7 +89,7 @@ library(nlrx)
 outpath <- tempdir()
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 
@@ -119,7 +119,7 @@ This function can be used for any NetLogo model, even if the code does not conta
 library(nlrx)
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 
