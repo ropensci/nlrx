@@ -112,35 +112,36 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE) {
 
   ## Check version support
   check_netlogo_version(version, throw_error = TRUE)
-  ## Construct base url
-  nl_url <- paste0("https://ccl.northwestern.edu/netlogo/", version, "/")
-  ## Get filename depending on os
+  ## Detect OS if not provided
   if (is.na(os)) {
     os <- util_get_os()
   }
-  switch(os,
-         # nocov start
-         "win" = {
-           nl_file <- paste0("NetLogo-", version, "-64.msi")
-         },
-         "mac" = {
-           nl_file <- paste0("NetLogo-", version, ".dmg")
-         },
-         "unix" = {
-           nl_file <- paste0("NetLogo-", version, "-64.tgz")
-         },
-         "Unknown OS" = {
-           stop("Unknown OS. OS not supported by NetLogo")
-         }
-         # nocov end
-  )
+  ## Construct the download URL (see util_netlogo_download_url)
+  nl_dl <- util_netlogo_download_url(version, os)
+  to_file <- file.path(to, basename(nl_dl))
+
   ## Download
-  nl_dl <- paste0(nl_url, nl_file)
-  to_file <- file.path(to, nl_file)
   utils::download.file(nl_dl, to_file)
 
   ## Extract the archive if os==unix and extract == TRUE:
   if (os == "unix" & extract == TRUE) {
     system(paste0("tar xvzf ", to_file, " --directory ", to))
   }
+}
+
+# Construct the NetLogo download URL for a given version and OS.
+# NetLogo 7+ releases are hosted on GitHub under a 'v'-prefixed tag, e.g.
+# https://github.com/NetLogo/NetLogo/releases/download/v7.0.4/NetLogo-7.0.4-64.tgz
+# macOS ships separate x86_64 and aarch64 disk images; we default to x86_64,
+# which also runs on Apple Silicon via Rosetta.
+util_netlogo_download_url <- function(version, os) {
+  nl_file <- switch(
+    os,
+    "win"  = paste0("NetLogo-", version, "-64.msi"),
+    "mac"  = paste0("NetLogo-", version, "-x86_64.dmg"),
+    "unix" = paste0("NetLogo-", version, "-64.tgz"),
+    stop("Unknown OS. OS not supported by NetLogo", call. = FALSE)
+  )
+  paste0("https://github.com/NetLogo/NetLogo/releases/download/v",
+         version, "/", nl_file)
 }
