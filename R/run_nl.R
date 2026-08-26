@@ -5,6 +5,7 @@
 #' @param nl nl object
 #' @param block_size number of simulations bundled into one execution block (one NetLogo instance can only receive one block).
 #' @param threads number of NetLogo threads used for execution (handled via NetLogo).
+#' @param ... additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @return tibble with simulation output results
 #' @details
 #'
@@ -52,7 +53,8 @@
 #' })
 #'
 #' # Adjust block size for performance tuning:
-#' results <- run_nl_all(nl, block_size = 500, threads = 10) # NetLogo gets re-initialized once every 500 simulations
+#' # Larger block_size means fewer NetLogo restarts (re-initialized once per block):
+#' results <- run_nl_all(nl, block_size = 500, threads = 10)
 #' }
 #' @aliases run_nl_all
 #' @rdname run_nl_all
@@ -355,6 +357,7 @@ merge_result_blocks <- function(nl, results_list){
 #' @param seed a random seed for the NetLogo simulation (ignored when \code{repetition > 1})
 #' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
+#' @param ... additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @return tibble with simulation output results
 #' @details
 #' Uses the \code{logolink} backend for NetLogo 7+.
@@ -434,6 +437,7 @@ run_nl_one <- function(nl,
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
 #' @param threads number of NetLogo threads used for execution (handled via NetLogo).
+#' @param ... additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @return simulation output results can be tibble, list, ... (structure depends on simdesign method)
 #' @details
 #'

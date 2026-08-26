@@ -14,6 +14,8 @@ run_nl_one(nl, seed, threads = 1, siminputrow, ...)
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
 \item{siminputrow}{rownumber of the input tibble within the attached simdesign object that should be executed}
+
+\item{...}{additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
 \value{
 tibble with simulation output results

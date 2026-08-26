@@ -12,6 +12,8 @@ run_nl_dyn(nl, seed, threads = 1, ...)
 \item{seed}{a random seed for the NetLogo simulation}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
+
+\item{...}{additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
 \value{
 simulation output results can be tibble, list, ... (structure depends on simdesign method)

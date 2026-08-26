@@ -181,7 +181,7 @@ nl <- nl_simple
 nl@experiment <- experiment(expname="wolf-sheep",
                              outpath="C:/out/",
                              repetition=1,
-                             tickmetrics="true"
+                             tickmetrics="true",
                              evalticks=seq(40,50),
                              idsetup="setup",
                              idgo="go",

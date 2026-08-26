@@ -121,6 +121,8 @@ globalVariables(c(
   ".",
   "[run number]",
   "[step]",
+  "run_number",
+  "step",
   "funs",
   "group_by",
   "metrics",

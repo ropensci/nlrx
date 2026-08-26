@@ -12,6 +12,8 @@ run_nl_all(nl, block_size = 100, threads = 1, ...)
 \item{block_size}{number of simulations bundled into one execution block (one NetLogo instance can only receive one block).}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
+
+\item{...}{additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
 \value{
 tibble with simulation output results
@@ -69,6 +71,7 @@ results <- run_nl_all(nl, threads = 10) # 10 threads
 })
 
 # Adjust block size for performance tuning:
-results <- run_nl_all(nl, block_size = 500, threads = 10) # NetLogo gets re-initialized once every 500 simulations
+# Larger block_size means fewer NetLogo restarts (re-initialized once per block):
+results <- run_nl_all(nl, block_size = 500, threads = 10)
 }
 }
