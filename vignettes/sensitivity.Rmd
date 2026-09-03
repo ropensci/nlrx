@@ -101,12 +101,10 @@ nl@simdesign <- simdesign_morris(nl=nl,
 #### Step 4: Run simulations
 
 To execute the simulations, we can use the function `run_nl_all()`.
-Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the "Advanced configuration" vignette).
+Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by increasing `threads` (and, for larger designs, distributing runs across cluster nodes; more details on parallelization can be found in the "Advanced configuration" vignette).
 
 ```{r eval=FALSE}
-library(future)
-plan(multisession)
-results <- run_nl_all(nl)
+results <- run_nl_all(nl, threads = 4)
 ```
 
 #### Step 5: Investigate output
@@ -187,12 +185,10 @@ nl@simdesign <- simdesign_lhs(nl, samples=500, nseeds=1, precision=3)
 #### Step 4: Run simulations
 
 To execute the simulations, we can use the function `run_nl_all()`.
-Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the "Advanced configuration" vignette).
+Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by increasing `threads` (and, for larger designs, distributing runs across cluster nodes; more details on parallelization can be found in the "Advanced configuration" vignette).
 
 ```{r eval=FALSE}
-library(future)
-plan(multisession)
-results <- run_nl_all(nl, split=10)
+results <- run_nl_all(nl, threads = 4)
 ```
 
 #### Step 5: Investigate output
