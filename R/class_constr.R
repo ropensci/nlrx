@@ -77,7 +77,7 @@ nl <- function(nlversion = "7.0.4",
 #'
 #' @param expname A character string defining the name of the experiment, no whitespaces allowed
 #' @param outpath Path to a directory where experiment output will be stored
-#' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble
+#' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble. Repetitions are executed by NetLogo BehaviorSpace with seeds that nlrx neither controls nor observes; prefer the nseeds argument of the simdesign helpers (see details)
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
 #' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
@@ -106,8 +106,10 @@ nl <- function(nlversion = "7.0.4",
 #'
 #' \emph{repetition}
 #'
-#' In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-#' In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
+#' The repetition is passed to NetLogo BehaviorSpace, which repeats each row of the simulation design that many times.
+#' Whenever repetition is greater than one, nlrx does not pass the simdesign random seeds to NetLogo, because BehaviorSpace would run all repetitions of a parameterisation with the same seed and thus produce identical results.
+#' NetLogo then seeds each run itself and these seeds are not reported back, so such runs cannot be reproduced.
+#' In most cases repetition should therefore be set to one and the nseeds argument of the simdesign helper functions should be used instead, which controls and reports the random seed of each run (see the "Advanced configuration" vignette).
 #'
 #' \emph{tickmetrics}
 #'

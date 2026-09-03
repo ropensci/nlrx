@@ -29,8 +29,8 @@
 #' Lastly, the R console outputs XML filepaths. These XML files are \code{BehaviorSpace} definitions. Run these manually via NetLogo \code{BehaviorSpace} to diagnose issues with the experiment and simdesign setup.
 #'
 #' @section Reproducibility and Seeds:
-#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
-#' NetLogo will generate its own seeds for repetitions, which limits reproducibility and prevents control over sampling stochasticity.
+#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo, because BehaviorSpace would otherwise run all repetitions of a parameterisation with the same seed and produce identical results.
+#' NetLogo then generates its own seed for each run, based on the current date and time. These seeds are not reported back by BehaviorSpace and cannot be recovered, which limits reproducibility and prevents control over sampling stochasticity.
 #' For fully reproducible results, set \code{repetition = 1} and use \code{nseeds} in the simdesign instead.
 #'
 #' @section Suppressing Messages:
