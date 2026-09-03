@@ -17,7 +17,7 @@ Description: Setup, run and analyze 'NetLogo' (<https://www.netlogo.org>) model 
     However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.
     The user defines all information that is needed in an intuitive framework, using class objects.
     Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user.
-    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.
+    Simulations are organised into blocks that use 'NetLogo's native multithreading, so large simulation designs with many runs can be executed in parallel.
     This also enables simulating 'NetLogo' experiments on remote high performance computing machines.
     In order to use this package, 'Java' and 'NetLogo' (>= 7.0.0) need to be available on the executing system.
 License: GPL-3

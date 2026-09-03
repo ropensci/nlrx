@@ -1,4 +1,20 @@
 
+# nlrx 0.5.0
+
+## Major changes
+
+* Added support for NetLogo 7 and newer. The simulation backend was redesigned around the 'logolink' package, which generates the BehaviorSpace XML and executes NetLogo.
+* Simulations are now executed in blocks. `run_nl_all()` gains `block_size` (number of simulations bundled into one NetLogo instance) and `threads` (NetLogo's native multithreading) arguments, replacing the previous future/`furrr`-based parallelism.
+* Performance: bundling many simulations as BehaviorSpace sub-experiments within a single NetLogo instance avoids the repeated JVM/NetLogo start-up of the previous one-process-per-run approach, which can substantially speed up larger designs.
+
+## Breaking changes
+
+* Support for NetLogo versions prior to 7.0.0 has been removed. NetLogo (>= 7.0.0) and 'logolink' (>= 1.0.0) are now required to run simulations.
+* The legacy execution backend (OS-specific batch-file generation and direct NetLogo calls) has been removed; execution is delegated entirely to 'logolink'.
+* The arguments `split`, `cleanup.csv`, `cleanup.xml`, `cleanup.bat` and `writeRDS` are deprecated and no longer have an effect (file handling is managed by 'logolink'). Passing them now emits a deprecation warning.
+* The `n_cluster` argument of the ABC-MCMC simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`) has been removed. It never parallelised simulations (it was always reset to 1) and is now deprecated; passing it emits a deprecation warning.
+* NetLogo 7 introduced a new model file format (`.nlogox`) and converts widget sizes. Models created in older NetLogo versions must be opened and re-saved in NetLogo 7 before they can be used with nlrx. See the NetLogo transition guide for details: <https://docs.netlogo.org/transition>.
+
 # nlrx 0.4.6
 
 ## Functionality
