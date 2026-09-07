@@ -57,7 +57,6 @@ defined parameterisation.
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -88,7 +87,6 @@ The distinct simdesign can be used to run distinct parameter combinations. To se
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -119,7 +117,6 @@ To setup a full-factorial simdesign, vectors of values need to be defined for ea
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -153,7 +150,6 @@ To setup a latin hypercube sampling simdesign, variable distributions need to be
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -192,7 +188,6 @@ To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -262,7 +257,6 @@ Optimization simdesigns can only be executed using the `run_nl_dyn()` function -
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -306,7 +300,6 @@ These algorithms can be used by attaching the corresponding simdesigns (`simdesi
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",

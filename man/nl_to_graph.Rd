@@ -43,7 +43,6 @@ nl <- nl(nlversion = "6.0.4",
 
 nl@experiment <- experiment(expname="networks",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="false",
                             idsetup="setup",
                             idgo="go",

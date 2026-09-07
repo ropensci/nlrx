@@ -4,7 +4,7 @@
 \alias{util_run_nl_dyn_ABCmcmc}
 \title{ABCmcmc call simulations function}
 \usage{
-util_run_nl_dyn_ABCmcmc(nl, seed, threads = 1, ...)
+util_run_nl_dyn_ABCmcmc(nl, seed, threads = 1, nreplicates = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
@@ -12,6 +12,8 @@ util_run_nl_dyn_ABCmcmc(nl, seed, threads = 1, ...)
 \item{seed}{current model seed}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
+
+\item{nreplicates}{number of replicated model runs per evaluation}
 }
 \description{
 ABCmcmc call simulations function

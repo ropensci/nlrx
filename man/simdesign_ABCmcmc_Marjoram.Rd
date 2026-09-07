@@ -11,7 +11,6 @@ simdesign_ABCmcmc_Marjoram(
   prior_test = NULL,
   n_rec,
   n_between_sampling = 10,
-  n_cluster = 1,
   use_seed = FALSE,
   dist_weights = NULL,
   n_calibration = 10000,
@@ -19,7 +18,8 @@ simdesign_ABCmcmc_Marjoram(
   proposal_phi = 1,
   seed_count = 0,
   progress_bar = FALSE,
-  nseeds
+  nseeds,
+  ...
 )
 }
 \arguments{
@@ -34,8 +34,6 @@ simdesign_ABCmcmc_Marjoram(
 \item{n_rec}{Number of samples along the MCMC}
 
 \item{n_between_sampling}{a positive integer equal to the desired spacing between sampled points along the MCMC.}
-
-\item{n_cluster}{number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.}
 
 \item{use_seed}{if TRUE, seeds will be automatically created for each new model run}
 
@@ -52,6 +50,8 @@ simdesign_ABCmcmc_Marjoram(
 \item{progress_bar}{logical, FALSE by default. If TRUE, ABC_mcmc will output a bar of progression with the estimated remaining computing time. Option not available with multiple cores.}
 
 \item{nseeds}{number of seeds for this simulation design}
+
+\item{...}{deprecated arguments (e.g. \code{n_cluster}); currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
 \value{
 simdesign S4 class object
@@ -82,7 +82,6 @@ nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
                                             summary_stat_target = c(100, 80),
                                             n_rec = 100,
                                             n_between_sampling = 10,
-                                            n_cluster = 1,
                                             use_seed = FALSE,
                                             n_calibration = 10000,
                                             tolerance_quantile = 0.01,

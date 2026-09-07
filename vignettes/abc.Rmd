@@ -65,7 +65,6 @@ If more than one tick would be measured, the algorithm automatically calculates 
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="false",
                             idsetup="setup",
                             idgo="go",
@@ -129,6 +128,17 @@ If you want to repeat the same algorithm several times, just embed the `run_nl_d
 
 ```{r eval=FALSE}
 results <- run_nl_dyn(nl, seed = nl@simdesign@simseeds[1])
+```
+
+Because the model is stochastic, the summary statistics of a single model run are noisy.
+The `nreplicates` argument of `run_nl_dyn()` simulates each proposed parameterization several times with different random seeds and passes the averaged summary statistics to the algorithm.
+With `use_seed = TRUE` the replicate seeds are derived from the seed that EasyABC supplies for the respective step:
+
+```{r eval=FALSE}
+results <- run_nl_dyn(nl,
+                      seed = nl@simdesign@simseeds[1],
+                      nreplicates = 5,
+                      threads = 5)
 ```
 
 #### Step 5: Investigate output
@@ -225,7 +235,6 @@ We also need to define our output metrics. These metrics are also used for the r
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="false",
                             idsetup="setup",
                             idgo="go",

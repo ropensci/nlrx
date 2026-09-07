@@ -16,7 +16,7 @@ util_run_nl_dyn_ABCmcmc_fn(param, threads = 1)
 
 \item{evalcrit}{evaluation criterion for simulated annealing}
 
-\item{seed}{current model seed}
+\item{seed}{vector of model seeds, one per replicated run of this evaluation}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 }

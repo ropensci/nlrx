@@ -4,7 +4,7 @@
 \alias{run_nl_dyn}
 \title{Execute NetLogo simulation without pregenerated parametersets}
 \usage{
-run_nl_dyn(nl, seed, threads = 1, ...)
+run_nl_dyn(nl, seed, threads = 1, nreplicates = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
@@ -12,6 +12,8 @@ run_nl_dyn(nl, seed, threads = 1, ...)
 \item{seed}{a random seed for the NetLogo simulation}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
+
+\item{nreplicates}{number of replicated model runs per evaluation of the dynamic design (default 1)}
 
 \item{...}{additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
@@ -28,12 +30,26 @@ This is the case for dynamic designs, such as Simulated Annealing and Genetic Al
 Simulations are executed sequentially, one parameterization at a time, as each new parameterization depends on the results of the previous simulation.
 Internally, each simulation step is executed via \code{run_nl_one()}.
 }
+\section{Replicated evaluations}{
+
+Dynamic designs evaluate a stochastic model, so every evaluation of the objective carries simulation noise.
+With \code{nreplicates > 1}, each parameterisation proposed by the algorithm is simulated \code{nreplicates} times with different random seeds, and the reported value is aggregated over these replicates.
+Aggregation happens in two steps: first the mean over all measured ticks within a replicate, then the mean over the replicates.
+The replicated runs of one evaluation are executed within a single NetLogo instance, so \code{threads} can be used to run them in parallel.
+
+The replicate seeds are derived from \code{seed} and are identical for every evaluation of one \code{run_nl_dyn()} call.
+Reusing the same seeds across evaluations (known as common random numbers) means that differences between two proposed parameterisations reflect the parameters rather than the random draw, which makes the objective easier for the algorithm to optimize.
+It also means that the optimum is found for this particular set of random realisations; it is good practice to re-evaluate it with different seeds.
+
+Because the replicate seeds are derived from \code{seed}, they are not stored in the nl object.
+A dynamic design is reproduced by the nl object together with \code{seed} and \code{nreplicates}, so both should be recorded alongside the results.
+}
+
 \section{Reproducibility and Seeds}{
 
-When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
-NetLogo will generate its own seeds for repetitions, which limits reproducibility.
-This is a known limitation of dynamic designs. For full seed control, set \code{repetition = 1}
-and run multiple independent dynamic designs with different seeds via the simdesign.
+\code{seed} is used as the random seed of the NetLogo runs, and, with \code{nreplicates > 1}, as the basis from which the replicate seeds are derived.
+The stochastic elements of the optimization algorithms themselves (for example the starting values of \code{GenSA} or the initial population of \code{GenAlg}) are drawn from the random number generator of R and are not controlled by \code{seed}; call \code{set.seed()} before \code{run_nl_dyn()} if these should be reproducible as well.
+The \code{nseeds} argument of the dynamic simdesign helpers generates several seeds: running \code{run_nl_dyn()} once per seed yields independent repetitions of the whole optimization, which shows whether the algorithm converges to the same solution under different stochasticity.
 }
 
 \section{Suppressing Messages}{
@@ -56,7 +72,10 @@ nl@simdesign <- simdesign_GenAlg(nl=nl,
                                   nseeds = 1)
 
 # Run simulations:
-results <- run_nl_dyn(nl)
+results <- run_nl_dyn(nl, seed = getsim(nl, "simseeds")[1])
+
+# Average each evaluation over 5 replicated model runs to reduce simulation noise:
+results <- run_nl_dyn(nl, seed = getsim(nl, "simseeds")[1], nreplicates = 5)
 
 }
 }

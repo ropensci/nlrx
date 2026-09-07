@@ -9,7 +9,7 @@ run_nl_one(nl, seed, threads = 1, siminputrow, ...)
 \arguments{
 \item{nl}{nl object}
 
-\item{seed}{a random seed for the NetLogo simulation (ignored when \code{repetition > 1})}
+\item{seed}{a random seed for the NetLogo simulation, or a vector of random seeds to run the same parameterisation repeatedly}
 
 \item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
@@ -29,9 +29,12 @@ Uses the \code{logolink} backend for NetLogo 7+.
 The random seed is set within the NetLogo model to control stochasticity. For further information, see the Reproducibility section in \code{run_nl_all()}.
 The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
 
+If \code{seed} is a vector of more than one seed, the same parameterisation is executed once per seed.
+These replicated runs are independent of each other, and each of them reports its own seed in the \code{random-seed} column of the results.
+
 The \code{threads} argument controls NetLogo's native multithreading.
-This is relevant when \code{repetition > 1}, as multiple repetitions can be parallelized within one NetLogo instance.
-For single runs (\code{repetition = 1}), \code{threads} has no effect.
+This is relevant when more than one seed is executed, because the runs are then parallelized within one NetLogo instance.
+For a single run, \code{threads} has no effect.
 }
 \section{Suppressing Messages}{
 
@@ -48,6 +51,11 @@ nl <- nl_lhs
 # Run one simulation:
 results <- run_nl_one(nl = nl,
                       seed = getsim(nl, "simseeds")[1],
+                      siminputrow = 1)
+
+# Run the same parameterisation with three different seeds:
+results <- run_nl_one(nl = nl,
+                      seed = getsim(nl, "simseeds")[1:3],
                       siminputrow = 1)
 
 }

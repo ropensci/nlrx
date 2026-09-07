@@ -6,10 +6,17 @@
 * Added support for NetLogo 7 and newer. The simulation backend was redesigned around the 'logolink' package, which generates the BehaviorSpace XML and executes NetLogo.
 * Simulations are now executed in blocks. `run_nl_all()` gains `block_size` (number of simulations bundled into one NetLogo instance) and `threads` (NetLogo's native multithreading) arguments, replacing the previous future/`furrr`-based parallelism.
 * Performance: bundling many simulations as BehaviorSpace sub-experiments within a single NetLogo instance avoids the repeated JVM/NetLogo start-up of the previous one-process-per-run approach, which can substantially speed up larger designs.
+* `run_nl_one()` now accepts a vector of random seeds and executes the parameterisation once per seed. The replicated runs are executed within one NetLogo instance and can be parallelised with `threads`.
+* `run_nl_dyn()` gains an `nreplicates` argument. Each parameterisation proposed by a dynamic simdesign (`GenSA`, `GenAlg`, `ABCmcmc_*`) is then simulated `nreplicates` times with different random seeds, which reduces the simulation noise of the evaluation criterion. The replicate seeds are derived from the `seed` argument and are identical across the evaluations of one call (common random numbers), so they do not have to be stored.
+
+## Bugfixes
+
+* Simulation results of dynamic simdesigns are now aggregated in two steps, first over the measured ticks of each run and then over the replicated runs. Previously a single mean was calculated over all returned rows, which weighted runs with more measured ticks higher than shorter ones.
 
 ## Breaking changes
 
 * Support for NetLogo versions prior to 7.0.0 has been removed. NetLogo (>= 7.0.0) and 'logolink' (>= 1.0.0) are now required to run simulations.
+* The `repetition` slot of the experiment class has been removed, together with the `repetition` argument of `experiment()`. Repetitions were executed by NetLogo BehaviorSpace with seeds that nlrx neither controlled nor reported, so repeated runs could not be reproduced, and with more than one repetition the results could not be mapped back to their parameterisation reliably. Passing `repetition = 1` still works but emits a deprecation warning and has no effect; `repetition > 1` is an error. Use `nseeds` in the simdesign helpers instead, or `nreplicates` in `run_nl_dyn()` for dynamic designs.
 * The legacy execution backend (OS-specific batch-file generation and direct NetLogo calls) has been removed; execution is delegated entirely to 'logolink'.
 * The arguments `split`, `cleanup.csv`, `cleanup.xml`, `cleanup.bat` and `writeRDS` are deprecated and no longer have an effect (file handling is managed by 'logolink'). Passing them now emits a deprecation warning.
 * The `n_cluster` argument of the ABC-MCMC simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`) has been removed. It never parallelised simulations (it was always reset to 1) and is now deprecated; passing it emits a deprecation warning.

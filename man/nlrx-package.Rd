@@ -51,7 +51,6 @@ Details on the specific slots of the experiment class can be found in the packag
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{nl@experiment <- experiment(expname="wolf-sheep",
                              outpath=outpath,
-                             repetition=1,
                              tickmetrics="true",
                              idsetup="setup",
                              idgo="go",
@@ -74,7 +73,7 @@ Step 3: Attach a simulation design
 While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
 nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns).
 All simdesign helper functions need a properly defined nl object with a valid experiment design.
-Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
+Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and replication management).
 A simulation design is attached to a nl object by using one of the simdesign helper functions:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{nl@simdesign <- simdesign_lhs(nl=nl,
@@ -88,7 +87,7 @@ Step 4: Run simulations
 All information that is needed to run the simulations is now stored within the nl object.
 The \code{run_nl_one()} function allows to run one specific simulation from the siminput parameter table.
 The \code{run_nl_all()} function runs a loop over all simseeds and rows of the parameter input table siminput.
-The loops are constructed in a way that allows easy parallelisation, either locally or on remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
+Simulations are organised into blocks that can be executed in parallel via NetLogo's native multithreading (\code{threads}) and, for large designs, distributed across remote HPC machines (see "Advanced configuration" vignette for more information on parallelisation).
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{results <- run_nl_all(nl = nl)
 }\if{html}{\out{</div>}}

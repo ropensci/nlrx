@@ -7,7 +7,6 @@
 experiment(
   expname = "defaultexp",
   outpath = NA_character_,
-  repetition = 1,
   tickmetrics = "true",
   evalticks = NA_integer_,
   idsetup = "setup",
@@ -29,8 +28,6 @@ experiment(
 \item{expname}{A character string defining the name of the experiment, no whitespaces allowed}
 
 \item{outpath}{Path to a directory where experiment output will be stored}
-
-\item{repetition}{A number which gives the number of repetitions for each row of the simulation design input tibble}
 
 \item{tickmetrics}{Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
 
@@ -76,11 +73,6 @@ After attaching an experiment, different simdesign helper functions can be used 
 The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 
 \strong{The following class slots are obligatory to run an experiment:}
-
-\emph{repetition}
-
-In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
 
 \emph{tickmetrics}
 
@@ -180,7 +172,6 @@ Please note that NetLogo models may contain a huge number of turtles and output 
 nl <- nl_simple
 nl@experiment <- experiment(expname="wolf-sheep",
                              outpath="C:/out/",
-                             repetition=1,
                              tickmetrics="true",
                              evalticks=seq(40,50),
                              idsetup="setup",

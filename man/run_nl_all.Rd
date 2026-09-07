@@ -44,9 +44,10 @@ Lastly, the R console outputs XML filepaths. These XML files are \code{BehaviorS
 }
 \section{Reproducibility and Seeds}{
 
-When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
-NetLogo will generate its own seeds for repetitions, which limits reproducibility and prevents control over sampling stochasticity.
-For fully reproducible results, set \code{repetition = 1} and use \code{nseeds} in the simdesign instead.
+Every simulation is executed with an explicit random seed, taken from the \code{nseeds} seeds of the attached simdesign (\code{nl@simdesign@simseeds}).
+NetLogo is seeded with that value and reports it back, so each row of the results can be traced to the parameterisation (\code{siminputrow}) and the seed (\code{random-seed}) that produced it.
+Re-running a design with the same seeds therefore reproduces the results exactly.
+To replicate a parameterisation under different stochasticity, increase \code{nseeds} in the simdesign helper.
 }
 
 \section{Suppressing Messages}{
