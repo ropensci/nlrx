@@ -42,7 +42,6 @@ testthat::test_that("Run nl", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -82,6 +81,20 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), 2)
 
+  testthat::context("Run replicated simulations with run_nl_one()")
+  ## A vector of seeds runs the same parameterisation once per seed.
+  ## Every replicate reports its own seed and the correct siminputrow:
+  rep_seeds <- nlrx:::util_generate_replicate_seeds(seed, 3)
+  results <- run_nl_one(nl, rep_seeds, threads, siminputrow)
+  testthat::expect_equal(nrow(results), 3 * length(nl@experiment@evalticks))
+  testthat::expect_setequal(results$`random-seed`, rep_seeds)
+  testthat::expect_true(all(results$siminputrow == siminputrow))
+  testthat::expect_false(any(is.na(results$siminputrow)))
+
+  ## The same seed gives the same results:
+  results_again <- run_nl_one(nl, rep_seeds, threads, siminputrow)
+  testthat::expect_equal(results$`count sheep`, results_again$`count sheep`)
+
   testthat::context("Run all simulations with run_nl_all()")
   results <- run_nl_all(nl)
   testthat::expect_match(class(results)[1], "tbl_df")
@@ -90,7 +103,6 @@ testthat::test_that("Run nl", {
   ## Step3: Test tickmetrics = false
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "false",
                               idsetup = "setup",
                               idgo = "go",
@@ -139,7 +151,6 @@ testthat::test_that("Run nl", {
   ## Step3: Test tickmetrics = false
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",

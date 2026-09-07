@@ -18,7 +18,6 @@ testthat::test_that("class objects are created with correct variables", {
   nl@experiment <- experiment(
     expname = "nlrxtest",
     outpath = "C:/out/",
-    repetition = 1,
     tickmetrics = "true",
     idsetup = "setup",
     idgo = "go",
@@ -47,7 +46,6 @@ testthat::test_that("class objects are created with correct variables", {
   testthat::context("Class construction: experiment")
   testthat::expect_match(getexp(nl, "expname"), "nlrxtest")
   testthat::expect_match(getexp(nl, "outpath"), "C:/out/")
-  testthat::expect_equal(getexp(nl, "repetition"), 1)
   testthat::expect_match(getexp(nl, "tickmetrics"), "true")
   testthat::expect_match(getexp(nl, "idsetup"), "setup")
   testthat::expect_match(getexp(nl, "idgo"), "go")

@@ -47,7 +47,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -69,7 +68,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -101,7 +99,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with different number of values and distinct
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "fail",
                               idsetup = "setup",
                               idgo = "go",
@@ -130,7 +127,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with whitespace in expname:
   nl@experiment <- experiment(expname = "nlrx test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -160,7 +156,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with same parameter in variables and constants:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -191,7 +186,6 @@ testthat::test_that("util_eval", {
   ## Add non existing constant parameter:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -221,7 +215,6 @@ testthat::test_that("util_eval", {
   ## Add non existing variable parameter:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -253,7 +246,6 @@ testthat::test_that("util_eval", {
   ## Leave some parameters non defined:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -275,7 +267,6 @@ testthat::test_that("util_eval", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",

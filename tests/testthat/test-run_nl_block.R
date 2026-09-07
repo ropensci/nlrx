@@ -40,7 +40,6 @@ testthat::test_that("run_nl_block", {
   # Step2: Add Experiment
   nl@experiment <- experiment(expname = "wolf-sheep",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "false",
                               idsetup = "setup",
                               idgo = "go",

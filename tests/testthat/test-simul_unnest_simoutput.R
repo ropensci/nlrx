@@ -40,7 +40,6 @@ testthat::test_that("Get nl spatial", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -103,7 +102,6 @@ testthat::test_that("Get nl spatial", {
   ## Check functioning without explicitly measuring breeds:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -144,7 +142,6 @@ testthat::test_that("Get nl spatial", {
   ## Check error message if coordinates are missing:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -183,7 +180,6 @@ testthat::test_that("Get nl spatial", {
   ## Check unnest without turtle metrics:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -230,7 +226,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -256,7 +251,6 @@ testthat::test_that("Get nl spatial", {
   ## Check missing who numbers:
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -273,7 +267,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -290,7 +283,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",

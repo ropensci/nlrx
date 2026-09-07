@@ -11,7 +11,6 @@ testthat::test_that("Simdesign objects are created properly", {
   nl@experiment <- experiment(
     expname = "nlrxtest",
     outpath = "/home/out",
-    repetition = 1,
     tickmetrics = "true",
     idsetup = "setup",
     idgo = "go",
@@ -197,7 +196,7 @@ testthat::test_that("Simdesign objects are created properly", {
 
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
-  testthat::expect_equal(length(getsim(nl, "simobject")), 15)
+  testthat::expect_equal(length(getsim(nl, "simobject")), 14)
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
@@ -213,7 +212,7 @@ testthat::test_that("Simdesign objects are created properly", {
 
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
-  testthat::expect_equal(length(getsim(nl, "simobject")), 15)
+  testthat::expect_equal(length(getsim(nl, "simobject")), 14)
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
@@ -230,7 +229,7 @@ testthat::test_that("Simdesign objects are created properly", {
 
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
-  testthat::expect_equal(length(getsim(nl, "simobject")), 16)
+  testthat::expect_equal(length(getsim(nl, "simobject")), 15)
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)

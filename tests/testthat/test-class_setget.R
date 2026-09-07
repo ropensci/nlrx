@@ -15,7 +15,6 @@ testthat::test_that("Class setter and getter", {
   ## Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = "out",
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",

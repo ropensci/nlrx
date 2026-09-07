@@ -36,7 +36,6 @@ testthat::test_that("export_nl", {
 
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
