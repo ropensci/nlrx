@@ -5,7 +5,6 @@
 
 <!-- old badges: [![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
 ![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) -->
-
 <!-- badges: start -->
 
 [![R build
@@ -179,7 +178,6 @@ configuration” vignette.
 ``` r
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -210,7 +208,7 @@ experiment design. Each simdesign helper also allows to define a number
 of random seeds that are randomly generated and can be used to execute
 repeated simulations of the same parameter matrix with different
 random-seeds (see “Advanced configuration” vignette for more information
-on random-seed and repetition management). A simulation design is
+on random-seed and replication management). A simulation design is
 attached to a nl object by using one of the simdesign helper functions:
 
 ``` r
