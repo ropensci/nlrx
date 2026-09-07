@@ -29,9 +29,10 @@
 #' Lastly, the R console outputs XML filepaths. These XML files are \code{BehaviorSpace} definitions. Run these manually via NetLogo \code{BehaviorSpace} to diagnose issues with the experiment and simdesign setup.
 #'
 #' @section Reproducibility and Seeds:
-#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo, because BehaviorSpace would otherwise run all repetitions of a parameterisation with the same seed and produce identical results.
-#' NetLogo then generates its own seed for each run, based on the current date and time. These seeds are not reported back by BehaviorSpace and cannot be recovered, which limits reproducibility and prevents control over sampling stochasticity.
-#' For fully reproducible results, set \code{repetition = 1} and use \code{nseeds} in the simdesign instead.
+#' Every simulation is executed with an explicit random seed, taken from the \code{nseeds} seeds of the attached simdesign (\code{nl@simdesign@simseeds}).
+#' NetLogo is seeded with that value and reports it back, so each row of the results can be traced to the parameterisation (\code{siminputrow}) and the seed (\code{random-seed}) that produced it.
+#' Re-running a design with the same seeds therefore reproduces the results exactly.
+#' To replicate a parameterisation under different stochasticity, increase \code{nseeds} in the simdesign helper.
 #'
 #' @section Suppressing Messages:
 #' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
@@ -70,20 +71,6 @@ run_nl_all <- function(nl,
     dots = list(...),
     deprecated_args = c("split", "cleanup.csv", "cleanup.xml", "cleanup.bat", "writeRDS")
   )
-
-
-  # Warn user regarding repetition setting
-  if (nl@experiment@repetition > 1) {
-    warning(
-      paste0(
-        "Experiment with repetition > 1 detected: Simdesign seeds won't be passed to NetLogo.\n",
-        "Repeated runs will therefore not use nl@simdesign@simseeds as explicit random-seed values.\n",
-        "Seeds will instead be chosen by NetLogo.\n",
-        "For reproducible results, it is recommended to set repetition = 1 and use nseeds via the simdesign."
-      ),
-      call. = FALSE
-    )
-  }
 
 
   # Construct blocks of simulation definitions
@@ -158,19 +145,15 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
 
   # Handle idrunnum (add it to the parameterizations if given)
   if (!is.na(nl@experiment@idrunnum)) {
-    if (nl@experiment@repetition > 1) {
-      warning("`idrunnum` cannot be used when `repetition` > 1, because seeds of repeated runs are handled by NetLogo and are therefore unknown before execution. Recommendation: use `repetition = 1` with `nseeds`.", call. = FALSE)
+    seed_part <- if ("random-seed" %in% names(block_df)) {
+      block_df$`random-seed`
     } else {
-      seed_part <- if ("random-seed" %in% names(block_df)) {
-        block_df$`random-seed`
-      } else {
-        rep(NA, nrow(block_df))
-      }
-
-      block_df[[nl@experiment@idrunnum]] <- paste0(
-        nl@experiment@expname, "_", seed_part, "_", block_df$siminputrow
-      )
+      rep(NA, nrow(block_df))
     }
+
+    block_df[[nl@experiment@idrunnum]] <- paste0(
+      nl@experiment@expname, "_", seed_part, "_", block_df$siminputrow
+    )
   }
 
   # Generate a NetLogo run_metrics_condition from 'evalticks'
@@ -200,22 +183,15 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
 
   # Format the job configuration (NetLogo variables) in a way that can be passed as sub_experiments (nested list instead of df)
   # "siminputrow" column has to be left out, as its not a variable within NetLogo.
-  # For when 'repetition' > 1, 'random-seed' also needs to be left out (as NetLogo has to pick seeds itself then).
-  if (nl@experiment@repetition > 1) {
-    jobs_formatted <- lapply(seq_len(nrow(block_df)), function(i) {
-      as.list(dplyr::select(block_df[i, , drop = FALSE], -siminputrow, -`random-seed`))
-    })
-  } else { # when no repetitions:
-    jobs_formatted <- lapply(seq_len(nrow(block_df)), function(i) {
-      as.list(dplyr::select(block_df[i, , drop = FALSE], -siminputrow))
-    })
-  }
+  # Every row of block_df is one NetLogo run, carrying its own 'random-seed' where one is defined.
+  jobs_formatted <- lapply(seq_len(nrow(block_df)), function(i) {
+    as.list(dplyr::select(block_df[i, , drop = FALSE], -siminputrow))
+  })
 
   # 2. BEHAVIORSPACE FILE CREATION
   # Use Logolink to translate the simulation-parametersets (siminput) and NLRX user settings into a BehaviorSpace XML that can be ran by NetLogo:
   xml_path <- suppressWarnings(logolink::create_experiment(
     name = paste0("NLRX Experiment ", nl@experiment@expname, ". Job ID ", block_number),
-    repetitions = nl@experiment@repetition,
     run_metrics_every_step = run_metrics_every_step,
     time_limit = nl@experiment@runtime,
     setup = if (!is.na(nl@experiment@idsetup)) nl@experiment@idsetup else NULL, # names of setup ..
@@ -256,15 +232,17 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   lookup <- block_df |>
     dplyr::mutate(run_number = dplyr::row_number())
 
-  if (any(c("random-seed", "random_seed") %in% names(results_final))) { # random_seed is temporary, logolink will most likely give an option to always return as random-seed.
-    lookup <- dplyr::select(lookup, run_number, siminputrow)
-  } else {
-    # random-seed won't be returned when repetition > 1
-    # but later analysis will expect this seed.
-    # even though the simulation didn't run with this seed, it is reattached.
-    # this was handled the same way pre NetLogo 7, see util_gather_results() in older nlrx versions
-    lookup <- dplyr::select(lookup, run_number, siminputrow, `random-seed`)
+  # random_seed is temporary, logolink will most likely give an option to always return as random-seed.
+  seed_in_results <- any(c("random-seed", "random_seed") %in% names(results_final))
+  lookup_cols <- c("run_number", "siminputrow")
+
+  if (!seed_in_results && "random-seed" %in% names(lookup)) {
+    # Only reached when the runs were executed without an explicit seed:
+    # carry the column over so that downstream analysis finds it.
+    lookup_cols <- c(lookup_cols, "random-seed")
   }
+
+  lookup <- dplyr::select(lookup, dplyr::all_of(lookup_cols))
 
   # assign siminputrow to create results_final
   results_final <- results_final |>
@@ -296,7 +274,7 @@ create_simulation_blocks <- function(nl, block_size){
 
   # Construct blocks of simulation parameterizations ("jobs")
   siminput <- siminput |> dplyr::mutate(siminputrow = dplyr::row_number()) # required for mapping, later on.
-  distinct_simulations <- siminput |> tidyr::expand_grid(`random-seed` = simseeds) # uses simseeds to construct fully fledged experiment definitions (1 row per simulation, not counting repetitions which are done in NetLogo)
+  distinct_simulations <- siminput |> tidyr::expand_grid(`random-seed` = simseeds) # uses simseeds to construct fully fledged experiment definitions (1 row per simulation)
 
   required_blocks <- ceiling(seq_len(nrow(distinct_simulations)) / block_size) # determine number of job blocks
   simulation_blocks_list <- split(distinct_simulations, required_blocks) # split simulation-definitions into blocks.
@@ -354,7 +332,7 @@ merge_result_blocks <- function(nl, results_list){
 #' @description Execute one NetLogo simulation from a nl object with a defined experiment and simdesign
 #'
 #' @param nl nl object
-#' @param seed a random seed for the NetLogo simulation (ignored when \code{repetition > 1})
+#' @param seed a random seed for the NetLogo simulation, or a vector of random seeds to run the same parameterisation repeatedly
 #' @param threads number of NetLogo threads used for execution (handled via NetLogo).
 #' @param siminputrow rownumber of the input tibble within the attached simdesign object that should be executed
 #' @param ... additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
@@ -365,9 +343,12 @@ merge_result_blocks <- function(nl, results_list){
 #' The random seed is set within the NetLogo model to control stochasticity. For further information, see the Reproducibility section in \code{run_nl_all()}.
 #' The siminputrow number defines which row of the input data tibble within the simdesign object of the provided nl object is executed.
 #'
+#' If \code{seed} is a vector of more than one seed, the same parameterisation is executed once per seed.
+#' These replicated runs are independent of each other, and each of them reports its own seed in the \code{random-seed} column of the results.
+#'
 #' The \code{threads} argument controls NetLogo's native multithreading.
-#' This is relevant when \code{repetition > 1}, as multiple repetitions can be parallelized within one NetLogo instance.
-#' For single runs (\code{repetition = 1}), \code{threads} has no effect.
+#' This is relevant when more than one seed is executed, because the runs are then parallelized within one NetLogo instance.
+#' For a single run, \code{threads} has no effect.
 #'
 #' @section Suppressing Messages:
 #' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
@@ -382,6 +363,11 @@ merge_result_blocks <- function(nl, results_list){
 #' # Run one simulation:
 #' results <- run_nl_one(nl = nl,
 #'                       seed = getsim(nl, "simseeds")[1],
+#'                       siminputrow = 1)
+#'
+#' # Run the same parameterisation with three different seeds:
+#' results <- run_nl_one(nl = nl,
+#'                       seed = getsim(nl, "simseeds")[1:3],
 #'                       siminputrow = 1)
 #'
 #' }
@@ -407,8 +393,10 @@ run_nl_one <- function(nl,
   # Wrap the single parameterization as a block of size 1
   block_df$siminputrow <- siminputrow
 
-  # Add the seed
-  if (!is.na(seed)) {
+  # Add the seed(s). One row per seed, so that each replicate is a NetLogo run of its own.
+  seed <- seed[!is.na(seed)]
+  if (length(seed) > 0) {
+    block_df <- block_df[rep(1L, length(seed)), , drop = FALSE]
     block_df$`random-seed` <- seed
   }
 
@@ -437,6 +425,7 @@ run_nl_one <- function(nl,
 #' @param nl nl object
 #' @param seed a random seed for the NetLogo simulation
 #' @param threads number of NetLogo threads used for execution (handled via NetLogo).
+#' @param nreplicates number of replicated model runs per evaluation of the dynamic design (default 1)
 #' @param ... additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @return simulation output results can be tibble, list, ... (structure depends on simdesign method)
 #' @details
@@ -447,11 +436,23 @@ run_nl_one <- function(nl,
 #' Simulations are executed sequentially, one parameterization at a time, as each new parameterization depends on the results of the previous simulation.
 #' Internally, each simulation step is executed via \code{run_nl_one()}.
 #'
+#' @section Replicated evaluations:
+#' Dynamic designs evaluate a stochastic model, so every evaluation of the objective carries simulation noise.
+#' With \code{nreplicates > 1}, each parameterisation proposed by the algorithm is simulated \code{nreplicates} times with different random seeds, and the reported value is aggregated over these replicates.
+#' Aggregation happens in two steps: first the mean over all measured ticks within a replicate, then the mean over the replicates.
+#' The replicated runs of one evaluation are executed within a single NetLogo instance, so \code{threads} can be used to run them in parallel.
+#'
+#' The replicate seeds are derived from \code{seed} and are identical for every evaluation of one \code{run_nl_dyn()} call.
+#' Reusing the same seeds across evaluations (known as common random numbers) means that differences between two proposed parameterisations reflect the parameters rather than the random draw, which makes the objective easier for the algorithm to optimize.
+#' It also means that the optimum is found for this particular set of random realisations; it is good practice to re-evaluate it with different seeds.
+#'
+#' Because the replicate seeds are derived from \code{seed}, they are not stored in the nl object.
+#' A dynamic design is reproduced by the nl object together with \code{seed} and \code{nreplicates}, so both should be recorded alongside the results.
+#'
 #' @section Reproducibility and Seeds:
-#' When \code{repetition > 1}, seeds defined in the simdesign are not passed to NetLogo.
-#' NetLogo will generate its own seeds for repetitions, which limits reproducibility.
-#' This is a known limitation of dynamic designs. For full seed control, set \code{repetition = 1}
-#' and run multiple independent dynamic designs with different seeds via the simdesign.
+#' \code{seed} is used as the random seed of the NetLogo runs, and, with \code{nreplicates > 1}, as the basis from which the replicate seeds are derived.
+#' The stochastic elements of the optimization algorithms themselves (for example the starting values of \code{GenSA} or the initial population of \code{GenAlg}) are drawn from the random number generator of R and are not controlled by \code{seed}; call \code{set.seed()} before \code{run_nl_dyn()} if these should be reproducible as well.
+#' The \code{nseeds} argument of the dynamic simdesign helpers generates several seeds: running \code{run_nl_dyn()} once per seed yields independent repetitions of the whole optimization, which shows whether the algorithm converges to the same solution under different stochasticity.
 #'
 #' @section Suppressing Messages:
 #' Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
@@ -471,7 +472,10 @@ run_nl_one <- function(nl,
 #'                                   nseeds = 1)
 #'
 #' # Run simulations:
-#' results <- run_nl_dyn(nl)
+#' results <- run_nl_dyn(nl, seed = getsim(nl, "simseeds")[1])
+#'
+#' # Average each evaluation over 5 replicated model runs to reduce simulation noise:
+#' results <- run_nl_dyn(nl, seed = getsim(nl, "simseeds")[1], nreplicates = 5)
 #'
 #' }
 #' @aliases run_nl_dyn
@@ -482,6 +486,7 @@ run_nl_one <- function(nl,
 run_nl_dyn <- function(nl,
                        seed,
                        threads = 1,
+                       nreplicates = 1,
                        ...) {
 
   util_check_deprecated_args(
@@ -489,18 +494,9 @@ run_nl_dyn <- function(nl,
     deprecated_args = c("cleanup.csv", "cleanup.xml", "cleanup.bat")
   )
 
-  if (nl@experiment@repetition > 1) {
-    warning(
-      paste0(
-        "Experiment with repetition > 1 detected: Simdesign seeds won't be passed to NetLogo.\n",
-        "Repeated runs will therefore not use nl@simdesign@simseeds as explicit random-seed values.\n",
-        "Seeds will instead be chosen by NetLogo.\n",
-        "This is a known limitation of dynamic designs. For full seed control, set repetition = 1 ",
-        "and run multiple independent dynamic designs with different seeds via the simdesign.",
-        "This limitation may be addressed in future versions."
-      ),
-      call. = FALSE
-    )
+  if (length(nreplicates) != 1 || is.na(nreplicates) ||
+      nreplicates < 1 || nreplicates != as.integer(nreplicates)) {
+    stop("`nreplicates` must be a single positive integer.", call. = FALSE)
   }
 
   nl_results <- NULL
@@ -509,7 +505,8 @@ run_nl_dyn <- function(nl,
     nl_results <- util_run_nl_dyn_GenSA(
       nl = nl,
       seed = seed,
-      threads = threads
+      threads = threads,
+      nreplicates = nreplicates
     )
   }
 
@@ -517,7 +514,8 @@ run_nl_dyn <- function(nl,
     nl_results <- util_run_nl_dyn_GenAlg(
       nl = nl,
       seed = seed,
-      threads = threads
+      threads = threads,
+      nreplicates = nreplicates
     )
   }
 
@@ -525,7 +523,8 @@ run_nl_dyn <- function(nl,
     nl_results <- util_run_nl_dyn_ABCmcmc(
       nl = nl,
       seed = seed,
-      threads = threads
+      threads = threads,
+      nreplicates = nreplicates
     )
   }
 

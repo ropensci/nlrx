@@ -213,10 +213,6 @@ util_print.experiment <- function(x, ...)
   output <- paste0(x@outpath, "\n")
   cat(ifelse(!is.na(x@outpath), style_def(output), style_na(output)))
 
-  cat("NetLogo repetitions    = ")
-  output <- paste0(x@repetition, "\n")
-  cat(ifelse(!is.na(x@repetition), style_def(output), style_na(output)))
-
   cat("Measure on each tick?  = ")
   output <- paste0(x@tickmetrics, "\n")
   cat(ifelse(!is.na(x@tickmetrics), style_def(output), style_na(output)))

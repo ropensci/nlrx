@@ -49,7 +49,6 @@
 #' ```
 #' nl@@experiment <- experiment(expname="wolf-sheep",
 #'                              outpath=outpath,
-#'                              repetition=1,
 #'                              tickmetrics="true",
 #'                              idsetup="setup",
 #'                              idgo="go",
@@ -72,7 +71,7 @@
 #' While the experiment defines the variables and specifications of the model, the simulation design creates a parameter input table based on these model specifications and the chosen simulation design method.
 #' nlrx provides a bunch of different simulation designs, such as full-factorial, latin-hypercube, sobol, morris and eFast (see "Simdesign Examples" vignette for more information on simdesigns).
 #' All simdesign helper functions need a properly defined nl object with a valid experiment design.
-#' Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and repetition management).
+#' Each simdesign helper also allows to define a number of random seeds that are randomly generated and can be used to execute repeated simulations of the same parameter matrix with different random-seeds (see "Advanced configuration" vignette for more information on random-seed and replication management).
 #' A simulation design is attached to a nl object by using one of the simdesign helper functions:
 #'
 #' ```

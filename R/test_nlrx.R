@@ -42,7 +42,6 @@ test_nlrx <- function(nlpath, nlversion){
   # Attach experiment
   nl@experiment <- experiment(expname="wolf-sheep",
                               outpath="",
-                              repetition=1,
                               tickmetrics="true",
                               idsetup="setup",
                               idgo="go",

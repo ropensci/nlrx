@@ -75,6 +75,83 @@ util_generate_seeds <- function(nseeds) {
 }
 
 
+#' Derive a vector of replicate seeds from a single design seed
+#'
+#' @description Derive a reproducible vector of random seeds for replicated model runs
+#'
+#' @param seed the design seed the replicate seeds are derived from
+#' @param nreplicates number of replicate seeds to derive
+#' @details
+#' The derived seeds are a deterministic function of \code{seed} and therefore do not need to be
+#' stored: the same \code{seed} always yields the same replicate seeds.
+#' Because the seeds are drawn from the head of one stream, the seed vector for a smaller
+#' \code{nreplicates} is a prefix of the vector for a larger one.
+#'
+#' The random number generator state of the calling environment is saved and restored, so that
+#' deriving replicate seeds does not interfere with the random number stream of the dynamic
+#' simulation designs (\code{genalg} and \code{EasyABC} draw from it).
+#' @return numeric vector of length \code{nreplicates}
+#' @aliases util_generate_replicate_seeds
+#' @rdname util_generate_replicate_seeds
+#' @keywords internal
+util_generate_replicate_seeds <- function(seed, nreplicates) {
+
+  if (length(seed) != 1 || is.na(seed) || nreplicates <= 1) {
+    return(seed)
+  }
+
+  ## Store the current RNG state and restore it on exit:
+  has_state <- exists(".Random.seed", envir = globalenv(), inherits = FALSE)
+  if (isTRUE(has_state)) {
+    old_state <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
+  }
+  on.exit({
+    if (isTRUE(has_state)) {
+      assign(".Random.seed", old_state, envir = globalenv())
+    } else if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+      rm(".Random.seed", envir = globalenv())
+    }
+  }, add = TRUE)
+
+  set.seed(seed)
+  util_generate_seeds(nreplicates)
+}
+
+
+#' Reduce replicated simulation results to one value per metric
+#'
+#' @description Aggregate simulation results over measured ticks and over replicates
+#'
+#' @param results tibble of simulation results, as returned by \code{run_nl_one()}
+#' @param cols character vector of metric columns that should be reduced
+#' @details
+#' Reduction happens in two stages: first the mean over all measured ticks within each replicate,
+#' then the mean over the replicates.
+#' Replicates are identified by the \code{random-seed} column.
+#' The two stages matter whenever replicates return a different number of ticks (for example when
+#' an exit condition is defined), because a single mean over all rows would weight long runs
+#' higher than short ones.
+#' @return tibble with one row and one column per entry of \code{cols}
+#' @aliases util_reduce_replicates
+#' @rdname util_reduce_replicates
+#' @keywords internal
+util_reduce_replicates <- function(results, cols) {
+
+  tick_mean <- function(x) mean(as.numeric(x))
+
+  ## Stage one: mean over ticks, within each replicate:
+  if ("random-seed" %in% names(results)) {
+    results <- results %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of("random-seed"))) %>%
+      dplyr::summarise(dplyr::across(dplyr::all_of(cols), tick_mean), .groups = "drop") %>%
+      dplyr::select(-"random-seed")
+  }
+
+  ## Stage two: mean over replicates (or over ticks, if replicates are not identifiable):
+  dplyr::summarise(results, dplyr::across(dplyr::all_of(cols), tick_mean))
+}
+
+
 #' Utility function for checking for deprecated or unsupported arguments
 #'
 #' @param dots Named list of arguments captured from \code{...}

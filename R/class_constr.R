@@ -77,7 +77,6 @@ nl <- function(nlversion = "7.0.4",
 #'
 #' @param expname A character string defining the name of the experiment, no whitespaces allowed
 #' @param outpath Path to a directory where experiment output will be stored
-#' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble. Repetitions are executed by NetLogo BehaviorSpace with seeds that nlrx neither controls nor observes; prefer the nseeds argument of the simdesign helpers (see details)
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
 #' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
@@ -103,13 +102,6 @@ nl <- function(nlversion = "7.0.4",
 #' The simdesign helper functions use the variable definitions from the experiment within the nl object to generate a parameter tibble for simulations.
 #'
 #' \strong{The following class slots are obligatory to run an experiment:}
-#'
-#' \emph{repetition}
-#'
-#' The repetition is passed to NetLogo BehaviorSpace, which repeats each row of the simulation design that many times.
-#' Whenever repetition is greater than one, nlrx does not pass the simdesign random seeds to NetLogo, because BehaviorSpace would run all repetitions of a parameterisation with the same seed and thus produce identical results.
-#' NetLogo then seeds each run itself and these seeds are not reported back, so such runs cannot be reproduced.
-#' In most cases repetition should therefore be set to one and the nseeds argument of the simdesign helper functions should be used instead, which controls and reports the random seed of each run (see the "Advanced configuration" vignette).
 #'
 #' \emph{tickmetrics}
 #'
@@ -212,7 +204,6 @@ nl <- function(nlversion = "7.0.4",
 #' nl <- nl_simple
 #' nl@@experiment <- experiment(expname="wolf-sheep",
 #'                              outpath="C:/out/",
-#'                              repetition=1,
 #'                              tickmetrics="true",
 #'                              evalticks=seq(40,50),
 #'                              idsetup="setup",
@@ -248,7 +239,6 @@ nl <- function(nlversion = "7.0.4",
 #' @export
 experiment <- function(expname = "defaultexp",
                        outpath = NA_character_,
-                       repetition = 1,
                        tickmetrics = "true",
                        evalticks = NA_integer_,
                        idsetup = "setup",
@@ -265,10 +255,41 @@ experiment <- function(expname = "defaultexp",
                        constants = list(),
                        ...) {
 
+  dots <- list(...)
+
+  ## 'repetition' was removed in nlrx 0.5.0. Setting it to 1 has no effect and is
+  ## only warned about, so that existing scripts and documentation keep working:
+  if ("repetition" %in% names(dots)) {
+    repetition <- dots$repetition
+    dots$repetition <- NULL
+
+    if (!is.numeric(repetition) || length(repetition) != 1 ||
+        is.na(repetition) || repetition > 1) {
+      stop(
+        paste0(
+          "Argument 'repetition' was removed in nlrx 0.5.0 and repetition > 1 is no longer supported.\n",
+          "To run a parameterisation several times, use the nseeds argument of the simdesign helper ",
+          "functions, which controls and reports the random seed of each run.\n",
+          "For dynamic designs, use the nreplicates argument of run_nl_dyn()."
+        ),
+        call. = FALSE
+      )
+    }
+
+    warning(
+      paste0(
+        "Argument 'repetition' is deprecated and has no effect. It can be removed from the ",
+        "experiment definition. Use nseeds (simdesign helpers) or nreplicates (run_nl_dyn) instead."
+      ),
+      call. = FALSE
+    )
+  }
+
+  util_check_deprecated_args(dots = dots, deprecated_args = character(0))
+
   methods::new("experiment",
                expname=expname,
                outpath=path.expand(outpath),
-               repetition=repetition,
                tickmetrics=tickmetrics,
                evalticks=evalticks,
                idsetup=idsetup,
@@ -282,8 +303,7 @@ experiment <- function(expname = "defaultexp",
                metrics.patches=metrics.patches,
                metrics.links=metrics.links,
                variables=variables,
-               constants=constants,
-               ...)
+               constants=constants)
 
 
 }

@@ -36,7 +36,6 @@
 #'
 #' nl@experiment <- experiment(expname="networks",
 #'                             outpath=outpath,
-#'                             repetition=1,
 #'                             tickmetrics="false",
 #'                             idsetup="setup",
 #'                             idgo="go",
