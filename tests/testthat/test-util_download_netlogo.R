@@ -9,14 +9,18 @@ testthat::test_that("supported_netlogo_versions", {
   testthat::expect_false(check_netlogo_version("non_valid_version"))
   testthat::expect_error(check_netlogo_version("non_valid_version", throw_error = TRUE))
 
-  mockery::stub(download_netlogo, "utils::download.file", NULL)
-  mockery::stub(download_netlogo, "system", NULL)
+  # Mock out the actual download and the tar extraction so the test stays
+  # offline. `os` is pinned rather than left at NA so the extract branch (which
+  # only triggers on unix) is exercised on every platform.
+  testthat::local_mocked_bindings(download.file = function(...) NULL,
+                                  .package = "utils")
+  testthat::local_mocked_bindings(system = function(...) NULL,
+                                  .package = "base")
   nlversion <- "7.0.0"
   nlpath <- tempdir()
-  os <- NA
 
   testthat::expect_null(download_netlogo(to = nlpath,
-                                         os = os,
+                                         os = "unix",
                                          version = nlversion,
                                          extract = TRUE))
 
