@@ -82,10 +82,29 @@ testthat::test_that("run_nl_dyn rejects invalid nreplicates", {
 
   nl <- nl_gensa
 
-  testthat::expect_error(run_nl_dyn(nl, seed = 1, nreplicates = 0), "positive integer")
-  testthat::expect_error(run_nl_dyn(nl, seed = 1, nreplicates = 2.5), "positive integer")
-  testthat::expect_error(run_nl_dyn(nl, seed = 1, nreplicates = c(2, 3)), "positive integer")
-  testthat::expect_error(run_nl_dyn(nl, seed = 1, nreplicates = NA), "positive integer")
+  testthat::expect_error(run_nl_dyn(nl, nreplicates = 0), "positive integer")
+  testthat::expect_error(run_nl_dyn(nl, nreplicates = 2.5), "positive integer")
+  testthat::expect_error(run_nl_dyn(nl, nreplicates = c(2, 3)), "positive integer")
+  testthat::expect_error(run_nl_dyn(nl, nreplicates = NA), "positive integer")
+})
+
+testthat::test_that("run_nl_dyn takes the seeds from the simdesign", {
+
+  nl <- nl_gensa
+
+  ## Without seeds there is nothing to run:
+  nl_noseeds <- nl
+  setsim(nl_noseeds, "simseeds") <- NA_integer_
+  testthat::expect_error(run_nl_dyn(nl_noseeds), "No valid random seeds")
+
+  ## A supplied seed is deprecated but still honoured:
+  testthat::expect_warning(
+    try(run_nl_dyn(nl, seed = 1, nreplicates = 0), silent = TRUE),
+    "deprecated"
+  )
+
+  ## Simdesigns with pregenerated parametersets belong to run_nl_all():
+  testthat::expect_error(run_nl_dyn(nl_lhs), "cannot be used with the simdesign method")
 })
 
 testthat::test_that("the removed repetition argument is handled", {

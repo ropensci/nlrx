@@ -66,9 +66,11 @@ testthat::test_that("run_nl_dyn abc", {
                                              nseeds = 1)
 
   #start <- Sys.time()
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  results.dyn <- run_nl_dyn(nl)
   #end <- Sys.time()
   testthat::expect_match(class(results.dyn)[1], "tbl_df")
-  testthat::expect_equal(length(results.dyn), 8)
+  testthat::expect_equal(nrow(results.dyn), 1)
+  testthat::expect_match(class(results.dyn$result[[1]])[1], "tbl_df")
+  testthat::expect_equal(length(results.dyn$result[[1]]), 8)
 
 })

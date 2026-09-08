@@ -122,12 +122,14 @@ nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
 
 For calibration simdesigns, the `run_nl_dyn()` function lets you execute the simulations.
 There are some notable differences between `run_nl_all()` and `run_nl_dyn()`.
-First, because parameterizations depend of results from previous runs, `run_nl_dyn()` can not be parallelized.
-Second, the procedure does not automatically loop over created random seeds of the simdesign.
-If you want to repeat the same algorithm several times, just embed the `run_nl_dyn()` function in any kind of loop and iterate through the `nl@simdesign@simseeds` vector. We set the `use_seed` parameter of the simdesign to true, however we still need to define a random-seed in run_nl_dyn although it will be overwritten by the EasyABC functions.
+First, because parameterizations depend of results from previous runs, a single calibration can not be parallelized.
+Second, `run_nl_dyn()` runs one complete calibration for each random seed of the simdesign, one after another.
+Third, the returned tibble contains one row per seed, with the seed in the `seed` column and the result of the respective calibration in the `result` list column.
+Note that with `use_seed = TRUE` the seeds of the model runs are chosen by the EasyABC functions; the seeds of the simdesign then only determine how many independent calibrations are run.
 
 ```{r eval=FALSE}
-results <- run_nl_dyn(nl, seed = nl@simdesign@simseeds[1])
+results <- run_nl_dyn(nl)
+results$result[[1]]
 ```
 
 Because the model is stochastic, the summary statistics of a single model run are noisy.
@@ -136,19 +138,19 @@ With `use_seed = TRUE` the replicate seeds are derived from the seed that EasyAB
 
 ```{r eval=FALSE}
 results <- run_nl_dyn(nl,
-                      seed = nl@simdesign@simseeds[1],
                       nreplicates = 5,
                       threads = 5)
 ```
 
 #### Step 5: Investigate output
 
-The output is reported as nested tibble which can be attached to the nl object.
+Each calibration reports its output as a nested tibble, stored in the `result` column of the returned tibble.
+The post-processing below inspects one of these calibrations, so we attach the result of the first seed to the nl object.
 There are many possible ways to inspect the simulation output of the `ABCmcmc` functions.
 Below you find some guidance on how to summarize the output for calculating parameter statistics, sampling distributions, sampling density and exporting the best parameter combination.
 
 ```{r eval=FALSE}
-setsim(nl, "simoutput") <- results
+setsim(nl, "simoutput") <- results$result[[1]]
 saveRDS(nl, file.path(nl@experiment@outpath, "ABCmcmc.rds"))
 
 ## Calculate descriptive statistics

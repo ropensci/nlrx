@@ -62,20 +62,27 @@ testthat::test_that("run_nl_dyn", {
                                   control=list(max.time = 1),
                                   nseeds=1)
 
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  results.dyn <- run_nl_dyn(nl)
 
-  expected_size <- ifelse("trace.mat" %in% names(results.dyn), 4, 3)
+  ## One row per seed of the simdesign, the GenSA object in the result column:
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(nrow(results.dyn), length(getsim(nl, "simseeds")))
+  testthat::expect_equal(results.dyn$seed, getsim(nl, "simseeds"))
 
-  testthat::expect_match(class(results.dyn), "list")
-  testthat::expect_equal(length(results.dyn), expected_size)
+  gensa <- results.dyn$result[[1]]
+  expected_size <- ifelse("trace.mat" %in% names(gensa), 4, 3)
+  testthat::expect_match(class(gensa), "list")
+  testthat::expect_equal(length(gensa), expected_size)
 
   testthat::context("Run optimization with run_nl_dyn() GenAlg")
   nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,
                                    evalcrit = 1, elitism = NA,
                                    mutationChance = NA, nseeds = 1)
 
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
-  testthat::expect_match(class(results.dyn), "rbga")
-  testthat::expect_equal(length(results.dyn), 12)
+  results.dyn <- run_nl_dyn(nl)
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(nrow(results.dyn), 1)
+  testthat::expect_match(class(results.dyn$result[[1]]), "rbga")
+  testthat::expect_equal(length(results.dyn$result[[1]]), 12)
 
 })

@@ -96,13 +96,22 @@ nl@simdesign <- simdesign_GenSA(nl,
 
 For optimization simdesign, the `run_nl_dyn()` function lets you execute the simulations.
 There are some notable differences between `run_nl_all()` and `run_nl_dyn()`.
-First, because parameterizations depend of results from previous runs, `run_nl_dyn()` can not be parallelized.
-Second, the procedure does not automatically loop over created random seeds of the simdesign.
-If you want to repeat the same algorithm several times, just embed the `run_nl_dyn()` function in any kind of loop and iterate through the `nl@simdesign@simseeds` vector.
-Third, the output of `run_nl_dyn()` is reported as objects from the specific optimization procedures and not in tibble format. In order to attach these results to the nl object, the output needs to be converted to tibble format first. However, attaching optimization results to the nl does not enable any further post-processing functions of the nlrx package and is only relevant for storing results together with the nl object. This design decision was made in order to allow application of the method specific summary functions to the results of the optimization.
+First, because parameterizations depend of results from previous runs, a single optimization can not be parallelized.
+Second, `run_nl_dyn()` runs one complete optimization for each random seed of the simdesign, one after another, and these optimizations are independent of each other.
+Third, the results of the optimizations are not returned in one tibble of model output, because optimization procedures do not report model output but their own result objects.
+Instead, the returned tibble contains one row per seed, with the seed in the `seed` column and the result object of the respective optimization in the `result` list column.
+The objects are stored exactly as the optimization packages return them, so that their summary and plot functions can be applied to them.
 
 ```{r eval=FALSE}
-results <- run_nl_dyn(nl, seed = nl@simdesign@simseeds[1])
+results <- run_nl_dyn(nl)
+results$result[[1]]
+```
+
+If an optimization fails, the loop is not interrupted: the error is stored in the `result` column of that seed, a warning lists the failed seeds, and the results of the remaining seeds are returned.
+To run only some of the seeds, for example to distribute them over the nodes of a cluster, reduce the seed vector of the simdesign before the call:
+
+```{r eval=FALSE}
+setsim(nl, "simseeds") <- getsim(nl, "simseeds")[1]
 ```
 
 Optimization algorithms evaluate a stochastic model, so every evaluation of the fitness criterion carries simulation noise.
@@ -112,18 +121,17 @@ Because the replicated runs of one evaluation are executed within a single NetLo
 
 ```{r eval=FALSE}
 results <- run_nl_dyn(nl,
-                      seed = nl@simdesign@simseeds[1],
                       nreplicates = 5,
                       threads = 5)
 ```
 
-The replicate seeds are derived from `seed` and are the same for every evaluation of a `run_nl_dyn()` call.
+The replicate seeds are derived from the seed of the respective optimization and are the same for every evaluation of that optimization.
 Reusing the seeds this way means that a difference between two proposed parameterizations reflects the parameters rather than the random draw, which makes the fitness criterion easier to optimize.
 It also means that the optimum is found for this particular set of random realisations, so it is good practice to re-evaluate the resulting parameterization with different seeds.
 
 #### Step 5: Investigate output
 
-The output list of the Simulated Annealing procedure contains four elements:
+Each element of the `result` column is the output list of the Simulated Annealing procedure and contains four elements:
 `value` reports the minimum final value of the evaluation criterion.
 `par` reports the parameter settings of the final parameterisation in the same order as defined in the experiment of the nl object.
 `trace.mat` gives you detailed information on the optimization process over all iterations.
@@ -131,13 +139,20 @@ The output list of the Simulated Annealing procedure contains four elements:
 
 ```{r eval=FALSE}
 results
+results$result[[1]]$value
+results$result[[1]]$par
 ```
 
-In order to store our results together with the nl object we need to attach the results to the nl object first.
-As explained above, we need to enframe the results as a tibble.
+With several seeds, comparing the optima of the individual optimizations shows whether the algorithm converges to the same solution under different stochasticity:
 
 ```{r eval=FALSE}
-setsim(nl, "simoutput") <- tibble::enframe(results)
+purrr::map_dbl(results$result, "value")
+```
+
+In order to store our results together with the nl object we can attach the returned tibble to it:
+
+```{r eval=FALSE}
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "genSA_1.rds"))
 
 ```
@@ -227,13 +242,22 @@ nl@simdesign <- simdesign_GenSA(nl,
 
 For optimization simdesign, the `run_nl_dyn()` function lets you execute the simulations.
 There are some notable differences between `run_nl_all()` and `run_nl_dyn()`.
-First, because parameterizations depend of results from previous runs, `run_nl_dyn()` can not be parallelized.
-Second, the procedure does not automatically loop over created random seeds of the simdesign.
-If you want to repeat the same algorithm several times, just embed the `run_nl_dyn()` function in any kind of loop and iterate through the `nl@simdesign@simseeds` vector.
-Third, the output of `run_nl_dyn()` is reported as objects from the specific optimization procedures and not in tibble format. In order to attach these results to the nl object, the output needs to be converted to tibble format first. However, attaching optimization results to the nl does not enable any further post-processing functions of the nlrx package and is only relevant for storing results together with the nl object. This design decision was made in order to allow application of the method specific summary functions to the results of the optimization.
+First, because parameterizations depend of results from previous runs, a single optimization can not be parallelized.
+Second, `run_nl_dyn()` runs one complete optimization for each random seed of the simdesign, one after another, and these optimizations are independent of each other.
+Third, the results of the optimizations are not returned in one tibble of model output, because optimization procedures do not report model output but their own result objects.
+Instead, the returned tibble contains one row per seed, with the seed in the `seed` column and the result object of the respective optimization in the `result` list column.
+The objects are stored exactly as the optimization packages return them, so that their summary and plot functions can be applied to them.
 
 ```{r eval=FALSE}
-results <- run_nl_dyn(nl, seed = nl@simdesign@simseeds[1])
+results <- run_nl_dyn(nl)
+results$result[[1]]
+```
+
+If an optimization fails, the loop is not interrupted: the error is stored in the `result` column of that seed, a warning lists the failed seeds, and the results of the remaining seeds are returned.
+To run only some of the seeds, for example to distribute them over the nodes of a cluster, reduce the seed vector of the simdesign before the call:
+
+```{r eval=FALSE}
+setsim(nl, "simseeds") <- getsim(nl, "simseeds")[1]
 ```
 
 Optimization algorithms evaluate a stochastic model, so every evaluation of the fitness criterion carries simulation noise.
@@ -243,12 +267,11 @@ Because the replicated runs of one evaluation are executed within a single NetLo
 
 ```{r eval=FALSE}
 results <- run_nl_dyn(nl,
-                      seed = nl@simdesign@simseeds[1],
                       nreplicates = 5,
                       threads = 5)
 ```
 
-The replicate seeds are derived from `seed` and are the same for every evaluation of a `run_nl_dyn()` call.
+The replicate seeds are derived from the seed of the respective optimization and are the same for every evaluation of that optimization.
 Reusing the seeds this way means that a difference between two proposed parameterizations reflects the parameters rather than the random draw, which makes the fitness criterion easier to optimize.
 It also means that the optimum is found for this particular set of random realisations, so it is good practice to re-evaluate the resulting parameterization with different seeds.
 
@@ -262,13 +285,13 @@ The output list of the Simulated Annealing procedure contains four elements:
 
 ```{r eval=FALSE}
 results
+results$result[[1]]$value
 ```
 
-In order to store our results together with the nl object we need to attach the results to the nl object first.
-As explained above, we need to enframe the results as a tibble.
+In order to store our results together with the nl object we can attach the returned tibble to it:
 
 ```{r eval=FALSE}
-setsim(nl, "simoutput") <- tibble::enframe(results)
+setsim(nl, "simoutput") <- results
 saveRDS(nl, file.path(nl@experiment@outpath, "genSA_2.rds"))
 
 ```
