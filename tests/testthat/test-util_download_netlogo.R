@@ -58,8 +58,12 @@ testthat::test_that("NetLogo download URLs are reachable (headers only, no downl
 
   # Needs internet; never run on CRAN.
   testthat::skip_on_cran()
-  testthat::skip_if_offline("github.com")
   testthat::skip_if_not(isTRUE(capabilities("libcurl")), "libcurl not available")
+  # skip_if_offline() errors rather than skips when the curl package is missing,
+  # so guard it. curl is only needed for that connectivity probe; the test body
+  # below uses base curlGetHeaders(), which needs libcurl but not the package.
+  testthat::skip_if_not_installed("curl")
+  testthat::skip_if_offline("github.com")
 
   for (v in supported_netlogo_versions()) {
     for (os in c("win", "mac", "unix")) {
