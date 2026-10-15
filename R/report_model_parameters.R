@@ -87,7 +87,7 @@ report_model_parameters <- function(nl) {
       }
 
       # INPUTBOX
-      if (widget_type == "inputBox") {
+      if (widget_type == "input") {
         name <- xml2::xml_attr(node, "variable")
 
         entry <- list(
