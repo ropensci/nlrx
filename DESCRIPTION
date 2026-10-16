@@ -64,4 +64,4 @@ Suggests:
 VignetteBuilder: knitr
 SystemRequirements: 
     NetLogo (>= 7.0.0), Java (>= 11), pandoc, OpenSSL, udunits-2, PROJ.4, GEOS, GDAL, libxml2
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

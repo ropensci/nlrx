@@ -90,7 +90,7 @@ nl <- function(nlversion = "7.0.4",
 #' @param metrics.patches vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))
 #' @param metrics.links a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("end1", "end2")))
 #' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))
-#' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
+#' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model. Give strings as plain character values and booleans as logicals (e.g. list("pNUM" = 12, "pLOGIC" = TRUE, "pSTRING" = "default")). The escaped-quote convention of nlrx < 0.5.0 ("\"default\"") and boolean strings ("true") are still accepted and repaired silently.
 #' @param ... ...
 #' @return experiment S4 class object
 #' @details
@@ -286,6 +286,21 @@ experiment <- function(expname = "defaultexp",
   }
 
   util_check_deprecated_args(dots = dots, deprecated_args = character(0))
+
+  ## Repair the value conventions of nlrx < 0.5.0 (strings wrapped in escaped
+  ## quotes, booleans given as strings), so that the stored experiment already
+  ## holds what NetLogo will be given (see util_normalize_nl_value()):
+  constants <- lapply(constants, util_normalize_nl_value)
+
+  variables <- lapply(variables, function(variable) {
+    if (is.list(variable)) {
+      if (!is.null(variable$values)) {
+        variable$values <- util_normalize_nl_value(variable$values)
+      }
+      return(variable)
+    }
+    util_normalize_nl_value(variable)
+  })
 
   methods::new("experiment",
                expname=expname,

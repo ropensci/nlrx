@@ -74,8 +74,8 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
                                              "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
                                              "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
                                              "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                            constants = list("model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 ```
 
 #### Step 3: Attach a simulation design
@@ -168,8 +168,8 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
                                              "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
                                              "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
                                              "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                            constants = list("model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 ```
 
 #### Step 3: Attach a simulation design

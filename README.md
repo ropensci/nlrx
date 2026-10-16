@@ -5,7 +5,6 @@
 
 <!-- old badges: [![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
 ![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) -->
-
 <!-- badges: start -->
 
 [![R build
@@ -187,13 +186,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 ```
 
 #### Step 3: Attach a simulation design

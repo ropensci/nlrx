@@ -74,7 +74,7 @@ nl@experiment <- experiment(expname = "nlrx_spatial",
                             metrics = c("count sheep","count wolves"),
                             metrics.turtles = list("turtles" = c("who", "pxcor", "pycor")),
                             metrics.patches = c("pxcor", "pycor", "pcolor"),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              'initial-number-sheep' = 100,
                                              'initial-number-wolves' = 50,
                                              "grass-regrowth-time" = 30,
@@ -82,7 +82,7 @@ nl@experiment <- experiment(expname = "nlrx_spatial",
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false")
+                                             "show-energy?" = FALSE)
                             )
 
 # Attach simdesign simple using only constants

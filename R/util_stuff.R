@@ -191,3 +191,50 @@ util_check_deprecated_args <- function(dots, deprecated_args) {
   return(invisible(NULL))
 }
 
+
+#' Normalize parameter values for the logolink backend
+#'
+#' @description Repairs the two value conventions of nlrx < 0.5.0 that are no
+#' longer valid now that 'logolink' writes the BehaviorSpace XML: strings that
+#' were wrapped in escaped quotes and booleans that were given as character
+#' strings.
+#'
+#' @param x value or vector of values of a single NetLogo global
+#' @details
+#' 'logolink' quotes character values itself and lowercases logical values, so
+#' a value like \code{"\"default\""} would reach NetLogo as \code{""default""}
+#' and abort the run, and a value like \code{"false"} would reach it as the
+#' string \code{"false"} instead of a boolean.
+#'
+#' One layer of enclosing double quotes is therefore removed, and character
+#' values that are entirely \code{"true"}/\code{"false"} (in any capitalisation)
+#' are converted to logical. This also applies to a quoted \code{"\"true\""}:
+#' NetLogo parses an unquoted \code{true} as a boolean, so a global whose value
+#' is the \emph{string} "true" could not be expressed before 0.5.0 either.
+#'
+#' Values that are not character (numbers, logicals, stepped value lists) are
+#' returned unchanged. The function is idempotent, so it can be applied at
+#' several points of the pipeline.
+#' @return \code{x} with legacy quoting and boolean strings normalized
+#' @aliases util_normalize_nl_value
+#' @rdname util_normalize_nl_value
+#' @keywords internal
+util_normalize_nl_value <- function(x) {
+
+  if (!is.character(x) || length(x) == 0) {
+    return(x)
+  }
+
+  ## Strip one layer of enclosing double quotes (the pre-0.5.0 string convention):
+  quoted <- !is.na(x) & nchar(x) >= 2 & startsWith(x, "\"") & endsWith(x, "\"")
+  x[quoted] <- substr(x[quoted], 2, nchar(x[quoted]) - 1)
+
+  ## Convert boolean strings to logicals:
+  if (any(!is.na(x)) &&
+      all(is.na(x) | grepl("^(true|false)$", x, ignore.case = TRUE))) {
+    return(as.logical(toupper(x)))
+  }
+
+  return(x)
+}
+

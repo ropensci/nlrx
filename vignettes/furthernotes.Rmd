@@ -42,8 +42,9 @@ simdesign_ABCmcmc_Wegmann | min, max, qfun             | numeric
 Additionally, please note the following restrictions in order to define variables and constants correctly:
 
 * Categorical variable values are currently only allowed for simdesign_simple, simdesign_distinct and simdesign_ff.
-* Variable values that should be recognized by NetLogo as strings need to be nested inside escaped quotes (e.g. `"\"string\""`).
-* Variable values that should be recognized by NetLogo as logical need to be entered as strings (e.g. `"false"`).
+* Variable values that should be recognized by NetLogo as strings are given as plain character values (e.g. `"string"`). Up to nlrx 0.4.6 these had to be nested inside escaped quotes (`"\"string\""`); such values are still accepted and the superfluous quotes are removed, but the escaping is no longer needed.
+* Variable values that should be recognized by NetLogo as logical are given as logicals (e.g. `FALSE`). The strings `"true"` and `"false"` are still accepted and converted.
+* NetLogo literals such as a list (`[1 2 3]`) cannot be passed as parameter values: character values are always quoted, so the literal would reach NetLogo as a string. Define such globals within the model instead.
 * It is not allowed to list the same variable in the variables and constants list. 
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
 * simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.

@@ -15,6 +15,13 @@ check_value_format(x, name = NULL)
 Character vector of detected issues
 }
 \description{
-Checks variables and constants for patterns problematic in NetLogo 7+
+Checks variables and constants for value patterns that nlrx cannot repair
+}
+\details{
+Escaped string quotes and boolean strings are normalized by
+\link[nlrx]{util_normalize_nl_value} and are not reported here. What remains
+are values that cannot survive the handover to 'logolink' at all: it quotes
+every character value, so NetLogo literals such as \code{"[1 2 3]"} would be
+passed to the model as a string.
 }
 \keyword{internal}

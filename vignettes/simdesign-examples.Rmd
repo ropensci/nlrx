@@ -68,13 +68,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             variables = list(),
                             constants = list("initial-number-sheep" = 20,
                                              "initial-number-wolves" = 20,
-                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_simple(nl=nl,
                                  nseeds=3)
@@ -97,13 +97,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
                                              'initial-number-wolves' = list(values=c(30, 40, 50, 60))),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_distinct(nl=nl,
                                    nseeds=3)
@@ -127,13 +127,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
                                              'initial-number-wolves' = list(min=0, max=50, step=10)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_ff(nl=nl,
                              nseeds=3)
@@ -160,13 +160,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
@@ -198,13 +198,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
@@ -267,13 +267,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150),
                                              'initial-number-wolves' = list(min=50, max=150)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_GenAlg(nl=nl, 
                                  popSize = 200, 
@@ -310,13 +310,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150),
                                              'initial-number-wolves' = list(min=50, max=150)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            summary_stat_target = c(100, 80),

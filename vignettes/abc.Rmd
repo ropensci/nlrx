@@ -77,8 +77,8 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                              "grass-regrowth-time" = 30,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                                             "model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 
 ```
 
@@ -249,8 +249,8 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                              "grass-regrowth-time" = 30,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                                             "model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 
 ```
 

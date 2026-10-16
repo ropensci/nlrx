@@ -68,13 +68,13 @@ nl@experiment <- experiment(expname="wolf-sheep-GenSA1",
                             metrics=c("(1 / count wolves)"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 ```
 
@@ -199,13 +199,13 @@ nl@experiment <- experiment(expname="wolf-sheep-GenSA2",
                             metrics.patches = c("pxcor", "pycor", "pcolor"),
                             variables = list('initial-number-sheep' = list(min=50, max=150),
                                              'initial-number-wolves' = list(min=50, max=150)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 ```
 

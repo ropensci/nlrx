@@ -136,11 +136,12 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   # 1. BEHAVIORSPACE DEFINITION PREPARATION
   # Handling NLRX features, ensuring correct formatting of settings and simulation input
 
-  # Ensure boolean formatting
-  for (col in names(block_df)) { # convert to logical, as Logolink expects logical
-    if (is.character(block_df[[col]]) && all(block_df[[col]] %in% c("true", "false"))) { # all instances of "true" and "false"
-      block_df[[col]] <- block_df[[col]] == "true" # "true" = TRUE, "false" = FALSE
-    }
+  # Normalize parameter values for logolink: strip the escaped quotes of the
+  # pre-0.5.0 string convention and convert boolean strings to logicals.
+  # experiment() does this as well; repeating it here covers values that never
+  # passed through the constructor (setexp(), import_nl()) and is idempotent.
+  for (col in setdiff(names(block_df), "siminputrow")) {
+    block_df[[col]] <- util_normalize_nl_value(block_df[[col]])
   }
 
   # Handle idrunnum (add it to the parameterizations if given)
@@ -200,7 +201,7 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     exit_condition = if (!is.na(nl@experiment@stopcond)) nl@experiment@stopcond else NULL,
     run_metrics_condition = run_metrics_condition, # when measurements are recorded
     metrics = util_collect_experiment_metrics(nl), # packages nl@experiment@metrics with nl@experiment@metrics.turtles/patches/links.
-    constants = nl@experiment@constants,
+    constants = lapply(nl@experiment@constants, util_normalize_nl_value),
     sub_experiments = jobs_formatted # specific parameter configurations
   ))
 

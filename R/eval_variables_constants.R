@@ -158,7 +158,7 @@ check_constants_and_variables_logolink <- function(nl) {
         c(
           "Potential NetLogo 7+ formatting issues detected:",
           paste0("- ", issues),
-          "Strings should be plain character values. Booleans should be given as logical values, not as strings; NLRX converts string booleans automatically."
+          "These values cannot be repaired by nlrx. Strings are given as plain character values and booleans as logicals; the escaped quotes and boolean strings of nlrx < 0.5.0 are repaired automatically."
         ),
         collapse = "\n"
       ),
@@ -173,35 +173,32 @@ check_constants_and_variables_logolink <- function(nl) {
 
 #' Helper function for \code{check_constants_and_variables_logolink()}
 #'
-#' @description Checks variables and constants for patterns problematic in NetLogo 7+
+#' @description Checks variables and constants for value patterns that nlrx cannot repair
 #'
 #' @param x value to check
 #' @param name optional name of the checked entry
+#' @details Escaped string quotes and boolean strings are normalized by
+#' \link[nlrx]{util_normalize_nl_value} and are not reported here. What remains
+#' are values that cannot survive the handover to 'logolink' at all: it quotes
+#' every character value, so NetLogo literals such as \code{"[1 2 3]"} would be
+#' passed to the model as a string.
 #' @return Character vector of detected issues
 #' @keywords internal
 
 check_value_format <- function(x, name = NULL) {
   issues <- character() # Collect issue messages
 
-  # Check for boolean-strings that NetLogo could expect as boolean
+  # Check for NetLogo literals that would be turned into strings by logolink
   if (is.character(x)) {
-    if (length(x) == 1 && x %in% c("true", "false")) {
-      issues <- c(
-        issues,
-        paste0(
-          if (!is.null(name)) paste0("'", name, "': ") else "",
-          "Boolean is given as character ('", x, "'). NLRX will automatically convert these to logical."
-        )
-      )
-    }
+    literal <- !is.na(x) & grepl("^\\[.*\\]$", x)
 
-    # Check for manually quoted strings "\"example\"", which should be formatted with simple quotations from NetLogo 7 onward.
-    if (length(x) == 1 && grepl('^".*"$', x)) {
+    if (any(literal)) {
       issues <- c(
         issues,
         paste0(
           if (!is.null(name)) paste0("'", name, "': ") else "",
-          "String was manually quoted (", x, "). Netlogo 7+ expects plain character values."
+          "Value looks like a NetLogo list literal (", x[literal][1],
+          "). Character values are quoted by 'logolink', so it would reach NetLogo as a string."
         )
       )
     }

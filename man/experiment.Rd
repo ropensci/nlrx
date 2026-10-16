@@ -55,7 +55,7 @@ experiment(
 
 \item{variables}{a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))}
 
-\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))}
+\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model. Give strings as plain character values and booleans as logicals (e.g. list("pNUM" = 12, "pLOGIC" = TRUE, "pSTRING" = "default")). The escaped-quote convention of nlrx < 0.5.0 ("\"default\"") and boolean strings ("true") are still accepted and repaired silently.}
 
 \item{...}{...}
 }
