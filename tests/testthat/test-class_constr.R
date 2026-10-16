@@ -99,3 +99,22 @@ testthat::test_that("class objects are created with correct variables", {
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
 
 })
+
+testthat::test_that("nl() accepts untested NetLogo 7 versions with a warning", {
+
+  make_nl <- function(...) {
+    nl(nlpath = tempdir(),
+       modelpath = file.path(tempdir(), "Wolf Sheep Predation.nlogox"),
+       ...)
+  }
+
+  ## Untested NetLogo 7 release: warn, but build the object.
+  testthat::expect_warning(nlobj <- make_nl(nlversion = "7.9.9"))
+  testthat::expect_match(getnl(nlobj, "nlversion"), "7.9.9")
+
+  ## check_version = FALSE silences the warning.
+  testthat::expect_silent(make_nl(nlversion = "7.9.9", check_version = FALSE))
+
+  ## Versions below 7.0.0 cannot run at all and stay an error.
+  testthat::expect_error(make_nl(nlversion = "6.4.0"))
+})

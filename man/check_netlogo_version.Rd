@@ -2,20 +2,34 @@
 % Please edit documentation in R/download_netlogo.R
 \name{check_netlogo_version}
 \alias{check_netlogo_version}
-\title{Check supported NetLogo versions}
+\title{Check NetLogo versions}
 \usage{
 check_netlogo_version(version, throw_error = FALSE)
 }
 \arguments{
 \item{version}{Character string naming which NetLogo Version to check}
 
-\item{throw_error}{TRUE/FALSE, if TRUE an error is thrown if the version is not supported}
+\item{throw_error}{TRUE/FALSE, if TRUE untested versions are reported (see details)}
 }
 \value{
-logical, if netlogo versions is supported by nlrx
+logical, TRUE if the version is one of \link[nlrx]{supported_netlogo_versions}
 }
 \description{
-Auxiliary function to check supported NetLogo version numbers
+Auxiliary function to check a NetLogo version number against the tested versions
+}
+\details{
+With \code{throw_error = TRUE} a version that is not among the tested ones is reported
+according to how likely it is to work:
+\itemize{
+\item NetLogo \strong{7.0.0 or newer}: a \strong{warning}. Simulations are executed by
+'logolink', so untested releases are likely to run; set \code{check_version = FALSE} in
+\link[nlrx]{nl} to silence it.
+\item NetLogo \strong{below 7.0.0}: an \strong{error}. Support for these versions was
+removed in nlrx 0.5.0, so simulations cannot run at all. The error points to nlrx 0.4.6,
+the last version supporting NetLogo 5.3.1 to 6.4.0, which can be installed from GitHub
+with \code{remotes::install_github("ropensci/nlrx@v0.4.6")}.
+\item A string that is not a version number: an \strong{error}.
+}
 }
 \examples{
 \dontrun{

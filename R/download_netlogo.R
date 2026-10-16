@@ -1,7 +1,11 @@
-#' Report supported NetLogo versions
+#' Report tested NetLogo versions
 #'
-#' @description Auxiliary function to report supported NetLogo version numbers
-#' @return  a vector of supported Versions for Download and Usage (parameter `version`):
+#' @description Auxiliary function to report the NetLogo versions nlrx is tested with
+#' @return a vector of NetLogo versions that nlrx is tested with (parameter `version`)
+#' @details
+#' These are the versions used in the automated tests and for \link[nlrx]{download_netlogo}.
+#' Newer NetLogo 7 releases are not rejected: because execution is delegated to 'logolink',
+#' they are likely to work and only emit a warning (see \link[nlrx]{check_netlogo_version}).
 #'
 #' @examples
 #' \dontrun{
@@ -24,12 +28,25 @@ supported_netlogo_versions <- function() {
   return(supported_versions)
 }
 
-#' Check supported NetLogo versions
+#' Check NetLogo versions
 #'
-#' @description Auxiliary function to check supported NetLogo version numbers
+#' @description Auxiliary function to check a NetLogo version number against the tested versions
 #' @param version Character string naming which NetLogo Version to check
-#' @param throw_error TRUE/FALSE, if TRUE an error is thrown if the version is not supported
-#' @return logical, if netlogo versions is supported by nlrx
+#' @param throw_error TRUE/FALSE, if TRUE untested versions are reported (see details)
+#' @return logical, TRUE if the version is one of \link[nlrx]{supported_netlogo_versions}
+#' @details
+#' With \code{throw_error = TRUE} a version that is not among the tested ones is reported
+#' according to how likely it is to work:
+#' \itemize{
+#'   \item NetLogo \strong{7.0.0 or newer}: a \strong{warning}. Simulations are executed by
+#'   'logolink', so untested releases are likely to run; set \code{check_version = FALSE} in
+#'   \link[nlrx]{nl} to silence it.
+#'   \item NetLogo \strong{below 7.0.0}: an \strong{error}. Support for these versions was
+#'   removed in nlrx 0.5.0, so simulations cannot run at all. The error points to nlrx 0.4.6,
+#'   the last version supporting NetLogo 5.3.1 to 6.4.0, which can be installed from GitHub
+#'   with \code{remotes::install_github("ropensci/nlrx@v0.4.6")}.
+#'   \item A string that is not a version number: an \strong{error}.
+#' }
 #'
 #' @examples
 #' \dontrun{
@@ -47,35 +64,48 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
   ## Check version support
   supported <- version %in% supported_netlogo_versions()
 
-  ## Throw error if needed:
-  if (isTRUE(throw_error)) {
-    if (!isTRUE(supported)) {
+  ## Report untested versions if needed:
+  if (isTRUE(throw_error) && !isTRUE(supported)) {
 
-      # For NetLogo 7+
-      if (numeric_version(version) >= numeric_version("7.0.0")) {
-        msg <- paste(
-          "NetLogo version", version,
-          "is not officially tested with nlrx.",
-          "NetLogo 7+ support is handled through logolink and execution may therefore still succeed.",
-          "To bypass this check, set check_version = FALSE in nl().",
-          "Officially tested versions are:",
+    ## A string that is not a version number cannot be acted on at all:
+    parsed <- tryCatch(numeric_version(version), error = function(e) NULL)
+
+    if (is.null(parsed)) {
+      stop(
+        paste(
+          "NetLogo version", version, "is not a valid version number.",
+          "Tested versions are:",
           paste(supported_netlogo_versions(), collapse = ", ")
-        )
-        stop(msg, call. = FALSE)
-        # For NetLogo below 7 (deprecated support)
-      } else {
-        msg <- paste(
-          "NetLogo version",
-          version,
-          "is no longer supported by nlrx.",
-          "Support for NetLogo versions below 7.0.0 has been deprecated.",
-          "Please upgrade to NetLogo 7.0.0 or newer.",
-          "To bypass this check (not recommended), set check_version = FALSE in nl().",
-          "Officially supported versions are:",
-          paste(supported_netlogo_versions(), collapse = ", ")
-        )
-        stop(msg, call. = FALSE)
-      }
+        ),
+        call. = FALSE
+      )
+    }
+
+    # For NetLogo 7+: untested, but execution is delegated to logolink, so it is
+    # likely to work. Warn and continue instead of refusing.
+    if (parsed >= numeric_version("7.0.0")) {
+      msg <- paste(
+        "NetLogo version", version,
+        "is not among the versions nlrx was tested with.",
+        "NetLogo 7+ is executed through logolink, so simulations are likely to run anyway.",
+        "To silence this warning, set check_version = FALSE in nl().",
+        "Tested versions are:",
+        paste(supported_netlogo_versions(), collapse = ", ")
+      )
+      warning(msg, call. = FALSE)
+      # For NetLogo below 7: support was removed, simulations cannot run.
+    } else {
+      msg <- paste0(
+        "NetLogo version ", version, " is no longer supported by nlrx.\n",
+        "Support for NetLogo versions below 7.0.0 was removed in nlrx 0.5.0.\n",
+        "Tested versions are: ",
+        paste(supported_netlogo_versions(), collapse = ", "), ".\n\n",
+        "Either upgrade to NetLogo 7.0.0 or newer, or keep using your NetLogo ",
+        "installation with nlrx 0.4.6, the last version that supports NetLogo 5.3.1 to 6.4.0:\n",
+        "  remotes::install_github(\"ropensci/nlrx@v0.4.6\")\n",
+        "Note that nlrx 0.4.6 no longer receives updates."
+      )
+      stop(msg, call. = FALSE)
     }
   }
 
@@ -94,8 +124,13 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
 #' @details
 #'
-#' Retrieve supported Versions for Download and Usage (parameter `version`):
+#' Retrieve the versions nlrx is tested with (parameter `version`):
 #' supported_netlogo_versions()
+#'
+#' Newer NetLogo 7 releases can be downloaded as well: the download URL is derived from the
+#' version number, so an untested version only emits a warning
+#' (\link[nlrx]{check_netlogo_version}) and fails with a download error if no such release
+#' exists.
 #'
 #'
 #' @examples

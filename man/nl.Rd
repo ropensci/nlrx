@@ -28,7 +28,7 @@ nl(
 
 \item{simdesign}{Holds a simdesign S4 class object}
 
-\item{check_version}{Logical. If TRUE, check if the NetLogo version is officially supported. Set to FALSE to bypass version checks (e.g., for testing untested NetLogo 7.x versions).}
+\item{check_version}{Logical. If TRUE (default), the NetLogo version is checked against the versions nlrx is tested with (\link[nlrx]{supported_netlogo_versions}): an untested NetLogo 7.x version emits a warning and is accepted, a version below 7.0.0 is an error. Set to FALSE to silence the warning.}
 
 \item{...}{...}
 }

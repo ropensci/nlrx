@@ -20,8 +20,13 @@ If set to NA (default) os will be detected automatically (\code{util_get_os()})}
 Auxiliary function to download NetLogo
 }
 \details{
-Retrieve supported Versions for Download and Usage (parameter \code{version}):
+Retrieve the versions nlrx is tested with (parameter \code{version}):
 supported_netlogo_versions()
+
+Newer NetLogo 7 releases can be downloaded as well: the download URL is derived from the
+version number, so an untested version only emits a warning
+(\link[nlrx]{check_netlogo_version}) and fails with a download error if no such release
+exists.
 }
 \examples{
 \dontrun{

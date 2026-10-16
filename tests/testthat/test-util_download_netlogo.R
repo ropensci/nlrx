@@ -9,6 +9,19 @@ testthat::test_that("supported_netlogo_versions", {
   testthat::expect_false(check_netlogo_version("non_valid_version"))
   testthat::expect_error(check_netlogo_version("non_valid_version", throw_error = TRUE))
 
+  ## Tested versions pass silently:
+  testthat::expect_silent(check_netlogo_version("7.0.4", throw_error = TRUE))
+
+  ## An untested NetLogo 7 release only warns - execution goes through logolink,
+  ## so it is likely to work - and is still reported as untested:
+  testthat::expect_warning(untested <- check_netlogo_version("7.9.9", throw_error = TRUE))
+  testthat::expect_false(untested)
+
+  ## NetLogo < 7 is not untested but unsupported, so it stays an error - and the
+  ## error points at the last nlrx version that supports NetLogo 6.x:
+  testthat::expect_error(check_netlogo_version("6.4.0", throw_error = TRUE),
+                         regexp = "install_github")
+
   # Mock out the actual download and the tar extraction so the test stays
   # offline. `os` is pinned rather than left at NA so the extract branch (which
   # only triggers on unix) is exercised on every platform.
