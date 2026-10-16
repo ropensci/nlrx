@@ -30,7 +30,7 @@ util_run_nl_dyn_GenSA <- function(nl,
 
   # Call the GenSA function from the GenSA package:
   results <- GenSA::GenSA(
-    par = NULL,
+    par = gensa$par,
     fn = function(par, ...) {
       util_run_nl_dyn_GenSA_fn(
         param = par,

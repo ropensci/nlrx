@@ -756,7 +756,7 @@ simdesign_eFast <- function(nl,
 #' @description Add a Simulated Annealing simdesign to a nl object
 #'
 #' @param nl nl object with a defined experiment
-#' @param par optional vector of start values for each parameter defined in variables of experiment
+#' @param par optional vector of start values, one for each variable of the experiment, in the order in which the variables are defined. If NULL (default), GenSA draws a random start point within the parameter boundaries.
 #' @param evalcrit position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value
 #' @param control list with further arguments passed to the GenSA function (see ?GenSA for details)
 #' @param nseeds number of seeds for this simulation design
@@ -766,6 +766,7 @@ simdesign_eFast <- function(nl,
 #' This function creates a simdesign S4 class which can be added to a nl object.
 #'
 #' Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+#' Only min and max are used: the algorithm searches the range they define, so a qfun of the variable definition is irrelevant for this simdesign.
 #'
 #' The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
 #' that are defined in the variables field of the experiment object within the nl object.
@@ -851,6 +852,34 @@ simdesign_GenSA <- function(nl,
   if (suppressWarnings(is.na(evalcrit_reporter))) {
     stop(paste0("Error: No valid reporter at defined evalcrit position: ",
                 evalcrit))
+  }
+
+  ## Validate the optional start values here, where the user defined them,
+  ## rather than at run time: one value per variable, in the order of the
+  ## variables, and within the boundaries the algorithm searches.
+  if (!is.null(par)) {
+    if (!is.numeric(par) || length(par) != length(lower)) {
+      stop(
+        paste0(
+          "'par' must be a numeric vector with one start value per variable (",
+          length(lower), "), in the order of the experiment variables: ",
+          paste(names(getexp(nl, "variables")), collapse = ", "), "."
+        ),
+        call. = FALSE
+      )
+    }
+
+    outside <- which(par < as.vector(lower) | par > as.vector(upper))
+
+    if (length(outside) > 0) {
+      stop(
+        paste0(
+          "'par' values outside the min/max boundaries of their variables: ",
+          paste(names(getexp(nl, "variables"))[outside], collapse = ", "), "."
+        ),
+        call. = FALSE
+      )
+    }
   }
 
   # Create a gsa object:
