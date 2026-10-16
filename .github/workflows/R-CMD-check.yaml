@@ -17,6 +17,13 @@ name: R-CMD-check
 
 permissions: read-all
 
+# A new push to a pull request supersedes the run that is still going. The
+# macOS jobs are long, so letting them finish costs a lot of runner time for a
+# result nobody will look at.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 env:
   NETLOGO_VERSION: "7.0.4"
 
@@ -67,6 +74,11 @@ jobs:
           # The disk image holds a single folder named like the version, with the
           # models at its root (same layout as the Linux archive).
           cp -R "/Volumes/netlogo/NetLogo ${NETLOGO_VERSION}" "${HOME}/netlogo/"
+          # The quarantine attribute travels with the copy, and Gatekeeper then
+          # reassesses the bundle on every NetLogo_Console launch. The tests start
+          # one process per simulation block, so this is suspected to be behind the
+          # macOS runtime being an order of magnitude above Linux and Windows.
+          xattr -dr com.apple.quarantine "${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" || true
           hdiutil detach /Volumes/netlogo -quiet
           rm netlogo.dmg
           echo "NETLOGO_HOME=${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" >> "${GITHUB_ENV}"
