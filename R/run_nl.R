@@ -227,6 +227,22 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
       all(!is.na(nl@experiment@evalticks))) { # ensure evalticks is defined
     results_final <- results_final |>
       dplyr::filter(step %in% nl@experiment@evalticks) # filter out any records not adhering to the rule.
+
+    # Report requested ticks that carry no results, instead of silently
+    # returning fewer rows than asked for. nlrx 0.4.x intended this message but
+    # its index expression could never select anything.
+    unreported <- util_unreported_evalticks(nl@experiment@evalticks, results_final$step)
+
+    if (length(unreported) > 0) {
+      warning(
+        paste0(
+          "No results returned for evalticks ", paste(unreported, collapse = ", "),
+          ". The simulations of this block ended before these ticks were reached ",
+          "(check 'runtime' and 'stopcond')."
+        ),
+        call. = FALSE
+      )
+    }
   }
 
   # infer relation of resulting run_numbers and original siminputrow from block_df

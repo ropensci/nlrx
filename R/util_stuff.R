@@ -192,6 +192,30 @@ util_check_deprecated_args <- function(dots, deprecated_args) {
 }
 
 
+#' Identify evalticks without results
+#'
+#' @description Reports the evalticks of an experiment for which no simulation records were returned
+#'
+#' @param evalticks the \code{evalticks} of the experiment
+#' @param steps the tick numbers present in the simulation results
+#' @details
+#' Simulations can end before a requested tick is reached, either because
+#' \code{runtime} is shorter or because a \code{stopcond} ended them. The
+#' affected ticks then silently carry no results, which this function surfaces.
+#' @return the requested evalticks that are missing from \code{steps}, in the order given
+#' @aliases util_unreported_evalticks
+#' @rdname util_unreported_evalticks
+#' @keywords internal
+util_unreported_evalticks <- function(evalticks, steps) {
+
+  if (length(evalticks) == 0 || all(is.na(evalticks))) {
+    return(evalticks[0])
+  }
+
+  return(setdiff(evalticks, unique(steps)))
+}
+
+
 #' Normalize parameter values for the logolink backend
 #'
 #' @description Repairs the two value conventions of nlrx < 0.5.0 that are no
