@@ -36,7 +36,6 @@ testthat::test_that("run_nl_dyn abc", {
   nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
                                              summary_stat_target = c(1),
                                              n_rec = 2,
-                                             n_cluster = 1,
                                              use_seed = FALSE,
                                              progress_bar = TRUE,
                                              n_calibration = 101, #102
