@@ -1,22 +1,24 @@
-# NOTE: This workflow is overkill for most R packages
-# check-standard.yaml is likely a better choice
-# usethis::use_github_action("check-standard") will install it.
+# R-CMD-check for nlrx.
 #
-# For help debugging build failures open an issue on the RStudio community with the 'github-actions' tag.
-# https://community.rstudio.com/new-topic?category=Package%20development&tags=github-actions
+# The matrix mirrors the platforms CRAN checks on (Linux, macOS, Windows; see
+# https://cran.r-project.org/web/checks/check_flavors.html) and includes r-devel
+# and oldrel, because CRAN checks those too.
+#
+# Simulations need a local NetLogo installation, so every job installs NetLogo
+# and exports NETLOGO_HOME. The tests skip the execution path when that variable
+# is missing, which keeps them usable without a NetLogo installation.
 on:
   push:
-    branches:
-      - ghactions
-      - main
-      - master
+    branches: [main, master]
   pull_request:
-    branches:
-      - ghactions
-      - main
-      - master
+  workflow_dispatch:
 
 name: R-CMD-check
+
+permissions: read-all
+
+env:
+  NETLOGO_VERSION: "7.0.4"
 
 jobs:
   R-CMD-check:
@@ -28,119 +30,166 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: macos-latest,   r: 'release', netlogo_arch: 'aarch64'}
+          - {os: macos-13,       r: 'release', netlogo_arch: 'x86_64'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-22.04,  r: 'release'}
-        #  - {os: windows-latest, r: '3.6'}
-        #  - {os: ubuntu-16.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest", http-user-agent: "R/4.0.0 (ubuntu-16.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
-        #  - {os: ubuntu-16.04,   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        #  - {os: ubuntu-16.04,   r: 'oldrel',  rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        #  - {os: ubuntu-16.04,   r: '3.5',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        #  - {os: ubuntu-16.04,   r: '3.4',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
-        #  - {os: ubuntu-16.04,   r: '3.3',     rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM_ROOT: "https://packagemanager.posit.co"
-      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Setup JAVA
-        uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
-          java-version: '1.8' # The JDK version to make available on the path.
-          java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
-          architecture: x64 # (x64 or x86) - defaults to x64
+          distribution: temurin
+          java-version: '21'
 
-      - name: Setup NETLOGO Linux
+      - name: Install NetLogo (Linux)
         if: runner.os == 'Linux'
         run: |
-          wget http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
-          mkdir /home/runner/work/netlogo
-          tar -xvzf NetLogo-6.1.1-64.tgz --directory /home/runner/work/netlogo
-          rm -rf NetLogo-6.1.1-64.tgz
+          curl -fsSL -o netlogo.tgz "https://github.com/NetLogo/NetLogo/releases/download/v${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz"
+          mkdir -p "${HOME}/netlogo"
+          tar -xzf netlogo.tgz --directory "${HOME}/netlogo"
+          rm netlogo.tgz
+          echo "NETLOGO_HOME=${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" >> "${GITHUB_ENV}"
 
-      - name: Setup NETLOGO MacOS # we use the tgz version here as well
-        if: runner.os == 'MacOS'
+      - name: Install NetLogo (macOS)
+        if: runner.os == 'macOS'
         run: |
-          wget http://ccl.northwestern.edu/netlogo/6.1.1/NetLogo-6.1.1-64.tgz
-          mkdir /Applications/netlogo
-          tar -xvzf NetLogo-6.1.1-64.tgz --directory /Applications/netlogo
-          rm -rf NetLogo-6.1.1-64.tgz
-#          wget https://raw.githubusercontent.com/Homebrew/homebrew-cask/ab6bc2bebb332b01db1babc896996b8fa01cd54a/Casks/netlogo.rb
-#          brew install --HEAD -s netlogo.rb
-#          rm -rf netlogo.rb
+          curl -fsSL -o netlogo.dmg "https://github.com/NetLogo/NetLogo/releases/download/v${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-${{ matrix.config.netlogo_arch }}.dmg"
+          hdiutil attach netlogo.dmg -mountpoint /Volumes/netlogo -nobrowse -quiet
+          mkdir -p "${HOME}/netlogo"
+          # The disk image holds a single folder named like the version, with the
+          # models at its root (same layout as the Linux archive).
+          cp -R "/Volumes/netlogo/NetLogo ${NETLOGO_VERSION}" "${HOME}/netlogo/"
+          hdiutil detach /Volumes/netlogo -quiet
+          rm netlogo.dmg
+          echo "NETLOGO_HOME=${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" >> "${GITHUB_ENV}"
 
-      - name: Setup NETLOGO Windows
+      - name: Install NetLogo (Windows)
         if: runner.os == 'Windows'
-        run: choco install netlogo --version=6.1.1
+        shell: pwsh
+        run: |
+          $url = "https://github.com/NetLogo/NetLogo/releases/download/v$env:NETLOGO_VERSION/NetLogo-$env:NETLOGO_VERSION-64.msi"
+          curl.exe -fsSL -o netlogo.msi $url
+          Start-Process msiexec.exe -ArgumentList "/i", "netlogo.msi", "/qn", "/norestart" -Wait
+          Remove-Item netlogo.msi
+          $candidates = @(
+            "C:/Program Files/NetLogo $env:NETLOGO_VERSION",
+            "C:/Program Files (x86)/NetLogo $env:NETLOGO_VERSION"
+          )
+          $home_dir = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
+          if (-not $home_dir) {
+            Write-Host "NetLogo not found in the expected locations. Contents of C:/Program Files:"
+            Get-ChildItem "C:/Program Files" | Select-Object -ExpandProperty Name
+            exit 1
+          }
+          "NETLOGO_HOME=$home_dir" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Setup R
-        uses: r-lib/actions/setup-r@v2
+      - name: Verify the NetLogo installation
+        shell: bash
+        run: |
+          echo "NETLOGO_HOME=${NETLOGO_HOME}"
+          test -d "${NETLOGO_HOME}" || { echo "NETLOGO_HOME is not a directory"; exit 1; }
+          # What the tests and logolink need: the sample models and the console.
+          test -f "${NETLOGO_HOME}/models/Sample Models/Biology/Wolf Sheep Predation.nlogox" \
+            || { echo "Sample models missing; contents:"; ls "${NETLOGO_HOME}"; exit 1; }
+          test -e "${NETLOGO_HOME}/NetLogo_Console" \
+            || { echo "NetLogo_Console missing; contents:"; ls "${NETLOGO_HOME}"; exit 1; }
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
 
-      - name: Setup PANDOC
-        uses: r-lib/actions/setup-pandoc@v2
-
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-
-      - name: Cache R packages
-        if: runner.os != 'Windows'
-        uses: actions/cache@v3
+      - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          extra-packages: any::rcmdcheck
+          needs: check
 
-      - name: Install system dependencies
-        if: runner.os == 'Linux'
-        run: |
-          while read -r cmd
-          do
-            eval sudo $cmd
-          done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          error-on: '"warning"'
+          upload-snapshots: true
 
-      - name: Install dependencies
+  # A single job that runs the CRAN-specific incoming checks, including the URL
+  # checks, which the matrix above skips. This is what catches problems that
+  # would otherwise only surface after submitting to CRAN.
+  cran-incoming:
+    runs-on: ubuntu-latest
+    name: CRAN incoming checks
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      _R_CHECK_CRAN_INCOMING_: true
+      _R_CHECK_CRAN_INCOMING_REMOTE_: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: release
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      # No NetLogo here: the execution tests skip without NETLOGO_HOME, which is
+      # exactly the situation on the CRAN check machines.
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          error-on: '"note"'
+          upload-snapshots: true
+
+  test-coverage:
+    runs-on: ubuntu-latest
+    name: Test coverage
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install NetLogo
         run: |
-          remotes::install_deps(dependencies = TRUE)
-          remotes::install_cran("rcmdcheck")
+          curl -fsSL -o netlogo.tgz "https://github.com/NetLogo/NetLogo/releases/download/v${NETLOGO_VERSION}/NetLogo-${NETLOGO_VERSION}-64.tgz"
+          mkdir -p "${HOME}/netlogo"
+          tar -xzf netlogo.tgz --directory "${HOME}/netlogo"
+          rm netlogo.tgz
+          echo "NETLOGO_HOME=${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" >> "${GITHUB_ENV}"
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::covr
+          needs: coverage
+
+      - name: Test coverage
+        run: covr::codecov(quiet = FALSE, token = Sys.getenv("CODECOV_TOKEN"))
         shell: Rscript {0}
-
-      - name: Session info
-        run: |
-          options(width = 100)
-          pkgs <- installed.packages()[, "Package"]
-          sessioninfo::session_info(pkgs, include_base = TRUE)
-        shell: Rscript {0}
-
-      - name: Check
         env:
-          _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
-
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
-
-      - name: Codecov test coverage
-        run: covr::codecov(token = "3651cae6-2263-4130-a651-75eb7fc02149")
-        shell: Rscript {0}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

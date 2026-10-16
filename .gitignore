@@ -6,3 +6,5 @@ inst/doc
 vignettes/articles/nlrx_papers.bib.sav
 .DS_Store
 CRAN-SUBMISSION
+nlrx.Rcheck/
+nlrx_*.tar.gz

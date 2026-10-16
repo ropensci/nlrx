@@ -17,3 +17,5 @@ vignettes/articles
 ^data_raw$
 ^\.github$
 ^CRAN-SUBMISSION$
+^nlrx\.Rcheck$
+^nlrx_.*\.tar\.gz$

@@ -1,29 +1,8 @@
 testthat::context("export_nl tests")
 testthat::test_that("export_nl", {
 
-  # Run these tests only on Github actions:
-  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
-
-  ## Check that JAVA is installed:
-  testthat::expect_true(system('java -version') == 0)
-
-  ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4",
-                                 "FAILED")))
-
-  testthat::expect_true(nlpath != "FAILED")
-  testthat::expect_true(dir.exists(nlpath))
-
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 7.0.4/app/netlogo-7.0.4.jar",
-                                  "FAILED")))
-
-  testthat::expect_true(jarpath != "FAILED")
-  testthat::expect_true(file.exists(jarpath))
-
+  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
+  nlpath <- skip_without_netlogo()
   modelpath <- file.path(nlpath, "models", "Sample Models",
                          "Biology", "Wolf Sheep Predation.nlogox")
 
