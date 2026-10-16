@@ -562,7 +562,7 @@ simdesign_soboljansen <- function(nl,
 #' @param morrisr morris r value
 #' @param morrisgridjump morris grid jump value
 #' @param nseeds number of seeds for this simulation design
-#' @param scale logical, if TRUE (default) the input factors are scaled to [0,1] before the elementary effects are computed, which makes them comparable across parameters with different units and ranges. Set to FALSE to obtain unscaled effects
+#' @param scale logical, if TRUE (default) the input factors are scaled to `[0, 1]` before the elementary effects are computed, which makes them comparable across parameters with different units and ranges. Set to FALSE to obtain unscaled effects
 #' @return simdesign S4 class object
 #' @details
 #'

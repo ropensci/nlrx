@@ -27,7 +27,7 @@ simdesign_morris(
 
 \item{nseeds}{number of seeds for this simulation design}
 
-\item{scale}{logical, if TRUE (default) the input factors are scaled to \link{0,1} before the elementary effects are computed, which makes them comparable across parameters with different units and ranges. Set to FALSE to obtain unscaled effects}
+\item{scale}{logical, if TRUE (default) the input factors are scaled to \verb{[0, 1]} before the elementary effects are computed, which makes them comparable across parameters with different units and ranges. Set to FALSE to obtain unscaled effects}
 }
 \value{
 simdesign S4 class object
