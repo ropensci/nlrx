@@ -133,6 +133,54 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   stopifnot(length(threads) == 1, !is.na(threads), threads >= 1, threads == as.integer(threads))
   stopifnot(length(block_number) == 1, !is.na(block_number), block_number >= 0, block_number == as.integer(block_number))
 
+  # 0. NETLOGO INSTALLATION
+  # logolink resolves NetLogo from the NETLOGO_HOME environment variable and
+  # offers no argument for it, so that variable is the only channel available.
+  # Honour nlpath for the duration of this block and restore the environment
+  # afterwards, so the nl object decides which installation is used without
+  # changing the session.
+  nlpath <- nl@nlpath
+  use_nlpath <- length(nlpath) == 1 && !is.na(nlpath) && nzchar(nlpath)
+  netlogo_home <- Sys.getenv("NETLOGO_HOME")
+
+  if (use_nlpath && !dir.exists(nlpath)) {
+    if (nzchar(netlogo_home)) {
+      # Imported or shared nl objects carry the nlpath of another machine:
+      # report it, but stay runnable.
+      warning(
+        paste0("The nlpath of the nl object does not exist on this system (", nlpath,
+               "). Falling back to NETLOGO_HOME (", netlogo_home, ")."),
+        call. = FALSE
+      )
+      use_nlpath <- FALSE
+    } else {
+      stop(
+        paste0("The nlpath of the nl object does not exist on this system (", nlpath,
+               ") and the NETLOGO_HOME environment variable is not set."),
+        call. = FALSE
+      )
+    }
+  }
+
+  if (!use_nlpath && !nzchar(netlogo_home)) {
+    stop(
+      paste0(
+        "No NetLogo installation defined. Set nlpath in nl() or the NETLOGO_HOME ",
+        "environment variable, e.g. Sys.setenv(NETLOGO_HOME = \"/path/to/NetLogo 7.0.4\")."
+      ),
+      call. = FALSE
+    )
+  }
+
+  if (use_nlpath) {
+    if (nzchar(netlogo_home)) {
+      on.exit(Sys.setenv(NETLOGO_HOME = netlogo_home), add = TRUE)
+    } else {
+      on.exit(Sys.unsetenv("NETLOGO_HOME"), add = TRUE)
+    }
+    Sys.setenv(NETLOGO_HOME = nlpath)
+  }
+
   # 1. BEHAVIORSPACE DEFINITION PREPARATION
   # Handling NLRX features, ensuring correct formatting of settings and simulation input
 

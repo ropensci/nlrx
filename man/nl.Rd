@@ -6,7 +6,7 @@
 \usage{
 nl(
   nlversion = "7.0.4",
-  nlpath = character(),
+  nlpath = Sys.getenv("NETLOGO_HOME"),
   modelpath = character(),
   jvmmem = 1024,
   experiment = methods::new("experiment"),
@@ -18,7 +18,7 @@ nl(
 \arguments{
 \item{nlversion}{A character string defining the NetLogo version that is used}
 
-\item{nlpath}{Path to the NetLogo main directory matching the defined version}
+\item{nlpath}{Path to the NetLogo main directory matching the defined version. Defaults to the \code{NETLOGO_HOME} environment variable, so it can be omitted when that is set. When a path is given, it takes precedence: it is used for the duration of each \code{\link[nlrx]{run_nl_all}} / \code{\link[nlrx]{run_nl_one}} / \code{\link[nlrx]{run_nl_dyn}} call, so one nl object can be run against a different NetLogo installation than another without changing the session}
 
 \item{modelpath}{Path to the NetLogo model file (.nlogox) that is used for simulations. Since NetLogo 6.3.0 the models shipped with NetLogo are stored at the installation root, so a sample model is reached with \code{file.path(nlpath, "models/Sample Models/...")}}
 

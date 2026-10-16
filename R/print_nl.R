@@ -49,8 +49,10 @@ util_print.nl <- function(x, ...) {
 
 
   cat("NetLogo path    = ")
-  output <- paste0(x@nlpath, "\n")
-  cat(ifelse(!identical(x@nlpath, character(0)), style_def(output), style_na(output)))
+  # An empty nlpath means NETLOGO_HOME is used at run time (see ?nl):
+  nlpath_set <- length(x@nlpath) == 1 && !is.na(x@nlpath) && nzchar(x@nlpath)
+  output <- paste0(ifelse(nlpath_set, x@nlpath, "<NETLOGO_HOME>"), "\n")
+  cat(ifelse(nlpath_set, style_def(output), style_na(output)))
 
 
   cat("Model path      = ")
@@ -87,8 +89,15 @@ util_print.summary <- function(x, ...)
   output <- ifelse(check_netlogo_version(x@nlversion), style_def("\u2713"), style_na("\u2717"))
   cat(paste0(output, "\n"))
 
-  cat("nlpath exists on local system: ")
-  output <- ifelse(dir.exists(x@nlpath), style_def("\u2713"), style_na("\u2717"))
+  cat("NetLogo installation exists on local system: ")
+  # Without an nlpath the run uses NETLOGO_HOME, so check whatever will be used:
+  nl_dir <- if (length(x@nlpath) == 1 && !is.na(x@nlpath) && nzchar(x@nlpath)) {
+    x@nlpath
+  } else {
+    Sys.getenv("NETLOGO_HOME")
+  }
+  output <- ifelse(nzchar(nl_dir) && dir.exists(nl_dir),
+                   style_def("\u2713"), style_na("\u2717"))
   cat(paste0(output, "\n"))
 
   cat("modelpath exists on local system: ")
