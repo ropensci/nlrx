@@ -4,7 +4,7 @@
 #'
 #' @param nlversion A character string defining the NetLogo version that is used
 #' @param nlpath Path to the NetLogo main directory matching the defined version
-#' @param modelpath Path to the NetLogo model file (.nlogox) that is used for simulations
+#' @param modelpath Path to the NetLogo model file (.nlogox) that is used for simulations. Since NetLogo 6.3.0 the models shipped with NetLogo are stored at the installation root, so a sample model is reached with \code{file.path(nlpath, "models/Sample Models/...")}
 #' @param jvmmem Java virtual machine memory capacity in megabytes
 #' @param experiment Holds a experiment S4 class object
 #' @param simdesign Holds a simdesign S4 class object
@@ -30,11 +30,11 @@
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' # Windows default NetLogo installation path (adjust to your needs!):
 #' netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
+#' modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("C:/out")
 #' # Unix default NetLogo installation path (adjust to your needs!):
 #' netlogopath <- file.path("/home/NetLogo 7.0.4")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
+#' modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("/home/out")
 #'
 #' nl <- nl(nlversion = "7.0.4",

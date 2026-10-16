@@ -22,11 +22,9 @@ test_nlrx <- function(nlpath, nlversion){
     stop("Provided NetLogo path does not exist!")
   }
 
-  modelpath <- ifelse(
-    nlversion >= "6.3.0",
-    file.path(nlpath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox"),
-    file.path(nlpath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
-  )
+  ## NetLogo keeps its models at the installation root since 6.3.0, and nlrx
+  ## requires 7.0.0 or newer, so there is only one layout left to support:
+  modelpath <- file.path(nlpath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 
   if(!file.exists(modelpath)){
     stop("Provided nlpath deviates from expected NetLogo standard folder structure. Test aborted!")

@@ -4,7 +4,7 @@ testthat::test_that("Simdesign objects are created properly", {
   nl <- nl(
     nlversion = "7.0.4",
     nlpath = "/home/travis/netlogo/NetLogo 7.0.4",
-    modelpath = "/home/travis/netlogo/NetLogo 7.0.4/app/models/Wolf Sheep Predation.nlogox",
+    modelpath = "/home/travis/netlogo/NetLogo 7.0.4/models/Wolf Sheep Predation.nlogox",
     jvmmem = 1024
   )
 

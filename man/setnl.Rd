@@ -21,7 +21,7 @@ Setter function to set a variable of a nl object
 # Example for Wolf Sheep Predation model from NetLogo models library:
 nl <- nl(
 nlpath = "/home/user/NetLogo 7.0.4/",
-modelpath = "/home/user/NetLogo 7.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
+modelpath = "/home/user/NetLogo 7.0.4/models/Sample Models/Biology/Wolf Sheep Predation.nlogox",
 jvmmem = 1024)
 
 # set NetLogo version

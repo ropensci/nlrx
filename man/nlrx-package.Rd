@@ -31,11 +31,11 @@ Depending on the operation system, paths to NetLogo and the model need to be adj
 \if{html}{\out{<div class="sourceCode">}}\preformatted{library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
 netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
 netlogopath <- file.path("/home/NetLogo 7.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,

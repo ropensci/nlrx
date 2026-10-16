@@ -28,15 +28,15 @@ Generate igraph objects from measured turtles and links metrics
 library(nlrx)
 library(igraph)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -50,7 +50,7 @@ nl@experiment <- experiment(expname="networks",
                             metrics.turtles = list("turtles" = c("who", "color")),
                             metrics.links = list("links" = c("[who] of end1", "[who] of end2")),
                             constants = list("num-nodes" = 80,
-                                             "layout?" = "true"))
+                                             "layout?" = TRUE))
 
 nl@simdesign <- simdesign_simple(nl, 1)
 nl@simdesign@simoutput <- run_nl_all(nl)
