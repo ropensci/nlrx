@@ -4,7 +4,7 @@
 \alias{download_netlogo}
 \title{Download NetLogo}
 \usage{
-download_netlogo(to, version, os = NA, extract = FALSE)
+download_netlogo(to, version, os = NA, extract = FALSE, arch = NA)
 }
 \arguments{
 \item{to}{Path to folder where the downloaded file is saved.}
@@ -15,6 +15,10 @@ download_netlogo(to, version, os = NA, extract = FALSE)
 If set to NA (default) os will be detected automatically (\code{util_get_os()})}
 
 \item{extract}{TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of \code{to} (only unix)}
+
+\item{arch}{macOS architecture of the disk image, "aarch64" (Apple Silicon) or "x86_64" (Intel).
+If NA (default) the architecture of the running machine is detected (\code{util_get_mac_arch()}).
+Ignored for Windows and Linux, which have one download each.}
 }
 \description{
 Auxiliary function to download NetLogo

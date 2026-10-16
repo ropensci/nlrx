@@ -122,6 +122,9 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @param os operation system ("win", "mac", "unix") decides which version of netlogo (msi, dmg, tgz) is downloaded.
 #' If set to NA (default) os will be detected automatically (`util_get_os()`)
 #' @param extract TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of `to` (only unix)
+#' @param arch macOS architecture of the disk image, "aarch64" (Apple Silicon) or "x86_64" (Intel).
+#' If NA (default) the architecture of the running machine is detected (`util_get_mac_arch()`).
+#' Ignored for Windows and Linux, which have one download each.
 #' @details
 #'
 #' Retrieve the versions nlrx is tested with (parameter `version`):
@@ -143,7 +146,7 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 #' @rdname download_netlogo
 #'
 #' @export
-download_netlogo <- function(to, version, os = NA, extract = FALSE) {
+download_netlogo <- function(to, version, os = NA, extract = FALSE, arch = NA) {
 
   ## Check version support
   check_netlogo_version(version, throw_error = TRUE)
@@ -152,7 +155,7 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE) {
     os <- util_get_os()
   }
   ## Construct the download URL (see util_netlogo_download_url)
-  nl_dl <- util_netlogo_download_url(version, os)
+  nl_dl <- util_netlogo_download_url(version, os, arch)
   to_file <- file.path(to, basename(nl_dl))
 
   ## Download
@@ -169,14 +172,55 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE) {
 # https://github.com/NetLogo/NetLogo/releases/download/v7.0.4/NetLogo-7.0.4-64.tgz
 # macOS ships separate x86_64 and aarch64 disk images; we default to x86_64,
 # which also runs on Apple Silicon via Rosetta.
-util_netlogo_download_url <- function(version, os) {
+util_netlogo_download_url <- function(version, os, arch = NA) {
+
+  ## NetLogo ships one disk image per macOS architecture:
+  if (identical(os, "mac") && is.na(arch)) {
+    arch <- util_get_mac_arch()
+  }
+
   nl_file <- switch(
     os,
     "win"  = paste0("NetLogo-", version, "-64.msi"),
-    "mac"  = paste0("NetLogo-", version, "-x86_64.dmg"),
+    "mac"  = paste0("NetLogo-", version, "-", arch, ".dmg"),
     "unix" = paste0("NetLogo-", version, "-64.tgz"),
     stop("Unknown OS. OS not supported by NetLogo", call. = FALSE)
   )
   paste0("https://github.com/NetLogo/NetLogo/releases/download/v",
          version, "/", nl_file)
+}
+
+
+#' Report the macOS architecture
+#'
+#' @description Reports which macOS architecture a NetLogo disk image should be downloaded for
+#'
+#' @return "aarch64" on Apple Silicon, "x86_64" otherwise
+#' @details
+#' Under Rosetta, R reports \code{x86_64} even on Apple Silicon, so the hardware
+#' is asked directly via \code{sysctl hw.optional.arm64} in that case. Pass
+#' \code{arch} to \link[nlrx]{download_netlogo} to override the result, for
+#' example to fetch an image for a different machine.
+#' @aliases util_get_mac_arch
+#' @rdname util_get_mac_arch
+#' @keywords internal
+util_get_mac_arch <- function() {
+
+  machine <- unname(Sys.info()["machine"])
+
+  if (isTRUE(grepl("^(arm|aarch)", machine, ignore.case = TRUE))) {
+    return("aarch64")
+  }
+
+  ## Rosetta reports an Intel machine on Apple Silicon hardware:
+  arm_hardware <- suppressWarnings(tryCatch(
+    system2("sysctl", c("-n", "hw.optional.arm64"), stdout = TRUE, stderr = FALSE),
+    error = function(e) character(0)
+  ))
+
+  if (length(arm_hardware) == 1 && identical(trimws(arm_hardware), "1")) {
+    return("aarch64")
+  }
+
+  return("x86_64")
 }

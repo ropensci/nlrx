@@ -59,11 +59,20 @@ testthat::test_that("util_netlogo_download_url builds GitHub release URLs", {
                            paste0(base, "NetLogo-", v, "-64.tgz"))
     testthat::expect_equal(util_netlogo_download_url(v, "win"),
                            paste0(base, "NetLogo-", v, "-64.msi"))
-    testthat::expect_equal(util_netlogo_download_url(v, "mac"),
+    ## macOS ships one image per architecture, so both are requestable and the
+    ## default follows the running machine:
+    testthat::expect_equal(util_netlogo_download_url(v, "mac", arch = "x86_64"),
                            paste0(base, "NetLogo-", v, "-x86_64.dmg"))
+    testthat::expect_equal(util_netlogo_download_url(v, "mac", arch = "aarch64"),
+                           paste0(base, "NetLogo-", v, "-aarch64.dmg"))
+    testthat::expect_equal(util_netlogo_download_url(v, "mac"),
+                           paste0(base, "NetLogo-", v, "-", util_get_mac_arch(), ".dmg"))
   }
 
   testthat::expect_error(util_netlogo_download_url("7.0.4", "Unknown OS"))
+
+  ## The detected architecture is one of the two NetLogo publishes:
+  testthat::expect_true(util_get_mac_arch() %in% c("aarch64", "x86_64"))
 
 })
 
@@ -79,14 +88,19 @@ testthat::test_that("NetLogo download URLs are reachable (headers only, no downl
   testthat::skip_if_offline("github.com")
 
   for (v in supported_netlogo_versions()) {
-    for (os in c("win", "mac", "unix")) {
-      nl_url <- util_netlogo_download_url(v, os)
+    ## Both macOS images are published, so both are probed:
+    nl_urls <- c(util_netlogo_download_url(v, "win"),
+                 util_netlogo_download_url(v, "unix"),
+                 util_netlogo_download_url(v, "mac", arch = "x86_64"),
+                 util_netlogo_download_url(v, "mac", arch = "aarch64"))
+
+    for (nl_url in nl_urls) {
       # curlGetHeaders performs a HEAD-like request: it retrieves the response
       # headers (following redirects) without downloading the file body.
       status <- attr(curlGetHeaders(nl_url, redirect = TRUE), "status")
       testthat::expect_equal(
         status, 200L,
-        info = paste0("Unreachable NetLogo download URL (", os, "): ", nl_url)
+        info = paste0("Unreachable NetLogo download URL: ", nl_url)
       )
     }
   }
