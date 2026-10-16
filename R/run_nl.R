@@ -243,10 +243,12 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     name = paste0("NLRX Experiment ", nl@experiment@expname, ". Job ID ", block_number),
     run_metrics_every_step = run_metrics_every_step,
     time_limit = nl@experiment@runtime,
-    setup = if (!is.na(nl@experiment@idsetup)) nl@experiment@idsetup else NULL, # names of setup ..
-    go = if (!is.na(nl@experiment@idgo)) nl@experiment@idgo else NULL, # .. and go buttons
-    post_experiment = if (!is.na(nl@experiment@idfinal)) nl@experiment@idfinal else NULL,
-    exit_condition = if (!is.na(nl@experiment@stopcond)) nl@experiment@stopcond else NULL,
+    # These slots accept a vector of procedures or commands, which is collapsed
+    # into one block of NetLogo code (see util_collapse_commands()).
+    setup = util_collapse_commands(nl@experiment@idsetup), # names of setup ..
+    go = util_collapse_commands(nl@experiment@idgo), # .. and go buttons
+    post_experiment = util_collapse_commands(nl@experiment@idfinal),
+    exit_condition = util_collapse_commands(nl@experiment@stopcond),
     run_metrics_condition = run_metrics_condition, # when measurements are recorded
     metrics = util_collect_experiment_metrics(nl), # packages nl@experiment@metrics with nl@experiment@metrics.turtles/patches/links.
     constants = lapply(nl@experiment@constants, util_normalize_nl_value),
@@ -358,6 +360,9 @@ create_simulation_blocks <- function(nl, block_size){
 #' @keywords internal
 
 merge_result_blocks <- function(nl, results_list){
+  # Blocks can disagree on a column's type (e.g. a NetLogo error message in one
+  # run); harmonize before binding so that no completed run is lost.
+  results_list <- util_harmonize_block_types(results_list)
   nl_results <- dplyr::bind_rows(results_list)
 
   ## logolink (used in run_nl_block() ) renames outputs, but NLRX expects the original names downstream

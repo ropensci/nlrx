@@ -287,6 +287,27 @@ experiment <- function(expname = "defaultexp",
 
   util_check_deprecated_args(dots = dots, deprecated_args = character(0))
 
+  ## Report evalticks that the simulation cannot reach, before it is run.
+  ## A tick equal to runtime is still measured, so only larger ones are lost.
+  ## A runtime of 0 or NA means "run until the stop condition", where the
+  ## reachable ticks are unknown in advance.
+  if (all(!is.na(evalticks)) && length(runtime) == 1 &&
+      !is.na(runtime) && runtime > 0) {
+
+    unreachable <- evalticks[evalticks > runtime]
+
+    if (length(unreachable) > 0) {
+      warning(
+        paste0(
+          "evalticks beyond the runtime of the experiment (", runtime, "): ",
+          paste(unreachable, collapse = ", "),
+          ". No results will be reported for these ticks."
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
   ## Repair the value conventions of nlrx < 0.5.0 (strings wrapped in escaped
   ## quotes, booleans given as strings), so that the stored experiment already
   ## holds what NetLogo will be given (see util_normalize_nl_value()):

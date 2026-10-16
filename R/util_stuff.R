@@ -192,6 +192,98 @@ util_check_deprecated_args <- function(dots, deprecated_args) {
 }
 
 
+#' Collapse NetLogo commands into one code block
+#'
+#' @description Turns an experiment slot that may hold several procedures or commands into one string
+#'
+#' @param commands character vector of NetLogo procedures or commands, possibly NA
+#' @details
+#' \code{idsetup}, \code{idgo}, \code{idfinal} and \code{stopcond} accept a
+#' vector, which NetLogo expects as one block of code with one command per line.
+#' Returns NULL for an undefined slot, which is what 'logolink' expects for
+#' "not set".
+#' @return a single character string, or NULL if nothing is defined
+#' @aliases util_collapse_commands
+#' @rdname util_collapse_commands
+#' @keywords internal
+util_collapse_commands <- function(commands) {
+
+  if (length(commands) == 0 || all(is.na(commands))) {
+    return(NULL)
+  }
+
+  return(paste(commands[!is.na(commands)], collapse = "\n"))
+}
+
+
+#' Harmonize result column types across simulation blocks
+#'
+#' @description Makes columns that have different types in different blocks bindable
+#'
+#' @param results_list list of result tibbles, one per simulation block
+#' @details
+#' A metric can come back as a number in one block and as a character in
+#' another, for example when a run reports a NetLogo error message. Binding the
+#' blocks then fails and the results of all completed runs are lost. Such
+#' columns are converted to character in every block instead, with a warning
+#' naming them. List columns (agent metrics) are left untouched.
+#' @return \code{results_list} with conflicting columns converted to character
+#' @aliases util_harmonize_block_types
+#' @rdname util_harmonize_block_types
+#' @keywords internal
+util_harmonize_block_types <- function(results_list) {
+
+  results_list <- results_list[!vapply(results_list, is.null, logical(1))]
+
+  if (length(results_list) < 2) {
+    return(results_list)
+  }
+
+  conflicting <- character()
+
+  for (col in unique(unlist(lapply(results_list, names)))) {
+    present <- Filter(function(block) col %in% names(block), results_list)
+    columns <- lapply(present, function(block) block[[col]])
+
+    ## Agent metrics are list columns and are not comparable this way:
+    if (any(vapply(columns, is.list, logical(1)))) {
+      next
+    }
+
+    ## Blocks that hold only NA carry no type information:
+    informative <- Filter(function(x) !all(is.na(x)), columns)
+    classes <- unique(vapply(informative, function(x) class(x)[1], character(1)))
+
+    if (length(classes) > 1) {
+      conflicting <- c(conflicting, col)
+    }
+  }
+
+  if (length(conflicting) == 0) {
+    return(results_list)
+  }
+
+  warning(
+    paste0(
+      "The simulation blocks returned different types for: ",
+      paste(conflicting, collapse = ", "),
+      ". These columns were converted to character so that the results of all ",
+      "runs are kept. A NetLogo error message in one of the runs is the usual cause."
+    ),
+    call. = FALSE
+  )
+
+  results_list <- lapply(results_list, function(block) {
+    for (col in intersect(conflicting, names(block))) {
+      block[[col]] <- as.character(block[[col]])
+    }
+    block
+  })
+
+  return(results_list)
+}
+
+
 #' Identify evalticks without results
 #'
 #' @description Reports the evalticks of an experiment for which no simulation records were returned
