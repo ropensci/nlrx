@@ -200,8 +200,43 @@ jobs:
           extra-packages: any::covr
           needs: coverage
 
-      - name: Test coverage
-        run: covr::codecov(quiet = FALSE, token = Sys.getenv("CODECOV_TOKEN"))
+      # covr::codecov() posts to Codecov's legacy /upload/v2 endpoint and returns
+      # the response instead of raising, so a rejected upload left this job green.
+      # Uploads had in fact been failing since 2025-11-25 without anyone noticing.
+      # The official action reports a failed upload as a failed step, and it also
+      # prefixes the branch name on pull requests from forks, which is what lets
+      # those upload without access to the repository secret.
+      - name: Compute coverage
+        run: |
+          cov <- covr::package_coverage(
+            quiet = FALSE,
+            clean = FALSE,
+            install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
+          )
+          print(cov)
+          covr::to_cobertura(cov)
         shell: Rscript {0}
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - uses: codecov/codecov-action@v7
+        with:
+          files: ./cobertura.xml
+          disable_search: true
+          plugins: noop
+          # A fork's pull request has no access to the secret and relies on the
+          # tokenless path, which is rate limited, so a miss there must not fail
+          # the job. On pushes a rejected upload is a real problem and should.
+          fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
+          # CODECOV_TOKEN is an organisation-wide secret of ropensci, not a
+          # per-repository token, and an organisation token cannot identify the
+          # repository on its own. The action documents slug as required in that
+          # case; it was missing, which is what the legacy uploader's 404
+          # "Could not find a repository associated with upload token" describes.
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ${{ github.repository }}
+
+      # Coverage runs the full suite, NetLogo included. Without this the log ends
+      # at the failure summary and says nothing about which test broke.
+      - name: Show testthat output
+        if: always()
+        run: find '${{ runner.temp }}/package' -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
