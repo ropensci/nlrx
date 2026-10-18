@@ -1,16 +1,20 @@
 testthat::context("Simdesign Helper")
 testthat::test_that("Simdesign objects are created properly", {
 
+  ## Nothing here executes NetLogo, so these paths only have to be syntactically
+  ## valid. Build them from tempdir() to keep them platform neutral.
+  nlpath <- file.path(tempdir(), "NetLogo 7.0.4")
+
   nl <- nl(
     nlversion = "7.0.4",
-    nlpath = "/home/travis/netlogo/NetLogo 7.0.4",
-    modelpath = "/home/travis/netlogo/NetLogo 7.0.4/models/Wolf Sheep Predation.nlogox",
+    nlpath = nlpath,
+    modelpath = file.path(nlpath, "models", "Wolf Sheep Predation.nlogox"),
     jvmmem = 1024
   )
 
   nl@experiment <- experiment(
     expname = "nlrxtest",
-    outpath = "/home/out",
+    outpath = tempdir(),
     tickmetrics = "true",
     idsetup = "setup",
     idgo = "go",
@@ -35,7 +39,6 @@ testthat::test_that("Simdesign objects are created properly", {
     )
   )
 
-  # Skill all following tests on CRAN and travis
   testthat::context("Class construction: simdesign")
   # Testing validity of simdesign simple:
   nl@simdesign <- simdesign_simple(
