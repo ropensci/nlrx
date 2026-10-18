@@ -81,17 +81,40 @@ testthat::test_that("simdesign_morris passes scale through to sensitivity::morri
   ## unscaled elementary effects were not obtainable.
   nl <- nl_lhs
 
+  ## sensitivity::morris() draws its trajectories at random, deduplicates them
+  ## and warns whenever any were dropped ("keeping 1 repetitions out of 2").
+  ## With nl_lhs's two factors on four levels that collision turns up in about
+  ## 3% of draws, measured over 500, which is roughly 9% of suite runs across
+  ## the three calls below - a warning that says nothing about what this test
+  ## checks. Muffle that one message rather than seeding the generator, so the
+  ## test keeps covering the random case. Every other warning still surfaces;
+  ## morris() also warns about missing design fields, and those matter.
+  without_dedup_warning <- function(expr) {
+    withCallingHandlers(
+      expr,
+      warning = function(w) {
+        if (grepl("repetitions out of", conditionMessage(w), fixed = TRUE)) {
+          invokeRestart("muffleWarning")
+        }
+      }
+    )
+  }
+
   for (scale in c(TRUE, FALSE)) {
-    nl@simdesign <- simdesign_morris(nl = nl, morristype = "oat",
-                                     morrislevels = 4, morrisr = 2,
-                                     morrisgridjump = 2, nseeds = 1,
-                                     scale = scale)
+    nl@simdesign <- without_dedup_warning(
+      simdesign_morris(nl = nl, morristype = "oat",
+                       morrislevels = 4, morrisr = 2,
+                       morrisgridjump = 2, nseeds = 1,
+                       scale = scale)
+    )
     testthat::expect_identical(getsim(nl, "simobject")[[1]]$scale, scale)
   }
 
   ## The default stays TRUE, as before:
-  nl@simdesign <- simdesign_morris(nl = nl, morristype = "oat",
-                                   morrislevels = 4, morrisr = 2,
-                                   morrisgridjump = 2, nseeds = 1)
+  nl@simdesign <- without_dedup_warning(
+    simdesign_morris(nl = nl, morristype = "oat",
+                     morrislevels = 4, morrisr = 2,
+                     morrisgridjump = 2, nseeds = 1)
+  )
   testthat::expect_true(getsim(nl, "simobject")[[1]]$scale)
 })
