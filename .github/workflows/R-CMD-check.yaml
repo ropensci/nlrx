@@ -74,10 +74,12 @@ jobs:
           # The disk image holds a single folder named like the version, with the
           # models at its root (same layout as the Linux archive).
           cp -R "/Volumes/netlogo/NetLogo ${NETLOGO_VERSION}" "${HOME}/netlogo/"
-          # The quarantine attribute travels with the copy, and Gatekeeper then
-          # reassesses the bundle on every NetLogo_Console launch. The tests start
-          # one process per simulation block, so this is suspected to be behind the
-          # macOS runtime being an order of magnitude above Linux and Windows.
+          # The quarantine attribute travels with the copy out of the disk image,
+          # and nothing here wants Gatekeeper reassessing a bundle it already
+          # mounted. This was also tried as an explanation for macOS being far
+          # slower than Linux, which it is not: the runtime is NetLogo start-up
+          # in the slow execution tests, and stripping the attribute changed
+          # nothing measurable.
           xattr -dr com.apple.quarantine "${HOME}/netlogo/NetLogo ${NETLOGO_VERSION}" || true
           hdiutil detach /Volumes/netlogo -quiet
           rm netlogo.dmg
