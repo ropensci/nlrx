@@ -38,7 +38,7 @@ jobs:
       matrix:
         config:
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'release', slow_tests: 'true'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
           - {os: macos-latest,   r: 'release', netlogo_arch: 'aarch64'}
           - {os: macos-26-intel, r: 'release', netlogo_arch: 'x86_64'}
@@ -47,6 +47,10 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # Empty on every entry but one, which skips the calibrated ABC sampler
+      # there. The uncalibrated one still runs everywhere, so no platform loses
+      # coverage of the ABC execution path. See tests/testthat/helper-netlogo.R.
+      NLRX_SLOW_TESTS: ${{ matrix.config.slow_tests }}
 
     steps:
       - uses: actions/checkout@v4
@@ -176,6 +180,9 @@ jobs:
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # Coverage needs the calibrated sampler too, or the arguments only it
+      # passes to EasyABC would be reported as uncovered.
+      NLRX_SLOW_TESTS: 'true'
 
     steps:
       - uses: actions/checkout@v4
