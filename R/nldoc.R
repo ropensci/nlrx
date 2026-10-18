@@ -27,7 +27,7 @@
 #' \dontrun{
 #'
 #' # List model files (.nls subfiles are also supported)
-#' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+#' modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
 #'                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 #'
 #' # Define output directory:
@@ -62,8 +62,8 @@ nldoc <- function(modelfiles,
                   date = as.Date(Sys.time()),
                   toc = TRUE)
 {
-  ## Read code from provided netlogo files:
-  nlogocode <- nldoc_read_nlogo(modelfiles)
+  ## Read code from provided netlogox files:
+  nlogocode <- nldoc_read_nlogox(modelfiles)
   ## Parse code to noxygencode:
   noxygen <- nldoc_parse_modelcode(nlogocode)
 

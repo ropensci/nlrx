@@ -4,8 +4,8 @@ create_sample_data <- function() {
   set.seed(593472)
 
   ## Set nl path, model path and output path
-  nlpath <- "C:/Program Files/NetLogo 6.0.4/"
-  modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo"
+  nlpath <- "C:/Program Files/NetLogo 7.0.4/"
+  modelpath <- "C:/Program Files/NetLogo 7.0.4/models/Sample Models/Biology/Wolf Sheep Predation.nlogox"
   outpath <- "C:/out"
 
   # Create testdata nl_simple
@@ -135,13 +135,13 @@ setup_sample_data_nl <- function(nlpath, modelpath, outpath) {
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
                                                'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
-                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                              constants = list("model-version" = "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   return(nl)
 
@@ -166,7 +166,7 @@ setup_sample_data_nl_spatial <- function(nlpath, modelpath, outpath) {
                               metrics = c("count sheep","count wolves"),
                               metrics.turtles = list("turtles" = c("who", "pxcor", "pycor")),
                               metrics.patches = c("pxcor", "pycor", "pcolor"),
-                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                              constants = list("model-version" = "sheep-wolves-grass",
                                                'initial-number-sheep' = 100,
                                                'initial-number-wolves' = 50,
                                                "grass-regrowth-time" = 30,
@@ -174,7 +174,7 @@ setup_sample_data_nl_spatial <- function(nlpath, modelpath, outpath) {
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   return(nl)
 
@@ -201,13 +201,13 @@ setup_sample_data_nl_distinct <- function(nlpath, modelpath, outpath) {
                               metrics = c("count sheep","count wolves"),
                               variables = list('initial-number-sheep' = list(values=c(10, 20, 30)),
                                                'initial-number-wolves' = list(values=c(10, 20, 30))),
-                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                              constants = list("model-version" = "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   return(nl)
 

@@ -51,8 +51,8 @@ nldoc_network <- function(modelfiles)
 {
   ## Create a network from procedures:
 
-  ## Read code from provided netlogo files:
-  nlogocode <- nldoc_read_nlogo(modelfiles)
+  ## Read code from provided netlogox files:
+  nlogocode <- nldoc_read_nlogox(modelfiles)
 
   ## Now find these names in model code:
   nw <- nldoc_find_procedure_calls(nlogocode)

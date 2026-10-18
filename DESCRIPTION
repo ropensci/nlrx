@@ -1,7 +1,7 @@
 Package: nlrx
 Type: Package
 Title: Setup, Run and Analyze 'NetLogo' Model Simulations from 'R' via 'XML'
-Version: 0.4.6
+Version: 0.5.0
 Authors@R: c(person("Jan", "Salecker", email = "jan.salecker@posteo.de",
                      role = c("aut"), comment = c(ORCID = '0000-0002-9000-4229')),
              person("Marco", "Sciaini", email = "sciaini.marco@gmail.com", 
@@ -9,20 +9,21 @@ Authors@R: c(person("Jan", "Salecker", email = "jan.salecker@posteo.de",
              person("Marina", "Papadopoulou", role = "rev",
                     comment = "Marina reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/262>"),
              person("Sebastian", "Hanss", email = "nlrx@mailbox.org", 
-                     role = c("cre"), comment = "Package maintainer together with Jan Salecker"))
+                     role = c("cre"), comment = "Package maintainer together with Jan Salecker"),
+             person("Marten", "Hossfeld", email = "marten.hossfeld@gmail.com", 
+                     role = c("aut"), comment = "Major maintenance update including NetLogo 7 support and backend redesign"))
 Description: Setup, run and analyze 'NetLogo' (<https://www.netlogo.org>) model simulations in 'R'.
     'nlrx' experiments use a similar structure as 'NetLogos' Behavior Space experiments. 
     However, 'nlrx' offers more flexibility and additional tools for running and analyzing complex simulation designs and sensitivity analyses.
     The user defines all information that is needed in an intuitive framework, using class objects.
     Experiments are submitted from 'R' to 'NetLogo' via 'XML' files that are dynamically written, based on specifications defined by the user.
-    By nesting model calls in future environments, large simulation design with many runs can be executed in parallel.
+    Simulations are organised into blocks that use 'NetLogo's native multithreading, so large simulation designs with many runs can be executed in parallel.
     This also enables simulating 'NetLogo' experiments on remote high performance computing machines.
-    In order to use this package, 'Java' and 'NetLogo' (>= 5.3.1) need to be available on the executing system.
+    In order to use this package, 'Java' and 'NetLogo' (>= 7.0.0) need to be available on the executing system.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 URL: https://docs.ropensci.org/nlrx/, https://github.com/ropensci/nlrx/
 BugReports: https://github.com/ropensci/nlrx/issues/
 Imports:
@@ -32,7 +33,6 @@ Imports:
     dplyr,
     readr,
     purrr,
-    furrr,
     magrittr,
     stats,
     utils,
@@ -48,15 +48,20 @@ Imports:
     igraph,
     stringr,
     progressr,
-    EasyABC
+    EasyABC,
+    logolink (>= 1.0.0),
+    cli,
+    janitor,
+    xml2
 Depends:
-    R (>= 3.3)
+    R (>= 4.1.0)
 Suggests: 
     testthat,
-    mockery,
+    curl,
     knitr,
     rmarkdown,
     covr
 VignetteBuilder: knitr
 SystemRequirements: 
-    NetLogo (>= 5.3.1), Java (>= 11), pandoc, OpenSSL, udunits-2, PROJ.4, GEOS, GDAL, libxml2
+    NetLogo (>= 7.0.0), Java (>= 11), pandoc, OpenSSL, udunits-2, PROJ.4, GEOS, GDAL, libxml2
+Config/roxygen2/version: 8.1.1

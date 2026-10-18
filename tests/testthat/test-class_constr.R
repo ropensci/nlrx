@@ -1,16 +1,16 @@
 testthat::context("Class construction")
 testthat::test_that("class objects are created with correct variables", {
   nl <- nl(
-    nlversion = "6.0.2",
-    nlpath = "C:/Program Files/NetLogo 6.0.2/",
-    modelpath = "C:/WolfSheepPredation.nlogo",
+    nlversion = "7.0.4",
+    nlpath = "C:/Program Files/NetLogo 7.0.4/",
+    modelpath = "C:/WolfSheepPredation.nlogox",
     jvmmem = 1024
   )
 
   testthat::context("Class construction: nl")
-  testthat::expect_match(getnl(nl, "nlversion"), "6.0.2")
-  testthat::expect_match(getnl(nl, "nlpath"), "C:/Program Files/NetLogo 6.0.2/")
-  testthat::expect_match(getnl(nl, "modelpath"), "C:/WolfSheepPredation.nlogo")
+  testthat::expect_match(getnl(nl, "nlversion"), "7.0.4")
+  testthat::expect_match(getnl(nl, "nlpath"), "C:/Program Files/NetLogo 7.0.4/")
+  testthat::expect_match(getnl(nl, "modelpath"), "C:/WolfSheepPredation.nlogox")
   testthat::expect_equal(getnl(nl, "jvmmem"), 1024)
   testthat::expect_match(class(getnl(nl, "experiment"))[1], "experiment")
   testthat::expect_match(class(getnl(nl, "simdesign"))[1], "simdesign")
@@ -18,7 +18,6 @@ testthat::test_that("class objects are created with correct variables", {
   nl@experiment <- experiment(
     expname = "nlrxtest",
     outpath = "C:/out/",
-    repetition = 1,
     tickmetrics = "true",
     idsetup = "setup",
     idgo = "go",
@@ -34,20 +33,19 @@ testthat::test_that("class objects are created with correct variables", {
                                      qfun = "qunif")
     ),
     constants = list(
-      "model-version" = "\"sheep-wolves-grass\"",
+      "model-version" = "sheep-wolves-grass",
       "grass-regrowth-time" = 30,
       "sheep-gain-from-food" = 4,
       "wolf-gain-from-food" = 20,
       "sheep-reproduce" = 4,
       "wolf-reproduce" = 5,
-      "show-energy?" = "false"
+      "show-energy?" = FALSE
     )
   )
 
   testthat::context("Class construction: experiment")
   testthat::expect_match(getexp(nl, "expname"), "nlrxtest")
   testthat::expect_match(getexp(nl, "outpath"), "C:/out/")
-  testthat::expect_equal(getexp(nl, "repetition"), 1)
   testthat::expect_match(getexp(nl, "tickmetrics"), "true")
   testthat::expect_match(getexp(nl, "idsetup"), "setup")
   testthat::expect_match(getexp(nl, "idgo"), "go")
@@ -79,14 +77,13 @@ testthat::test_that("class objects are created with correct variables", {
                          "show-energy?")
 
   testthat::expect_match(getexp(nl, "constants")[[1]],
-                         "\"sheep-wolves-grass\"")
+                         "sheep-wolves-grass")
   testthat::expect_equal(getexp(nl, "constants")[[2]], 30)
   testthat::expect_equal(getexp(nl, "constants")[[3]], 4)
   testthat::expect_equal(getexp(nl, "constants")[[4]], 20)
   testthat::expect_equal(getexp(nl, "constants")[[5]], 4)
   testthat::expect_equal(getexp(nl, "constants")[[6]], 5)
-  testthat::expect_match(getexp(nl, "constants")[[7]], "false")
-
+  testthat::expect_false(getexp(nl, "constants")[[7]])
 
   testthat::context("Class construction: simdesign")
   # Testing validity of simdesign simple:
@@ -101,4 +98,23 @@ testthat::test_that("class objects are created with correct variables", {
   testthat::expect_equal(length(getsim(nl, "simseeds")), 3)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
 
+})
+
+testthat::test_that("nl() accepts untested NetLogo 7 versions with a warning", {
+
+  make_nl <- function(...) {
+    nl(nlpath = tempdir(),
+       modelpath = file.path(tempdir(), "Wolf Sheep Predation.nlogox"),
+       ...)
+  }
+
+  ## Untested NetLogo 7 release: warn, but build the object.
+  testthat::expect_warning(nlobj <- make_nl(nlversion = "7.9.9"))
+  testthat::expect_match(getnl(nlobj, "nlversion"), "7.9.9")
+
+  ## check_version = FALSE silences the warning.
+  testthat::expect_silent(make_nl(nlversion = "7.9.9", check_version = FALSE))
+
+  ## Versions below 7.0.0 cannot run at all and stay an error.
+  testthat::expect_error(make_nl(nlversion = "6.4.0"))
 })

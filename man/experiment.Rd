@@ -7,14 +7,13 @@
 experiment(
   expname = "defaultexp",
   outpath = NA_character_,
-  repetition = 1,
   tickmetrics = "true",
+  evalticks = NA_integer_,
   idsetup = "setup",
   idgo = "go",
   idfinal = NA_character_,
   idrunnum = NA_character_,
   runtime = 1,
-  evalticks = NA_integer_,
   stopcond = NA_character_,
   metrics = c("count turtles"),
   metrics.turtles = list(),
@@ -30,9 +29,9 @@ experiment(
 
 \item{outpath}{Path to a directory where experiment output will be stored}
 
-\item{repetition}{A number which gives the number of repetitions for each row of the simulation design input tibble}
-
 \item{tickmetrics}{Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
+
+\item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
 
 \item{idsetup}{character string or vector of character strings, defining the name of the NetLogo setup procedure}
 
@@ -43,8 +42,6 @@ experiment(
 \item{idrunnum}{character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.}
 
 \item{runtime}{number of model ticks that should be run for each simulation}
-
-\item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
 
 \item{stopcond}{a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")}
 
@@ -58,7 +55,7 @@ experiment(
 
 \item{variables}{a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))}
 
-\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))}
+\item{constants}{a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model. Give strings as plain character values and booleans as logicals (e.g. list("pNUM" = 12, "pLOGIC" = TRUE, "pSTRING" = "default")). The escaped-quote convention of nlrx < 0.5.0 ("\"default\"") and boolean strings ("true") are still accepted and repaired silently.}
 
 \item{...}{...}
 }
@@ -77,14 +74,15 @@ The simdesign helper functions use the variable definitions from the experiment 
 
 \strong{The following class slots are obligatory to run an experiment:}
 
-\emph{repetition}
-
-In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
-
 \emph{tickmetrics}
 
 If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
+
+\emph{evalticks}
+
+Only applied if tickmetrics = TRUE.
+Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+Set evalticks to NA_integer_ to measure on every tick.
 
 \emph{idsetup, idgo}
 
@@ -135,12 +133,6 @@ The name of this widget can be entered into the "idrunnum" field of the experime
 During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 
-\emph{evalticks}
-
-Only applied if tickmetrics = TRUE.
-Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
-Set evalticks to NA_integer_ to measure on every tick.
-
 \emph{stopcond}
 
 The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
@@ -180,14 +172,13 @@ Please note that NetLogo models may contain a huge number of turtles and output 
 nl <- nl_simple
 nl@experiment <- experiment(expname="wolf-sheep",
                              outpath="C:/out/",
-                             repetition=1,
                              tickmetrics="true",
+                             evalticks=seq(40,50),
                              idsetup="setup",
                              idgo="go",
                              idfinal=NA_character_,
                              idrunnum=NA_character_,
                              runtime=50,
-                             evalticks=seq(40,50),
                              stopcond="not any? turtles",
                              metrics=c("count sheep",
                                        "count wolves",
@@ -202,13 +193,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                                               'initial-number-wolves' =
                              list(min=50, max=150, step=10, qfun="qunif")),
                              constants = list("model-version" =
-                                              "\"sheep-wolves-grass\"",
+                                              "sheep-wolves-grass",
                                               "grass-regrowth-time" = 30,
                                               "sheep-gain-from-food" = 4,
                                               "wolf-gain-from-food" = 20,
                                               "sheep-reproduce" = 4,
                                               "wolf-reproduce" = 5,
-                                              "show-energy?" = "false"))
+                                              "show-energy?" = FALSE))
 
 
 }

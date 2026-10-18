@@ -50,16 +50,16 @@ library(ggplot2)
 library(gganimate) # devtools::install_github('thomasp85/gganimate') - if you have troubles installing gganimate, you most likely also need to install gifski as system dependency
 
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
 # Define nl object
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -67,7 +67,6 @@ nl <- nl(nlversion = "6.0.3",
 # Define experiment
 nl@experiment <- experiment(expname = "nlrx_spatial",
                             outpath = outpath,
-                            repetition = 1,      
                             tickmetrics = "true",
                             idsetup = "setup",   
                             idgo = "go",         
@@ -75,7 +74,7 @@ nl@experiment <- experiment(expname = "nlrx_spatial",
                             metrics = c("count sheep","count wolves"),
                             metrics.turtles = list("turtles" = c("who", "pxcor", "pycor")),
                             metrics.patches = c("pxcor", "pycor", "pcolor"),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              'initial-number-sheep' = 100,
                                              'initial-number-wolves' = 50,
                                              "grass-regrowth-time" = 30,
@@ -83,7 +82,7 @@ nl@experiment <- experiment(expname = "nlrx_spatial",
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false")
+                                             "show-energy?" = FALSE)
                             )
 
 # Attach simdesign simple using only constants
@@ -214,22 +213,21 @@ library(nlrx)
 library(igraph)
 
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.4")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Networks/Giant Component.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Networks/Giant Component.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.4",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
 
 nl@experiment <- experiment(expname="networks",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="false",
                             idsetup="setup",
                             idgo="go",

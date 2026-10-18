@@ -2,15 +2,20 @@
 % Please edit documentation in R/download_netlogo.R
 \name{supported_netlogo_versions}
 \alias{supported_netlogo_versions}
-\title{Report supported NetLogo versions}
+\title{Report tested NetLogo versions}
 \usage{
 supported_netlogo_versions()
 }
 \value{
-a vector of supported Versions for Download and Usage (parameter \code{version}):
+a vector of NetLogo versions that nlrx is tested with (parameter \code{version})
 }
 \description{
-Auxiliary function to report supported NetLogo version numbers
+Auxiliary function to report the NetLogo versions nlrx is tested with
+}
+\details{
+These are the versions used in the automated tests and for \link[nlrx]{download_netlogo}.
+Newer NetLogo 7 releases are not rejected: because execution is delegated to 'logolink',
+they are likely to work and only emit a warning (see \link[nlrx]{check_netlogo_version}).
 }
 \examples{
 \dontrun{

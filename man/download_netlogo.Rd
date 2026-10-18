@@ -4,7 +4,7 @@
 \alias{download_netlogo}
 \title{Download NetLogo}
 \usage{
-download_netlogo(to, version, os = NA, extract = FALSE)
+download_netlogo(to, version, os = NA, extract = FALSE, arch = NA)
 }
 \arguments{
 \item{to}{Path to folder where the downloaded file is saved.}
@@ -15,18 +15,27 @@ download_netlogo(to, version, os = NA, extract = FALSE)
 If set to NA (default) os will be detected automatically (\code{util_get_os()})}
 
 \item{extract}{TRUE/FALSE, if TRUE downloaded archive is extracted to subfolder of \code{to} (only unix)}
+
+\item{arch}{macOS architecture of the disk image, "aarch64" (Apple Silicon) or "x86_64" (Intel).
+If NA (default) the architecture of the running machine is detected (\code{util_get_mac_arch()}).
+Ignored for Windows and Linux, which have one download each.}
 }
 \description{
 Auxiliary function to download NetLogo
 }
 \details{
-Retrieve supported Versions for Download and Usage (parameter \code{version}):
+Retrieve the versions nlrx is tested with (parameter \code{version}):
 supported_netlogo_versions()
+
+Newer NetLogo 7 releases can be downloaded as well: the download URL is derived from the
+version number, so an untested version only emits a warning
+(\link[nlrx]{check_netlogo_version}) and fails with a download error if no such release
+exists.
 }
 \examples{
 \dontrun{
 dlpath <- tempdir()  # adjust path to your needs
-try(download_netlogo(dlpath, "6.0.3"))
+try(download_netlogo(dlpath, "7.0.4"))
 }
 
 }

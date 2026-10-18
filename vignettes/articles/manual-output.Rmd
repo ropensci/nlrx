@@ -42,7 +42,6 @@ In our case we want to use our newly created `nlrx_id` string input field, so we
 # Attach experiment
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath=outpath,
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -52,13 +51,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 ```
 
 
