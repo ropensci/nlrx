@@ -200,6 +200,19 @@ testthat::test_that("Simdesign objects are created properly", {
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
   testthat::expect_equal(length(getsim(nl, "simobject")), 14)
+  ## These names are the argument list handed to EasyABC::ABC_mcmc by
+  ## util_run_nl_dyn_ABCmcmc(). ABC_mcmc declares only a handful of formals and
+  ## takes the method specific ones through ..., so a rename on the EasyABC side
+  ## cannot be caught here - only the execution test sees that. Pinning the names
+  ## does catch a rename on our side, which the length check alone does not.
+  testthat::expect_named(
+    getsim(nl, "simobject"),
+    c("method", "postpro_function", "prior", "summary_stat_target",
+      "prior_test", "n_rec", "n_between_sampling", "use_seed", "dist_weights",
+      "n_calibration", "tolerance_quantile", "proposal_phi", "seed_count",
+      "progress_bar"),
+    ignore.order = TRUE
+  )
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
@@ -216,6 +229,19 @@ testthat::test_that("Simdesign objects are created properly", {
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
   testthat::expect_equal(length(getsim(nl, "simobject")), 14)
+  ## These names are the argument list handed to EasyABC::ABC_mcmc by
+  ## util_run_nl_dyn_ABCmcmc(). ABC_mcmc declares only a handful of formals and
+  ## takes the method specific ones through ..., so a rename on the EasyABC side
+  ## cannot be caught here - only the execution test sees that. Pinning the names
+  ## does catch a rename on our side, which the length check alone does not.
+  testthat::expect_named(
+    getsim(nl, "simobject"),
+    c("method", "postpro_function", "prior", "summary_stat_target",
+      "prior_test", "n_rec", "n_between_sampling", "use_seed", "dist_weights",
+      "dist_max", "tab_normalization", "proposal_range", "seed_count",
+      "progress_bar"),
+    ignore.order = TRUE
+  )
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
@@ -233,6 +259,19 @@ testthat::test_that("Simdesign objects are created properly", {
   testthat::expect_match(getsim(nl, "simmethod"), "ABCmcmc")
   testthat::expect_equal(nrow(getsim(nl, "siminput")), 0)
   testthat::expect_equal(length(getsim(nl, "simobject")), 15)
+  ## These names are the argument list handed to EasyABC::ABC_mcmc by
+  ## util_run_nl_dyn_ABCmcmc(). ABC_mcmc declares only a handful of formals and
+  ## takes the method specific ones through ..., so a rename on the EasyABC side
+  ## cannot be caught here - only the execution test sees that. Pinning the names
+  ## does catch a rename on our side, which the length check alone does not.
+  testthat::expect_named(
+    getsim(nl, "simobject"),
+    c("method", "postpro_function", "prior", "summary_stat_target",
+      "prior_test", "n_rec", "n_between_sampling", "use_seed", "dist_weights",
+      "n_calibration", "tolerance_quantile", "proposal_phi", "numcomp",
+      "seed_count", "progress_bar"),
+    ignore.order = TRUE
+  )
   testthat::expect_match(class(getsim(nl, "simobject")), "list")
   testthat::expect_equal(length(getsim(nl, "simseeds")), 1)
   testthat::expect_equal(nrow(getsim(nl, "simoutput")), 0)
