@@ -3,11 +3,12 @@
 #' @description Construct a new nl object
 #'
 #' @param nlversion A character string defining the NetLogo version that is used
-#' @param nlpath Path to the NetLogo main directory matching the defined version
-#' @param modelpath Path to the NetLogo model file (*.nlogo) that is used for simulations
+#' @param nlpath Path to the NetLogo main directory matching the defined version. Defaults to the \code{NETLOGO_HOME} environment variable, so it can be omitted when that is set. When a path is given, it takes precedence: it is used for the duration of each \code{\link[nlrx]{run_nl_all}} / \code{\link[nlrx]{run_nl_one}} / \code{\link[nlrx]{run_nl_dyn}} call, so one nl object can be run against a different NetLogo installation than another without changing the session
+#' @param modelpath Path to the NetLogo model file (.nlogox) that is used for simulations. Since NetLogo 6.3.0 the models shipped with NetLogo are stored at the installation root, so a sample model is reached with \code{file.path(nlpath, "models/Sample Models/...")}
 #' @param jvmmem Java virtual machine memory capacity in megabytes
 #' @param experiment Holds a experiment S4 class object
 #' @param simdesign Holds a simdesign S4 class object
+#' @param check_version Logical. If TRUE (default), the NetLogo version is checked against the versions nlrx is tested with (\link[nlrx]{supported_netlogo_versions}): an untested NetLogo 7.x version emits a warning and is accepted, a version below 7.0.0 is an error. Set to FALSE to silence the warning.
 #' @param ... ...
 #' @return nl S4 class object
 #' @details
@@ -28,15 +29,15 @@
 #' @examples
 #' # Example for Wolf Sheep Predation model from NetLogo models library:
 #' # Windows default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("C:/out")
 #' # Unix default NetLogo installation path (adjust to your needs!):
-#' netlogopath <- file.path("/home/NetLogo 6.0.3")
-#' modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+#' netlogopath <- file.path("/home/NetLogo 7.0.4")
+#' modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 #' outpath <- file.path("/home/out")
 #'
-#' nl <- nl(nlversion = "6.0.3",
+#' nl <- nl(nlversion = "7.0.4",
 #'          nlpath = netlogopath,
 #'          modelpath = modelpath,
 #'          jvmmem = 1024)
@@ -44,21 +45,27 @@
 #' @name nl
 #' @rdname nl
 #' @export
-nl <- function(nlversion = "6.0.2",
-               nlpath = character(),
+nl <- function(nlversion = "7.0.4",
+               nlpath = Sys.getenv("NETLOGO_HOME"),
                modelpath = character(),
                jvmmem = 1024,
                experiment = methods::new("experiment"),
                simdesign = methods::new("simdesign"),
+               check_version = TRUE,
                ...) {
+
+  # Check NetLogo version support
+  if (isTRUE(check_version)) {
+    check_netlogo_version(nlversion, throw_error = TRUE)
+  }
 
   methods::new("nl",
                nlversion = nlversion,
                nlpath = path.expand(nlpath),
                modelpath = path.expand(modelpath),
                jvmmem = jvmmem,
-               experiment = methods::new("experiment"),
-               simdesign = methods::new("simdesign"),
+               experiment = experiment,
+               simdesign = simdesign,
                ...)
 }
 
@@ -70,21 +77,20 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' @param expname A character string defining the name of the experiment, no whitespaces allowed
 #' @param outpath Path to a directory where experiment output will be stored
-#' @param repetition A number which gives the number of repetitions for each row of the simulation design input tibble
 #' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
+#' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
 #' @param idgo character string or vector of character strings, defining the name of the NetLogo go procedure
 #' @param idfinal character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick
 #' @param idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
 #' @param runtime number of model ticks that should be run for each simulation
-#' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
 #' @param metrics.turtles a list with named vectors of strings defining valid turtles-own variables that are taken as output measurements (e.g. list("turtles" = c("who", "pxcor", "pycor", "color"))
 #' @param metrics.patches vector of strings defining valid patches-own variables that are taken as output measurements (e.g. c("pxcor", "pycor", "pcolor"))
 #' @param metrics.links a list with named vectors of strings defining valid links-own variables that are taken as output measurements (e.g. list("links" = c("end1", "end2")))
 #' @param variables a nested list of variables that are changed within a simulation design. The name of each sublist item has to be a valid global of the defined NetLogo model. Depending on the desired simdesign each list item consist of a vector of values, a min value, a max value, a step value and a qfun (e.g. list("paramA" = list(values=c(0, 0.5, 1), min=0, max=1, step=0.1, qfun="qunif")))
-#' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model (e.g. list("pNUM" = 12, "pLOGIC"="TRUE", "pSTRING"="\"default\""))
+#' @param constants a list of constants that are kept constant within a simulation design. The name of each list item has to be a valid global of the defined NetLogo model. Give strings as plain character values and booleans as logicals (e.g. list("pNUM" = 12, "pLOGIC" = TRUE, "pSTRING" = "default")). The escaped-quote convention of nlrx < 0.5.0 ("\"default\"") and boolean strings ("true") are still accepted and repaired silently.
 #' @param ... ...
 #' @return experiment S4 class object
 #' @details
@@ -97,14 +103,15 @@ nl <- function(nlversion = "6.0.2",
 #'
 #' \strong{The following class slots are obligatory to run an experiment:}
 #'
-#' \emph{repetition}
-#'
-#' In cases, where the random seed is controlled by nlrx simdesigns, repitition should be set to one as random seeds would not differ between simulations.
-#' In cases, where the random seed is set within the NetLogo model, repitition can be increased to repeat the same parameterisation with different random seeds.
-#'
 #' \emph{tickmetrics}
 #'
 #' If "true", the defined output reporters are collected on each simulation tick that is defined in evalticks. If "false" measurements are taken only on the last tick.
+#'
+#' \emph{evalticks}
+#'
+#' Only applied if tickmetrics = TRUE.
+#' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
+#' Set evalticks to NA_integer_ to measure on every tick.
 #'
 #' \emph{idsetup, idgo}
 #'
@@ -156,13 +163,6 @@ nl <- function(nlversion = "6.0.2",
 #' During simulations, the value of this widget is automatically updated with a generated string that contains the current nlrx experiment name, random seed and siminputrow ("expname_seed_siminputrow").
 #' For self-written output In NetLogo, we suggest to include this global variable which allows referencing the self-written output files to the collected output of the nlrx simulations in R.
 #'
-#' \emph{evalticks}
-#'
-#' Only applied if tickmetrics = TRUE.
-#' Evalticks may contain a vector of integers, defining the ticks for which the defined metrics will be measured.
-#' Set evalticks to NA_integer_ to measure on every tick.
-#'
-#'
 #' \emph{stopcond}
 #'
 #' The stopcond slot can be used to define a stop condition by providing a string with valid NetLogo code that reports either true or false.
@@ -204,14 +204,13 @@ nl <- function(nlversion = "6.0.2",
 #' nl <- nl_simple
 #' nl@@experiment <- experiment(expname="wolf-sheep",
 #'                              outpath="C:/out/",
-#'                              repetition=1,
 #'                              tickmetrics="true",
+#'                              evalticks=seq(40,50),
 #'                              idsetup="setup",
 #'                              idgo="go",
 #'                              idfinal=NA_character_,
 #'                              idrunnum=NA_character_,
 #'                              runtime=50,
-#'                              evalticks=seq(40,50),
 #'                              stopcond="not any? turtles",
 #'                              metrics=c("count sheep",
 #'                                        "count wolves",
@@ -226,13 +225,13 @@ nl <- function(nlversion = "6.0.2",
 #'                                               'initial-number-wolves' =
 #'                              list(min=50, max=150, step=10, qfun="qunif")),
 #'                              constants = list("model-version" =
-#'                                               "\"sheep-wolves-grass\"",
+#'                                               "sheep-wolves-grass",
 #'                                               "grass-regrowth-time" = 30,
 #'                                               "sheep-gain-from-food" = 4,
 #'                                               "wolf-gain-from-food" = 20,
 #'                                               "sheep-reproduce" = 4,
 #'                                               "wolf-reproduce" = 5,
-#'                                               "show-energy?" = "false"))
+#'                                               "show-energy?" = FALSE))
 #'
 #'
 #' @name experiment
@@ -240,14 +239,13 @@ nl <- function(nlversion = "6.0.2",
 #' @export
 experiment <- function(expname = "defaultexp",
                        outpath = NA_character_,
-                       repetition = 1,
                        tickmetrics = "true",
+                       evalticks = NA_integer_,
                        idsetup = "setup",
                        idgo = "go",
                        idfinal = NA_character_,
                        idrunnum = NA_character_,
                        runtime = 1,
-                       evalticks = NA_integer_,
                        stopcond= NA_character_,
                        metrics = c("count turtles"),
                        metrics.turtles = list(),
@@ -257,25 +255,91 @@ experiment <- function(expname = "defaultexp",
                        constants = list(),
                        ...) {
 
+  dots <- list(...)
+
+  ## 'repetition' was removed in nlrx 0.5.0. Setting it to 1 has no effect and is
+  ## only warned about, so that existing scripts and documentation keep working:
+  if ("repetition" %in% names(dots)) {
+    repetition <- dots$repetition
+    dots$repetition <- NULL
+
+    if (!is.numeric(repetition) || length(repetition) != 1 ||
+        is.na(repetition) || repetition > 1) {
+      stop(
+        paste0(
+          "Argument 'repetition' was removed in nlrx 0.5.0 and repetition > 1 is no longer supported.\n",
+          "To run a parameterisation several times, use the nseeds argument of the simdesign helper ",
+          "functions, which controls and reports the random seed of each run.\n",
+          "For dynamic designs, use the nreplicates argument of run_nl_dyn()."
+        ),
+        call. = FALSE
+      )
+    }
+
+    warning(
+      paste0(
+        "Argument 'repetition' is deprecated and has no effect. It can be removed from the ",
+        "experiment definition. Use nseeds (simdesign helpers) or nreplicates (run_nl_dyn) instead."
+      ),
+      call. = FALSE
+    )
+  }
+
+  util_check_deprecated_args(dots = dots, deprecated_args = character(0))
+
+  ## Report evalticks that the simulation cannot reach, before it is run.
+  ## A tick equal to runtime is still measured, so only larger ones are lost.
+  ## A runtime of 0 or NA means "run until the stop condition", where the
+  ## reachable ticks are unknown in advance.
+  if (all(!is.na(evalticks)) && length(runtime) == 1 &&
+      !is.na(runtime) && runtime > 0) {
+
+    unreachable <- evalticks[evalticks > runtime]
+
+    if (length(unreachable) > 0) {
+      warning(
+        paste0(
+          "evalticks beyond the runtime of the experiment (", runtime, "): ",
+          paste(unreachable, collapse = ", "),
+          ". No results will be reported for these ticks."
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
+  ## Repair the value conventions of nlrx < 0.5.0 (strings wrapped in escaped
+  ## quotes, booleans given as strings), so that the stored experiment already
+  ## holds what NetLogo will be given (see util_normalize_nl_value()):
+  constants <- lapply(constants, util_normalize_nl_value)
+
+  variables <- lapply(variables, function(variable) {
+    if (is.list(variable)) {
+      if (!is.null(variable$values)) {
+        variable$values <- util_normalize_nl_value(variable$values)
+      }
+      return(variable)
+    }
+    util_normalize_nl_value(variable)
+  })
+
   methods::new("experiment",
                expname=expname,
                outpath=path.expand(outpath),
-               repetition=repetition,
                tickmetrics=tickmetrics,
+               evalticks=evalticks,
                idsetup=idsetup,
                idgo=idgo,
                idfinal=idfinal,
                idrunnum=idrunnum,
                runtime=runtime,
-               evalticks=evalticks,
                stopcond=stopcond,
                metrics=metrics,
                metrics.turtles=metrics.turtles,
                metrics.patches=metrics.patches,
                metrics.links=metrics.links,
                variables=variables,
-               constants=constants,
-               ...)
+               constants=constants)
 
 
 }

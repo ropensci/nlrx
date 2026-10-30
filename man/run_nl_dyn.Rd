@@ -4,27 +4,19 @@
 \alias{run_nl_dyn}
 \title{Execute NetLogo simulation without pregenerated parametersets}
 \usage{
-run_nl_dyn(
-  nl,
-  seed,
-  cleanup.csv = TRUE,
-  cleanup.xml = TRUE,
-  cleanup.bat = TRUE
-)
+run_nl_dyn(nl, threads = 1, nreplicates = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
-\item{seed}{a random seed for the NetLogo simulation}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{nreplicates}{number of replicated model runs per evaluation of the dynamic design (default 1)}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
-
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{...}{additional arguments; currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.}
 }
 \value{
-simulation output results can be tibble, list, ...
+tibble with one row per random seed of the simdesign, with the columns \code{seed} and \code{result}
 }
 \description{
 Execute NetLogo simulation from a nl object with a defined experiment and simdesign but no pregenerated input parametersets
@@ -32,26 +24,68 @@ Execute NetLogo simulation from a nl object with a defined experiment and simdes
 \details{
 run_nl_dyn can be used for simdesigns where no predefined parametersets exist.
 This is the case for dynamic designs, such as Simulated Annealing and Genetic Algorithms, where parametersets are dynamically generated, based on the output of previous simulations.
-The logical cleanup variables can be set to FALSE to preserve temporary generated output files (e.g. for debugging).
-cleanup.csv deletes/keeps the temporary generated model output files from each run.
-cleanup.xml deletes/keeps the temporary generated experiment xml files from each run.
-cleanup.bat deletes/keeps the temporary generated batch/sh commandline files from each run.
+
+Simulations are executed sequentially, one parameterization at a time, as each new parameterization depends on the results of the previous simulation.
+Internally, each simulation step is executed via \code{run_nl_one()}.
+
+One complete optimization is executed for each random seed of the simdesign (\code{nl@simdesign@simseeds}, defined by the \code{nseeds} argument of the simdesign helper functions).
+The optimizations are independent of each other and are executed one after another.
+To run only some of the seeds, for example to distribute them over the nodes of a cluster, reduce the seed vector of the simdesign beforehand with \code{setsim(nl, "simseeds") <- ...}.
+
+The returned tibble contains one row per seed, with the seed in the \code{seed} column and the result of the optimization in the \code{result} list column.
+Results are stored as the objects that the respective optimization package returns (\code{GenSA}, \code{genalg}, \code{EasyABC}), so that the summary and plot functions of these packages can be applied to them, for example \code{results$result[[1]]}.
+
+If an optimization fails, the loop is not interrupted: the error is stored in the \code{result} column of the respective seed, a warning lists the failed seeds, and the results of the remaining seeds are returned.
 }
+\section{Replicated evaluations}{
+
+Dynamic designs evaluate a stochastic model, so every evaluation of the objective carries simulation noise.
+With \code{nreplicates > 1}, each parameterisation proposed by the algorithm is simulated \code{nreplicates} times with different random seeds, and the reported value is aggregated over these replicates.
+Aggregation happens in two steps: first the mean over all measured ticks within a replicate, then the mean over the replicates.
+The replicated runs of one evaluation are executed within a single NetLogo instance, so \code{threads} can be used to run them in parallel.
+
+The replicate seeds are derived from the seed of the respective optimization and are identical for every evaluation of that optimization.
+Reusing the same seeds across evaluations (known as common random numbers) means that differences between two proposed parameterisations reflect the parameters rather than the random draw, which makes the objective easier for the algorithm to optimize.
+It also means that the optimum is found for this particular set of random realisations; it is good practice to re-evaluate it with different seeds.
+
+Because the replicate seeds are derived from the seed of the optimization, they are not stored in the nl object.
+A dynamic design is reproduced by the nl object together with \code{nreplicates}, so \code{nreplicates} should be recorded alongside the results.
+}
+
+\section{Reproducibility and Seeds}{
+
+Each seed of the simdesign is used as the random seed of the NetLogo runs of one optimization, and, with \code{nreplicates > 1}, as the basis from which the replicate seeds of that optimization are derived.
+The stochastic elements of the optimization algorithms themselves (for example the starting values of \code{GenSA} or the initial population of \code{GenAlg}) are drawn from the random number generator of R and are not controlled by these seeds; call \code{set.seed()} before \code{run_nl_dyn()} if these should be reproducible as well.
+Several seeds (\code{nseeds > 1}) therefore yield independent repetitions of the whole optimization, which shows whether the algorithm converges to the same solution under different stochasticity.
+}
+
+\section{Suppressing Messages}{
+
+Informational messages (e.g., XML file paths) are displayed using the \code{cli} package. To suppress these messages, wrap the function call with
+\code{suppressMessages()}, e.g., \code{suppressMessages(run_nl_dyn(nl))}.
+}
+
 \examples{
 \dontrun{
 
 # Load nl object form test data:
 nl <- nl_lhs
 
-# Add genalg simdesign:
+# Add genalg simdesign with three seeds, thus three independent optimizations:
 nl@simdesign <- simdesign_GenAlg(nl=nl,
                                   popSize = 200,
                                   iters = 100,
                                   evalcrit = 1,
-                                  nseeds = 1)
+                                  nseeds = 3)
 
 # Run simulations:
 results <- run_nl_dyn(nl)
+
+# The optimization objects are stored in the result column:
+summary(results$result[[1]])
+
+# Average each evaluation over 5 replicated model runs to reduce simulation noise:
+results <- run_nl_dyn(nl, nreplicates = 5, threads = 5)
 
 }
 }

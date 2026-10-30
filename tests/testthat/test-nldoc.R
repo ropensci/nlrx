@@ -5,7 +5,7 @@ testthat::test_that("nldoc", {
 
   if (rmarkdown::pandoc_available())
   {
-    modelfiles <- c("WSP.nlogo",
+    modelfiles <- c("WSP.nlogox",
                     "WSP.nls")
 
 

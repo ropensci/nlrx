@@ -1,33 +1,12 @@
 testthat::context("export_nl tests")
 testthat::test_that("export_nl", {
 
-  # Run these tests only on Github actions:
-  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
+  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
+  nlpath <- skip_without_netlogo()
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
 
-  ## Check that JAVA is installed:
-  testthat::expect_true(system('java -version') == 0)
-
-  ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
-                                 "FAILED")))
-
-  testthat::expect_true(nlpath != "FAILED")
-  testthat::expect_true(dir.exists(nlpath))
-
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                                  "FAILED")))
-
-  testthat::expect_true(jarpath != "FAILED")
-  testthat::expect_true(file.exists(jarpath))
-
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
-
-  nl <- nl(nlversion = "6.1.1",
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -36,7 +15,6 @@ testthat::test_that("export_nl", {
 
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -51,13 +29,13 @@ testthat::test_that("export_nl", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,

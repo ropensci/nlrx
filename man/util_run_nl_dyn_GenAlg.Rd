@@ -4,18 +4,16 @@
 \alias{util_run_nl_dyn_GenAlg}
 \title{Genetic Algorithm call simulations function}
 \usage{
-util_run_nl_dyn_GenAlg(nl, seed, cleanup.csv, cleanup.xml, cleanup.bat)
+util_run_nl_dyn_GenAlg(nl, seed, threads = 1, nreplicates = 1, ...)
 }
 \arguments{
 \item{nl}{nl object}
 
 \item{seed}{current model seed}
 
-\item{cleanup.csv}{TRUE/FALSE, if TRUE temporary created csv output files will be deleted after gathering results.}
+\item{threads}{number of NetLogo threads used for execution (handled via NetLogo).}
 
-\item{cleanup.xml}{TRUE/FALSE, if TRUE temporary created xml output files will be deleted after gathering results.}
-
-\item{cleanup.bat}{TRUE/FALSE, if TRUE temporary created bat/sh output files will be deleted after gathering results.}
+\item{nreplicates}{number of replicated model runs per evaluation}
 }
 \description{
 Genetic Algorithm call simulations function

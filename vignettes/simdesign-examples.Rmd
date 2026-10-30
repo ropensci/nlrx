@@ -31,15 +31,15 @@ First we set up a nl object. We use this nl object for all simdesigns:
 ```{r eval=FALSE}
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -57,7 +57,6 @@ defined parameterisation.
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -69,13 +68,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             variables = list(),
                             constants = list("initial-number-sheep" = 20,
                                              "initial-number-wolves" = 20,
-                                             "model-version" = "\"sheep-wolves-grass\"",
+                                             "model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_simple(nl=nl,
                                  nseeds=3)
@@ -88,7 +87,6 @@ The distinct simdesign can be used to run distinct parameter combinations. To se
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -99,13 +97,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
                                              'initial-number-wolves' = list(values=c(30, 40, 50, 60))),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_distinct(nl=nl,
                                    nseeds=3)
@@ -119,7 +117,6 @@ To setup a full-factorial simdesign, vectors of values need to be defined for ea
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -130,13 +127,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(values=c(10, 20, 30, 40)),
                                              'initial-number-wolves' = list(min=0, max=50, step=10)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_ff(nl=nl,
                              nseeds=3)
@@ -153,7 +150,6 @@ To setup a latin hypercube sampling simdesign, variable distributions need to be
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -164,13 +160,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
@@ -192,7 +188,6 @@ To setup sensitivity analysis simdesigns, variable distributions (min, max, qfun
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -203,13 +198,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150, qfun="qunif"),
                                              'initial-number-wolves' = list(min=50, max=150, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_lhs(nl=nl,
                                samples=100,
@@ -262,7 +257,6 @@ Optimization simdesigns can only be executed using the `run_nl_dyn()` function -
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -273,13 +267,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150),
                                              'initial-number-wolves' = list(min=50, max=150)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_GenAlg(nl=nl, 
                                  popSize = 200, 
@@ -306,7 +300,6 @@ These algorithms can be used by attaching the corresponding simdesigns (`simdesi
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname="wolf-sheep",
                             outpath="C:/out/",
-                            repetition=1,
                             tickmetrics="true",
                             idsetup="setup",
                             idgo="go",
@@ -317,13 +310,13 @@ nl@experiment <- experiment(expname="wolf-sheep",
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list('initial-number-sheep' = list(min=50, max=150),
                                              'initial-number-wolves' = list(min=50, max=150)),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
+                            constants = list("model-version" = "sheep-wolves-grass",
                                              "grass-regrowth-time" = 30,
                                              "sheep-gain-from-food" = 4,
                                              "wolf-gain-from-food" = 20,
                                              "sheep-reproduce" = 4,
                                              "wolf-reproduce" = 5,
-                                             "show-energy?" = "false"))
+                                             "show-energy?" = FALSE))
 
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            summary_stat_target = c(100, 80),

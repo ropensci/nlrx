@@ -65,7 +65,7 @@ nl_to_points <- function(nl, coords){
   if(nrow(turtles) == 0 & checkcoord1 == 0 ||checkcoord2 == 0) stop("You need to measure turtle coordinates to coerce model output into spatial points.")
 
   turtles_dat <- turtles %>%
-    dplyr::select(spatial.metrics)
+    dplyr::select(dplyr::all_of(spatial.metrics))
 
   if (coords == "px") {
     coord_ind <- grepl(c("\\bpxcor\\b|\\bpycor\\b"), names(turtles_dat))

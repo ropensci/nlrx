@@ -9,7 +9,7 @@ simdesign_GenSA(nl, par = NULL, evalcrit = 1, control = list(), nseeds = 1)
 \arguments{
 \item{nl}{nl object with a defined experiment}
 
-\item{par}{optional vector of start values for each parameter defined in variables of experiment}
+\item{par}{optional vector of start values, one for each variable of the experiment, in the order in which the variables are defined. If NULL (default), GenSA draws a random start point within the parameter boundaries.}
 
 \item{evalcrit}{position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value}
 
@@ -27,6 +27,7 @@ Add a Simulated Annealing simdesign to a nl object
 This function creates a simdesign S4 class which can be added to a nl object.
 
 Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+Only min and max are used: the algorithm searches the range they define, so a qfun of the variable definition is irrelevant for this simdesign.
 
 The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
 that are defined in the variables field of the experiment object within the nl object.
