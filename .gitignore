@@ -3,6 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
+docs/
 vignettes/articles/nlrx_papers.bib.sav
 .DS_Store
 CRAN-SUBMISSION
