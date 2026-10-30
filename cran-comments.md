@@ -15,8 +15,14 @@ NetLogo version points users to nlrx 0.4.6, which continues to support NetLogo 5
 # Test environments
 
 * local: Ubuntu 24.04, R 4.6.1 -- 0 errors | 0 warnings | 0 notes
-* TODO before submission: add the GitHub Actions R-CMD-check results (Ubuntu, macOS,
-  Windows; R release and oldrel) once they have run on the release branch.
+* GitHub Actions, with NetLogo 7.0.4 installed so that the simulation tests run:
+  * Ubuntu 24.04, R-devel (4.7.0), R 4.6.2 and R 4.5.3
+  * macOS 26 (aarch64 and x86_64), R 4.6.2
+  * Windows (x64, ucrt), R 4.6.2
+* GitHub Actions, without NetLogo and with `_R_CHECK_CRAN_INCOMING_REMOTE_=true`
+  (incoming and URL checks): Ubuntu 24.04, R 4.6.2
+
+All GitHub Actions checks: 0 errors | 0 warnings | 0 notes.
 
 # R CMD check results
 
