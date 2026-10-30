@@ -1,4 +1,4 @@
-# nlrx <img src="man/figures/logo.png" align="right" width="150" />
+# nlrx <img src="man/figures/logo.png" align="right" width="150" alt="nlrx logo" />
 
 <!-- old badges: [![Build Status](https://travis-ci.org/ropensci/nlrx.svg?branch=master)](https://travis-ci.org/ropensci/nlrx)[
 ![Build status](https://ci.appveyor.com/api/projects/status/swsstjxxjnkyuoh9/branch/master?svg=true)](https://ci.appveyor.com/project/marcosci/nlrx/branch/master) -->
@@ -12,7 +12,7 @@ coverage](https://codecov.io/gh/ropensci/nlrx/branch/master/graph/badge.svg)](ht
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/nlrx)](https://cran.r-project.org/package=nlrx)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.r-project.org/package=nlrx)
+[![CRAN downloads](http://cranlogs.r-pkg.org/badges/grand-total/nlrx)](https://cran.r-project.org/package=nlrx)
 [![ropensci](https://badges.ropensci.org/262_status.svg)](https://github.com/ropensci/software-review/issues/262)
 [![DOI:10.1111/2041-210X.13286](https://zenodo.org/badge/DOI/10.1111/2041-210X.13286.svg)](https://doi.org/10.1111/2041-210X.13286)
 <!-- badges: end -->

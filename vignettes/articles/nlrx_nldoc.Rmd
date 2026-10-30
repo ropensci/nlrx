@@ -147,5 +147,5 @@ tkplot(nw, layout=layout_with_fr(nw, niter = 2000))
 ```
 
 <center>
-<img src="nldoc_network.png" align="center" width="75%" />
+<img src="nldoc_network.png" align="center" width="75%" alt="Procedure call network of the Wolf Sheep Predation model: setup calls display-labels; go calls move, eat-grass, eat-sheep, reproduce-sheep, reproduce-wolves, death and grow-grass" />
 </center>

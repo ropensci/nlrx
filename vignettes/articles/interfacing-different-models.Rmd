@@ -114,7 +114,7 @@ gganimate::animate(p1, nframes = n, width=800, height=800, duration=6)
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/diffusion.gif" align="center" width="100%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/diffusion.gif" align="center" width="100%" alt="Animated map of the Diffusion model: a substance spreading outward across the patch grid over time" />
 </center>
 
 ## Fire model
@@ -191,7 +191,7 @@ g1 <- gganimate::animate(p1, nframes = n, width=800, height=800, duration = 6)
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/fire.gif" align="center" width="100%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/fire.gif" align="center" width="100%" alt="Animated map of the Fire model: a fire front burning through a forest from left to right" />
 </center>
 
 
@@ -283,7 +283,7 @@ gganimate::animate(p1, nframes = nmax, width=800, height=800, fps=10)
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/ants.gif" align="center" width="100%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/ants.gif" align="center" width="100%" alt="Animated map of the Ants model: ants leaving the central nest, laying chemical trails and collecting food from three sources" />
 </center>
 
 
@@ -366,7 +366,7 @@ gganimate::animate(p1, width=800, height=800, duration = 6)
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/waves.gif" align="center" width="100%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/waves.gif" align="center" width="100%" alt="Animated map of the Waves model: wave patterns travelling across a membrane" />
 </center>
 
 ## Flocking Model
@@ -441,7 +441,7 @@ gganimate::animate(p1, nframes=max(nl_spatial$`[step]`), width=600, height=600, 
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_spoke.gif" align="center" width="75%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_spoke.gif" align="center" width="75%" alt="Animated map of the Flocking model: birds drawn as points with heading lines, gradually aligning into flocks" />
 </center>
 
 ```{r eval = FALSE}
@@ -459,7 +459,7 @@ gganimate::animate(p2, nframes=max(nl_spatial$`[step]`), width=600, height=600, 
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_text.gif" align="center" width="75%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/flocking_text.gif" align="center" width="75%" alt="Animated map of the Flocking model: birds drawn as rotated text symbols, gradually aligning into flocks" />
 </center>
 
 ## Preferential Attachment
@@ -540,7 +540,7 @@ gganimate::animate(p1, nframes = max(nl_turtles$`[step]`), width=400, height=400
 ```
 
 <center>
-<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/networks.gif" align="center" width="75%" />
+<img src="https://github.com/nldoc/nlrx_playground/raw/master/gif/networks.gif" align="center" width="75%" alt="Animated plot of the Preferential Attachment model: a network growing as new nodes link to well-connected ones" />
 </center>
 
 #### Visualize network using igraph package
@@ -577,5 +577,5 @@ plot(nw,
 ```
 
 <center>
-<img src="networks_igraph.png" align="center" width="75%" />
+<img src="networks_igraph.png" align="center" width="75%" alt="Preferential attachment network drawn with igraph: a tree-like network around one central hub, nodes coloured by detected community" />
 </center>

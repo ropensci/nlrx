@@ -30,7 +30,7 @@ The main question for this vignette to answer is: How can you link such self-wri
 In order to link self-written output to our nlrx simulations within the R session, we need to transfer the current nlrx siminputrow and seed to our NetLogo model. That way, when executing `run_nl_all()`, within each simulation the NetLogo model exactly "knows" which parameter row (siminputrow) is currently simulated and the corresponding random seed. To transfer this information we just need to create a string input widget on our model interface. In the example below, we created such a widget at the bottom of the Wolf Sheep model called `nlrx_id`.
 
 <center>
-<img src="idrunnum_gui.png" align="center" width="75%" />
+<img src="idrunnum_gui.png" align="center" width="75%" alt="NetLogo interface of the Wolf Sheep Predation model with a new input widget for the global variable nlrx_id, type String, highlighted in red" />
 </center>
 
 #### Step 2: Define idrunnum of the experiment
