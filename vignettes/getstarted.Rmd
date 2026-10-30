@@ -64,7 +64,7 @@ And the development version from [GitHub](https://github.com/) with:
 remotes::install_github("ropensci/nlrx")
 ```
 
-## Get started
+## Overview
 
 General information that is needed to run NetLogo simulations remotely, such as path to the NetLogo installation folder is stored within a `nl` class object.
 Nested within this `nl` class are the classes `experiment` and `simdesign`. The `experiment` class stores all experiment specifications. After attaching a valid experiment, a `simdesign` class object can be attached to the `nl` class object, by using one of the simdesign helper functions. These helper functions create different parameter input matrices from the experiment variable definitions that can then be executed by the `run_nl_one()` and `run_nl_all()` functions. The nested design allows to store everything related to the experiment within one R object. Additionally, different simdesign helper functions can be applied to the same `nl` object in order to repeat the same experiment with different parameter exploration methods (simdesigns).
