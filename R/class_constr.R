@@ -82,7 +82,7 @@ nl <- function(nlversion = "7.0.4",
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
 #' @param idgo character string or vector of character strings, defining the name of the NetLogo go procedure
 #' @param idfinal character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick
-#' @param idrunnum character string, defining the name of a NetLogo global that should be used to parse the current siminputrow during model executions which can then be used for self-written output.
+#' @param idrunnum character string, defining the name of a string input widget in the NetLogo model. Before each run, nlrx writes a run identifier ("expname_seed_siminputrow") into this widget. Model code that writes its own output files (e.g. `export-world`, `file-open`) can use it in filenames, which keeps the files of different runs apart and allows matching them to the nlrx results. Must be an interface widget, not a variable declared in `globals []`, because the value is set before the setup procedure and `clear-all` would reset a code global. Note: `run_nl_dyn()` currently passes the same identifier to every evaluation of an optimization. See the article "Capturing NetLogo output manually" for a worked example: <https://docs.ropensci.org/nlrx/articles/manual-output.html>
 #' @param runtime number of model ticks that should be run for each simulation
 #' @param stopcond a NetLogo reporter that reports TRUE/FALSE. If it reports TRUE the current simulation run is stopped (e.g. "not any? turtles")
 #' @param metrics vector of strings defining valid NetLogo reporters that are taken as output measurements (e.g. c("count turtles", "count patches"))
