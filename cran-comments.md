@@ -1,26 +1,50 @@
-# Resubmission
+# Submission
 
-This is a resubmission. In this version I have:
+This is a major update of nlrx (0.4.6 -> 0.5.0).
 
-* Updated readr::file_write function to avoid pkg break due to deprecation
+nlrx now supports NetLogo 7 and newer. NetLogo 7 replaced the model file format and the
+way simulations are invoked, so the simulation backend was redesigned around the
+'logolink' package (on CRAN), which writes the BehaviorSpace XML and executes NetLogo.
 
+Support for NetLogo versions below 7.0.0 has been removed, which makes this a breaking
+release: the previous execution backend and a number of arguments that depended on it
+are gone. All breaking changes are listed in NEWS.md, and the error message for an older
+NetLogo version points users to nlrx 0.4.6, which continues to support NetLogo 5.3.1 to
+6.4.0.
 
-# Original (Re-) Submission
+# Test environments
 
-nlrx version 0.4.6
+* local: Ubuntu 24.04, R 4.6.1 -- 0 errors | 0 warnings | 0 notes
+* GitHub Actions, with NetLogo 7.0.4 installed so that the simulation tests run:
+  * Ubuntu 24.04, R-devel (4.7.0), R 4.6.2 and R 4.5.3
+  * macOS 26 (aarch64 and x86_64), R 4.6.2
+  * Windows (x64, ucrt), R 4.6.2
+* GitHub Actions, without NetLogo and with `_R_CHECK_CRAN_INCOMING_REMOTE_=true`
+  (incoming and URL checks): Ubuntu 24.04, R 4.6.2
 
-## CRAN check error fixes
+All GitHub Actions checks: 0 errors | 0 warnings | 0 notes.
 
-* None
+# R CMD check results
 
-## Changes in version 0.4.6
+0 errors | 0 warnings | 0 notes
 
-* Updated readr::file_write function to avoid pkg break due to deprecation
+# System requirements
 
-## R CMD check results
+Running simulations requires a local NetLogo (>= 7.0.0) and Java (>= 11) installation,
+which is not available on the check machines. Examples that execute NetLogo are therefore
+wrapped in \dontrun{}, and the tests that execute simulations are skipped unless a
+NetLogo installation is present. The checks above exercise everything that does not
+require NetLogo, including the generation of BehaviorSpace definitions.
 
-0 errors | 0 warnings | 0 note
+# Package dependencies
 
-## Reverse dependencies
+The dependency check reports "Imports includes 23 non-default packages". The number of
+imports is essentially unchanged from the previous release: 'logolink', 'cli', 'janitor'
+and 'xml2' were added and 'furrr' was dropped. The imports reflect the scope of the
+package, which covers simulation design (including sensitivity analysis and optimization
+backends) as well as spatial and network output processing.
 
-There are currently no reverse dependencies.
+# Reverse dependencies
+
+There are currently no reverse dependencies. Checked against the full CRAN package
+database (Depends, Imports, Suggests, LinkingTo, Enhances).

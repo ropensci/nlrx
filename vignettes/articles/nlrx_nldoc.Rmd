@@ -89,7 +89,7 @@ library(nlrx)
 outpath <- tempdir()
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 
@@ -119,7 +119,7 @@ This function can be used for any NetLogo model, even if the code does not conta
 library(nlrx)
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 
@@ -147,5 +147,5 @@ tkplot(nw, layout=layout_with_fr(nw, niter = 2000))
 ```
 
 <center>
-<img src="nldoc_network.png" align="center" width="75%" />
+<img src="nldoc_network.png" align="center" width="75%" alt="Procedure call network of the Wolf Sheep Predation model: setup calls display-labels; go calls move, eat-grass, eat-sheep, reproduce-sheep, reproduce-wolves, death and grow-grass" />
 </center>

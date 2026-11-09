@@ -2,11 +2,11 @@ title: nlrx | NetLogo from R
 url: https://docs.ropensci.org/nlrx
 
 template:
-  params:
-   bootswatch: sandstone
+  bootstrap: 5
+  bootswatch: sandstone
 navbar:
   structure:
-    left:  [intro, advanced, more, articles, tutorials]
+    left:  [intro, advanced, more, articles]
     right: [reference, news, search, github, lightswitch]
   components:
     intro:
@@ -22,10 +22,10 @@ navbar:
       menu:
        - text: "Capturing spatial NetLogo output"
          icon: fa-location-arrow
-         href: articles/articles/spatial-output.html
+         href: articles/spatial-output.html
        - text: "Capturing NetLogo output manually"
          icon: fa-location-arrow
-         href: articles/articles/manual-output.html
+         href: articles/manual-output.html
        - text: "Sensitivity Analysis with nlrx"
          icon: fa-gear
          href: articles/sensitivity.html
@@ -40,11 +40,10 @@ navbar:
          href: articles/simdesign-examples.html
        - text: "Interfacing a variety of different NetLogo models"
          icon: fa-image
-         href: articles/articles/interfacing-different-models.html
+         href: articles/interfacing-different-models.html
        - text: "NetLogo documentation with nlrx"
          icon: fa-book
-         href: articles/articles/nlrx_nldoc.html
+         href: articles/nlrx_nldoc.html
        - text: "Publication record"
          icon: fa-bookmark
-         href: articles/articles/nlrx_papers.html
-      href: news/index.html
+         href: articles/nlrx_papers.html

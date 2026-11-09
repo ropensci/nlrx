@@ -9,8 +9,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Publication record
-
 On this page we aim to collect research papers that have used and cited the nlrx package. We will update this database from time to time. If your article is missing, please drop us an [email](mailto:jan.salecker@posteo.de) or file an [issue](https://github.com/ropensci/nlrx/issues/new).
 
 ## Share your nlrx use cases
@@ -26,7 +24,7 @@ Salecker J, Sciaini M, Meyer KM, Wiegand K. The nlrx r package: A next-generatio
 Citation information for `nlrx` can also be accessed in R doing `citation(package = 'nlrx')`.
 
 
-## Publication record
+## Publications using nlrx
 
 <script src="//bibbase.org/show?bib=https://raw.githubusercontent.com/ropensci/nlrx/master/vignettes/articles/nlrx_papers.bib&jsonp=1&sort=author_short"></script>
 

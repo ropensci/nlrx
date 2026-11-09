@@ -5,27 +5,30 @@
 \title{Construct a new nl object}
 \usage{
 nl(
-  nlversion = "6.0.2",
-  nlpath = character(),
+  nlversion = "7.0.4",
+  nlpath = Sys.getenv("NETLOGO_HOME"),
   modelpath = character(),
   jvmmem = 1024,
   experiment = methods::new("experiment"),
   simdesign = methods::new("simdesign"),
+  check_version = TRUE,
   ...
 )
 }
 \arguments{
 \item{nlversion}{A character string defining the NetLogo version that is used}
 
-\item{nlpath}{Path to the NetLogo main directory matching the defined version}
+\item{nlpath}{Path to the NetLogo main directory matching the defined version. Defaults to the \code{NETLOGO_HOME} environment variable, so it can be omitted when that is set. When a path is given, it takes precedence: it is used for the duration of each \code{\link[nlrx]{run_nl_all}} / \code{\link[nlrx]{run_nl_one}} / \code{\link[nlrx]{run_nl_dyn}} call, so one nl object can be run against a different NetLogo installation than another without changing the session}
 
-\item{modelpath}{Path to the NetLogo model file (*.nlogo) that is used for simulations}
+\item{modelpath}{Path to the NetLogo model file (.nlogox) that is used for simulations. Since NetLogo 6.3.0 the models shipped with NetLogo are stored at the installation root, so a sample model is reached with \code{file.path(nlpath, "models/Sample Models/...")}}
 
 \item{jvmmem}{Java virtual machine memory capacity in megabytes}
 
 \item{experiment}{Holds a experiment S4 class object}
 
 \item{simdesign}{Holds a simdesign S4 class object}
+
+\item{check_version}{Logical. If TRUE (default), the NetLogo version is checked against the versions nlrx is tested with (\link[nlrx]{supported_netlogo_versions}): an untested NetLogo 7.x version emits a warning and is accepted, a version below 7.0.0 is an error. Set to FALSE to silence the warning.}
 
 \item{...}{...}
 }
@@ -50,15 +53,15 @@ The simdesign helper functions use the variable definitions from the experiment 
 \examples{
 # Example for Wolf Sheep Predation model from NetLogo models library:
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
