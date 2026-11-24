@@ -1,59 +1,33 @@
-testthat::context("export_nl tests")
-testthat::test_that("export_nl", {
+testthat::context("import_nl tests")
+testthat::test_that("import_nl extracts the folder and returns the nl object", {
 
-  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
-  nlpath <- skip_without_netlogo()
-  modelpath <- file.path(nlpath, "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogox")
+  proj <- file.path(tempfile("import_test"), "proj")
+  dir.create(proj, recursive = TRUE)
+  writeLines("<model/>", file.path(proj, "model.nlogox"))
+  nl <- nl(nlversion = "7.0.4", nlpath = tempdir(),
+           modelpath = file.path(proj, "model.nlogox"))
 
-  nl <- nl(nlversion = "7.0.4",
-           nlpath = nlpath,
-           modelpath = modelpath,
-           jvmmem = 1024)
-
-  outpath <- tempdir()
-
-  nl@experiment <- experiment(expname = "nlrx_test",
-                              outpath = outpath,
-                              tickmetrics = "true",
-                              idsetup = "setup",
-                              idgo = "go",
-                              idfinal = NA_character_,
-                              runtime = 2,
-                              evalticks = c(1,2),
-                              metrics = c("count sheep","count wolves"),
-                              variables = list('initial-number-sheep' =
-                                                 list(min=50, max=150,
-                                                      step=10, qfun="qunif"),
-                                               'initial-number-wolves' =
-                                                 list(min=50, max=150,
-                                                      step=10, qfun="qunif")),
-                              constants = list("model-version" =
-                                                 "sheep-wolves-grass",
-                                               "grass-regrowth-time" = 30,
-                                               "sheep-gain-from-food" = 4,
-                                               "wolf-gain-from-food" = 20,
-                                               "sheep-reproduce" = 4,
-                                               "wolf-reproduce" = 5,
-                                               "show-energy?" = FALSE))
-
-  nl@simdesign <- simdesign_lhs(nl=nl,
-                                samples=1,
-                                nseeds=1,
-                                precision=3)
-
-  ## Store the nl object and the model folder as zip file:
-  path <- dirname(nl@modelpath)
   tarfile <- tempfile(fileext = ".tar.gz")
-  export_nl(nl, path=path, tarfile = tarfile)
+  suppressMessages(export_nl(nl, tarfile = tarfile))
 
-  testthat::expect_true(file.exists(tarfile))
+  ## Read the archive again:
+  targetdir <- tempfile("import_target")
+  imported <- import_nl(tarfile = tarfile, targetdir = targetdir, new_session = FALSE)
 
-  ## Now read the zip file again:
-  targetdir <- tempdir()
-  import_nl(tarfile = tarfile, targetdir = targetdir, new_session = FALSE)
+  testthat::expect_identical(imported, nl)
+  testthat::expect_true(file.exists(file.path(targetdir, "proj", "model.nlogox")))
+  testthat::expect_true(file.exists(file.path(targetdir, "proj", "nlobject.rds")))
 
-  nlobjectfile <- file.path(targetdir, basename(path), "nlobject.rds")
-  testthat::expect_true(file.exists(nlobjectfile))
-
+  ## An archive without an nl object is rejected before anything is extracted:
+  otherdir <- file.path(tempfile("import_other"), "other")
+  dir.create(otherdir, recursive = TRUE)
+  writeLines("x", file.path(otherdir, "file.txt"))
+  othertar <- tempfile(fileext = ".tar.gz")
+  wd <- setwd(dirname(otherdir))
+  utils::tar(othertar, files = "other", compression = "gzip", tar = "internal")
+  setwd(wd)
+  emptydir <- tempfile("import_empty")
+  testthat::expect_error(import_nl(othertar, targetdir = emptydir),
+                         class = "nlrx_error_import_archive")
+  testthat::expect_false(dir.exists(emptydir))
 })

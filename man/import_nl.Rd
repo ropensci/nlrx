@@ -14,22 +14,27 @@ import_nl(tarfile, targetdir, new_session = FALSE)
 \item{new_session}{If TRUE, opens a new RStudio Session with an Rproj}
 }
 \value{
-The status value returned by the external command, invisibly.
+The imported nl object, invisibly.
 }
 \description{
 Import NetLogo Experiment from export_nl
 }
 \details{
-Imports NetLogo experiments that were saved with \code{export_nl}.
+Imports NetLogo experiments that were saved with \code{export_nl}. The archived
+folder is extracted into \code{targetdir} and the nl object stored with it is
+returned.
 If the folder comes with an .Rproj file (which is recommended because
 relative paths enhance the reproducability of your analysis),
-\code{import_nl} opens this project and loads the nl object in your R environment.
+\code{import_nl} can open this project in a new RStudio session (\code{new_session = TRUE}).
+
+Note that the paths stored in the nl object (\code{nlpath}, \code{modelpath}, \code{outpath})
+still point to the locations on the machine the experiment was exported from.
 }
 \examples{
 \dontrun{
 
-infile <- "/home/user/test.zip"
+infile <- "/home/user/test.tar.gz"
 targetdirectory <- "/home/user/test"
-import_nl(infile, targetdirectory)
+nl <- import_nl(infile, targetdirectory)
 }
 }
