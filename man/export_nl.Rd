@@ -11,18 +11,24 @@ export_nl(nl, path = dirname(getnl(nl, "modelpath")), tarfile)
 
 \item{path}{Path to folder that contains files to run NetLogo experiment}
 
-\item{tarfile}{Path to folder where the experiments gets stored as zip file}
+\item{tarfile}{Path to the tar.gz file the experiment gets stored in}
 }
 \value{
-The status value returned by the external command, invisibly.
+The path of the created tar.gz file, invisibly.
 }
 \description{
-Export NetLogo Experiment as zip file
+Export NetLogo Experiment as tar.gz file
 }
 \details{
 Exports your folder that contains data and scripts for NetLogo + nlrx analyses
-as a zip file. Furthermore, \code{export_nl} takes your nl object and saves it in the
-zipped folder. This enables other person to run the same experiment as you.
+as a tar.gz file. Furthermore, \code{export_nl} takes your nl object and saves it as
+\code{nlobject.rds} in the archived folder. This enables other person to run the same
+experiment as you. The folder itself is not changed.
+
+By default, the folder that contains the NetLogo model is exported. Everything
+in that folder ends up in the archive, so keep the model in a project folder of
+its own. The home directory and the filesystem root are refused, and the
+tar.gz file must not be stored within the exported folder.
 }
 \examples{
 \dontrun{
@@ -30,7 +36,7 @@ zipped folder. This enables other person to run the same experiment as you.
 # Load nl object from testdata:
 nl <- nl_lhs
 path <- getwd() # adjust path to your needs, path should point to a directory with model data
-outfile <- tempfile(fileext = ".zip") # adjust file path to your needs
+outfile <- tempfile(fileext = ".tar.gz") # adjust file path to your needs
 export_nl(nl, path = path, tarfile = outfile)
 }
 }

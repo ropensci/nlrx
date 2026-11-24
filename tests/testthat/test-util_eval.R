@@ -1,37 +1,14 @@
 testthat::context("util_eval")
 testthat::test_that("util_eval", {
 
-  # Run these tests only on Github actions:
-  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
-
-  ## Check that JAVA is installed:
-  testthat::expect_true(system('java -version') == 0)
-
-  ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
-                                 "FAILED")))
-
-  testthat::expect_true(nlpath != "FAILED")
-  testthat::expect_true(dir.exists(nlpath))
-
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                                  "FAILED")))
-
-
-  testthat::expect_true(jarpath != "FAILED")
-  testthat::expect_true(file.exists(jarpath))
-
-
+  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
+  nlpath <- skip_without_netlogo()
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl object:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
 
-   nl <- nl(nlversion = "6.1.1",
+   nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -47,7 +24,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -61,7 +37,7 @@ testthat::test_that("util_eval", {
                                                'number-wolves' =
                                                  list(qfun="qunif")),
                               constants = list("versionzzzz" =
-                                                 "\"sheep-wolves-grass\""))
+                                                 "sheep-wolves-grass"))
 
   ## Without proper constants, this should throw an error:
   testthat::expect_error(eval_variables_constants(nl))
@@ -69,7 +45,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with incomplete variables:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -83,13 +58,13 @@ testthat::test_that("util_eval", {
                                                'number-wolves' =
                                                  list(qfun="qunif")),
                               constants = list("version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
 
   testthat::expect_error(util_eval_variables_distinct(nl))
@@ -101,7 +76,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with different number of values and distinct
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "fail",
                               idsetup = "setup",
                               idgo = "go",
@@ -116,13 +90,13 @@ testthat::test_that("util_eval", {
                                                  list(qfun="qunif",
                                                       values=c(2,3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   testthat::expect_error(util_eval_variables_distinct(nl))
   testthat::expect_error(util_eval_experiment(nl))
@@ -130,7 +104,6 @@ testthat::test_that("util_eval", {
   ## Add an experiment with whitespace in expname:
   nl@experiment <- experiment(expname = "nlrx test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -147,20 +120,19 @@ testthat::test_that("util_eval", {
                                                       step=10, qfun="qunif",
                                                       values=c(1, 2, 3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
   testthat::expect_error(util_eval_experiment(nl))
 
 
   ## Add an experiment with same parameter in variables and constants:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -177,21 +149,20 @@ testthat::test_that("util_eval", {
                                                       step=10, qfun="qunif",
                                                       values=c(1, 2, 3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
                                                "initial-number-sheep" = 10,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
   testthat::expect_error(util_eval_experiment(nl))
   testthat::expect_error(eval_variables_constants(nl))
 
   ## Add non existing constant parameter:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -208,20 +179,19 @@ testthat::test_that("util_eval", {
                                                       step=10, qfun="qunif",
                                                       values=c(1, 2, 3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false",
+                                               "show-energy?" = FALSE,
                                                "this-param-does-not-exist" = 0))
   testthat::expect_error(eval_variables_constants(nl))
 
   ## Add non existing variable parameter:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -241,19 +211,18 @@ testthat::test_that("util_eval", {
                                                  list(min=0, max=1, step=1, qfun="qunif",
                                                       value=c(1, 2, 3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
   testthat::expect_error(eval_variables_constants(nl))
 
   ## Leave some parameters non defined:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -275,7 +244,6 @@ testthat::test_that("util_eval", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -292,13 +260,13 @@ testthat::test_that("util_eval", {
                                                       step=10, qfun="qunif",
                                                       values=c(1, 2, 3))),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
 
   ## Check variable definitions:

@@ -562,6 +562,7 @@ simdesign_soboljansen <- function(nl,
 #' @param morrisr morris r value
 #' @param morrisgridjump morris grid jump value
 #' @param nseeds number of seeds for this simulation design
+#' @param scale logical, if TRUE (default) the input factors are scaled to `[0, 1]` before the elementary effects are computed, which makes them comparable across parameters with different units and ranges. Set to FALSE to obtain unscaled effects
 #' @return simdesign S4 class object
 #' @details
 #'
@@ -600,7 +601,8 @@ simdesign_morris <- function(nl,
                              morrislevels,
                              morrisr,
                              morrisgridjump,
-                             nseeds) {
+                             nseeds,
+                             scale = TRUE) {
 
   util_eval_experiment(nl)
   util_eval_variables(nl)
@@ -627,7 +629,7 @@ simdesign_morris <- function(nl,
                             design = morrisdesign,
                             binf = mins,
                             bsup = maxs,
-                            scale=TRUE)
+                            scale = scale)
 
   # Export parameter matrix:
   moX <- tibble::as_tibble(mo$X)
@@ -756,7 +758,7 @@ simdesign_eFast <- function(nl,
 #' @description Add a Simulated Annealing simdesign to a nl object
 #'
 #' @param nl nl object with a defined experiment
-#' @param par optional vector of start values for each parameter defined in variables of experiment
+#' @param par optional vector of start values, one for each variable of the experiment, in the order in which the variables are defined. If NULL (default), GenSA draws a random start point within the parameter boundaries.
 #' @param evalcrit position of evaluation criterion within defined NetLogo metrics of nl experiment or a function that reports a single numeric value
 #' @param control list with further arguments passed to the GenSA function (see ?GenSA for details)
 #' @param nseeds number of seeds for this simulation design
@@ -765,7 +767,10 @@ simdesign_eFast <- function(nl,
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object.
 #'
+#' Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. With an empty \code{control} list, GenSA runs with its defaults (\code{maxit = 5000}), which amounts to tens of thousands of evaluations; set a stop criterion such as \code{max.call} or \code{max.time} in \code{control}.
+#'
 #' Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
+#' Only min and max are used: the algorithm searches the range they define, so a qfun of the variable definition is irrelevant for this simdesign.
 #'
 #' The GenSA simdesign generates a simulated Annealing experiment within the defined min and max parameter boundaries
 #' that are defined in the variables field of the experiment object within the nl object.
@@ -853,6 +858,34 @@ simdesign_GenSA <- function(nl,
                 evalcrit))
   }
 
+  ## Validate the optional start values here, where the user defined them,
+  ## rather than at run time: one value per variable, in the order of the
+  ## variables, and within the boundaries the algorithm searches.
+  if (!is.null(par)) {
+    if (!is.numeric(par) || length(par) != length(lower)) {
+      stop(
+        paste0(
+          "'par' must be a numeric vector with one start value per variable (",
+          length(lower), "), in the order of the experiment variables: ",
+          paste(names(getexp(nl, "variables")), collapse = ", "), "."
+        ),
+        call. = FALSE
+      )
+    }
+
+    outside <- which(par < as.vector(lower) | par > as.vector(upper))
+
+    if (length(outside) > 0) {
+      stop(
+        paste0(
+          "'par' values outside the min/max boundaries of their variables: ",
+          paste(names(getexp(nl, "variables"))[outside], collapse = ", "), "."
+        ),
+        call. = FALSE
+      )
+    }
+  }
+
   # Create a gsa object:
   gsa <- list(par = par,
               upper = upper,
@@ -893,6 +926,8 @@ simdesign_GenSA <- function(nl,
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object.
 #'
+#' Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes at most \code{popSize * iters} evaluations; the defaults (200 x 100) amount to 20,000 NetLogo runs per seed.
+#'
 #' Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
 #'
 #' The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
@@ -924,6 +959,8 @@ simdesign_GenSA <- function(nl,
 #'
 #' # Example 1: Using a metric from the experiment metrics vector for evaluation:
 #' nl@@simdesign <- simdesign_GenAlg(nl=nl,
+#'                                   popSize = 20,
+#'                                   iters = 10,
 #'                                   evalcrit=1,
 #'                                   nseeds=1)
 #'
@@ -937,6 +974,8 @@ simdesign_GenSA <- function(nl,
 #' }
 #'
 #' nl@@simdesign <- simdesign_GenAlg(nl=nl,
+#'                                   popSize = 20,
+#'                                   iters = 10,
 #'                                   evalcrit=critfun,
 #'                                   nseeds=1)
 #'
@@ -1010,7 +1049,7 @@ simdesign_GenAlg <- function(nl,
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
-#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
+#' @param ... deprecated arguments (e.g. \code{n_cluster}); currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
 #' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
@@ -1023,6 +1062,8 @@ simdesign_GenAlg <- function(nl,
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes about \code{n_calibration + n_rec * n_between_sampling} evaluations; the default calibration alone amounts to 10,000 NetLogo runs per seed. The calibration has to keep at least two runs (\code{ceiling(tolerance_quantile * n_calibration) >= 2}).
 #'
 #' Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
 #'
@@ -1043,12 +1084,11 @@ simdesign_GenAlg <- function(nl,
 #' # Attach the simdesign to the nl object
 #' nl@@simdesign <- simdesign_ABCmcmc_Marjoram(nl = nl,
 #'                                             summary_stat_target = c(100, 80),
-#'                                             n_rec = 100,
-#'                                             n_between_sampling = 10,
-#'                                             n_cluster = 1,
+#'                                             n_rec = 50,
+#'                                             n_between_sampling = 2,
 #'                                             use_seed = FALSE,
-#'                                             n_calibration = 10000,
-#'                                             tolerance_quantile = 0.01,
+#'                                             n_calibration = 200,
+#'                                             tolerance_quantile = 0.05,
 #'                                             proposal_phi = 1,
 #'                                             progress_bar = FALSE,
 #'                                             nseeds = 1)
@@ -1063,7 +1103,6 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
                                        prior_test = NULL,
                                        n_rec,
                                        n_between_sampling = 10,
-                                       n_cluster = 1,
                                        use_seed = FALSE,
                                        dist_weights = NULL,
                                        n_calibration = 10000,
@@ -1071,12 +1110,14 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
                                        proposal_phi = 1,
                                        seed_count = 0,
                                        progress_bar = FALSE,
-                                       nseeds)
+                                       nseeds,
+                                       ...)
 {
   # Evaluate experiment and variables:
   util_eval_experiment(nl)
   util_eval_variables(nl)
   util_eval_variables_op(nl)
+  util_eval_abc_calibration(n_calibration, tolerance_quantile)
   message("Creating ABC Monte-Carlo Markov-Chain simulation design")
 
   ## Generating prior data from variables definitions
@@ -1093,12 +1134,11 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
     return(prior.x)
   })
 
-  # Check n_cluster:
-  if(n_cluster > 1)
-  {
-    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
-    n_cluster <- 1
-  }
+  # Warn if deprecated arguments (e.g. n_cluster) were supplied:
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("n_cluster")
+  )
 
   # Create an abcmcmc object:
   abcmcmc <- list(method="Marjoram",
@@ -1108,7 +1148,6 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
                   prior_test=prior_test,
                   n_rec=n_rec,
                   n_between_sampling=n_between_sampling,
-                  n_cluster=n_cluster,
                   use_seed=use_seed,
                   dist_weights=dist_weights,
                   n_calibration=n_calibration,
@@ -1141,7 +1180,7 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
-#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
+#' @param ... deprecated arguments (e.g. \code{n_cluster}); currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
 #' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param dist_max a positive number. This is the tolerance threshold used during the MCMC. If not provided by the user, it is automatically computed as half the distance between the first simulation and the target summary statistics and a warning is printed.
@@ -1154,6 +1193,8 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes about \code{n_rec * n_between_sampling} evaluations.
 #'
 #' Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
 #'
@@ -1174,8 +1215,8 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
 #' # Attach the simdesign to the nl object
 #' nl@@simdesign <- simdesign_ABCmcmc_Marjoram_original(nl = nl,
 #'                                                      summary_stat_target = c(100, 80),
-#'                                                      n_rec = 100,
-#'                                                      n_between_sampling = 10,
+#'                                                      n_rec = 50,
+#'                                                      n_between_sampling = 2,
 #'                                                      nseeds = 1)
 #'
 #' @aliases simdesign_ABCmcmc_Marjoram_original
@@ -1188,7 +1229,6 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
                                                 prior_test = NULL,
                                                 n_rec,
                                                 n_between_sampling = 10,
-                                                n_cluster = 1,
                                                 use_seed = FALSE,
                                                 dist_weights = NULL,
                                                 dist_max = 0,
@@ -1196,7 +1236,8 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
                                                 proposal_range = vector(mode = "numeric", length = length(getexp(nl, "variables"))),
                                                 seed_count = 0,
                                                 progress_bar = FALSE,
-                                                nseeds)
+                                                nseeds,
+                                                ...)
 {
   # Evaluate experiment and variables:
   util_eval_experiment(nl)
@@ -1218,12 +1259,11 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
     return(prior.x)
   })
 
-  # Check n_cluster:
-  if(n_cluster > 1)
-  {
-    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
-    n_cluster <- 1
-  }
+  # Warn if deprecated arguments (e.g. n_cluster) were supplied:
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("n_cluster")
+  )
 
   # Create an abcmcmc object:
   abcmcmc <- list(method="Marjoram_original",
@@ -1233,7 +1273,6 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
                   prior_test=prior_test,
                   n_rec=n_rec,
                   n_between_sampling=n_between_sampling,
-                  n_cluster=n_cluster,
                   use_seed=use_seed,
                   dist_weights=dist_weights,
                   dist_max=dist_max,
@@ -1266,7 +1305,7 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
 #' @param n_between_sampling a positive integer equal to the desired spacing between sampled points along the MCMC.
-#' @param n_cluster number of cores to parallelize simulations. Due to the design of the EasyABC parallelization it is currently not possible to use this feature with cores > 1.
+#' @param ... deprecated arguments (e.g. \code{n_cluster}); currently only used to detect and warn about arguments that were deprecated in earlier nlrx versions.
 #' @param use_seed if TRUE, seeds will be automatically created for each new model run
 #' @param dist_weights a vector containing the weights to apply to the distance between the computed and the targeted statistics. These weights can be used to give more importance to a summary statistic for example. The weights will be normalized before applying them. Set to NULL to disable.
 #' @param n_calibration a positive integer. This is the number of simulations performed during the calibration step. Default value is 10000.
@@ -1280,6 +1319,8 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
 #' @details
 #'
 #' This function creates a simdesign S4 class which can be added to a nl object.
+#'
+#' Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes about \code{n_calibration + n_rec * n_between_sampling} evaluations; the default calibration alone amounts to 10,000 NetLogo runs per seed. The calibration has to keep at least two runs (\code{ceiling(tolerance_quantile * n_calibration) >= 2}).
 #'
 #' Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
 #'
@@ -1300,12 +1341,11 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
 #' # Attach the simdesign to the nl object
 #' nl@@simdesign <- simdesign_ABCmcmc_Wegmann(nl = nl,
 #'                                             summary_stat_target = c(100, 80),
-#'                                             n_rec = 100,
-#'                                             n_between_sampling = 10,
-#'                                             n_cluster = 1,
+#'                                             n_rec = 50,
+#'                                             n_between_sampling = 2,
 #'                                             use_seed = FALSE,
-#'                                             n_calibration = 10000,
-#'                                             tolerance_quantile = 0.01,
+#'                                             n_calibration = 200,
+#'                                             tolerance_quantile = 0.05,
 #'                                             proposal_phi = 1,
 #'                                             progress_bar = FALSE,
 #'                                             nseeds = 1)
@@ -1320,7 +1360,6 @@ simdesign_ABCmcmc_Wegmann <- function(nl,
                                       prior_test = NULL,
                                       n_rec,
                                       n_between_sampling = 10,
-                                      n_cluster = 1,
                                       use_seed = FALSE,
                                       dist_weights = NULL,
                                       n_calibration = 10000,
@@ -1329,12 +1368,14 @@ simdesign_ABCmcmc_Wegmann <- function(nl,
                                       numcomp = 0,
                                       seed_count = 0,
                                       progress_bar = FALSE,
-                                      nseeds)
+                                      nseeds,
+                                      ...)
 {
   # Evaluate experiment and variables:
   util_eval_experiment(nl)
   util_eval_variables(nl)
   util_eval_variables_op(nl)
+  util_eval_abc_calibration(n_calibration, tolerance_quantile)
   message("Creating ABC Monte-Carlo Markov-Chain simulation design")
 
   ## Generating prior data from variables definitions
@@ -1351,12 +1392,11 @@ simdesign_ABCmcmc_Wegmann <- function(nl,
     return(prior.x)
   })
 
-  # Check n_cluster:
-  if(n_cluster > 1)
-  {
-    warning("n_cluster is set to a value > 1. Due to the design of the parallelization of the EasyABC package it is currently not possible to use this feature. n_cluster will be reset to 1.")
-    n_cluster <- 1
-  }
+  # Warn if deprecated arguments (e.g. n_cluster) were supplied:
+  util_check_deprecated_args(
+    dots = list(...),
+    deprecated_args = c("n_cluster")
+  )
 
   # Create an abcmcmc object:
   abcmcmc <- list(method="Wegmann",
@@ -1366,7 +1406,6 @@ simdesign_ABCmcmc_Wegmann <- function(nl,
                   prior_test=prior_test,
                   n_rec=n_rec,
                   n_between_sampling=n_between_sampling,
-                  n_cluster=n_cluster,
                   use_seed=use_seed,
                   dist_weights=dist_weights,
                   n_calibration=n_calibration,

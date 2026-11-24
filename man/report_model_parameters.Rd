@@ -7,8 +7,7 @@
 report_model_parameters(nl)
 }
 \arguments{
-\item{nl}{nl object with a defined modelpath that points to a NetLogo model
-(*.nlogo)}
+\item{nl}{nl object with a defined modelpath that points to a NetLogo model (.nlogox)}
 }
 \description{
 Report globals from a NetLogo model that is defined within a nl

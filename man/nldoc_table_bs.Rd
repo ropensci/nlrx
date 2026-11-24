@@ -16,6 +16,10 @@ list containing NetLogo behavior space experiments
 Read NetLogo behavior space experiments from files
 }
 \details{
-The procedure reads text from the provided model files and reports a list of behavior space experiments.
+The procedure reads the behavior space experiments of the main model file
+(.nlogox) and reports one list per experiment: its \code{name}, the
+\code{definitions} (procedures, time limit, metrics, ...) as a named character
+vector, the \code{parameters} (constants) and the parameter sets of its
+\code{subexperiments} as tibbles with the columns name, type and values.
 }
 \keyword{internal}

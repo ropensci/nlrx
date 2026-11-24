@@ -3,6 +3,7 @@
 #' @description Write NetLogo documentation
 #'
 #' @param noxygen list with parsed and processed noxygen tags from NetLogo model code
+#' @param modelname title of the documentation if the model code has no @model header
 #' @param noxygen_it list with parsed and processed infotab strings
 #' @param noxygen_gui list with parsed and processed noxygen tags from NetLogo GUI elements
 #' @param noxygen_bs list with parsed and processed noxygen tags from NetLogo behavior space experiments
@@ -24,7 +25,8 @@
 #' @rdname nldoc_write_nldoc
 #' @keywords internal
 
-nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outpath, output_format, number_sections, theme, date, toc)
+nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outpath, output_format, number_sections, theme, date, toc,
+                              modelname = "Untitled Model")
 {
 
   # Get all the values from the UI elements:
@@ -44,42 +46,55 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     output_format <- "word_document"
   }
 
+  # Title and author from the @model header (the first one, if there are
+  # several), with fallback values for models without a header:
+  model <- if (nrow(noxygen$header) > 0) noxygen$header$model[1] else NA_character_
+  author <- if (nrow(noxygen$header) > 0) noxygen$header$author[1] else NA_character_
+
+  if (is.na(model) || model == "") {
+    model <- modelname
+  }
+  if (is.na(author) || author == "") {
+    author <- "Unknown"
+  }
+
   # write preambel for the markdown file (define format, style, ...)
-  preambel <- paste("---\r\n",
-                    "title: \"", noxygen$header$model, "\"\r\n",
-                    "author: \"", noxygen$header$author, "\"\r\n",
-                    "date: \"", date, "\"\r\n",
-                    "output: \r\n",
-                    "  ", output_format, ":\r\n",
-                    "    toc: ", toc, "\r\n", sep = '')
+  # Common lines:
+  preambel <- c(
+    "---",
+    paste0("title: \"", model, "\""),
+    paste0("author: \"", author, "\""),
+    paste0("date: \"", date, "\""),
+    "output:",
+    paste0("  ", output_format, ":")
+  )
 
-  # if PDF is chosen, add section numbering definition to the preambel
-  if (output_format == "pdf")
-  {
-    preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r\n", sep = '')
+  # Format-specific options:
+  if (output_format == "html_document") {
+    preambel <- c(preambel,
+                  paste0("    toc: ", toc),
+                  paste0("    number_sections: ", number_sections),
+                  paste0("    theme: ", theme))
+  } else if (output_format == "pdf_document") {
+    preambel <- c(preambel,
+                  paste0("    toc: ", toc),
+                  paste0("    number_sections: ", number_sections))
   }
 
-  # if HTML is chosen add section numbering and theme definition to the preambel
-  if (output_format == "html_document")
-  {
-    preambel <- paste(preambel,
-                      "    number_sections: ", number_sections, "\r\n",
-                      "    theme: ", theme, "\r\n", sep = '')
-  }
-
-  # Add end of preambel!
-  preambel <- paste(preambel,
-                    "---", sep='')
+  # Close preamble:
+  preambel <- c(preambel, "---", "")
 
 
   # Initialize string
   noxygencode <- ""
 
-  # Process the information from global
-  noxygencode <- c(noxygencode, "# Global")
+  # Process the information from global (if any are documented)
+  if (nrow(noxygen$global) > 0)
+  {
+    noxygencode <- c(noxygencode, "# Global")
+  }
 
-  for (i in 1:nrow(noxygen$global))
+  for (i in seq_len(nrow(noxygen$global)))
   {
     noxygen.global.i <- noxygen$global[i,]
     noxygencode.i <- paste0("## ", noxygen.global.i$global)
@@ -98,10 +113,13 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     noxygencode <- c(noxygencode, noxygencode.i)
   }
 
-  # Process the information from procedures
-  noxygencode <- c(noxygencode, "# Procedures")
+  # Process the information from procedures (if any are documented)
+  if (nrow(noxygen$proc) > 0)
+  {
+    noxygencode <- c(noxygencode, "# Procedures")
+  }
 
-  for (i in 1:nrow(noxygen$proc))
+  for (i in seq_len(nrow(noxygen$proc)))
   {
     noxygen.proc.i <- noxygen$proc[i,]
     noxygencode.i <- paste0("## ", noxygen.proc.i$procedure)
@@ -135,7 +153,7 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   }
 
   ## Add gui elements if wanted:
-  if (!is.na(noxygen_gui[1]))
+  if (length(noxygen_gui) > 0 && !is.na(noxygen_gui[1]))
   {
     noxygencode <- c(noxygencode, "# GUI elements")
     # Table header:
@@ -153,13 +171,16 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
       # Remove type and vlaue from list:
       noxygen_gui.i$type <- NULL
       noxygen_gui.i$value <- NULL
-      prop.i <- paste(names(noxygen_gui.i), noxygen_gui.i, sep=": ", collapse="; ")
+      # Properties with several values (chooser options) are listed comma-separated:
+      prop.i <- vapply(noxygen_gui.i, paste, character(1), collapse = ", ")
+      prop.i <- paste(names(noxygen_gui.i), prop.i, sep=": ", collapse="; ")
 
-      noxygencode <- c(noxygencode, paste("| ", name.i, " | ", type.i, " | ", value.i, " | ", prop.i, " |"))
+      noxygencode <- c(noxygencode, paste("| ", nldoc_md_cell(name.i), " | ", type.i, " | ",
+                                          nldoc_md_cell(value.i), " | ", nldoc_md_cell(prop.i), " |"))
     }
   }
 
-  if (!is.na(noxygen_it[1]))
+  if (length(noxygen_it) > 0 && !is.na(noxygen_it[1]))
   {
     noxygencode <- c(noxygencode, "# Info Tab")
 
@@ -172,87 +193,38 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
 
 
   ## Add bs elements if wanted:
-  if (!is.na(noxygen_bs[1]))
+  if (length(noxygen_bs) > 0 && !is.na(noxygen_bs[1]))
   {
     noxygencode <- c(noxygencode, "# Behavior Space Experiments")
 
-    ## The function generates a table for each experiment:
-
-    for(i in 1:length(noxygen_bs))
+    ## The function generates tables for each experiment:
+    for (experiment in noxygen_bs)
     {
-      noxygen.bs.i <- noxygen_bs[[i]]
-      noxygencode.i <- paste0("## ", noxygen.bs.i$.attrs[["name"]])
+      noxygencode.i <- paste0("## ", experiment$name)
 
-      # Main Table:
+      # Definitions (only those the experiment sets):
+      definitions <- experiment$definitions[nzchar(experiment$definitions)]
       noxygencode.i <- c(noxygencode.i, "#### Definitions {-}")
-      noxygencode.i <- c(noxygencode.i, "| Setup | Go | Final | Time limit | Metrics | Measure each tick | repetitions | exit condition |")
-      noxygencode.i <- c(noxygencode.i, "| --- | --- | --- | --- | --- | --- | --- | --- |")
+      noxygencode.i <- c(noxygencode.i, "| Definition | Value |")
+      noxygencode.i <- c(noxygencode.i, "| ---------- | ----- |")
+      noxygencode.i <- c(noxygencode.i, paste("|", names(definitions), "|", nldoc_md_cell(definitions), "|"))
 
-      setup.i <- paste(noxygen.bs.i[names(noxygen.bs.i) == "setup"], collapse="; ")
-      go.i <- paste(noxygen.bs.i[names(noxygen.bs.i) == "go"], collapse="; ")
-      final.i <- paste(noxygen.bs.i[names(noxygen.bs.i) == "final"], collapse="; ")
-      time.i <- noxygen.bs.i$timeLimit[["steps"]]
-      metrics.i <- paste(noxygen.bs.i[names(noxygen.bs.i) == "metric"], collapse="; ")
-      measure.i <- noxygen.bs.i$.attrs[["runMetricsEveryStep"]]
-      rep.i <- noxygen.bs.i$.attrs[["repetitions"]]
-      exit.i <- noxygen.bs.i[["exitCondition"]]
+      # Parameter tables of the experiment and its sub-experiments:
+      tables <- c(list("Parameters" = experiment$parameters),
+                  stats::setNames(experiment$subexperiments,
+                                  sprintf("Sub-experiment %d", seq_along(experiment$subexperiments))))
 
-      noxygencode.i <- c(noxygencode.i, paste("|", setup.i, "|", go.i, "|", final.i, "|", time.i, "|", metrics.i, "|", measure.i, "|", rep.i, "|", exit.i, "|"))
-
-
-      ## EnumeratedValueset if present:
-      parameters.i <- tibble::tibble()
-
-      if (length(noxygen.bs.i[names(noxygen.bs.i) == "enumeratedValueSet"]) > 0)
+      for (j in seq_along(tables))
       {
-        for (j in 1:length(noxygen.bs.i[names(noxygen.bs.i) == "enumeratedValueSet"]))
+        parameters.j <- tables[[j]]
+
+        if (nrow(parameters.j) > 0)
         {
-          noxygen.bs.i.value <- noxygen.bs.i[names(noxygen.bs.i) == "enumeratedValueSet"][[j]]
-          values.ij <- NULL
-          for(k in 1:length(noxygen.bs.i.value[names(noxygen.bs.i.value) == "value"]))
-          {
-            values.ij <- c(values.ij, noxygen.bs.i.value[[k]])
-          }
-          name.ij <- noxygen.bs.i.value$.attrs[[1]]
-          type.ij <- ifelse(length(values.ij) > 1, "enumerated", "constant")
-          values.ij <- paste(values.ij, collapse=", ")
-
-          parameters.ij <- tibble::tibble(name=name.ij, type=type.ij, values=values.ij)
-          parameters.i <- rbind(parameters.i, parameters.ij)
-
-          #noxygencode.i <- c(noxygencode.i, paste(noxygen.bs.i.value$.attrs[[1]], ": ", values, "\n"))
-        }
-      }
-
-      ## Stepped value set if present:
-      if (length(noxygen.bs.i[names(noxygen.bs.i) == "steppedValueSet"]) > 0)
-      {
-        for (j in 1:length(noxygen.bs.i[names(noxygen.bs.i) == "steppedValueSet"]))
-        {
-          noxygen.bs.i.value <- noxygen.bs.i[names(noxygen.bs.i) == "steppedValueSet"][[j]]
-          name.ij <- noxygen.bs.i.value[1]
-          type.ij <- "sequence"
-          values.ij <- paste0("from: ", noxygen.bs.i.value[2], "; to: ", noxygen.bs.i.value[4], "; by: ", noxygen.bs.i.value[3])
-
-          parameters.ij <- tibble::tibble(name=name.ij, type=type.ij, values=values.ij)
-          parameters.i <- rbind(parameters.i, parameters.ij)
-
-          #noxygencode.i <- c(noxygencode.i, paste(noxygen.bs.i.value[1], ": ", paste(noxygen.bs.i.value[2:4], collapse=", "), "\n"))
-        }
-      }
-
-      # If we have at least one parameter, write parameter table:
-      if (nrow(parameters.i > 0))
-      {
-        # Parameter Table:
-        noxygencode.i <- c(noxygencode.i, "#### Parameters {-}")
-        noxygencode.i <- c(noxygencode.i, "| Parameter | Type | Values |")
-        noxygencode.i <- c(noxygencode.i, "| --------- | ---- | ------ |")
-
-        for (j in 1:nrow(parameters.i))
-        {
-          parameters.ij <- parameters.i[j,]
-          noxygencode.i <- c(noxygencode.i, paste("|", parameters.ij$name, "|", parameters.ij$type, "|", parameters.ij$values, "|"))
+          noxygencode.i <- c(noxygencode.i, paste0("#### ", names(tables)[j], " {-}"))
+          noxygencode.i <- c(noxygencode.i, "| Parameter | Type | Values |")
+          noxygencode.i <- c(noxygencode.i, "| --------- | ---- | ------ |")
+          noxygencode.i <- c(noxygencode.i, paste("|", nldoc_md_cell(parameters.j$name), "|", parameters.j$type, "|",
+                                                  nldoc_md_cell(parameters.j$values), "|"))
         }
       }
 
@@ -274,8 +246,8 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   # Render the file
   if(rmarkdown::pandoc_available())
   {
-    rmarkdown::render(mdfile)
-    print("File successfully compiled!")
+    output <- rmarkdown::render(mdfile, quiet = TRUE)
+    cli::cli_alert_success("Documentation written to {.file {output}}.")
   } else
   {
     warning("MarkDown file (*.md) created but could not be compiled due to missing pandoc installation.")
@@ -285,4 +257,21 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   # Open the file:
   #outfile <- file.path(outpath, paste0("nldoc.", output_format))
 
+}
+
+
+#' Escape text for a markdown table cell
+#'
+#' @description Escapes pipes and removes line breaks, which would end the cell
+#' or the row of a markdown table
+#'
+#' @param x character vector
+#' @return escaped character vector
+#' @aliases nldoc_md_cell
+#' @rdname nldoc_md_cell
+#' @keywords internal
+nldoc_md_cell <- function(x)
+{
+  x <- gsub("[\r\n]+", " ", x)
+  gsub("|", "\\|", x, fixed = TRUE)
 }

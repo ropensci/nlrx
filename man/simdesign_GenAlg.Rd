@@ -38,6 +38,8 @@ Add a Genetic Algorithm simdesign to a nl object
 \details{
 This function creates a simdesign S4 class which can be added to a nl object.
 
+Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes at most \code{popSize * iters} evaluations; the defaults (200 x 100) amount to 20,000 NetLogo runs per seed.
+
 Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
 
 The GenAlg simdesign generates a Genetic Algorithm experiment within the defined min and max parameter boundaries
@@ -70,6 +72,8 @@ nl <- nl_lhs
 
 # Example 1: Using a metric from the experiment metrics vector for evaluation:
 nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  popSize = 20,
+                                  iters = 10,
                                   evalcrit=1,
                                   nseeds=1)
 
@@ -83,6 +87,8 @@ return(crit)
 }
 
 nl@simdesign <- simdesign_GenAlg(nl=nl,
+                                  popSize = 20,
+                                  iters = 10,
                                   evalcrit=critfun,
                                   nseeds=1)
 

@@ -29,7 +29,6 @@
     slots = list(
       expname = "character",
       outpath = "character",
-      repetition = "numeric",
       tickmetrics = "character",
       idsetup = "character",
       idgo = "character",
@@ -49,7 +48,6 @@
     prototype = list(
       expname = NA_character_,
       outpath = NA_character_,
-      repetition = 1,
       tickmetrics = "true",
       idsetup = "setup",
       idgo = "go",

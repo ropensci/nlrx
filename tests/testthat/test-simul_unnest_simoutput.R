@@ -1,36 +1,13 @@
 testthat::context("Get nl spatial")
 testthat::test_that("Get nl spatial", {
 
-  # Run these tests only on Github actions:
-  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
-
-  ## Check that JAVA is installed:
-  testthat::expect_true(system('java -version') == 0)
-
-  ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
-                                 "FAILED")))
-
-  testthat::expect_true(nlpath != "FAILED")
-  testthat::expect_true(dir.exists(nlpath))
-
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                                  "FAILED")))
-
-
-  testthat::expect_true(jarpath != "FAILED")
-  testthat::expect_true(file.exists(jarpath))
-
-
+  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
+  nlpath <- skip_without_netlogo()
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = "6.1.1",
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -40,7 +17,6 @@ testthat::test_that("Get nl spatial", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -52,13 +28,13 @@ testthat::test_that("Get nl spatial", {
                               metrics.patches = c("pxcor", "pycor", "pcolor"),
                               variables = list('initial-number-sheep' = list(min=50, max=150, step=10, qfun="qunif"),
                                                'initial-number-wolves' = list(min=50, max=150, step=10, qfun="qunif")),
-                              constants = list("model-version" = "\"sheep-wolves-grass\"",
+                              constants = list("model-version" = "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -103,7 +79,6 @@ testthat::test_that("Get nl spatial", {
   ## Check functioning without explicitly measuring breeds:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -121,13 +96,13 @@ testthat::test_that("Get nl spatial", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -144,7 +119,6 @@ testthat::test_that("Get nl spatial", {
   ## Check error message if coordinates are missing:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -161,13 +135,13 @@ testthat::test_that("Get nl spatial", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -183,7 +157,6 @@ testthat::test_that("Get nl spatial", {
   ## Check unnest without turtle metrics:
   nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
-                              repetition = 1,
                               tickmetrics = "true",
                               idsetup = "setup",
                               idgo = "go",
@@ -199,13 +172,13 @@ testthat::test_that("Get nl spatial", {
                                                  list(min=50, max=150,
                                                       step=10, qfun="qunif")),
                               constants = list("model-version" =
-                                                 "\"sheep-wolves-grass\"",
+                                                 "sheep-wolves-grass",
                                                "grass-regrowth-time" = 30,
                                                "sheep-gain-from-food" = 4,
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = "false"))
+                                               "show-energy?" = FALSE))
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -220,9 +193,9 @@ testthat::test_that("Get nl spatial", {
 
   ## nl_to_graph function
   testthat::context("nl_to_graph")
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Networks", "Giant Component.nlogo")
-  nl <- nl(nlversion = "6.1.1",
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Networks", "Giant Component.nlogox")
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -230,7 +203,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -256,7 +228,6 @@ testthat::test_that("Get nl spatial", {
   ## Check missing who numbers:
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -273,7 +244,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -290,7 +260,6 @@ testthat::test_that("Get nl spatial", {
 
   nl@experiment <- experiment(expname="networks",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",

@@ -14,7 +14,8 @@ nldoc_write_nldoc(
   number_sections,
   theme,
   date,
-  toc
+  toc,
+  modelname = "Untitled Model"
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ nldoc_write_nldoc(
 \item{date}{date that is printed in the documentation header}
 
 \item{toc}{TRUE/FALSE, if TRUE the documentation contains a table of contents - only for html and pdf output format}
+
+\item{modelname}{title of the documentation if the model code has no @model header}
 }
 \value{
 list containing NetLogo GUI elements

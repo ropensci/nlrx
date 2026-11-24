@@ -36,15 +36,15 @@ We use the Wolf Sheep Predation model from the models library for this example.
 ```{r eval=FALSE}
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -61,7 +61,6 @@ However, for calculation of sensitivity indices, we only want to consider the la
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname = "wolf-sheep-morris",
                             outpath = outpath,
-                            repetition = 1,   
                             tickmetrics = "true",
                             idsetup = "setup",  
                             idgo = "go",        
@@ -75,8 +74,8 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
                                              "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
                                              "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
                                              "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                            constants = list("model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 ```
 
 #### Step 3: Attach a simulation design
@@ -86,7 +85,7 @@ The `morrislevels` parameter sets the number of different values for each parame
 The `morrisr` paramater sets the number of repeated samplings (sampling size).
 The `morrisgridjump` parameter sets the number of levels that are increased/decreased for computing the elementary effects. Morris recommendation is to set this value to `levels / 2`.
 We can increase the `nseeds` parameter in order to perform multiple runs of the same parameter matrix with different random seeds.
-The variation between those repetitions is an indicator of the stochasticity effects within the model.
+The variation between those replicated runs is an indicator of the stochasticity effects within the model.
 More information on the Morris specific parameters can be found in the description of the morris function in the sensitivity package (`?morris`).
 
 ```{r eval=FALSE}
@@ -101,12 +100,10 @@ nl@simdesign <- simdesign_morris(nl=nl,
 #### Step 4: Run simulations
 
 To execute the simulations, we can use the function `run_nl_all()`.
-Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the "Advanced configuration" vignette).
+Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by increasing `threads` (and, for larger designs, distributing runs across cluster nodes; more details on parallelization can be found in the "Advanced configuration" vignette).
 
 ```{r eval=FALSE}
-library(future)
-plan(multisession)
-results <- run_nl_all(nl)
+results <- run_nl_all(nl, threads = 4)
 ```
 
 #### Step 5: Investigate output
@@ -135,15 +132,15 @@ Here we perform a Latin Hypercube Sampling to calculate Partial (rank) correlati
 ```{r eval=FALSE}
 library(nlrx)
 # Windows default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("C:/Program Files/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("C:/Program Files/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("C:/out")
 # Unix default NetLogo installation path (adjust to your needs!):
-netlogopath <- file.path("/home/NetLogo 6.0.3")
-modelpath <- file.path(netlogopath, "app/models/Sample Models/Biology/Wolf Sheep Predation.nlogo")
+netlogopath <- file.path("/home/NetLogo 7.0.4")
+modelpath <- file.path(netlogopath, "models/Sample Models/Biology/Wolf Sheep Predation.nlogox")
 outpath <- file.path("/home/out")
 
-nl <- nl(nlversion = "6.0.3",
+nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = modelpath,
          jvmmem = 1024)
@@ -159,7 +156,6 @@ We set the runtime of the model to 500 ticks and measure our metrics on each tic
 ```{r eval=FALSE}
 nl@experiment <- experiment(expname = "wolf-sheep-morris",
                             outpath = outpath,
-                            repetition = 1,   
                             tickmetrics = "true",
                             idsetup = "setup",  
                             idgo = "go",        
@@ -172,8 +168,8 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
                                              "wolf-gain-from-food" = list(min=0, max=100, step=10, qfun="qunif"),
                                              "sheep-reproduce" = list(min=0, max=20, step=5, qfun="qunif"),
                                              "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")),
-                            constants = list("model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false"))
+                            constants = list("model-version" = "sheep-wolves-grass",
+                                             "show-energy?" = FALSE))
 ```
 
 #### Step 3: Attach a simulation design
@@ -187,12 +183,10 @@ nl@simdesign <- simdesign_lhs(nl, samples=500, nseeds=1, precision=3)
 #### Step 4: Run simulations
 
 To execute the simulations, we can use the function `run_nl_all()`.
-Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by adjusting the future plan (more details on parallelization can be found in the "Advanced configuration" vignette).
+Sensitivity analyses typically have many runs that need to be simulated, thus we recommend to parallelize model runs by increasing `threads` (and, for larger designs, distributing runs across cluster nodes; more details on parallelization can be found in the "Advanced configuration" vignette).
 
 ```{r eval=FALSE}
-library(future)
-plan(multisession)
-results <- run_nl_all(nl, split=10)
+results <- run_nl_all(nl, threads = 4)
 ```
 
 #### Step 5: Investigate output

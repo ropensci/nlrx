@@ -292,3 +292,29 @@ util_eval_simdesign <- function(nl) {
 
 
 }
+
+
+#' Check the calibration step of an ABC-MCMC simdesign
+#'
+#' @description Stops if the calibration step keeps fewer than two runs, from
+#' which EasyABC cannot derive the proposal range of the MCMC.
+#'
+#' @param n_calibration number of simulations of the calibration step
+#' @param tolerance_quantile share of the calibration simulations that is kept
+#' @aliases util_eval_abc_calibration
+#' @rdname util_eval_abc_calibration
+#' @keywords internal
+util_eval_abc_calibration <- function(n_calibration, tolerance_quantile) {
+
+  kept <- ceiling(tolerance_quantile * n_calibration)
+
+  if (kept < 2) {
+    util_abort(c(
+      "The calibration step keeps only {kept} of {n_calibration} run{?s} ({.arg tolerance_quantile} = {tolerance_quantile}).",
+      "i" = "EasyABC needs at least 2 kept runs to set up the MCMC; with fewer it fails with an obscure error.",
+      ">" = "Increase {.arg n_calibration} or {.arg tolerance_quantile} so that {.code ceiling(tolerance_quantile * n_calibration)} is at least 2."
+    ), class = "nlrx_error_abc_calibration")
+  }
+
+  invisible(TRUE)
+}

@@ -50,7 +50,7 @@ nl_to_raster <- function(nl){
   if(nrow(patches) == 0 | checkcoord == 0) stop("You need to measure turtle coordinates to coerce model output into spatial points.")
 
   patches_dat <- patches %>%
-    dplyr::select(patch.metrics) %>%
+    dplyr::select(dplyr::all_of(patch.metrics)) %>%
     split(.,  patches[,c("siminputrow", "[step]", "random-seed")], lex.order=TRUE) %>%
     purrr::map(., function(x){
       raster::rasterFromXYZ(x[, c("pxcor",

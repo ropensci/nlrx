@@ -3,8 +3,7 @@
 #' @description Report globals from a NetLogo model that is defined within a nl
 #'  object
 #'
-#' @param nl nl object with a defined modelpath that points to a NetLogo model
-#'  (*.nlogo)
+#' @param nl nl object with a defined modelpath that points to a NetLogo model (.nlogox)
 #'
 #' @details
 #'
@@ -33,85 +32,126 @@ report_model_parameters <- function(nl) {
     stop("nl@modelpath does not exist on local file system. Cannot report model parameters!")
   }
 
-  ## Open the model as string
-  model.code <- readLines(getnl(nl, "modelpath"))
+  # Catch file format issues
+  util_check_model_format(nl@modelpath)
 
-  ## Find the line in the NetLogoCode where the interface definiton starts
-  ## (separator: @#$#@#$#@)
-  model.code.s1 <- grep("@#$#@#$#@", model.code, fixed = TRUE)[1]
+  file_type <- tools::file_ext(nl@modelpath) # detect file type (.nlogox required)
 
-  ## Remove model code before first separator:
-  if (is.na(model.code.s1) == FALSE) {
-    model.code <- model.code[(model.code.s1 + 1):length(model.code)]
+  if (file_type == "nlogox") {
+
+    modelparam <- util_read_nlogox_widgets(getnl(nl, "modelpath"))
+
+    if (is.null(modelparam)) {
+      stop("No <widgets> block found in .nlogox model file")
+    }
+
+    return(modelparam)
+
+  # If the fiel type was not supported
+  } else {
+    stop("Extension: ", file_type, " is not supported. Please use .nlogox (NetLogo 7+)")
   }
-  ## Find second separator where interface definiton ends:
-  model.code.s2 <- grep("@#$#@#$#@", model.code, fixed = TRUE)[1]
+}
 
-  ## Remove model code following second separator:
-  if (is.na(model.code.s1) == FALSE) {
-    model.code <- model.code[1:(model.code.s2 - 1)]
+
+#' Read the parameter widgets of a NetLogo 7 model
+#'
+#' @description Reads the sliders, switches, input boxes and choosers of a
+#' .nlogox model file.
+#'
+#' @param modelpath Path to a .nlogox model file
+#' @return named list with one entry per widget (type, value and the
+#' properties of the widget type), or NULL if the model has no widgets block
+#' @details
+#' Used by \code{report_model_parameters()} and \code{nldoc()}.
+#' @aliases util_read_nlogox_widgets
+#' @rdname util_read_nlogox_widgets
+#' @keywords internal
+util_read_nlogox_widgets <- function(modelpath) {
+
+  # Parse .nlogox
+  model.code <- xml2::read_xml(modelpath) # Open model as XML
+  widgets <- xml2::xml_find_first(model.code, ".//widgets") # Find widgets block
+
+  if (inherits(widgets, "xml_missing")) {
+    return(NULL)
   }
 
-  ## Extract the parameters and their values line by line:
+  widget_nodes <- xml2::xml_children(widgets) # Get all widgets
+
+  # Loop over widgets
   modelparam <- list()
+  for (node in widget_nodes) {
 
-  for (i in seq_len(length(model.code)))
-  {
-    ## Read current line from model code
-    l <- model.code[i]
+    widget_type <- xml2::xml_name(node)
 
-    ## Check if l is a definition element and of what kind:
-    if (l %in% c("SLIDER", "SWITCH", "INPUTBOX", "CHOOSER")) {
-      if (l == "SLIDER") {
-        name <- as.character(model.code[i + 5])
+    # SLIDER
+    if (widget_type == "slider") {
+      name <- xml2::xml_attr(node, "variable")
 
-        entry <- list(
-          type = l,
-          value = as.numeric(as.character(model.code[i + 9])),
-          min = as.numeric(as.character(model.code[i + 7])),
-          max = as.numeric(as.character(model.code[i + 8])),
-          incr = as.numeric(as.character(model.code[i + 10]))
-        )
+      entry <- list(
+        type = "SLIDER",
+        value = as.numeric(xml2::xml_attr(node, "default")),
+        min = as.numeric(xml2::xml_attr(node, "min")),
+        max = as.numeric(xml2::xml_attr(node, "max")),
+        incr = as.numeric(xml2::xml_attr(node, "step"))
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # SWITCH
+    if (widget_type == "switch") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "SWITCH",
+        value = tolower(xml2::xml_attr(node, "on")) == "true"
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # INPUTBOX
+    if (widget_type == "input") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "INPUTBOX",
+        value = xml2::xml_text(node),
+        entrytype = xml2::xml_attr(node, "type")
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # CHOOSER
+    if (widget_type == "chooser") {
+      name <- xml2::xml_attr(node, "variable")
+
+      choice_nodes <- xml2::xml_find_all(node, "./choice")
+      # Different .xml syntax for text content vs attributes:
+      choice_value <- function(x) {
+        if (!is.na(xml2::xml_attr(x, "value"))) {
+          xml2::xml_attr(x, "value")
+        } else {
+          xml2::xml_text(x)
+        }
       }
-      if (l == "SWITCH") {
-        name <- as.character(model.code[i + 5])
+      validvalues <- vapply(choice_nodes, choice_value, character(1))
 
-        entry <- list(
-          type = l,
-          value = ifelse(as.numeric(as.character(model.code[i + 8])) == 1,
-                         TRUE, FALSE)
-        )
-      }
-      # nocov start
-      if (l == "INPUTBOX") {
-        name <- as.character(model.code[i + 5])
+      select_id <- as.numeric(xml2::xml_attr(node, "current")) + 1
+      selectedvalue <- validvalues[select_id]
 
-        entry <- list(
-          type = l,
-          value = model.code[i + 6],
-          entrytype = model.code[i + 9]
-        )
-      }
-      # nocov end
-      if (l == "CHOOSER") {
-        name <- as.character(model.code[i + 5])
+      entry <- list(
+        type = "CHOOSER",
+        value = selectedvalue,
+        validvalues = validvalues
+      )
 
-        validvalues <- scan(text = (model.code[i + 7]), what = "", quiet = TRUE)
-        select_id <- (as.numeric(as.character(model.code[i + 8])) + 1)
-        selectedvalue <- validvalues[select_id]
-
-        entry <- list(
-          type = l,
-          value = selectedvalue,
-          validvalues = validvalues
-        )
-      }
-
-      ## Store in data.frame:
       modelparam[[name]] <- entry
     }
   }
 
   return(modelparam)
 }
-

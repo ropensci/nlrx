@@ -74,3 +74,359 @@ util_generate_seeds <- function(nseeds) {
   return(seeds)
 }
 
+
+#' Derive a vector of replicate seeds from a single design seed
+#'
+#' @description Derive a reproducible vector of random seeds for replicated model runs
+#'
+#' @param seed the design seed the replicate seeds are derived from
+#' @param nreplicates number of replicate seeds to derive
+#' @details
+#' The derived seeds are a deterministic function of \code{seed} and therefore do not need to be
+#' stored: the same \code{seed} always yields the same replicate seeds.
+#' Because the seeds are drawn from the head of one stream, the seed vector for a smaller
+#' \code{nreplicates} is a prefix of the vector for a larger one.
+#'
+#' The random number generator state of the calling environment is saved and restored, so that
+#' deriving replicate seeds does not interfere with the random number stream of the dynamic
+#' simulation designs (\code{genalg} and \code{EasyABC} draw from it).
+#' @return numeric vector of length \code{nreplicates}
+#' @aliases util_generate_replicate_seeds
+#' @rdname util_generate_replicate_seeds
+#' @keywords internal
+util_generate_replicate_seeds <- function(seed, nreplicates) {
+
+  if (length(seed) != 1 || is.na(seed) || nreplicates <= 1) {
+    return(seed)
+  }
+
+  ## Store the current RNG state and restore it on exit:
+  has_state <- exists(".Random.seed", envir = globalenv(), inherits = FALSE)
+  if (isTRUE(has_state)) {
+    old_state <- get(".Random.seed", envir = globalenv(), inherits = FALSE)
+  }
+  on.exit({
+    if (isTRUE(has_state)) {
+      assign(".Random.seed", old_state, envir = globalenv())
+    } else if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+      rm(".Random.seed", envir = globalenv())
+    }
+  }, add = TRUE)
+
+  set.seed(seed)
+  util_generate_seeds(nreplicates)
+}
+
+
+#' Reduce replicated simulation results to one value per metric
+#'
+#' @description Aggregate simulation results over measured ticks and over replicates
+#'
+#' @param results tibble of simulation results, as returned by \code{run_nl_one()}
+#' @param cols character vector of metric columns that should be reduced
+#' @details
+#' Reduction happens in two stages: first the mean over all measured ticks within each replicate,
+#' then the mean over the replicates.
+#' Replicates are identified by the \code{random-seed} column.
+#' The two stages matter whenever replicates return a different number of ticks (for example when
+#' an exit condition is defined), because a single mean over all rows would weight long runs
+#' higher than short ones.
+#' @return tibble with one row and one column per entry of \code{cols}
+#' @aliases util_reduce_replicates
+#' @rdname util_reduce_replicates
+#' @keywords internal
+util_reduce_replicates <- function(results, cols) {
+
+  tick_mean <- function(x) mean(as.numeric(x))
+
+  ## Stage one: mean over ticks, within each replicate:
+  if ("random-seed" %in% names(results)) {
+    results <- results %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of("random-seed"))) %>%
+      dplyr::summarise(dplyr::across(dplyr::all_of(cols), tick_mean), .groups = "drop") %>%
+      dplyr::select(-"random-seed")
+  }
+
+  ## Stage two: mean over replicates (or over ticks, if replicates are not identifiable):
+  dplyr::summarise(results, dplyr::across(dplyr::all_of(cols), tick_mean))
+}
+
+
+#' Utility function for checking for deprecated or unsupported arguments
+#'
+#' @param dots Named list of arguments captured from \code{...}
+#' @param deprecated_args Character vector of deprecated argument names that should trigger depreciation warnings (and not errors)
+#' @keywords internal
+
+util_check_deprecated_args <- function(dots, deprecated_args) {
+
+  # Check if there is something to check
+  if (length(dots) == 0) {
+    return(invisible(NULL))
+  }
+
+  # Warn when depreciated arguments are detected
+  deprecated_found <- intersect(names(dots), deprecated_args)
+
+  if (length(deprecated_found) > 0) {
+    for (arg in deprecated_found) {
+      warning(
+        "Argument '", arg, "' is deprecated.",
+        call. = FALSE
+      )
+    }
+  }
+
+  # Error when unknown arguments are detected
+  unsupported_found <- setdiff(names(dots), deprecated_args)
+
+  if (length(unsupported_found) > 0) {
+    stop(
+      "Unsupported argument(s): ",
+      paste("'", unsupported_found, "'", sep = "", collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  return(invisible(NULL))
+}
+
+
+#' Collapse NetLogo commands into one code block
+#'
+#' @description Turns an experiment slot that may hold several procedures or commands into one string
+#'
+#' @param commands character vector of NetLogo procedures or commands, possibly NA
+#' @details
+#' \code{idsetup}, \code{idgo}, \code{idfinal} and \code{stopcond} accept a
+#' vector, which NetLogo expects as one block of code with one command per line.
+#' Returns NULL for an undefined slot, which is what 'logolink' expects for
+#' "not set".
+#' @return a single character string, or NULL if nothing is defined
+#' @aliases util_collapse_commands
+#' @rdname util_collapse_commands
+#' @keywords internal
+util_collapse_commands <- function(commands) {
+
+  if (length(commands) == 0 || all(is.na(commands))) {
+    return(NULL)
+  }
+
+  return(paste(commands[!is.na(commands)], collapse = "\n"))
+}
+
+
+#' Harmonize result column types across simulation blocks
+#'
+#' @description Makes columns that have different types in different blocks bindable
+#'
+#' @param results_list list of result tibbles, one per simulation block
+#' @details
+#' A metric can come back as a number in one block and as a character in
+#' another, for example when a run reports a NetLogo error message. Binding the
+#' blocks then fails and the results of all completed runs are lost. Such
+#' columns are converted to character in every block instead, with a warning
+#' naming them. List columns (agent metrics) are left untouched.
+#' @return \code{results_list} with conflicting columns converted to character
+#' @aliases util_harmonize_block_types
+#' @rdname util_harmonize_block_types
+#' @keywords internal
+util_harmonize_block_types <- function(results_list) {
+
+  results_list <- results_list[!vapply(results_list, is.null, logical(1))]
+
+  if (length(results_list) < 2) {
+    return(results_list)
+  }
+
+  conflicting <- character()
+
+  for (col in unique(unlist(lapply(results_list, names)))) {
+    present <- Filter(function(block) col %in% names(block), results_list)
+    columns <- lapply(present, function(block) block[[col]])
+
+    ## Agent metrics are list columns and are not comparable this way:
+    if (any(vapply(columns, is.list, logical(1)))) {
+      next
+    }
+
+    ## Blocks that hold only NA carry no type information:
+    informative <- Filter(function(x) !all(is.na(x)), columns)
+    classes <- unique(vapply(informative, function(x) class(x)[1], character(1)))
+
+    if (length(classes) > 1) {
+      conflicting <- c(conflicting, col)
+    }
+  }
+
+  if (length(conflicting) == 0) {
+    return(results_list)
+  }
+
+  warning(
+    paste0(
+      "The simulation blocks returned different types for: ",
+      paste(conflicting, collapse = ", "),
+      ". These columns were converted to character so that the results of all ",
+      "runs are kept. A NetLogo error message in one of the runs is the usual cause."
+    ),
+    call. = FALSE
+  )
+
+  results_list <- lapply(results_list, function(block) {
+    for (col in intersect(conflicting, names(block))) {
+      block[[col]] <- as.character(block[[col]])
+    }
+    block
+  })
+
+  return(results_list)
+}
+
+
+#' Identify evalticks without results
+#'
+#' @description Reports the evalticks of an experiment for which no simulation records were returned
+#'
+#' @param evalticks the \code{evalticks} of the experiment
+#' @param steps the tick numbers present in the simulation results
+#' @details
+#' Simulations can end before a requested tick is reached, either because
+#' \code{runtime} is shorter or because a \code{stopcond} ended them. The
+#' affected ticks then silently carry no results, which this function surfaces.
+#' @return the requested evalticks that are missing from \code{steps}, in the order given
+#' @aliases util_unreported_evalticks
+#' @rdname util_unreported_evalticks
+#' @keywords internal
+util_unreported_evalticks <- function(evalticks, steps) {
+
+  if (length(evalticks) == 0 || all(is.na(evalticks))) {
+    return(evalticks[0])
+  }
+
+  return(setdiff(evalticks, unique(steps)))
+}
+
+
+#' Normalize parameter values for the logolink backend
+#'
+#' @description Repairs the two value conventions of nlrx < 0.5.0 that are no
+#' longer valid now that 'logolink' writes the BehaviorSpace XML: strings that
+#' were wrapped in escaped quotes and booleans that were given as character
+#' strings.
+#'
+#' @param x value or vector of values of a single NetLogo global
+#' @details
+#' 'logolink' quotes character values itself and lowercases logical values, so
+#' a value like \code{"\"default\""} would reach NetLogo as \code{""default""}
+#' and abort the run, and a value like \code{"false"} would reach it as the
+#' string \code{"false"} instead of a boolean.
+#'
+#' One layer of enclosing double quotes is therefore removed, and character
+#' values that are entirely \code{"true"}/\code{"false"} (in any capitalisation)
+#' are converted to logical. This also applies to a quoted \code{"\"true\""}:
+#' NetLogo parses an unquoted \code{true} as a boolean, so a global whose value
+#' is the \emph{string} "true" could not be expressed before 0.5.0 either.
+#'
+#' Values that are not character (numbers, logicals, stepped value lists) are
+#' returned unchanged. The function is idempotent, so it can be applied at
+#' several points of the pipeline.
+#' @return \code{x} with legacy quoting and boolean strings normalized
+#' @aliases util_normalize_nl_value
+#' @rdname util_normalize_nl_value
+#' @keywords internal
+util_normalize_nl_value <- function(x) {
+
+  if (!is.character(x) || length(x) == 0) {
+    return(x)
+  }
+
+  ## Strip one layer of enclosing double quotes (the pre-0.5.0 string convention):
+  quoted <- !is.na(x) & nchar(x) >= 2 & startsWith(x, "\"") & endsWith(x, "\"")
+  x[quoted] <- substr(x[quoted], 2, nchar(x[quoted]) - 1)
+
+  ## Convert boolean strings to logicals:
+  if (any(!is.na(x)) &&
+      all(is.na(x) | grepl("^(true|false)$", x, ignore.case = TRUE))) {
+    return(as.logical(toupper(x)))
+  }
+
+  return(x)
+}
+
+
+#' Signal an error with an advice-style message
+#'
+#' @description Signal an error for a problem in the user's setup (wrong
+#' NetLogo version, wrong model format, ...) that the user can fix.
+#'
+#' @param message Character vector, formatted with \code{cli::format_error()}.
+#' Unnamed elements state the problem, \code{"i"} elements give context and
+#' \code{">"} elements say what to do. cli inline markup and glue
+#' interpolation are evaluated in \code{.envir}.
+#' @param class Character vector of condition classes, prepended to
+#' \code{"nlrx_error"}.
+#' @param .envir Environment in which the message is interpolated.
+#' @details
+#' The condition is a base R error without a call, so neither the call nor a
+#' backtrace is printed - the user sees the advice only. Genuine runtime
+#' failures (NetLogo errors, internal errors) keep using \code{stop()}.
+#' @aliases util_abort
+#' @rdname util_abort
+#' @keywords internal
+util_abort <- function(message, class = NULL, .envir = parent.frame()) {
+  stop(structure(
+    class = c(class, "nlrx_error", "error", "condition"),
+    list(message = cli::format_error(message, .envir = .envir), call = NULL)
+  ))
+}
+
+#' Signal a warning with an advice-style message
+#'
+#' @description Warning counterpart of \code{util_abort()}.
+#'
+#' @param message Character vector, formatted with \code{cli::format_warning()}
+#' (see \code{util_abort()}).
+#' @param class Character vector of condition classes, prepended to
+#' \code{"nlrx_warning"}.
+#' @param .envir Environment in which the message is interpolated.
+#' @aliases util_warn
+#' @rdname util_warn
+#' @keywords internal
+util_warn <- function(message, class = NULL, .envir = parent.frame()) {
+  warning(structure(
+    class = c(class, "nlrx_warning", "warning", "condition"),
+    list(message = cli::format_warning(message, .envir = .envir), call = NULL)
+  ))
+}
+
+#' Reject NetLogo 6 model files
+#'
+#' @description Stops with an advice-style error if any of the model files is
+#' in the NetLogo 6 format (.nlogo).
+#'
+#' @param modelpath Character vector of model file paths. An empty vector
+#' passes, so an nl object can be created before the model is known.
+#' @details
+#' NetLogo 7 converts .nlogo files when it opens them, so a .nlogo model would
+#' even run. nlrx itself cannot read the old format (parameter reports,
+#' variable checks, nldoc), and the conversion is meant as a deliberate step,
+#' so the user is asked to convert the model once in NetLogo 7.
+#' @aliases util_check_model_format
+#' @rdname util_check_model_format
+#' @keywords internal
+util_check_model_format <- function(modelpath) {
+
+  nlogo6 <- modelpath[tolower(tools::file_ext(modelpath)) == "nlogo"]
+
+  if (length(nlogo6) > 0) {
+    nlogo6 <- basename(nlogo6)
+    util_abort(c(
+      "{.file {nlogo6}} {?is a/are} NetLogo 6 model file{?s} ({.val .nlogo}).",
+      "i" = "nlrx 0.5.0 requires the NetLogo 7 format ({.val .nlogox}).",
+      ">" = "Open the model in NetLogo 7 and save it to convert it, see {.url https://docs.netlogo.org/7.0.4/transition#changes-for-netlogo-700}."
+    ), class = "nlrx_error_model_format")
+  }
+
+  invisible(TRUE)
+}

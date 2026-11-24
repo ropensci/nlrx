@@ -9,7 +9,7 @@ test_nlrx(nlpath, nlversion)
 \arguments{
 \item{nlpath}{Provide a path to a netlogo folder}
 
-\item{nlversion}{Matching version string of the provided NetLogo folder (e.g. "6.1.1")}
+\item{nlversion}{Matching version string of the provided NetLogo folder (e.g. "7.0.4")}
 }
 \description{
 Runs a short test if nlrx runs on the local system
@@ -19,7 +19,7 @@ Runs a short test if nlrx runs on the local system. Reports TRUE if successful!
 }
 \examples{
 \dontrun{
-test_nlrx(nlpath="/Users/xyz/netlogo/NetLogo 6.1.1", nlversion="6.1.1")
+test_nlrx(nlpath="/Users/xyz/netlogo/NetLogo 7.0.4", nlversion="7.0.4")
 }
 
 }

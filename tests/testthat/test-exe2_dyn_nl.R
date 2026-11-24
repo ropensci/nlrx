@@ -1,36 +1,13 @@
 testthat::context("Exe2: run_nl_dyn tests")
 testthat::test_that("run_nl_dyn", {
 
-  # Run these tests only on Github actions:
-  testthat::skip_if(!identical(Sys.getenv("GITHUB_ACTIONS"), "true"))
-
-  ## Check that JAVA is installed:
-  testthat::expect_true(system('java -version') == 0)
-
-  ## Check that netLogo installation worked:
-  nlpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1",
-                   ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1",
-                          ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1",
-                                 "FAILED")))
-
-  testthat::expect_true(nlpath != "FAILED")
-  testthat::expect_true(dir.exists(nlpath))
-
-  jarpath <- ifelse(nlrx:::util_get_os() == "win", "C:/Program Files/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                    ifelse(nlrx:::util_get_os() == "unix", "/home/runner/work/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                           ifelse(nlrx:::util_get_os() == "mac","/Applications/netlogo/NetLogo 6.1.1/app/netlogo-6.1.1.jar",
-                                  "FAILED")))
-
-
-  testthat::expect_true(jarpath != "FAILED")
-  testthat::expect_true(file.exists(jarpath))
-
-
+  ## The execution path needs a NetLogo installation (NETLOGO_HOME):
+  nlpath <- skip_without_netlogo()
   ## Now we check if we can run a simple simulation:
   ## Step1: Create a nl obejct:
-  modelpath <- file.path(nlpath, "app", "models", "Sample Models",
-                         "Biology", "Wolf Sheep Predation.nlogo")
-  nl <- nl(nlversion = "6.1.1",
+  modelpath <- file.path(nlpath, "models", "Sample Models",
+                         "Biology", "Wolf Sheep Predation.nlogox")
+  nl <- nl(nlversion = "7.0.4",
            nlpath = nlpath,
            modelpath = modelpath,
            jvmmem = 1024)
@@ -40,7 +17,6 @@ testthat::test_that("run_nl_dyn", {
   ## Step2: Add Experiment
   nl@experiment <- experiment(expname="wolf-sheep",
                               outpath=outpath,
-                              repetition=1,
                               tickmetrics="false",
                               idsetup="setup",
                               idgo="go",
@@ -53,8 +29,8 @@ testthat::test_that("run_nl_dyn", {
                                                "grass-regrowth-time" = 30,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "model-version" = "\"sheep-wolves-grass\"",
-                                               "show-energy?" = "false"))
+                                               "model-version" = "sheep-wolves-grass",
+                                               "show-energy?" = FALSE))
 
   testthat::context("Run optimization with run_nl_dyn() GenSA")
   nl@simdesign <- simdesign_GenSA(nl,
@@ -63,20 +39,27 @@ testthat::test_that("run_nl_dyn", {
                                   control=list(max.time = 1),
                                   nseeds=1)
 
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
+  results.dyn <- run_nl_dyn(nl)
 
-  expected_size <- ifelse("trace.mat" %in% names(results.dyn), 4, 3)
+  ## One row per seed of the simdesign, the GenSA object in the result column:
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(nrow(results.dyn), length(getsim(nl, "simseeds")))
+  testthat::expect_equal(results.dyn$seed, getsim(nl, "simseeds"))
 
-  testthat::expect_match(class(results.dyn), "list")
-  testthat::expect_equal(length(results.dyn), expected_size)
+  gensa <- results.dyn$result[[1]]
+  expected_size <- ifelse("trace.mat" %in% names(gensa), 4, 3)
+  testthat::expect_match(class(gensa), "list")
+  testthat::expect_equal(length(gensa), expected_size)
 
   testthat::context("Run optimization with run_nl_dyn() GenAlg")
   nl@simdesign <- simdesign_GenAlg(nl, popSize = 5, iters = 1,
                                    evalcrit = 1, elitism = NA,
                                    mutationChance = NA, nseeds = 1)
 
-  results.dyn <- run_nl_dyn(nl, seed=getsim(nl, "simseeds")[1])
-  testthat::expect_match(class(results.dyn), "rbga")
-  testthat::expect_equal(length(results.dyn), 12)
+  results.dyn <- run_nl_dyn(nl)
+  testthat::expect_match(class(results.dyn)[1], "tbl_df")
+  testthat::expect_equal(nrow(results.dyn), 1)
+  testthat::expect_match(class(results.dyn$result[[1]]), "rbga")
+  testthat::expect_equal(length(results.dyn$result[[1]]), 12)
 
 })

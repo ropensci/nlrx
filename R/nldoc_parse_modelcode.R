@@ -27,9 +27,9 @@ nldoc_parse_modelcode <- function(nlogocode)
   noxygenblocks <- split(noxygenlines, c(0, cumsum(abs(diff(noxygenlines)) > 1)))
 
   # prepare tibbles for output:
-  inf.header <- tibble::tibble()
-  inf.global <- tibble::tibble()
-  inf.proc <- tibble::tibble()
+  inf.header <- tibble::tibble(model = character(), author = character())
+  inf.global <- tibble::tibble(global = character(), description = character(), code = list())
+  inf.proc <- tibble::tibble(procedure = character(), param = list(), return = list(), description = character(), code = list())
 
   ## Now loop trough the noxygenblocks:
   for (i in 1:length(noxygenblocks))

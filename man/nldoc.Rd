@@ -45,7 +45,8 @@ Create NetLogo documentation
 nldoc reads model code from the provided model files.
 The code is then split into several groups (code, gui, behavior space).
 The procedures then finds noxygen commands within the NetLogo model code.
-For a complete list of noxygen commands type ?nldoc
+The noxygen commands are listed in the nldoc article: \url{https://docs.ropensci.org/nlrx/articles/nlrx_nldoc.html}.
+Without a \code{@model} header, the name of the model file is used as title.
 These commands are translated into a markdown documentation file.
 If needed, tables of gui elements and behavior space experiments are added to the markdown file.
 Finally, the document is rendered in the specified format.
@@ -54,7 +55,7 @@ Finally, the document is rendered in the specified format.
 \dontrun{
 
 # List model files (.nls subfiles are also supported)
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogox",
                 "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
 
 # Define output directory:
