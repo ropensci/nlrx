@@ -79,8 +79,9 @@ testthat::test_that("Run nl", {
   testthat::expect_match(class(results)[1], "tbl_df")
   testthat::expect_equal(nrow(results), length(nl@experiment@evalticks))
 
-  ## Step3: Test tickmetrics = false
-  nl@experiment <- experiment(expname = "nlrx_test",
+  ## Step3: Test tickmetrics = false (evalticks are ignored, which
+  ## experiment() reports once):
+  testthat::expect_warning(nl@experiment <- experiment(expname = "nlrx_test",
                               outpath = outpath,
                               tickmetrics = "false",
                               idsetup = "setup",
@@ -102,7 +103,8 @@ testthat::test_that("Run nl", {
                                                "wolf-gain-from-food" = 20,
                                                "sheep-reproduce" = 4,
                                                "wolf-reproduce" = 5,
-                                               "show-energy?" = FALSE))
+                                               "show-energy?" = FALSE)),
+                           class = "nlrx_warning_evalticks_ignored")
 
   nl@simdesign <- simdesign_lhs(nl=nl,
                                 samples=1,
@@ -118,9 +120,10 @@ testthat::test_that("Run nl", {
   testthat::context("Run one simulation with run_nl_one()
                     and tickmetrics false")
 
-  expect_warning(
+  ## ... and not again for every run:
+  testthat::expect_warning(
     results <- run_nl_one(nl, seed, threads, siminputrow),
-    "'evalticks' is ignored when 'tickmetrics' isn't 'true'"
+    NA
   )
 
   testthat::expect_match(class(results)[1], "tbl_df")

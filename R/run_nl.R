@@ -220,13 +220,8 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
 
   # Make 'evalticks' and 'tickmetrics' adhere to legacy nlrx logic.
   # -> tickmetrics = 'true' in order for recording conditions to apply
+  # (experiment() warns once if evalticks is ignored, not every block)
   if (nl@experiment@tickmetrics != "true") {
-    if (!is.null(run_metrics_condition)) {
-      warning(
-        "'evalticks' is ignored when 'tickmetrics' isn't 'true'.",
-        call. = FALSE
-      )
-    }
     run_metrics_condition  <- NULL
   }
 

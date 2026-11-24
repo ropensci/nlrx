@@ -3,6 +3,7 @@
 
 ## Major changes
 
+* `experiment()` warns when `evalticks` is ignored because `tickmetrics = "false"` (metrics are then only measured on the last tick, as before). `evalticks` equal to `runtime` is not reported, since it agrees with that.
 * `run_nl_dyn()` tells upfront how many evaluations the optimization of each seed may take and shows their progress. Every evaluation is one NetLogo run, so the defaults of the dynamic simdesigns can take hours to days (for example 20,000 runs per seed for `simdesign_GenAlg()`), which looked like a hanging session: each run printed its log lines without any indication of the total. The log lines of the single runs are now held back and only shown when a run fails, a progress bar counts the evaluations, and a GenSA simdesign without any stop criterion in `control` produces a warning. The defaults are unchanged; the examples and vignettes use settings that finish within minutes.
 * `simdesign_ABCmcmc_Marjoram()` and `simdesign_ABCmcmc_Wegmann()` check that the calibration keeps at least two runs (`ceiling(tolerance_quantile * n_calibration) >= 2`). With fewer, 'EasyABC' failed with an obscure "subscript out of bounds" or "incorrect number of dimensions" error after the whole calibration had run.
 * nlrx no longer depends on the 'XML' package; NetLogo model files are read with 'xml2'.

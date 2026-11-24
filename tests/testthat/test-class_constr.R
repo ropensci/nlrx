@@ -118,3 +118,19 @@ testthat::test_that("nl() accepts untested NetLogo 7 versions with a warning", {
   ## Versions below 7.0.0 cannot run at all and stay an error.
   testthat::expect_error(make_nl(nlversion = "6.4.0"))
 })
+
+testthat::test_that("experiment() reports evalticks that tickmetrics = 'false' ignores", {
+
+  exp_with <- function(...) {
+    experiment(expname = "test", outpath = tempdir(), idsetup = "setup", idgo = "go",
+               runtime = 10, metrics = "count turtles", ...)
+  }
+
+  testthat::expect_warning(exp_with(tickmetrics = "false", evalticks = c(5, 10)),
+                           regexp = "evalticks.*is ignored",
+                           class = "nlrx_warning_evalticks_ignored")
+  ## evalticks = runtime is what tickmetrics = "false" measures anyway:
+  testthat::expect_warning(exp_with(tickmetrics = "false", evalticks = 10), NA)
+  testthat::expect_warning(exp_with(tickmetrics = "false"), NA)
+  testthat::expect_warning(exp_with(tickmetrics = "true", evalticks = c(5, 10)), NA)
+})

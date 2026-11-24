@@ -80,7 +80,7 @@ nl <- function(nlversion = "7.0.4",
 #'
 #' @param expname A character string defining the name of the experiment, no whitespaces allowed
 #' @param outpath Path to a directory where experiment output will be stored
-#' @param tickmetrics Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished
+#' @param tickmetrics Character string "true" runs defined metrics on each simulation tick (or on the ticks in evalticks). "false" runs metrics only after simulation is finished, and evalticks is ignored
 #' @param evalticks vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick
 #' @param idsetup character string or vector of character strings, defining the name of the NetLogo setup procedure
 #' @param idgo character string or vector of character strings, defining the name of the NetLogo go procedure
@@ -289,6 +289,18 @@ experiment <- function(expname = "defaultexp",
   }
 
   util_check_deprecated_args(dots = dots, deprecated_args = character(0))
+
+  ## evalticks only apply when metrics are measured on each tick; otherwise
+  ## only the last tick of each run is measured. evalticks = runtime agrees
+  ## with that, so only other ticks are reported:
+  if (identical(tickmetrics, "false") && length(evalticks) > 0 && all(!is.na(evalticks)) &&
+      !(length(evalticks) == 1 && length(runtime) == 1 && isTRUE(evalticks == runtime))) {
+    util_warn(c(
+      "{.arg evalticks} is ignored because {.arg tickmetrics} is {.val false}.",
+      "i" = "Without measurements on each tick, metrics are only reported for the last tick of each run.",
+      ">" = "Set {.code tickmetrics = \"true\"} to measure on the ticks in {.arg evalticks}, or drop {.arg evalticks}."
+    ), class = "nlrx_warning_evalticks_ignored")
+  }
 
   ## Report evalticks that the simulation cannot reach, before it is run.
   ## A tick equal to runtime is still measured, so only larger ones are lost.

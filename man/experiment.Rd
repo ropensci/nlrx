@@ -29,7 +29,7 @@ experiment(
 
 \item{outpath}{Path to a directory where experiment output will be stored}
 
-\item{tickmetrics}{Character string "true" runs defined metrics on each simulation tick. "false" runs metrics only after simulation is finished}
+\item{tickmetrics}{Character string "true" runs defined metrics on each simulation tick (or on the ticks in evalticks). "false" runs metrics only after simulation is finished, and evalticks is ignored}
 
 \item{evalticks}{vector of tick numbers defining when measurements are taken. NA_integer_ to measure each tick}
 
