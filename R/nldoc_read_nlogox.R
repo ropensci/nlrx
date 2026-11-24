@@ -21,6 +21,8 @@ nldoc_read_nlogox <- function(modelfiles) {
   nlversion <- NA
   bscode <- NA
 
+  util_check_model_format(modelfiles)
+
   for (i in 1:length(modelfiles)) {
     # Check if file exists
     if (!file.exists(modelfiles[i])) {

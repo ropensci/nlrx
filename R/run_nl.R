@@ -133,6 +133,10 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
   stopifnot(length(threads) == 1, !is.na(threads), threads >= 1, threads == as.integer(threads))
   stopifnot(length(block_number) == 1, !is.na(block_number), block_number >= 0, block_number == as.integer(block_number))
 
+  # The model has to be in the NetLogo 7 format (modelpath may have been
+  # changed after nl() checked it)
+  util_check_model_format(nl@modelpath)
+
   # 0. NETLOGO INSTALLATION
   # logolink resolves NetLogo from the NETLOGO_HOME environment variable and
   # offers no argument for it, so that variable is the only channel available.

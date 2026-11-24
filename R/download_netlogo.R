@@ -66,50 +66,56 @@ check_netlogo_version <- function(version, throw_error=FALSE) {
 
   ## Report untested versions if needed:
   if (isTRUE(throw_error) && !isTRUE(supported)) {
-
-    ## A string that is not a version number cannot be acted on at all:
-    parsed <- tryCatch(numeric_version(version), error = function(e) NULL)
-
-    if (is.null(parsed)) {
-      stop(
-        paste(
-          "NetLogo version", version, "is not a valid version number.",
-          "Tested versions are:",
-          paste(supported_netlogo_versions(), collapse = ", ")
-        ),
-        call. = FALSE
-      )
-    }
-
-    # For NetLogo 7+: untested, but execution is delegated to logolink, so it is
-    # likely to work. Warn and continue instead of refusing.
-    if (parsed >= numeric_version("7.0.0")) {
-      msg <- paste(
-        "NetLogo version", version,
-        "is not among the versions nlrx was tested with.",
-        "NetLogo 7+ is executed through logolink, so simulations are likely to run anyway.",
-        "To silence this warning, set check_version = FALSE in nl().",
-        "Tested versions are:",
-        paste(supported_netlogo_versions(), collapse = ", ")
-      )
-      warning(msg, call. = FALSE)
-      # For NetLogo below 7: support was removed, simulations cannot run.
-    } else {
-      msg <- paste0(
-        "NetLogo version ", version, " is no longer supported by nlrx.\n",
-        "Support for NetLogo versions below 7.0.0 was removed in nlrx 0.5.0.\n",
-        "Tested versions are: ",
-        paste(supported_netlogo_versions(), collapse = ", "), ".\n\n",
-        "Either upgrade to NetLogo 7.0.0 or newer, or keep using your NetLogo ",
-        "installation with nlrx 0.4.6, the last version that supports NetLogo 5.3.1 to 6.4.0:\n",
-        "  remotes::install_github(\"ropensci/nlrx@v0.4.6\")\n",
-        "Note that nlrx 0.4.6 no longer receives updates."
-      )
-      stop(msg, call. = FALSE)
-    }
+    util_report_netlogo_version(version)
   }
 
   return(supported)
+}
+
+#' Report a NetLogo version that nlrx is not tested with
+#'
+#' @description Signals the advice-style error or warning for a NetLogo version
+#' that is not among \link[nlrx]{supported_netlogo_versions} (see
+#' \link[nlrx]{check_netlogo_version} for the rules).
+#'
+#' @param version Character string naming the NetLogo version
+#' @param in_nl TRUE if called from \code{nl()}, which adds the hint how to
+#' silence the warning for untested NetLogo 7 versions
+#' @aliases util_report_netlogo_version
+#' @rdname util_report_netlogo_version
+#' @keywords internal
+util_report_netlogo_version <- function(version, in_nl = FALSE) {
+
+  tested <- supported_netlogo_versions()
+
+  ## A string that is not a version number cannot be acted on at all:
+  parsed <- tryCatch(numeric_version(version), error = function(e) NULL)
+
+  if (is.null(parsed)) {
+    util_abort(c(
+      "{.val {version}} is not a valid NetLogo version number.",
+      "i" = "nlrx is tested with NetLogo {tested}."
+    ), class = "nlrx_error_netlogo_version_invalid")
+  }
+
+  # For NetLogo 7+: untested, but execution is delegated to logolink, so it is
+  # likely to work. Warn and continue instead of refusing.
+  if (parsed >= numeric_version("7.0.0")) {
+    util_warn(c(
+      "NetLogo {version} is not among the versions nlrx is tested with.",
+      "i" = "nlrx is tested with NetLogo {tested}. NetLogo 7 runs through logolink, so simulations are likely to work anyway.",
+      if (isTRUE(in_nl)) c(">" = "Set {.code check_version = FALSE} in {.fn nl} to silence this warning.")
+    ), class = "nlrx_warning_netlogo_version_untested")
+    return(invisible(FALSE))
+  }
+
+  # For NetLogo below 7: support was removed, simulations cannot run.
+  util_abort(c(
+    "nlrx no longer supports NetLogo {version}.",
+    "i" = "Support for NetLogo below 7.0.0 was removed in nlrx 0.5.0; nlrx is tested with NetLogo {tested}.",
+    ">" = "Upgrade to NetLogo 7, see {.url https://docs.netlogo.org/7.0.4/transition#changes-for-netlogo-700}.",
+    ">" = "Or keep NetLogo 6 with nlrx 0.4.6, the last version for NetLogo 5.3.1 to 6.4.0 (no longer updated): {.code remotes::install_github(\"ropensci/nlrx@v0.4.6\")}"
+  ), class = "nlrx_error_netlogo_version_unsupported")
 }
 
 

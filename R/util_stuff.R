@@ -354,3 +354,79 @@ util_normalize_nl_value <- function(x) {
   return(x)
 }
 
+
+#' Signal an error with an advice-style message
+#'
+#' @description Signal an error for a problem in the user's setup (wrong
+#' NetLogo version, wrong model format, ...) that the user can fix.
+#'
+#' @param message Character vector, formatted with \code{cli::format_error()}.
+#' Unnamed elements state the problem, \code{"i"} elements give context and
+#' \code{">"} elements say what to do. cli inline markup and glue
+#' interpolation are evaluated in \code{.envir}.
+#' @param class Character vector of condition classes, prepended to
+#' \code{"nlrx_error"}.
+#' @param .envir Environment in which the message is interpolated.
+#' @details
+#' The condition is a base R error without a call, so neither the call nor a
+#' backtrace is printed - the user sees the advice only. Genuine runtime
+#' failures (NetLogo errors, internal errors) keep using \code{stop()}.
+#' @aliases util_abort
+#' @rdname util_abort
+#' @keywords internal
+util_abort <- function(message, class = NULL, .envir = parent.frame()) {
+  stop(structure(
+    class = c(class, "nlrx_error", "error", "condition"),
+    list(message = cli::format_error(message, .envir = .envir), call = NULL)
+  ))
+}
+
+#' Signal a warning with an advice-style message
+#'
+#' @description Warning counterpart of \code{util_abort()}.
+#'
+#' @param message Character vector, formatted with \code{cli::format_warning()}
+#' (see \code{util_abort()}).
+#' @param class Character vector of condition classes, prepended to
+#' \code{"nlrx_warning"}.
+#' @param .envir Environment in which the message is interpolated.
+#' @aliases util_warn
+#' @rdname util_warn
+#' @keywords internal
+util_warn <- function(message, class = NULL, .envir = parent.frame()) {
+  warning(structure(
+    class = c(class, "nlrx_warning", "warning", "condition"),
+    list(message = cli::format_warning(message, .envir = .envir), call = NULL)
+  ))
+}
+
+#' Reject NetLogo 6 model files
+#'
+#' @description Stops with an advice-style error if any of the model files is
+#' in the NetLogo 6 format (.nlogo).
+#'
+#' @param modelpath Character vector of model file paths. An empty vector
+#' passes, so an nl object can be created before the model is known.
+#' @details
+#' NetLogo 7 converts .nlogo files when it opens them, so a .nlogo model would
+#' even run. nlrx itself cannot read the old format (parameter reports,
+#' variable checks, nldoc), and the conversion is meant as a deliberate step,
+#' so the user is asked to convert the model once in NetLogo 7.
+#' @aliases util_check_model_format
+#' @rdname util_check_model_format
+#' @keywords internal
+util_check_model_format <- function(modelpath) {
+
+  nlogo6 <- modelpath[tolower(tools::file_ext(modelpath)) == "nlogo"]
+
+  if (length(nlogo6) > 0) {
+    nlogo6 <- basename(nlogo6)
+    util_abort(c(
+      "{.file {nlogo6}} {?is a/are} NetLogo 6 model file{?s} ({.val .nlogo}).",
+      "i" = "nlrx 0.5.0 requires the NetLogo 7 format ({.val .nlogox}).",
+      ">" = "Open the model in NetLogo 7 and save it to convert it, see {.url https://docs.netlogo.org/7.0.4/transition#changes-for-netlogo-700}."
+    ), class = "nlrx_error_model_format")
+  }
+
+  invisible(TRUE)
+}

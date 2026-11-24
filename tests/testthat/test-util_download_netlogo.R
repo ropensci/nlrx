@@ -7,20 +7,38 @@ testthat::test_that("supported_netlogo_versions", {
   testthat::expect_vector(versions)
   testthat::expect_true(all(check_netlogo_version(versions)))
   testthat::expect_false(check_netlogo_version("non_valid_version"))
-  testthat::expect_error(check_netlogo_version("non_valid_version", throw_error = TRUE))
+  testthat::expect_error(check_netlogo_version("non_valid_version", throw_error = TRUE),
+                         class = "nlrx_error_netlogo_version_invalid")
 
   ## Tested versions pass silently:
   testthat::expect_silent(check_netlogo_version("7.0.4", throw_error = TRUE))
 
   ## An untested NetLogo 7 release only warns - execution goes through logolink,
   ## so it is likely to work - and is still reported as untested:
-  testthat::expect_warning(untested <- check_netlogo_version("7.9.9", throw_error = TRUE))
+  testthat::expect_warning(untested <- check_netlogo_version("7.9.9", throw_error = TRUE),
+                           class = "nlrx_warning_netlogo_version_untested")
   testthat::expect_false(untested)
+
+  ## The hint how to silence the warning only makes sense within nl():
+  untested_msg <- function(...) {
+    tryCatch(util_report_netlogo_version("7.9.9", ...),
+             warning = conditionMessage)
+  }
+  testthat::expect_no_match(untested_msg(), "check_version")
+  testthat::expect_match(untested_msg(in_nl = TRUE), "check_version")
+  testthat::expect_warning(nl(nlversion = "7.9.9", nlpath = tempdir()),
+                           regexp = "check_version",
+                           class = "nlrx_warning_netlogo_version_untested")
+  testthat::expect_silent(nl(nlversion = "7.9.9", nlpath = tempdir(),
+                             check_version = FALSE))
 
   ## NetLogo < 7 is not untested but unsupported, so it stays an error - and the
   ## error points at the last nlrx version that supports NetLogo 6.x:
   testthat::expect_error(check_netlogo_version("6.4.0", throw_error = TRUE),
-                         regexp = "install_github")
+                         regexp = "install_github",
+                         class = "nlrx_error_netlogo_version_unsupported")
+  testthat::expect_error(nl(nlversion = "6.4.0", nlpath = tempdir()),
+                         class = "nlrx_error_netlogo_version_unsupported")
 
   # Mock out the actual download and the tar extraction so the test stays
   # offline. `os` is pinned rather than left at NA so the extract branch (which

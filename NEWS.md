@@ -36,7 +36,7 @@
 * NetLogo literals can no longer be used as parameter values. Since 'logolink' quotes every character value and offers no escape hatch, a value such as `"[1 2 3]"` reaches NetLogo as a string instead of a list. `eval_variables_constants()` reports values that look like list literals; define such globals within the model instead.
 * The arguments `split`, `cleanup.csv`, `cleanup.xml`, `cleanup.bat` and `writeRDS` are deprecated and no longer have an effect (file handling is managed by 'logolink'). Passing them now emits a deprecation warning.
 * The `n_cluster` argument of the ABC-MCMC simdesigns (`simdesign_ABCmcmc_Marjoram()`, `simdesign_ABCmcmc_Marjoram_original()`, `simdesign_ABCmcmc_Wegmann()`) has been removed. It never parallelised simulations (it was always reset to 1) and is now deprecated; passing it emits a deprecation warning.
-* NetLogo 7 introduced a new model file format (`.nlogox`) and converts widget sizes. Models created in older NetLogo versions must be opened and re-saved in NetLogo 7 before they can be used with nlrx. See the NetLogo transition guide for details: <https://docs.netlogo.org/transition>.
+* NetLogo 7 introduced a new model file format (`.nlogox`) and converts widget sizes. Models created in older NetLogo versions must be opened and re-saved in NetLogo 7 before they can be used with nlrx. See the NetLogo transition guide for details: <https://docs.netlogo.org/transition>. `nl()`, `report_model_parameters()`, `nldoc()` and the run functions stop with this advice when they are given a `.nlogo` file. NetLogo 7 would convert such a file on the fly, but nlrx cannot read the old format to check parameters.
 
 # nlrx 0.4.6
 

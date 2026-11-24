@@ -32,16 +32,12 @@ report_model_parameters <- function(nl) {
     stop("nl@modelpath does not exist on local file system. Cannot report model parameters!")
   }
 
+  # Catch file format issues
+  util_check_model_format(nl@modelpath)
+
   file_type <- tools::file_ext(nl@modelpath) # detect file type (.nlogox required)
 
-  # Catch file format issues
-  if (file_type == "nlogo") {
-    stop(
-      "The .nlogo format is no longer supported. ",
-      "Please convert your model to .nlogox format (NetLogo 7+). ",
-      "NetLogo can automatically upgrade models via the interface."
-    )
-  } else if (file_type == "nlogox") {
+  if (file_type == "nlogox") {
 
     # Parse .nlogox
     model.code <- xml2::read_xml(getnl(nl, "modelpath")) # Open model as XML
