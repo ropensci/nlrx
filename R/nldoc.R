@@ -18,7 +18,8 @@
 #' nldoc reads model code from the provided model files.
 #' The code is then split into several groups (code, gui, behavior space).
 #' The procedures then finds noxygen commands within the NetLogo model code.
-#' For a complete list of noxygen commands type ?nldoc
+#' The noxygen commands are listed in the nldoc article: \url{https://docs.ropensci.org/nlrx/articles/nlrx_nldoc.html}.
+#' Without a \code{@model} header, the name of the model file is used as title.
 #' These commands are translated into a markdown documentation file.
 #' If needed, tables of gui elements and behavior space experiments are added to the markdown file.
 #' Finally, the document is rendered in the specified format.
@@ -67,6 +68,20 @@ nldoc <- function(modelfiles,
   ## Parse code to noxygencode:
   noxygen <- nldoc_parse_modelcode(nlogocode)
 
+  ## Name of the main model file, the title if the code has no @model header:
+  mainfile <- modelfiles[tolower(tools::file_ext(modelfiles)) == "nlogox"][1]
+  modelname <- if (is.na(mainfile)) "Untitled Model" else tools::file_path_sans_ext(basename(mainfile))
+
+  ## Without noxygen annotations, only the model file sections are documented:
+  if (nrow(noxygen$header) == 0 && nrow(noxygen$global) == 0 && nrow(noxygen$proc) == 0)
+  {
+    cli::cli_alert_info(paste(
+      "No noxygen annotations found in the model code, so the documentation only",
+      "covers the GUI, Info tab and BehaviorSpace sections. The annotation tags are listed in",
+      "{.url https://docs.ropensci.org/nlrx/articles/nlrx_nldoc.html}."
+    ))
+  }
+
   ## Read gui elements from nlogo file:
   if (isTRUE(gui))
   {
@@ -106,6 +121,7 @@ nldoc <- function(modelfiles,
                    number_sections = number_sections,
                    theme = theme,
                    date = date,
-                   toc = toc)
+                   toc = toc,
+                   modelname = modelname)
 
 }

@@ -3,6 +3,7 @@
 #' @description Write NetLogo documentation
 #'
 #' @param noxygen list with parsed and processed noxygen tags from NetLogo model code
+#' @param modelname title of the documentation if the model code has no @model header
 #' @param noxygen_it list with parsed and processed infotab strings
 #' @param noxygen_gui list with parsed and processed noxygen tags from NetLogo GUI elements
 #' @param noxygen_bs list with parsed and processed noxygen tags from NetLogo behavior space experiments
@@ -24,7 +25,8 @@
 #' @rdname nldoc_write_nldoc
 #' @keywords internal
 
-nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outpath, output_format, number_sections, theme, date, toc)
+nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outpath, output_format, number_sections, theme, date, toc,
+                              modelname = "Untitled Model")
 {
 
   # Get all the values from the UI elements:
@@ -44,26 +46,24 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     output_format <- "word_document"
   }
 
-  # Handle empty header (fallback values)
-  if (nrow(noxygen$header) == 0) {
-    noxygen$header$model <- "Untitled Model"
-    noxygen$header$author <- "Unknown"
-  }
+  # Title and author from the @model header (the first one, if there are
+  # several), with fallback values for models without a header:
+  model <- if (nrow(noxygen$header) > 0) noxygen$header$model[1] else NA_character_
+  author <- if (nrow(noxygen$header) > 0) noxygen$header$author[1] else NA_character_
 
-  # Handle NA values
-  if (is.na(noxygen$header$model) || noxygen$header$model == "") {
-    noxygen$header$model <- "Untitled Model"
+  if (is.na(model) || model == "") {
+    model <- modelname
   }
-  if (is.na(noxygen$header$author) || noxygen$header$author == "") {
-    noxygen$header$author <- "Unknown"
+  if (is.na(author) || author == "") {
+    author <- "Unknown"
   }
 
   # write preambel for the markdown file (define format, style, ...)
   # Common lines:
   preambel <- c(
     "---",
-    paste0("title: \"", noxygen$header$model, "\""),
-    paste0("author: \"", noxygen$header$author, "\""),
+    paste0("title: \"", model, "\""),
+    paste0("author: \"", author, "\""),
     paste0("date: \"", date, "\""),
     "output:",
     paste0("  ", output_format, ":")
@@ -88,10 +88,13 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
   # Initialize string
   noxygencode <- ""
 
-  # Process the information from global
-  noxygencode <- c(noxygencode, "# Global")
+  # Process the information from global (if any are documented)
+  if (nrow(noxygen$global) > 0)
+  {
+    noxygencode <- c(noxygencode, "# Global")
+  }
 
-  for (i in 1:nrow(noxygen$global))
+  for (i in seq_len(nrow(noxygen$global)))
   {
     noxygen.global.i <- noxygen$global[i,]
     noxygencode.i <- paste0("## ", noxygen.global.i$global)
@@ -110,10 +113,13 @@ nldoc_write_nldoc <- function(noxygen, noxygen_it, noxygen_gui, noxygen_bs, outp
     noxygencode <- c(noxygencode, noxygencode.i)
   }
 
-  # Process the information from procedures
-  noxygencode <- c(noxygencode, "# Procedures")
+  # Process the information from procedures (if any are documented)
+  if (nrow(noxygen$proc) > 0)
+  {
+    noxygencode <- c(noxygencode, "# Procedures")
+  }
 
-  for (i in 1:nrow(noxygen$proc))
+  for (i in seq_len(nrow(noxygen$proc)))
   {
     noxygen.proc.i <- noxygen$proc[i,]
     noxygencode.i <- paste0("## ", noxygen.proc.i$procedure)
