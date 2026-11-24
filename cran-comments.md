@@ -14,9 +14,8 @@ NetLogo version points users to nlrx 0.4.6, which continues to support NetLogo 5
 
 # Test environments
 
-* local: Ubuntu 24.04, R 4.6.1 -- 0 errors | 0 warnings | 0 notes
 * GitHub Actions, with NetLogo 7.0.4 installed so that the simulation tests run:
-  * Ubuntu 24.04, R-devel (4.7.0), R 4.6.2 and R 4.5.3
+  * Ubuntu 24.04, R-devel (2026-11-23 r90971), R 4.6.2 and R 4.5.3
   * macOS 26 (aarch64 and x86_64), R 4.6.2
   * Windows (x64, ucrt), R 4.6.2
 * GitHub Actions, without NetLogo and with `_R_CHECK_CRAN_INCOMING_REMOTE_=true`
@@ -38,9 +37,9 @@ require NetLogo, including the generation of BehaviorSpace definitions.
 
 # Package dependencies
 
-The dependency check reports "Imports includes 23 non-default packages". The number of
+The dependency check reports "Imports includes 22 non-default packages". The number of
 imports is essentially unchanged from the previous release: 'logolink', 'cli', 'janitor'
-and 'xml2' were added and 'furrr' was dropped. The imports reflect the scope of the
+and 'xml2' were added, 'furrr' and 'XML' were dropped. The imports reflect the scope of the
 package, which covers simulation design (including sensitivity analysis and optimization
 backends) as well as spatial and network output processing.
 
