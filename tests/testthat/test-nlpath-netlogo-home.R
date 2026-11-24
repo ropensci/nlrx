@@ -31,9 +31,6 @@ testthat::test_that("run_nl_block() reports a missing NetLogo installation", {
   )
 
   nl <- nl_lhs
-  ## The sample data still carries a NetLogo 6 model path, which run_nl_block()
-  ## rejects before it looks at the installation:
-  nl@modelpath <- sub("\\.nlogo$", ".nlogox", nl@modelpath)
   block_df <- getsim(nl, "siminput")[1, , drop = FALSE]
   block_df$siminputrow <- 1
 

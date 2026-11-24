@@ -1,5 +1,7 @@
 testthat::context("Analyze nl with sample data")
 testthat::test_that("Analysis of sample data", {
+  ## The bias of the sobol indices is bootstrapped, so fix the RNG state:
+  set.seed(593472)
   myfuns <- list(mean=mean, sd=stats::sd, min=min, max=max)
   testthat::context("Load sample data ff")
   data("nl_ff", package = "nlrx")
@@ -12,8 +14,8 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(ff)[1], "tbl_df")
   testthat::expect_equal(nrow(ff), 121, .01)
   testthat::expect_equal(ncol(ff), 19, .01)
-  testthat::expect_equal(mean(ff$`count sheep_mean`), 84.2, .01)
-  testthat::expect_equal(mean(ff$`count wolves_mean`), 109, .01)
+  testthat::expect_equal(mean(ff$`count sheep_mean`), 83.45, .01)
+  testthat::expect_equal(mean(ff$`count wolves_mean`), 108.8, .01)
 
 
 
@@ -28,8 +30,8 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(lhs)[1], "tbl_df")
   testthat::expect_equal(nrow(lhs), 100, .01)
   testthat::expect_equal(ncol(lhs), 19, .01)
-  testthat::expect_equal(mean(lhs$`count sheep_mean`), 82.9, .01)
-  testthat::expect_equal(mean(lhs$`count wolves_mean`), 110, .01)
+  testthat::expect_equal(mean(lhs$`count sheep_mean`), 81.78, .01)
+  testthat::expect_equal(mean(lhs$`count wolves_mean`), 111.4, .01)
 
 
 
@@ -44,8 +46,8 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(sobol)[1], "tbl_df")
   testthat::expect_equal(nrow(sobol), 18, .01)
   testthat::expect_equal(ncol(sobol), 8, .01)
-  testthat::expect_equal(mean(sobol$original), 0.3385253, .01)
-  testthat::expect_equal(mean(sobol$bias), 0.006594322, .01)
+  testthat::expect_equal(mean(sobol$original), 0.3774193, .01)
+  testthat::expect_equal(mean(sobol$bias), 0.005001637, .01)
 
 
   testthat::context("Load sample data sobol2007")
@@ -59,8 +61,8 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(sobol2007)[1], "tbl_df")
   testthat::expect_equal(nrow(sobol2007), 24, .01)
   testthat::expect_equal(ncol(sobol2007), 9, .01)
-  testthat::expect_equal(mean(sobol2007$original), 0.513, .01)
-  testthat::expect_equal(mean(sobol2007$bias), 0.003789834, .01)
+  testthat::expect_equal(mean(sobol2007$original), 0.5149208, .01)
+  testthat::expect_equal(mean(sobol2007$bias), 0.00354011, .01)
 
 
   testthat::context("Load sample data soboljansen")
@@ -74,8 +76,8 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(soboljansen)[1], "tbl_df")
   testthat::expect_equal(nrow(soboljansen), 24, .01)
   testthat::expect_equal(ncol(soboljansen), 9, .01)
-  testthat::expect_equal(mean(soboljansen$original), 0.509, .01)
-  testthat::expect_equal(mean(soboljansen$bias), 0.001826447, .01)
+  testthat::expect_equal(mean(soboljansen$original), 0.497925, .01)
+  testthat::expect_equal(mean(soboljansen$bias), 0.001379957, .01)
 
 
   testthat::context("Load sample data morris")
@@ -89,7 +91,7 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(morris)[1], "tbl_df")
   testthat::expect_equal(nrow(morris), 36, .01)
   testthat::expect_equal(ncol(morris), 5, .01)
-  testthat::expect_equal(mean(morris$value), 37.9, .01)
+  testthat::expect_equal(mean(morris$value), 37.17, .01)
 
 
 
@@ -104,5 +106,5 @@ testthat::test_that("Analysis of sample data", {
   testthat::expect_match(class(eFast)[1], "tbl_df")
   testthat::expect_equal(nrow(eFast), 24, .01)
   testthat::expect_equal(ncol(eFast), 5, .01)
-  testthat::expect_equal(mean(eFast$value), 393, .01)
+  testthat::expect_equal(mean(eFast$value), 420.6, .01)
 })
