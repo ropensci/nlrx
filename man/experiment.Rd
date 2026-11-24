@@ -37,7 +37,7 @@ experiment(
 
 \item{idgo}{character string or vector of character strings, defining the name of the NetLogo go procedure}
 
-\item{idfinal}{character string or vector of character strings, defining the name of NetLogo procedures that should be run after the last tick}
+\item{idfinal}{character string or vector of character strings, defining the name of NetLogo procedures that should be run at the end of each run, after the last tick (BehaviorSpace post run commands)}
 
 \item{idrunnum}{character string, defining the name of a string input widget in the NetLogo model. Before each run, nlrx writes a run identifier ("expname_seed_siminputrow") into this widget. Model code that writes its own output files (e.g. \code{export-world}, \code{file-open}) can use it in filenames, which keeps the files of different runs apart and allows matching them to the nlrx results. Must be an interface widget, not a variable declared in \code{globals []}, because the value is set before the setup procedure and \code{clear-all} would reset a code global. Note: \code{run_nl_dyn()} currently passes the same identifier to every evaluation of an optimization. See the article "Capturing NetLogo output manually" for a worked example: \url{https://docs.ropensci.org/nlrx/articles/manual-output.html}}
 

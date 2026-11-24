@@ -251,7 +251,9 @@ run_nl_block <- function(nl, block_df, block_number, threads) {
     # into one block of NetLogo code (see util_collapse_commands()).
     setup = util_collapse_commands(nl@experiment@idsetup), # names of setup ..
     go = util_collapse_commands(nl@experiment@idgo), # .. and go buttons
-    post_experiment = util_collapse_commands(nl@experiment@idfinal),
+    # idfinal runs at the end of each run (BehaviorSpace post-run commands,
+    # called final commands before NetLogo 6.4), not once per block:
+    post_run = util_collapse_commands(nl@experiment@idfinal),
     exit_condition = util_collapse_commands(nl@experiment@stopcond),
     run_metrics_condition = run_metrics_condition, # when measurements are recorded
     metrics = util_collect_experiment_metrics(nl), # packages nl@experiment@metrics with nl@experiment@metrics.turtles/patches/links.
