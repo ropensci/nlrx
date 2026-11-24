@@ -482,8 +482,8 @@ experiment <- function(expname = "defaultexp",
 #'
 #' nl <- nl_lhs
 #' nl@simdesign <- simdesign_GenAlg(nl=nl,
-#'                                  popSize = 200,
-#'                                  iters = 100,
+#'                                  popSize = 20,
+#'                                  iters = 10,
 #'                                  evalcrit = 1,
 #'                                  elitism = NA,
 #'                                  mutationChance = NA,

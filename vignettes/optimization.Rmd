@@ -80,10 +80,10 @@ nl@experiment <- experiment(expname="wolf-sheep-GenSA1",
 
 #### Step 3: Attach a simulation design
 
-We use the `simdesgin_GenSA()` function to attach a Simulated Annealing simdesign.
+We use the `simdesign_GenSA()` function to attach a Simulated Annealing simdesign.
 We select the evaluation criterion (`evalcrit`) by assigning the position of the reporter that we want to evaluate within the metrics vector of the experiment.
 In our case, there is only one reporter in the metrics vector thus we set evalcrit to use the first reporter (`evalcrit = 1`).
-The control parameter allows us to provide additional parameters for the GenSA function (see ?GenSA for details). For demonstration purposes, we set the maximum number of iterations to 20.
+The control parameter allows us to provide additional parameters for the GenSA function (see ?GenSA for details). For demonstration purposes, we set the maximum number of iterations to 20. Each evaluation of the optimization is one NetLogo run, so a stop criterion like this matters: with the GenSA defaults (`maxit = 5000`), an optimization of two parameters takes about 50,000 runs, whereas `maxit = 20` takes about 100. `run_nl_dyn()` reports the budget when it starts, and warns if `control` contains no stop criterion at all.
 
 ```{r eval=FALSE}
 nl@simdesign <- simdesign_GenSA(nl, 
@@ -211,7 +211,7 @@ nl@experiment <- experiment(expname="wolf-sheep-GenSA2",
 
 #### Step 3: Attach a simulation design
 
-We use the `simdesgin_GenSA()` function to attach a Simulated Annealing simdesign.
+We use the `simdesign_GenSA()` function to attach a Simulated Annealing simdesign.
 Because we want to post-process our simulation results, we need to define an evaluation function.
 The evaluation function needs to accept the nl object as input and must return a single numeric value.
 First we load the package landscapemetrics. We then convert the spatial data to a raster format and calculate the landscape edge density index.

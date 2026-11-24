@@ -73,8 +73,8 @@ nl <- nl_lhs
 
 # Add genalg simdesign with three seeds, thus three independent optimizations:
 nl@simdesign <- simdesign_GenAlg(nl=nl,
-                                  popSize = 200,
-                                  iters = 100,
+                                  popSize = 20,
+                                  iters = 10,
                                   evalcrit = 1,
                                   nseeds = 3)
 

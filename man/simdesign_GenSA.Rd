@@ -26,6 +26,8 @@ Add a Simulated Annealing simdesign to a nl object
 \details{
 This function creates a simdesign S4 class which can be added to a nl object.
 
+Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. With an empty \code{control} list, GenSA runs with its defaults (\code{maxit = 5000}), which amounts to tens of thousands of evaluations; set a stop criterion such as \code{max.call} or \code{max.time} in \code{control}.
+
 Variables in the experiment variable list need to provide a numeric distribution with min and max (e.g. list(min=1, max=4)).
 Only min and max are used: the algorithm searches the range they define, so a qfun of the variable definition is irrelevant for this simdesign.
 

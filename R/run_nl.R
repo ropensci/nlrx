@@ -548,8 +548,8 @@ run_nl_one <- function(nl,
 #'
 #' # Add genalg simdesign with three seeds, thus three independent optimizations:
 #' nl@@simdesign <- simdesign_GenAlg(nl=nl,
-#'                                   popSize = 200,
-#'                                   iters = 100,
+#'                                   popSize = 20,
+#'                                   iters = 10,
 #'                                   evalcrit = 1,
 #'                                   nseeds = 3)
 #'
@@ -637,14 +637,34 @@ run_nl_dyn <- function(nl,
                             nreplicates = nreplicates)
   }
 
+  ## Tell upfront how long the optimizations may take:
+  total <- util_report_dyn_budget(nl, nseeds = length(seeds), nreplicates = nreplicates)
+
   ## One complete optimization per seed. Seeds are independent of each other, so a
   ## failing one does not discard the results of the others.
   p <- progressr::progressor(steps = length(seeds))
   nl_results <- vector("list", length(seeds))
+  on.exit(.nlrx_dyn$progress <- NULL, add = TRUE)
 
   for (i in seq_along(seeds)) {
     p(paste0("seed ", i, "/", length(seeds)))
+
+    ## Progress of the evaluations, advanced by util_run_nl_dyn_evaluation():
+    .nlrx_dyn$evaluations <- 0
+    .nlrx_dyn$total <- total
+    .nlrx_dyn$progress <- cli::cli_progress_bar(
+      name = sprintf("Seed %d/%d:", i, length(seeds)),
+      total = total,
+      format = if (is.na(total)) {
+        "{cli::pb_spin} {cli::pb_name}evaluation {cli::pb_current} | {cli::pb_elapsed}"
+      } else {
+        "{cli::pb_name}evaluation {cli::pb_current}/{cli::pb_total} {cli::pb_bar} | ETA {cli::pb_eta}"
+      },
+      clear = FALSE
+    )
+
     nl_results[[i]] <- try(run_one_optimization(seeds[[i]]), silent = TRUE)
+    cli::cli_progress_done(id = .nlrx_dyn$progress)
   }
 
   failed <- vapply(nl_results, function(x) inherits(x, "try-error"), logical(1))

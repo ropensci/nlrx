@@ -92,9 +92,8 @@ util_run_nl_dyn_GenSA_fn <- function(param,
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl_one(
+  results <- util_run_nl_dyn_evaluation(
     nl = nl,
-    siminputrow = 1,
     seed = seed,
     threads = threads
   )
@@ -209,9 +208,8 @@ util_run_nl_dyn_GenAlg_fn <- function(param,
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- gensa_param
   # Call netlogo:
-  results <- run_nl_one(
+  results <- util_run_nl_dyn_evaluation(
     nl = nl,
-    siminputrow = 1,
     seed = seed,
     threads = threads
   )
@@ -358,9 +356,8 @@ util_run_nl_dyn_ABCmcmc_fn <- function(param, threads = 1)
   # Attach current parameterisation to nl object:
   setsim(nl, "siminput") <- abcmcmc_param
   # Call netlogo:
-  results <- run_nl_one(
+  results <- util_run_nl_dyn_evaluation(
     nl = nl,
-    siminputrow = 1,
     seed = seeds,
     threads = threads
   )
@@ -378,3 +375,124 @@ util_run_nl_dyn_ABCmcmc_fn <- function(param, threads = 1)
   return(results)
 }
 
+
+
+## State of the running run_nl_dyn() call, read by the evaluations of the
+## optimization (the optimizers call them without passing arguments through):
+.nlrx_dyn <- new.env(parent = emptyenv())
+
+#' Run one evaluation of a dynamic simdesign
+#'
+#' @description Runs the simulations of one evaluation via \code{run_nl_one()},
+#' without its console output, and advances the progress bar of
+#' \code{run_nl_dyn()}.
+#'
+#' @param nl nl object with the parameterisation of this evaluation as siminput
+#' @param seed vector of model seeds, one per replicated run of this evaluation
+#' @param threads number of NetLogo threads used for execution (handled via NetLogo).
+#' @return Tibble with simulation output results
+#' @details
+#' An optimization runs thousands of evaluations, so the messages of each run
+#' (BehaviorSpace XML path, NetLogo progress) are held back. They are shown when
+#' the run fails, together with the error.
+#' @aliases util_run_nl_dyn_evaluation
+#' @rdname util_run_nl_dyn_evaluation
+#' @keywords internal
+util_run_nl_dyn_evaluation <- function(nl, seed, threads = 1) {
+
+  messages <- list()
+
+  results <- withCallingHandlers(
+    run_nl_one(nl = nl, siminputrow = 1, seed = seed, threads = threads),
+    message = function(m) {
+      messages[[length(messages) + 1]] <<- m
+      invokeRestart("muffleMessage")
+    },
+    error = function(e) {
+      for (m in messages) message(m)
+    }
+  )
+
+  if (!is.null(.nlrx_dyn$progress)) {
+    .nlrx_dyn$evaluations <- .nlrx_dyn$evaluations + 1
+    total <- .nlrx_dyn$total
+    cli::cli_progress_update(id = .nlrx_dyn$progress,
+                             set = if (is.na(total)) .nlrx_dyn$evaluations else min(.nlrx_dyn$evaluations, total))
+  }
+
+  return(results)
+}
+
+#' Report the evaluation budget of a dynamic simdesign
+#'
+#' @description Tells how many evaluations (NetLogo runs) the optimization of
+#' each seed may take, and which arguments control that number.
+#'
+#' @param nl nl object with a GenSA, GenAlg or ABCmcmc simdesign
+#' @param nseeds number of seeds, i.e. optimizations
+#' @param nreplicates number of replicated runs per evaluation
+#' @return The (approximate) maximum number of evaluations per seed, NA if
+#' unknown, invisibly.
+#' @details
+#' A GenSA simdesign without any stop criterion in \code{control}
+#' (\code{max.call}, \code{max.time}, \code{maxit}, \code{nb.stop.improvement}
+#' or \code{threshold.stop}) runs with the GenSA defaults (\code{maxit = 5000},
+#' \code{max.call = 1e7}), which take tens of thousands of evaluations; this is
+#' reported as a warning.
+#' @aliases util_report_dyn_budget
+#' @rdname util_report_dyn_budget
+#' @keywords internal
+util_report_dyn_budget <- function(nl, nseeds, nreplicates) {
+
+  simobject <- getsim(nl, "simobject")
+  simmethod <- getsim(nl, "simmethod")
+  runs <- if (nreplicates > 1) " ({nreplicates} replicated runs each)" else ""
+  seeds <- "for {nseeds} seed{?s}"
+
+  if (simmethod == "GenSA") {
+    control <- simobject$control
+    stops <- intersect(c("max.call", "max.time", "maxit", "nb.stop.improvement", "threshold.stop"),
+                       names(control))
+
+    if (length(stops) == 0) {
+      util_warn(c(
+        "GenSA has no stop criterion, so each optimization can take tens of thousands of evaluations.",
+        "i" = paste0("Each evaluation is one NetLogo run", runs, "; with the GenSA defaults ({.code maxit = 5000}) ",
+                     "an optimization of 2 parameters takes about 50,000 runs."),
+        ">" = "Set {.code control = list(max.call = ...)} or {.code max.time} (seconds) in {.fn simdesign_GenSA}."
+      ), class = "nlrx_warning_dyn_budget")
+      return(invisible(NA_real_))
+    }
+
+    limits <- c(
+      if (!is.null(control$max.call)) "{control$max.call} evaluation{?s} ({.code max.call})",
+      if (!is.null(control$max.time)) "{control$max.time} second{?s} ({.code max.time})",
+      if (!is.null(control$maxit)) "{control$maxit} iteration{?s} ({.code maxit})",
+      if (!is.null(control$nb.stop.improvement)) "{control$nb.stop.improvement} iteration{?s} without improvement ({.code nb.stop.improvement})",
+      if (!is.null(control$threshold.stop)) "reaching {control$threshold.stop} ({.code threshold.stop})"
+    )
+    cli::cli_alert_info(paste0("GenSA stops after ", paste(limits, collapse = " or "), " ", seeds, "."))
+    cli::cli_alert_info(paste0("Each evaluation is one NetLogo run", runs, "."))
+    return(invisible(if (is.null(control$max.call)) NA_real_ else control$max.call))
+  }
+
+  if (simmethod == "GenAlg") {
+    total <- simobject$popSize * simobject$iters
+    cli::cli_alert_info(paste0(
+      "GenAlg runs up to {total} evaluations per seed ({.arg popSize} {simobject$popSize} x {.arg iters} {simobject$iters}) ",
+      seeds, "; each evaluation is one NetLogo run", runs, "."
+    ))
+    return(invisible(total))
+  }
+
+  ## ABCmcmc: calibration (not for Marjoram_original) plus the MCMC steps:
+  calibration <- if (simobject$method == "Marjoram_original") 0 else simobject$n_calibration
+  total <- calibration + simobject$n_rec * simobject$n_between_sampling
+  cli::cli_alert_info(paste0(
+    "ABC-MCMC ({simobject$method}) runs about {total} evaluations per seed (",
+    if (calibration > 0) "{.arg n_calibration} {calibration} + " else "",
+    "{.arg n_rec} {simobject$n_rec} x {.arg n_between_sampling} {simobject$n_between_sampling}) ",
+    seeds, "; each evaluation is one NetLogo run", runs, "."
+  ))
+  return(invisible(total))
+}

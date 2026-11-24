@@ -3,6 +3,8 @@
 
 ## Major changes
 
+* `run_nl_dyn()` tells upfront how many evaluations the optimization of each seed may take and shows their progress. Every evaluation is one NetLogo run, so the defaults of the dynamic simdesigns can take hours to days (for example 20,000 runs per seed for `simdesign_GenAlg()`), which looked like a hanging session: each run printed its log lines without any indication of the total. The log lines of the single runs are now held back and only shown when a run fails, a progress bar counts the evaluations, and a GenSA simdesign without any stop criterion in `control` produces a warning. The defaults are unchanged; the examples and vignettes use settings that finish within minutes.
+* `simdesign_ABCmcmc_Marjoram()` and `simdesign_ABCmcmc_Wegmann()` check that the calibration keeps at least two runs (`ceiling(tolerance_quantile * n_calibration) >= 2`). With fewer, 'EasyABC' failed with an obscure "subscript out of bounds" or "incorrect number of dimensions" error after the whole calibration had run.
 * nlrx no longer depends on the 'XML' package; NetLogo model files are read with 'xml2'.
 * Added support for NetLogo 7 and newer (#106). The simulation backend was redesigned around the 'logolink' package, which generates the BehaviorSpace XML and executes NetLogo.
 * Simulations are now executed in blocks (#60). `run_nl_all()` gains `block_size` (number of simulations bundled into one NetLogo instance) and `threads` (NetLogo's native multithreading) arguments, replacing the previous future/`furrr`-based parallelism.

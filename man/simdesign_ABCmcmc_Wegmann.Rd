@@ -65,6 +65,8 @@ Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign usi
 \details{
 This function creates a simdesign S4 class which can be added to a nl object.
 
+Every evaluation of the optimization is one NetLogo run (or \code{nreplicates} runs, see \link[nlrx]{run_nl_dyn}), which takes from seconds to minutes depending on the model. \link[nlrx]{run_nl_dyn} reports the number of evaluations when it starts and shows their progress. An optimization takes about \code{n_calibration + n_rec * n_between_sampling} evaluations; the default calibration alone amounts to 10,000 NetLogo runs per seed. The calibration has to keep at least two runs (\code{ceiling(tolerance_quantile * n_calibration) >= 2}).
+
 Variables in the experiment variable list need to provide a numeric distribution with min, max and a shape of the distribution (qunif, qnorm, qlnorm, qexp)(e.g. list(min=1, max=4, qfun="qunif")).
 
 The function uses the EasyABC package to set up the ABC_mcmc function.
@@ -83,11 +85,11 @@ nl <- nl_lhs
 # Attach the simdesign to the nl object
 nl@simdesign <- simdesign_ABCmcmc_Wegmann(nl = nl,
                                             summary_stat_target = c(100, 80),
-                                            n_rec = 100,
-                                            n_between_sampling = 10,
+                                            n_rec = 50,
+                                            n_between_sampling = 2,
                                             use_seed = FALSE,
-                                            n_calibration = 10000,
-                                            tolerance_quantile = 0.01,
+                                            n_calibration = 200,
+                                            tolerance_quantile = 0.05,
                                             proposal_phi = 1,
                                             progress_bar = FALSE,
                                             nseeds = 1)
