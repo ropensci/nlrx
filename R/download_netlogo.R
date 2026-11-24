@@ -138,9 +138,13 @@ util_report_netlogo_version <- function(version, in_nl = FALSE) {
 #'
 #' Newer NetLogo 7 releases can be downloaded as well: the download URL is derived from the
 #' version number, so an untested version only emits a warning
-#' (\link[nlrx]{check_netlogo_version}) and fails with a download error if no such release
-#' exists.
+#' (\link[nlrx]{check_netlogo_version}) and fails with an error pointing to the NetLogo
+#' releases page if no such release exists.
 #'
+#' The download (about 400 MB) may take longer than R's default \code{timeout} of 60
+#' seconds, so the timeout is raised to at least one hour while it runs.
+#'
+#' @return The path of the downloaded file, invisibly.
 #'
 #' @examples
 #' \dontrun{
@@ -164,13 +168,51 @@ download_netlogo <- function(to, version, os = NA, extract = FALSE, arch = NA) {
   nl_dl <- util_netlogo_download_url(version, os, arch)
   to_file <- file.path(to, basename(nl_dl))
 
-  ## Download
-  utils::download.file(nl_dl, to_file)
+  ## Download. The archives are large, so R's default timeout of 60 seconds is
+  ## raised for the download. mode = "wb": on Windows a text transfer would
+  ## corrupt the installer (only some extensions are detected as binary).
+  timeout <- options(timeout = max(3600, getOption("timeout")))
+  on.exit(options(timeout), add = TRUE)
+
+  ## download.file() reports a failed or incomplete download by warnings (and
+  ## an error for a failed one), so any of them means the file is unusable:
+  problems <- character()
+  tryCatch(
+    withCallingHandlers(
+      utils::download.file(nl_dl, to_file, mode = "wb"),
+      warning = function(w) {
+        problems <<- c(problems, conditionMessage(w))
+        invokeRestart("muffleWarning")
+      }
+    ),
+    error = function(e) problems <<- c(problems, conditionMessage(e))
+  )
+
+  if (length(problems) > 0) {
+    unlink(to_file)
+    reason <- problems[length(problems)]
+
+    if (any(grepl("404", problems))) {
+      util_abort(c(
+        "NetLogo {version} is not available for download.",
+        "i" = "There is no file at {.url {nl_dl}} (HTTP 404).",
+        ">" = "Check the available versions at {.url https://github.com/NetLogo/NetLogo/releases}."
+      ), class = "nlrx_error_download_netlogo")
+    }
+
+    util_abort(c(
+      "Downloading NetLogo {version} failed.",
+      "i" = "{reason}",
+      ">" = "Check your internet connection and try again, or download NetLogo from {.url https://github.com/NetLogo/NetLogo/releases} yourself."
+    ), class = "nlrx_error_download_netlogo")
+  }
 
   ## Extract the archive if os==unix and extract == TRUE:
   if (os == "unix" & extract == TRUE) {
-    system(paste0("tar xvzf ", to_file, " --directory ", to))
+    utils::untar(to_file, exdir = to)
   }
+
+  invisible(to_file)
 }
 
 # Construct the NetLogo download URL for a given version and OS.

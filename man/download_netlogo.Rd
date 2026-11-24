@@ -20,6 +20,9 @@ If set to NA (default) os will be detected automatically (\code{util_get_os()})}
 If NA (default) the architecture of the running machine is detected (\code{util_get_mac_arch()}).
 Ignored for Windows and Linux, which have one download each.}
 }
+\value{
+The path of the downloaded file, invisibly.
+}
 \description{
 Auxiliary function to download NetLogo
 }
@@ -29,8 +32,11 @@ supported_netlogo_versions()
 
 Newer NetLogo 7 releases can be downloaded as well: the download URL is derived from the
 version number, so an untested version only emits a warning
-(\link[nlrx]{check_netlogo_version}) and fails with a download error if no such release
-exists.
+(\link[nlrx]{check_netlogo_version}) and fails with an error pointing to the NetLogo
+releases page if no such release exists.
+
+The download (about 400 MB) may take longer than R's default \code{timeout} of 60
+seconds, so the timeout is raised to at least one hour while it runs.
 }
 \examples{
 \dontrun{

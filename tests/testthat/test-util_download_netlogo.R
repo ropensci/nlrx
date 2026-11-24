@@ -43,18 +43,55 @@ testthat::test_that("supported_netlogo_versions", {
   # Mock out the actual download and the tar extraction so the test stays
   # offline. `os` is pinned rather than left at NA so the extract branch (which
   # only triggers on unix) is exercised on every platform.
-  testthat::local_mocked_bindings(download.file = function(...) NULL,
-                                  .package = "utils")
-  testthat::local_mocked_bindings(system = function(...) NULL,
-                                  .package = "base")
+  download_args <- NULL
+  testthat::local_mocked_bindings(download.file = function(url, destfile, ...) {
+    download_args <<- c(list(url = url, destfile = destfile, timeout = getOption("timeout")), list(...))
+    0L
+  }, .package = "utils")
+  testthat::local_mocked_bindings(untar = function(...) 0L, .package = "utils")
   nlversion <- "7.0.0"
   nlpath <- tempdir()
+  timeout <- getOption("timeout")
 
-  testthat::expect_null(download_netlogo(to = nlpath,
-                                         os = "unix",
-                                         version = nlversion,
-                                         extract = TRUE))
+  res <- download_netlogo(to = nlpath, os = "unix", version = nlversion, extract = TRUE)
+  testthat::expect_identical(res, file.path(nlpath, "NetLogo-7.0.0-64.tgz"))
+  ## Binary transfer, with a timeout that suits the archive size, restored afterwards:
+  testthat::expect_identical(download_args$mode, "wb")
+  testthat::expect_gte(download_args$timeout, 3600)
+  testthat::expect_identical(getOption("timeout"), timeout)
 
+})
+
+testthat::test_that("download_netlogo explains failed downloads", {
+
+  nlpath <- tempfile("download_test")
+  dir.create(nlpath)
+  partial <- file.path(nlpath, "NetLogo-7.9.9-64.tgz")
+
+  ## A release that does not exist (download.file warns, then fails):
+  testthat::local_mocked_bindings(download.file = function(url, destfile, ...) {
+    writeLines("", destfile)
+    warning("downloaded length 0 != reported length 9")
+    warning("cannot open URL '", url, "': HTTP status was '404 Not Found'")
+    stop("cannot open URL '", url, "'")
+  }, .package = "utils")
+  testthat::expect_error(
+    suppressWarnings(download_netlogo(to = nlpath, os = "unix", version = "7.9.9")),
+    regexp = "not available for download",
+    class = "nlrx_error_download_netlogo"
+  )
+  testthat::expect_false(file.exists(partial))
+
+  ## Any other failure, e.g. a timeout:
+  testthat::local_mocked_bindings(download.file = function(url, destfile, ...) {
+    warning("Timeout of 3600 seconds was reached")
+    stop("download from '", url, "' failed")
+  }, .package = "utils")
+  testthat::expect_error(
+    download_netlogo(to = nlpath, os = "unix", version = "7.0.4"),
+    regexp = "internet connection",
+    class = "nlrx_error_download_netlogo"
+  )
 })
 
 testthat::test_that("util_netlogo_download_url builds GitHub release URLs", {
