@@ -3,6 +3,7 @@
 
 ## Major changes
 
+* nlrx no longer depends on the 'XML' package; NetLogo model files are read with 'xml2'.
 * Added support for NetLogo 7 and newer (#106). The simulation backend was redesigned around the 'logolink' package, which generates the BehaviorSpace XML and executes NetLogo.
 * Simulations are now executed in blocks (#60). `run_nl_all()` gains `block_size` (number of simulations bundled into one NetLogo instance) and `threads` (NetLogo's native multithreading) arguments, replacing the previous future/`furrr`-based parallelism.
 * Performance: bundling many simulations as BehaviorSpace sub-experiments within a single NetLogo instance avoids the repeated JVM/NetLogo start-up of the previous one-process-per-run approach, which can substantially speed up larger designs (#94, #95, #101).
@@ -17,6 +18,7 @@
 
 ## Bugfixes
 
+* `nldoc()` documents the GUI elements and BehaviorSpace experiments of NetLogo 7 models again. Both were still read with the parser for the NetLogo 6 file format, so the GUI section was silently left out and the BehaviorSpace tables lacked the time limit, metrics, final commands and parameters. The GUI elements are now read with the same parser as `report_model_parameters()`, and the BehaviorSpace section covers the NetLogo 7 experiment definitions, including pre- and post-experiment commands, the measurement condition and sub-experiments. The `toc` and `number_sections` options now also apply to PDF output, and rendering no longer prints the pandoc command line.
 * `nldoc()` no longer fails on models without complete noxygen annotations. A model without an `@model` header failed with "missing value where TRUE/FALSE needed", and one without `@global` or `@procedure` tags with "argument is of length zero". Without a header, the name of the model file is now used as title; sections without documented globals or procedures are left out, and a message points out when the model has no annotations at all.
 * `export_nl()` no longer archives more than the exported folder. A relative `path` such as `"."` made it pack the whole working directory and then the whole R session's temporary directory, and folders of earlier exports in the same session were mixed into the archive. The archive is now assembled in a staging folder of its own and written with `utils::tar()`, without listing every file in the console. The home directory and the filesystem root are refused, as is an archive stored within the exported folder, and a message reports how many files were exported. `export_nl()` returns the path of the archive invisibly.
 * `import_nl()` returns the imported nl object (invisibly) instead of the status of the `tar` command, and `new_session = TRUE` opens the `.Rproj` file of the extracted folder. It looked for that file within the archive file itself, so it never found one. Archives that hold no `nlobject.rds` are rejected before anything is extracted.

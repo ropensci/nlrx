@@ -28,7 +28,6 @@ Roxygen: list(markdown = TRUE)
 URL: https://docs.ropensci.org/nlrx/, https://github.com/ropensci/nlrx/
 BugReports: https://github.com/ropensci/nlrx/issues/
 Imports:
-    XML,
     lhs,
     sensitivity,
     dplyr,

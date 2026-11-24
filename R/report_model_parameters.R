@@ -39,88 +39,10 @@ report_model_parameters <- function(nl) {
 
   if (file_type == "nlogox") {
 
-    # Parse .nlogox
-    model.code <- xml2::read_xml(getnl(nl, "modelpath")) # Open model as XML
-    widgets <- xml2::xml_find_first(model.code, ".//widgets") # Find widgets block
+    modelparam <- util_read_nlogox_widgets(getnl(nl, "modelpath"))
 
-    if (inherits(widgets, "xml_missing")) {
+    if (is.null(modelparam)) {
       stop("No <widgets> block found in .nlogox model file")
-    }
-
-    widget_nodes <- xml2::xml_children(widgets) # Get all widgets
-
-    # Loop over widgets
-    modelparam <- list()
-    for (node in widget_nodes) {
-
-      widget_type <- xml2::xml_name(node)
-
-      # SLIDER
-      if (widget_type == "slider") {
-        name <- xml2::xml_attr(node, "variable")
-
-        entry <- list(
-          type = "SLIDER",
-          value = as.numeric(xml2::xml_attr(node, "default")),
-          min = as.numeric(xml2::xml_attr(node, "min")),
-          max = as.numeric(xml2::xml_attr(node, "max")),
-          incr = as.numeric(xml2::xml_attr(node, "step"))
-        )
-
-        modelparam[[name]] <- entry
-      }
-
-      # SWITCH
-      if (widget_type == "switch") {
-        name <- xml2::xml_attr(node, "variable")
-
-        entry <- list(
-          type = "SWITCH",
-          value = tolower(xml2::xml_attr(node, "on")) == "true"
-        )
-
-        modelparam[[name]] <- entry
-      }
-
-      # INPUTBOX
-      if (widget_type == "input") {
-        name <- xml2::xml_attr(node, "variable")
-
-        entry <- list(
-          type = "INPUTBOX",
-          value = xml2::xml_text(node),
-          entrytype = xml2::xml_attr(node, "type")
-        )
-
-        modelparam[[name]] <- entry
-      }
-
-      # CHOOSER
-      if (widget_type == "chooser") {
-        name <- xml2::xml_attr(node, "variable")
-
-        choice_nodes <- xml2::xml_find_all(node, "./choice")
-        # Different .xml syntax for text content vs attributes:
-        choice_value <- function(x) {
-          if (!is.na(xml2::xml_attr(x, "value"))) {
-            xml2::xml_attr(x, "value")
-          } else {
-            xml2::xml_text(x)
-          }
-        }
-        validvalues <- vapply(choice_nodes, choice_value, character(1))
-
-        select_id <- as.numeric(xml2::xml_attr(node, "current")) + 1
-        selectedvalue <- validvalues[select_id]
-
-        entry <- list(
-          type = "CHOOSER",
-          value = selectedvalue,
-          validvalues = validvalues
-        )
-
-        modelparam[[name]] <- entry
-      }
     }
 
     return(modelparam)
@@ -131,3 +53,105 @@ report_model_parameters <- function(nl) {
   }
 }
 
+
+#' Read the parameter widgets of a NetLogo 7 model
+#'
+#' @description Reads the sliders, switches, input boxes and choosers of a
+#' .nlogox model file.
+#'
+#' @param modelpath Path to a .nlogox model file
+#' @return named list with one entry per widget (type, value and the
+#' properties of the widget type), or NULL if the model has no widgets block
+#' @details
+#' Used by \code{report_model_parameters()} and \code{nldoc()}.
+#' @aliases util_read_nlogox_widgets
+#' @rdname util_read_nlogox_widgets
+#' @keywords internal
+util_read_nlogox_widgets <- function(modelpath) {
+
+  # Parse .nlogox
+  model.code <- xml2::read_xml(modelpath) # Open model as XML
+  widgets <- xml2::xml_find_first(model.code, ".//widgets") # Find widgets block
+
+  if (inherits(widgets, "xml_missing")) {
+    return(NULL)
+  }
+
+  widget_nodes <- xml2::xml_children(widgets) # Get all widgets
+
+  # Loop over widgets
+  modelparam <- list()
+  for (node in widget_nodes) {
+
+    widget_type <- xml2::xml_name(node)
+
+    # SLIDER
+    if (widget_type == "slider") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "SLIDER",
+        value = as.numeric(xml2::xml_attr(node, "default")),
+        min = as.numeric(xml2::xml_attr(node, "min")),
+        max = as.numeric(xml2::xml_attr(node, "max")),
+        incr = as.numeric(xml2::xml_attr(node, "step"))
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # SWITCH
+    if (widget_type == "switch") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "SWITCH",
+        value = tolower(xml2::xml_attr(node, "on")) == "true"
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # INPUTBOX
+    if (widget_type == "input") {
+      name <- xml2::xml_attr(node, "variable")
+
+      entry <- list(
+        type = "INPUTBOX",
+        value = xml2::xml_text(node),
+        entrytype = xml2::xml_attr(node, "type")
+      )
+
+      modelparam[[name]] <- entry
+    }
+
+    # CHOOSER
+    if (widget_type == "chooser") {
+      name <- xml2::xml_attr(node, "variable")
+
+      choice_nodes <- xml2::xml_find_all(node, "./choice")
+      # Different .xml syntax for text content vs attributes:
+      choice_value <- function(x) {
+        if (!is.na(xml2::xml_attr(x, "value"))) {
+          xml2::xml_attr(x, "value")
+        } else {
+          xml2::xml_text(x)
+        }
+      }
+      validvalues <- vapply(choice_nodes, choice_value, character(1))
+
+      select_id <- as.numeric(xml2::xml_attr(node, "current")) + 1
+      selectedvalue <- validvalues[select_id]
+
+      entry <- list(
+        type = "CHOOSER",
+        value = selectedvalue,
+        validvalues = validvalues
+      )
+
+      modelparam[[name]] <- entry
+    }
+  }
+
+  return(modelparam)
+}

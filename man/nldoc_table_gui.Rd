@@ -10,12 +10,13 @@ nldoc_table_gui(modelfiles)
 \item{modelfiles}{vector of filepaths to model files}
 }
 \value{
-list containing NetLogo GUI elements
+list containing NetLogo GUI elements, or NA if the model has none
 }
 \description{
 Read NetLogo GUI elements from files
 }
 \details{
-The procedure reads text from the provided model files and reports a list of GUI elements.
+The procedure reads the parameter widgets (sliders, switches, input boxes and
+choosers) of the main model file (.nlogox) and reports a list of GUI elements.
 }
 \keyword{internal}
