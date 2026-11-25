@@ -176,7 +176,7 @@ nl <- function(nlversion = "7.0.4",
 #' The metrics.patches slot accepts a vector of valid patches-own variables of the NetLogo model.
 #' These patch variables are measured in addition to the defined metrics.
 #' Results of these metrics will be nested inside the output results tibble of the simulations.
-#' Please note that NetLogo models may contain a huge number of patches and output measurements of agent variables on each tick may need a lot of ressources.
+#' Please note that NetLogo models may contain a huge number of patches and output measurements of agent variables on each tick may need a lot of resources.
 #'
 #' \emph{metrics.turtles}
 #'
@@ -185,7 +185,7 @@ nl <- function(nlversion = "7.0.4",
 #' For example metrics.turtles = list("sheep"=c("color"), "wolves"=c("who")) - would measure the color of each sheep and the who number of each wolf agent.
 #' To measure turtles-own variables for all turtles, use "turtles" = c(...).
 #' Be aware, that NetLogo will produce runtime errors if you measure breed-own variables for agents that do not belong to this breed.
-#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
+#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of resources.
 #'
 #' \emph{metrics.links}
 #'
@@ -194,7 +194,7 @@ nl <- function(nlversion = "7.0.4",
 #' For example metrics.links = list("linktype-a"=c("end1"), "linktype-b"=c("end2")) - would measure the start agent of each linktype-a link and the end agent of each linktype-b link.
 #' To measure links-own variables for all links, use "links" = c(...).
 #' Be aware, that NetLogo will produce runtime errors if you measure link-breed-own variables for agents that do not belong to this breed.
-#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of ressources.
+#' Please note that NetLogo models may contain a huge number of turtles and output measurements of agent variables on each tick may need a lot of resources.
 #'
 #'
 #'
@@ -527,4 +527,3 @@ simdesign <- function(simmethod = character(),
                simoutput=simoutput)
 
 }
-

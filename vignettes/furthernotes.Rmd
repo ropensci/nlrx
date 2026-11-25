@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 Correctly defining variables within the experiment class object is crucial for creating simdesigns.
 The implemented simdesigns have different requirements for variable definitions:
 
-   Simdesign       | Variable requirements              |  data type 
+   Simdesign       | Variable requirements              |  data type
 ------------------ | ---------------------------------- | -----------
 simdesign_simple   | only constants are used            | any
 simdesign_distinct | values (need to have equal length) | any
@@ -45,12 +45,12 @@ Additionally, please note the following restrictions in order to define variable
 * Variable values that should be recognized by NetLogo as strings are given as plain character values (e.g. `"string"`). Up to nlrx 0.4.6 these had to be nested inside escaped quotes (`"\"string\""`); such values are still accepted and the superfluous quotes are removed, but the escaping is no longer needed.
 * Variable values that should be recognized by NetLogo as logical are given as logicals (e.g. `FALSE`). The strings `"true"` and `"false"` are still accepted and converted.
 * NetLogo literals such as a list (`[1 2 3]`) cannot be passed as parameter values: character values are always quoted, so the literal would reach NetLogo as a string. Define such globals within the model instead.
-* It is not allowed to list the same variable in the variables and constants list. 
+* It is not allowed to list the same variable in the variables and constants list.
 * NetLogo model parameters that are not listed in any of these two lists will be set with their default value from the NetLogo model interface.
 * simdesign_simple() requires at least one defined constant within the constants list. If your model does not have any globals (GUI and code), please create a dummy global (either create a global widget on the GUI or add a dummy variable to the globals[] code section) for your model and put it in the constants list with an appropriate value.
 
 A complete list of all valid NetLogo parameters can be loaded by committing a nl object with a valid modelpath to the function `report_model_parameters()`. This function reads all GUI elements of the NetLogo model that can be set by nlrx.
-After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by commiting the nl object to the function `eval_variables_constants()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
+After attaching an experiment to an nl object, validity of defined experiment variables and constants can be checked by committing the nl object to the function `eval_variables_constants()`. The function will report detailed warnings or error messages, if definitions of variables or constants are invalid.
 
 ## Print functions
 
@@ -74,11 +74,11 @@ The `run_nl_one()` does not report any progress because it only executes one sim
 
 In addition, NetLogo print commands are redirected to the R console. Thus, print commands can be used within the NetLogo model code to display the current progress of simulations in the R console. Another possibility is, to define a print reporter procedure in the experiment slot "idfinal" that is executed at the end of each simulation.
 
-Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions. 
+Capturing output from multiple processes in parallelized environments to one R console is not straightforward. If such functionality is needed, we suggest to write the current progress to an output file directly from NetLogo (for example using the idrunnum functionality of nlrx, see section "Notes on self-written output"). These output files can then be monitored to capture the progress of the parallelized model executions.
 
 ## Access to intermediate results
 
-For long-running experiments and simdesigns, it may be beneficial to gain access to intermediate results. 
+For long-running experiments and simdesigns, it may be beneficial to gain access to intermediate results.
 This is especially useful to obtain results of successful runs, even if the R session crashes or gets stalled.
 The `run_all_all()` and `run_nl_one()` functions provide a parameter `writeRDS`. If this is set to `TRUE`, a rds file, carrying the current seed and siminputrow will be written to the specified `outpath` of the nl object experiment. Please note, that in case of the `run_all_all()` function, a huge number of rds files may be written to your disk (check `print(nl)` to get an estimated number of runs/files) which may cause other issues.
 

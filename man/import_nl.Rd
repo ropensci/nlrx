@@ -24,7 +24,7 @@ Imports NetLogo experiments that were saved with \code{export_nl}. The archived
 folder is extracted into \code{targetdir} and the nl object stored with it is
 returned.
 If the folder comes with an .Rproj file (which is recommended because
-relative paths enhance the reproducability of your analysis),
+relative paths enhance the reputability of your analysis),
 \code{import_nl} can open this project in a new RStudio session (\code{new_session = TRUE}).
 
 Note that the paths stored in the nl object (\code{nlpath}, \code{modelpath}, \code{outpath})

@@ -1175,7 +1175,7 @@ simdesign_ABCmcmc_Marjoram <- function(nl,
 #' @description Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Majoram Original algorithm to a nl object
 #'
 #' @param nl nl object with a defined experiment
-#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.
+#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in length and order to the specified summary_stat_target.
 #' @param summary_stat_target a vector of target values in the same order as the defined metrics of the experiment
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
@@ -1300,7 +1300,7 @@ simdesign_ABCmcmc_Marjoram_original <- function(nl,
 #' @description Add an Approximate Bayesian Computation (Monte-Carlo Markov-Chain) simdesign using the Wegmann algorithm to a nl object
 #'
 #' @param nl nl object with a defined experiment
-#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.
+#' @param postpro_function default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in length and order to the specified summary_stat_target.
 #' @param summary_stat_target a vector of target values in the same order as the defined metrics of the experiment
 #' @param prior_test a string expressing the constraints between model parameters. This expression will be evaluated as a logical expression, you can use all the logical operators including "<", ">", ... Each parameter should be designated with "X1", "X2", ... in the same order as in the prior definition. Set to NULL to disable.
 #' @param n_rec Number of samples along the MCMC
@@ -1427,4 +1427,3 @@ simdesign_ABCmcmc_Wegmann <- function(nl,
   return(new_simdesign)
 
 }
-
