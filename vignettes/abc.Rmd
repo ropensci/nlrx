@@ -90,7 +90,7 @@ The `summary_stat_target` represents the vector of our target values that we wan
 ```{r eval=FALSE}
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            summary_stat_target = c(100, 80),
-                                           n_rec = 100, 
+                                           n_rec = 100,
                                            n_calibration=200,
                                            use_seed = TRUE,
                                            progress_bar = TRUE,
@@ -98,12 +98,12 @@ nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
 ```
 
 
-These are the most important simdesign parameters, but there are many more to fine control the behavior of the algorithm. Check out the simdesign help page for more information. As already mentioned before, it is also possible to define a custom post-processing function. To apply this function for model output, the function name needs to be entered as `postpro_function` within the simdesign. For example, we might want to use the maximum value of some measured metrics to calibrate our model. Or maybe we want to run some tests and use the test statistics as calibration criterion. In such cases, we can define a function that accepts the nl object (with simulation results attached) as function input and returns a vector of numerics. This vector needs to represent the values that we defined as `sumary_stat_target` and thus should have the same length and order. Below is an example of a custom post-processing function that calculates the maximum value of selected metrics over all simulation ticks.
+These are the most important simdesign parameters, but there are many more to fine control the behavior of the algorithm. Check out the simdesign help page for more information. As already mentioned before, it is also possible to define a custom post-processing function. To apply this function for model output, the function name needs to be entered as `postpro_function` within the simdesign. For example, we might want to use the maximum value of some measured metrics to calibrate our model. Or maybe we want to run some tests and use the test statistics as calibration criterion. In such cases, we can define a function that accepts the nl object (with simulation results attached) as function input and returns a vector of numerics. This vector needs to represent the values that we defined as `summary_stat_target` and thus should have the same length and order. Below is an example of a custom post-processing function that calculates the maximum value of selected metrics over all simulation ticks.
 
 ```{r eval=FALSE}
 post <- function(nl){
-  res <- getsim(nl, "simoutput") %>% 
-    dplyr::select(getexp(nl, "metrics")) %>% 
+  res <- getsim(nl, "simoutput") %>%
+    dplyr::select(getexp(nl, "metrics")) %>%
     dplyr::summarise_each(list(max=max))
   return(as.numeric(res))
 }
@@ -111,7 +111,7 @@ post <- function(nl){
 nl@simdesign <- simdesign_ABCmcmc_Marjoram(nl=nl,
                                            postpro_function = post,
                                            summary_stat_target = c(100, 80),
-                                           n_rec = 100, 
+                                           n_rec = 100,
                                            n_calibration=200,
                                            use_seed = TRUE,
                                            progress_bar = TRUE,
@@ -159,7 +159,7 @@ getsim(nl, "simoutput") %>% # get simulation results from nl object
   tidyr::unnest(cols=param) %>%  # unnest param column
   dplyr::summarise_each(list(min=min, max=max, mean=mean, median=median)) %>% # calculate statistics
   tidyr::gather(parameter, value) %>% # convert to long format
-  tidyr::separate(parameter, into = c("parameter", "stat"), sep = "_") %>% # seperate parameter name and statistic
+  tidyr::separate(parameter, into = c("parameter", "stat"), sep = "_") %>% # separate parameter name and statistic
   tidyr::spread(stat, value) # convert back to wide format
 
 ## Plot histogram of parameter sampling distribution:
@@ -188,12 +188,12 @@ getsim(nl, "simoutput") %>%  # get simulation results from nl object
   dplyr::filter(dist == epsilon) %>% # only keep runs with dist=epsilon
   dplyr::left_join(getsim(nl, "simoutput") %>% # join parameter values of best runs
                      dplyr::select(param) %>%
-                     tidyr::unnest(cols=param) %>% 
-                     dplyr::mutate(runID=dplyr::row_number())) %>% 
+                     tidyr::unnest(cols=param) %>%
+                     dplyr::mutate(runID=dplyr::row_number())) %>%
   dplyr::left_join(getsim(nl, "simoutput") %>% # join output values best runs
                      dplyr::select(stats) %>%
-                     tidyr::unnest(cols=stats) %>% 
-                     dplyr::mutate(runID=dplyr::row_number())) %>% 
+                     tidyr::unnest(cols=stats) %>%
+                     dplyr::mutate(runID=dplyr::row_number())) %>%
   dplyr::select(runID, dist, epsilon, dplyr::everything()) # update order of columns
 
 ## Analyse mcmc using coda summary and plot functions:
@@ -259,9 +259,9 @@ nl@experiment <- experiment(expname="wolf-sheep",
 We use the `simdesign_lhs()` helper function to generate a Latin Hypercube Sampling with 500 samples
 
 ```{r eval=FALSE}
-nl@simdesign <- simdesign_lhs(nl, 
-                              samples=500, 
-                              nseeds=1, 
+nl@simdesign <- simdesign_lhs(nl,
+                              samples=500,
+                              nseeds=1,
                               precision=3)
 ```
 
@@ -286,9 +286,9 @@ For post-processing, we need a tibble with input parameter distributions. This c
 Third, we need to define expected values for our outputs. In our case, we just assume that `count sheep` should have a value of 100, whereas `count wolves` should have a value of 80.
 
 ```{r eval=FALSE}
-input <- getsim(nl, "siminput") %>% 
+input <- getsim(nl, "siminput") %>%
   dplyr::select(names(getexp(nl, "variables")))
-output <- getsim(nl, "simoutput") %>% 
+output <- getsim(nl, "simoutput") %>%
   dplyr::select(getexp(nl, "metrics"))
 target <- c("count sheep"=100, "count wolves"=80)
 ```
@@ -296,16 +296,16 @@ target <- c("count sheep"=100, "count wolves"=80)
 We use the `abc` function of the [abc package](https://cran.r-project.org/package=abc) to perform the rejection sampling. For this example, we perform both algorithms provided by this function ("rejection" and "loclinear").
 
 ```{r eval=FALSE}
-results.abc.reject <- abc::abc(target=target, 
+results.abc.reject <- abc::abc(target=target,
                         param=input,
                         sumstat=output,
-                        tol=0.3, 
+                        tol=0.3,
                         method="rejection")
 
-results.abc.loclin <- abc::abc(target=target, 
+results.abc.loclin <- abc::abc(target=target,
                                param=input,
                                sumstat=output,
-                               tol=0.3, 
+                               tol=0.3,
                                method="loclinear")
 ```
 
@@ -314,13 +314,13 @@ Thus, we reformat the results to a tidy data format and attach the initial param
 
 ```{r eval=FALSE}
 results.abc.all <- tibble::as_tibble(results.abc.reject$unadj.values) %>% # results from rejection method
-  tidyr::gather(parameter, value) %>% 
-  dplyr::mutate(method="rejection") %>% 
+  tidyr::gather(parameter, value) %>%
+  dplyr::mutate(method="rejection") %>%
   dplyr::bind_rows(tibble::as_tibble(results.abc.loclin$adj.values) %>% # results from local linear regression method
-                     tidyr::gather(parameter, value) %>% 
-                     dplyr::mutate(method="loclinear")) %>% 
+                     tidyr::gather(parameter, value) %>%
+                     dplyr::mutate(method="loclinear")) %>%
   dplyr::bind_rows(input %>%                # initial parameter distribution (lhs)
-                     tidyr::gather(parameter, value) %>% 
+                     tidyr::gather(parameter, value) %>%
                      dplyr::mutate(method="lhs"))
 
 ggplot2::ggplot(results.abc.all) +
@@ -332,4 +332,3 @@ ggplot2::ggplot(results.abc.all) +
   ggplot2::geom_density(ggplot2::aes(x=value, fill=method), alpha=0.1)
 
 ```
-

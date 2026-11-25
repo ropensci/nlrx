@@ -62,8 +62,8 @@ However, for calculation of sensitivity indices, we only want to consider the la
 nl@experiment <- experiment(expname = "wolf-sheep-morris",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",  
-                            idgo = "go",        
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 500,
                             evalticks = seq(300,500),
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
@@ -82,7 +82,7 @@ nl@experiment <- experiment(expname = "wolf-sheep-morris",
 
 We use the `simdesgin_morris()` function to attach a Morris Sensitivity Analysis design.
 The `morrislevels` parameter sets the number of different values for each parameter (sampling density).
-The `morrisr` paramater sets the number of repeated samplings (sampling size).
+The `morrisr` parameter sets the number of repeated samplings (sampling size).
 The `morrisgridjump` parameter sets the number of levels that are increased/decreased for computing the elementary effects. Morris recommendation is to set this value to `levels / 2`.
 We can increase the `nseeds` parameter in order to perform multiple runs of the same parameter matrix with different random seeds.
 The variation between those replicated runs is an indicator of the stochasticity effects within the model.
@@ -157,8 +157,8 @@ We set the runtime of the model to 500 ticks and measure our metrics on each tic
 nl@experiment <- experiment(expname = "wolf-sheep-morris",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",  
-                            idgo = "go",        
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 500,
                             metrics=c("count sheep", "count wolves", "count patches with [pcolor = green]"),
                             variables = list("initial-number-sheep" = list(min=50, max=150, step=10, qfun="qunif"),
@@ -220,8 +220,8 @@ output <- getsim(nl, "simoutput") %>%   # Take simulation output
   dplyr::rename_all(~str_replace_all(., c("-" = "_", "\\s+" = "_", "\\[" = "_", "\\]" = "_", "=" = ""))) # Remove - and space characters.
 
 # Perform pcc and src for each output separately (map)
-pcc.result <- purrr::map(names(output), function(x) sensitivity::pcc(X=input, y=output[,x], nboot = 100, rank = FALSE)) 
-src.result <- purrr::map(names(output), function(x) sensitivity::src(X=input, y=output[,x], nboot = 100, rank = FALSE)) 
+pcc.result <- purrr::map(names(output), function(x) sensitivity::pcc(X=input, y=output[,x], nboot = 100, rank = FALSE))
+src.result <- purrr::map(names(output), function(x) sensitivity::src(X=input, y=output[,x], nboot = 100, rank = FALSE))
 ```
 
 The results are reported as a nested list, where each outer element represents one of the calculated model outputs. The inner list items represent the different outputs from the `pcc` and `src` functions.
@@ -236,8 +236,8 @@ We can also extract all the data to a tidy data format and create nice plots wit
 
 ```{r eval=FALSE}
 pcc.result.tidy <- purrr::map_dfr(seq_along(pcc.result), function(x) {
-  pcc.result[[x]]$PCC %>% 
-    tibble::rownames_to_column(var="parameter") %>% 
+  pcc.result[[x]]$PCC %>%
+    tibble::rownames_to_column(var="parameter") %>%
     dplyr::mutate(metric = names(output)[x])
 })
 
@@ -248,8 +248,8 @@ ggplot(pcc.result.tidy) +
   geom_errorbar(aes(x=parameter, ymin=`min. c.i.`, ymax=`max. c.i.`, color=metric), width=0.1)
 
 src.result.tidy <- purrr::map_dfr(seq_along(src.result), function(x) {
-  src.result[[x]]$SRC %>% 
-    tibble::rownames_to_column(var="parameter") %>% 
+  src.result[[x]]$SRC %>%
+    tibble::rownames_to_column(var="parameter") %>%
     dplyr::mutate(metric = names(output)[x])
 })
 

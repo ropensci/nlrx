@@ -25,7 +25,7 @@ simdesign_ABCmcmc_Marjoram_original(
 \arguments{
 \item{nl}{nl object with a defined experiment}
 
-\item{postpro_function}{default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in leght and order to the specified summary_stat_target.}
+\item{postpro_function}{default is NULL. Allows to provide a function that is called to post-process the output Tibble of the NetLogo simulations. The function must accept the nl object with attached results as input argument. The function must return a one-dimensional vector of output metrics that corresponds in length and order to the specified summary_stat_target.}
 
 \item{summary_stat_target}{a vector of target values in the same order as the defined metrics of the experiment}
 

@@ -23,9 +23,9 @@ library(nlrx)
 library(tidyverse)
 library(ggplot2)
 library(gganimate)
-library(cartography) 
+library(cartography)
 library(rcartocolor)
-library(ggthemes) 
+library(ggthemes)
 ```
 
 Second, we need to define the path variables pointing to the NetLogo installation.
@@ -40,7 +40,7 @@ netlogopath <- file.path("/home/NetLogo 7.0.4")
 outpath <- file.path("/home/out")
 ```
 
-... and now are ready to interface some of the models of the NetLogo model library. 
+... and now are ready to interface some of the models of the NetLogo model library.
 
 
 
@@ -52,10 +52,10 @@ Turtles move over the lattice and generate heat on cells they move over. The acc
 In order to transfer the spatial information from NetLogo to R, we measure the who number and coordinates of all turtles (metrics.turtles) and coordinates, patch color and amount of heat of all patches (metrics.patches).
 
 After converting the spatial data to tibble format (`unnest_simoutput()`), we split the spatial data into a turtles tibble and a patches tibble using the agent column of the returned tibble from `unnest_simoutput()`.
-The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who). 
+The plot consist of a geom_tile layer, which displays the amount of heat in each cell and a geom_point layer that displays the movement of the turtles. In order to render animated gifs with gganimate it is very important to set the group property of the turtles layer correctly (group=who).
 
 ```{r  eval = FALSE}
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, "models/Sample Models/Art/Diffusion Graphics.nlogox"),
@@ -65,8 +65,8 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "diffusion",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",  
-                            idgo = "go",        
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 500,
                             evalticks = seq(1,500),
                             constants = list("num-turtles" = 20,
@@ -108,7 +108,7 @@ p1 <- ggplot() +
   transition_time(`[step]`) +
   guides(fill="none", color="none") +
   coord_equal() +
-  theme_void() 
+  theme_void()
 
 gganimate::animate(p1, nframes = n, width=800, height=800, duration=6)
 ```
@@ -126,7 +126,7 @@ Thus, we also measure the turtle breed (metrics.turtles).
 Before plotting we split up the turtle data into two tibbles, one for each breed. This allows us to create two different geom_point layers with different aesthetics.
 
 ```{r  eval = FALSE}
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, "models/Sample Models/Earth Science/Fire.nlogox"),
@@ -136,8 +136,8 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "fire",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup", 
-                            idgo = "go",       
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 500,
                             evalticks = seq(1,500),
                             metrics = c("count patches"),
@@ -163,7 +163,7 @@ setsim(nl, "simoutput") <- results
 
 nl_spatial <- unnest_simoutput(nl)
 n <- max(nl_spatial$`[step]`)
-         
+
 embers <- nl_spatial %>% dplyr::filter(breed == "embers" & agent == "turtles" & `[step]` < n) %>% dplyr::select(pxcor, pycor, `[step]`, color, who)
 fires <- nl_spatial %>% dplyr::filter(breed == "fires" & agent == "turtles" & `[step]` < n) %>% dplyr::select(pxcor, pycor, `[step]`, color, who)
 patches <- nl_spatial %>% dplyr::filter(agent == "patches" & `[step]` < n) %>% dplyr::select(pxcor, pycor, pcolor, `[step]`)
@@ -185,8 +185,8 @@ p1 <- ggplot(embers) +
   transition_time(`[step]`) +
   guides(fill="none", color="none") +
   coord_equal() +
-  theme_void() 
-  
+  theme_void()
+
 g1 <- gganimate::animate(p1, nframes = n, width=800, height=800, duration = 6)
 ```
 
@@ -198,7 +198,7 @@ g1 <- gganimate::animate(p1, nframes = n, width=800, height=800, duration = 6)
 
 ## Ants model
 
-The Ants model is another typical example for displaying patches and moving turtles. 
+The Ants model is another typical example for displaying patches and moving turtles.
 Ants move across the lattice in order to gather food from food sources and returning food to their nest in the center.
 Ants carrying food leave a trail of chemicals on cells they move over. These chemicals also diffuse to neighboring cells over time. Displaying the patches output from the model is not straightforward because three different groups of patches exist: food sources, ants nest and all other patches which are colored depending on the amount of chemicals that the patch contains.
 
@@ -217,7 +217,7 @@ In some cases, it is important to set the number of frames explicitly to the num
 Otherwise, gganimate may interpolate between measured steps, which may lead to incorrect results.
 
 ```{r eval = FALSE}
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, "models/Sample Models/Biology/Ants.nlogox"),
@@ -227,8 +227,8 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "ants",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",   
-                            idgo = "go",         
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 1000,
                             evalticks = seq(1,1000),
                             metrics.turtles = list("turtles" = c("who", "pxcor", "pycor", "breed")),
@@ -250,11 +250,11 @@ setsim(nl, "simoutput") <- results
 nl_spatial <- unnest_simoutput(nl)
 
 ## Step6: Prepare data for plotting
-# Extract infromation on food sources and select maximum step as simulation length:
+# Extract information on food sources and select maximum step as simulation length:
 food_dat <- nl_spatial %>% dplyr::filter(food > 0) %>% dplyr::select(pxcor, pycor, `[step]`)
 nmax <- max(food_dat$`[step]`)
 food_dat <- food_dat %>% dplyr::filter(`[step]` %in% 1:nmax)
-# Extract information on chemicals and apply minimum treshhold for coloring:
+# Extract information on chemicals and apply minimum threshold for coloring:
 chem_dat <- nl_spatial %>% dplyr::filter(`[step]` %in% 1:nmax) %>% dplyr::select(pxcor, pycor, chemical, `[step]`)
 chem_dat$chemical <- ifelse(chem_dat$chemical <= 0.2, NA, chem_dat$chemical)
 # Extract information on turtle positions:
@@ -306,7 +306,7 @@ modelpath <- "models/Sample Models/Chemistry ^& Physics/Waves/Wave Machine.nlogo
 ## Linux:
 modelpath <- "models/Sample Models/Chemistry & Physics/Waves/Wave Machine.nlogox"
 
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, modelpath),
@@ -316,7 +316,7 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "waves",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",  
+                            idsetup = "setup",
                             idgo = "go",
                             runtime = 100,
                             evalticks = seq(1,100),
@@ -360,7 +360,7 @@ p1 <- ggplot(waves) +
   transition_time(`[step]`) +
   guides(color="none") +
   coord_equal() +
-  theme_void() 
+  theme_void()
 
 gganimate::animate(p1, width=800, height=800, duration = 6)
 ```
@@ -382,7 +382,7 @@ We present two examples for heading conversion:
 (b) geom_spoke can be used to plot arrows pointing into the heading of the agent. geom_spoke uses radians angles. Similar to geom_text angles, an angle of 0 is pointing to the right and angles are defined in counter-clockwise direction. Thus, we need to shift NetLogo headings by 90 degree to the right, inverse the direction by multiplying all headings with -1 and finally transform the degree angles to radians angles.
 
 ```{r eval = FALSE}
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, "models/Sample Models/Biology/Flocking.nlogox"),
@@ -392,13 +392,13 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "flocking",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup",   
-                            idgo = "go",         
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 300,
                             evalticks = seq(1,300),
                             constants = list("population" = 100,
                                              "vision" = 5,
-                                             "minimum-separation" = 1, 
+                                             "minimum-separation" = 1,
                                              "max-align-turn" = 4,
                                              "max-cohere-turn" = 4,
                                              "max-separate-turn" = 4),
@@ -422,9 +422,9 @@ nl_spatial <- unnest_simoutput(nl)
 ## Calculate angles for plotting:
 # (a) convert NetLogo degree headings (clockwise with 0 = top) to geom_text degree angle (counter-clockwise with 0 = right)
 # (b) convert geom_text degree angle to geom_spoke radians angle
-nl_spatial <- nl_spatial %>% 
-  dplyr::select(`[step]`, who, xcor, ycor, heading, color) %>% 
-  mutate(heading_text = ((heading * -1) + 90)) %>% 
+nl_spatial <- nl_spatial %>%
+  dplyr::select(`[step]`, who, xcor, ycor, heading, color) %>%
+  mutate(heading_text = ((heading * -1) + 90)) %>%
   mutate(heading_radians = ((heading_text * pi) / 180))
 
 # Plot with geom_point and geom_spoke
@@ -435,7 +435,7 @@ p1 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
   guides(color=FALSE) +
   transition_time(`[step]`) +
   coord_equal() +
-  theme_void() 
+  theme_void()
 
 gganimate::animate(p1, nframes=max(nl_spatial$`[step]`), width=600, height=600, fps=20)
 ```
@@ -452,7 +452,7 @@ p2 <- ggplot(nl_spatial, aes(x=xcor, y=ycor)) +
   guides(color=FALSE) +
   transition_time(`[step]`) +
   coord_equal() +
-  theme_void() 
+  theme_void()
 
 gganimate::animate(p2, nframes=max(nl_spatial$`[step]`), width=600, height=600, fps=20)
 
@@ -478,7 +478,7 @@ Again, after attaching the simulation results and postprocessing with `unnest_si
 Finally, we need to reference the who number start and end points of the links to the actual coordinates of the corresponding turtle on each step. This can be easily achieved with two left_join calls, one for end1 who numbers and one for end2 who numbers.
 
 ```{r eval = FALSE}
-## Step1: Create a nl obejct:
+## Step1: Create a nl object:
 nl <- nl(nlversion = "7.0.4",
          nlpath = netlogopath,
          modelpath = file.path(netlogopath, "models/Sample Models/Networks/Preferential Attachment.nlogox"),
@@ -488,13 +488,13 @@ nl <- nl(nlversion = "7.0.4",
 nl@experiment <- experiment(expname = "networks",
                             outpath = outpath,
                             tickmetrics = "true",
-                            idsetup = "setup", 
-                            idgo = "go",       
+                            idsetup = "setup",
+                            idgo = "go",
                             runtime = 200,
                             evalticks = seq(1,200),
                             constants = list("layout?" = TRUE),
-                            metrics.turtles = list("turtles" = c("who", 
-                                                                 "xcor",                            
+                            metrics.turtles = list("turtles" = c("who",
+                                                                 "xcor",
                                                                  "ycor",
                                                                  "color")),
                             metrics.links = list("links" = c("[who] of end1","[who] of end2")))
@@ -515,16 +515,16 @@ nl_spatial <- unnest_simoutput(nl)
 
 ## Subset nl_spatial using the group column:
 nl_links <- nl_spatial %>%
-  dplyr::filter(agent == "links") %>% 
+  dplyr::filter(agent == "links") %>%
   dplyr::select(-who, -xcor, -ycor, -color)
 
 nl_turtles <- nl_spatial %>%
-  dplyr::filter(agent == "turtles") %>% 
+  dplyr::filter(agent == "turtles") %>%
   dplyr::select(`[step]`, who, xcor, ycor, color)
 
 ## Reference who numbers of link start (end1) and end (end2) points to actual coordinates:
-nl_links <- nl_links %>% 
-  dplyr::left_join(nl_turtles, by=c("[step]"="[step]","end1" = "who")) %>% 
+nl_links <- nl_links %>%
+  dplyr::left_join(nl_turtles, by=c("[step]"="[step]","end1" = "who")) %>%
   dplyr::left_join(nl_turtles, by=c("[step]"="[step]","end2" = "who"))
 
 ## Plot:
@@ -561,7 +561,7 @@ nw.all <- nl_to_graph(nl)
 nw <- nw.all %>% dplyr::filter(`[step]` == max(`[step]`))
 nw <- nw$spatial.links[[1]]
 
-## Perform community cluster algorithm and set community dependend colors:
+## Perform community cluster algorithm and set community dependent colors:
 com <- walktrap.community(nw)
 V(nw)$community <- com$membership
 rain <- rainbow(14, alpha=.5)

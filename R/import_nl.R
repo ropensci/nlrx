@@ -14,7 +14,7 @@
 #' folder is extracted into `targetdir` and the nl object stored with it is
 #' returned.
 #' If the folder comes with an .Rproj file (which is recommended because
-#' relative paths enhance the reproducability of your analysis),
+#' relative paths enhance the reputability of your analysis),
 #' `import_nl` can open this project in a new RStudio session (`new_session = TRUE`).
 #'
 #' Note that the paths stored in the nl object (`nlpath`, `modelpath`, `outpath`)
